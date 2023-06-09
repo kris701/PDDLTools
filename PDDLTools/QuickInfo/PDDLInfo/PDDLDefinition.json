@@ -1,0 +1,17 @@
+﻿{
+  "Elements": [
+    {
+      "Key": "define",
+      "Blocks": [
+        {
+          "Text": "Example text",
+          "Type": "type"
+        },
+        {
+          "Text": "Example text 2",
+          "Type": "comment"
+        }
+      ]
+    }
+  ]
+}

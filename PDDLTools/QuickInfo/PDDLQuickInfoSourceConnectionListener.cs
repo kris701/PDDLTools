@@ -21,12 +21,7 @@ namespace PDDLTools.ErrorList
         public void SubjectBuffersConnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
             if (PDDLInfo.QuickInfoContent.Count == 0)
-            {
-                PDDLInfo.IsLoading = true;
-                PDDLInfoInitializer initializer = new PDDLInfoInitializer();
-                initializer.InitializeQuickInfo();
-                PDDLInfo.IsLoading = false;
-            }
+                PDDLInfo.InitializeInfo();
         }
 
         public void SubjectBuffersDisconnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)

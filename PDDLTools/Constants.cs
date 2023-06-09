@@ -8,7 +8,7 @@ namespace PDDLTools
 {
     internal class Constants
     {
-        public const string PackageGuidString = "6eaa553c-a41f-487b-99a1-a8383b6d1f78";
+        public const string PackageGuidString = "956B19CF-953A-4E2A-9813-9EC5626CC12E";
         public const string PDDLLanguageName = "PDDL";
         public const int PDDLLanguageID = 1636;
         public const string PDDLExt = ".pddl";

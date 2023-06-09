@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PDDLTools.6eaa553c-a41f-487b-99a1-a8383b6d1f78" Version="1.00.10" Language="en-US" Publisher="Kristian Skov Johansen" />
+        <Identity Id="PDDLTools.956B19CF-953A-4E2A-9813-9EC5626CC12E" Version="1.00.12" Language="en-US" Publisher="Kristian Skov Johansen" />
         <DisplayName>PDDL Tools</DisplayName>
         <Description xml:space="preserve">WIPWIP</Description>
         <Icon>Icon.png</Icon>

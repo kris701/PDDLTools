@@ -77,6 +77,9 @@
     <Compile Include="Helpers\PDDLHelper.cs" />
     <Compile Include="Helpers\PowershellProcess.cs" />
     <Compile Include="Options\OptionsAccessor.cs" />
+    <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\InfoElement.cs" />
+    <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
+    <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceConnectionListener.cs" />
     <Compile Include="Windows\WelcomeWindow\WelcomeWindow.cs" />
     <Compile Include="Commands\WelcomeWindowCommand.cs" />
@@ -85,7 +88,6 @@
     </Compile>
     <Compile Include="Language\ContentTypeDefinition.cs" />
     <Compile Include="QuickInfo\PDDLInfo\PDDLInfo.cs" />
-    <Compile Include="QuickInfo\PDDLInfo\PDDLInfoInitializer.cs" />
     <Compile Include="Language\PDDLLanguageFactory.cs" />
     <Compile Include="Helpers\DirHelper.cs" />
     <Compile Include="Helpers\ProcessHelper.cs" />
@@ -113,6 +115,7 @@
     <Resource Include="Windows\WelcomeWindow\Resources\HaskellLogo.png" />
     <Content Include="Commands\Resources\RunFIle.png" />
     <None Include="Grammars\pddl.tmLanguage" />
+    <EmbeddedResource Include="QuickInfo\PDDLInfo\PDDLDefinition.json" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

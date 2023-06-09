@@ -60,7 +60,7 @@ namespace PDDLTools.QuickInfo
                     return new QuickInfoItem(null, "");
                 }
 
-                if (PDDLInfo.PDDLInfo.IsLoading)
+                if (PDDLInfo.PDDLInfo.QuickInfoContent.Count == 0)
                 {
                     ITrackingSpan applicable = currentSnapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
                     return new QuickInfoItem(applicable, "Quickinfo is loading...");
