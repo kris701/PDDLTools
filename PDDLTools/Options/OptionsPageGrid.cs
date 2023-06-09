@@ -17,6 +17,12 @@ namespace PDDLTools.Options
         public string FDPath { get; set; }
 
         [Category("PDDL Tools")]
+        [DisplayName("Python Prefix")]
+        [Description("What the 'python' command is called in your environment. Usually its 'python3' or 'python'")]
+        [DefaultValue("")]
+        public string PythonPrefix { get; set; } = "python";
+
+        [Category("PDDL Tools")]
         [DisplayName("Fast Downward File Execution Timeout")]
         [Description("How much time should pass before the Fast Downward instance is killed in seconds.")]
         [DefaultValue(10)]

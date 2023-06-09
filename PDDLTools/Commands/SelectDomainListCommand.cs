@@ -45,6 +45,8 @@ namespace PDDLTools.Commands
                 if (pOutValue != IntPtr.Zero)
                 {
                     var allDocuments = await DTE2Helper.GetAllOpenDocumentsAsync();
+                    if (allDocuments.Count == 0)
+                        allDocuments.Add("No valid PDDL domains found");
                     Marshal.GetNativeVariantForObject(allDocuments.ToArray(), pOutValue);
                 }
             }

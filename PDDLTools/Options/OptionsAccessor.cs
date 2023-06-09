@@ -24,6 +24,19 @@ namespace PDDLTools.Options
             }
         }
 
+        public static string PythonPrefix
+        {
+            get
+            {
+                return Instance.PythonPrefix;
+            }
+            set
+            {
+                Instance.PythonPrefix = value;
+                Instance.SaveSettingsToStorage();
+            }
+        }
+
         public static int FDFileExecutionTimeout
         {
             get

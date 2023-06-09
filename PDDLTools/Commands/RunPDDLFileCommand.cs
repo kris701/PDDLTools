@@ -69,7 +69,7 @@ namespace PDDLTools.Commands
             _process.ErrorDataRecieved += RecieveErrorData;
             _process.OutputDataRecieved += RecieveOutputData;
             _process.StopOnError = true;
-             await _process.StartProcessAsync($"& 'python {DirHelper.CombinePathAndFile(OptionsAccessor.FDPPath, "fastdownward.py")}' '{_sourceFilePath}'");
+             await _process.StartProcessAsync($"& {OptionsAccessor.PythonPrefix} '{OptionsAccessor.FDPPath}' '{SelectDomainCommand.SelectedDomainPath}' '{_sourceFilePath}' --search '{SelectSearchCommand.SelectedSearch}'");
 
             var timeoutSpan = TimeSpan.FromSeconds(OptionsAccessor.FDFileExecutionTimeout);
             var res = await _process.WaitForExitAsync(timeoutSpan);
@@ -77,13 +77,13 @@ namespace PDDLTools.Commands
             switch (res)
             {
                 case ProcessCompleteReson.ForceKilled:
-                    await OutputPanel.WriteLineAsync($"ERROR! Function ran for longer than {timeoutSpan}! Killing process...");
+                    await OutputPanel.WriteLineAsync($"ERROR! FD ran for longer than {timeoutSpan}! Killing process...");
                     break;
                 case ProcessCompleteReson.StoppedOnError:
                     await OutputPanel.WriteLineAsync($"Errors encountered!");
                     break;
                 case ProcessCompleteReson.RanToCompletion:
-                    await OutputPanel.WriteLineAsync("Function ran to completion!");
+                    await OutputPanel.WriteLineAsync("FD ran to completion!");
                     break;
                 case ProcessCompleteReson.ProcessNotRunning:
                     await OutputPanel.WriteLineAsync("Process is not running!");
