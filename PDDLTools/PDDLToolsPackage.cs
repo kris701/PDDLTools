@@ -49,8 +49,13 @@ namespace PDDLTools
 #pragma warning restore VSTHRD103 // Call async methods when in an async method
 
             await RunPDDLFileCommand.InitializeAsync(this);
+
             await SelectDomainCommand.InitializeAsync(this);
             await SelectDomainListCommand.InitializeAsync(this);
+
+            await SelectSearchCommand.InitializeAsync(this);
+            await SelectSearchListCommand.InitializeAsync(this);
+
             new FastDownwardErrorManager(this);
         }
     }

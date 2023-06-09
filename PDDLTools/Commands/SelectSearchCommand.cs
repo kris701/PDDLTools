@@ -21,19 +21,19 @@ using System.Runtime.InteropServices;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectDomainCommand : BaseCommand
+    internal sealed class SelectSearchCommand : BaseCommand
     {
-        public override int CommandId { get; } = 257;
-        public static SelectDomainCommand Instance { get; internal set; }
-        public static string SelectedDomainPath { get; internal set; }
+        public override int CommandId { get; } = 263;
+        public static SelectSearchCommand Instance { get; internal set; }
+        public static string SelectedSearch { get; internal set; }
 
-        private SelectDomainCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private SelectSearchCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
         {
         }
 
         public static async Task InitializeAsync(AsyncPackage package)
         {
-            Instance = new SelectDomainCommand(package, await InitializeCommandServiceAsync(package));
+            Instance = new SelectSearchCommand(package, await InitializeCommandServiceAsync(package));
         }
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
@@ -41,14 +41,14 @@ namespace PDDLTools.Commands
             OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
             if (eventArgs.InValue != null)
             {
-                SelectedDomainPath = eventArgs.InValue as string;
+                SelectedSearch = eventArgs.InValue as string;
             }
-            if (eventArgs.OutValue != null && SelectedDomainPath != "")
+            if (eventArgs.OutValue != null && SelectedSearch != "")
             {
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    Marshal.GetNativeVariantForObject(SelectedDomainPath, pOutValue);
+                    Marshal.GetNativeVariantForObject(SelectedSearch, pOutValue);
                 }
             }
         }

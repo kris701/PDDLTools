@@ -17,38 +17,36 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
+using System.Windows.Controls;
 using System.Runtime.InteropServices;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectDomainCommand : BaseCommand
+    internal sealed class SelectSearchListCommand : BaseCommand
     {
-        public override int CommandId { get; } = 257;
-        public static SelectDomainCommand Instance { get; internal set; }
-        public static string SelectedDomainPath { get; internal set; }
+        public override int CommandId { get; } = 264;
+        public static SelectSearchListCommand Instance { get; internal set; }
 
-        private SelectDomainCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private SelectSearchListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
         {
         }
 
         public static async Task InitializeAsync(AsyncPackage package)
         {
-            Instance = new SelectDomainCommand(package, await InitializeCommandServiceAsync(package));
+            Instance = new SelectSearchListCommand(package, await InitializeCommandServiceAsync(package));
         }
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
         {
-            OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
-            if (eventArgs.InValue != null)
-            {
-                SelectedDomainPath = eventArgs.InValue as string;
-            }
-            if (eventArgs.OutValue != null && SelectedDomainPath != "")
+            var eventArgs = e as OleMenuCmdEventArgs;
+            if (eventArgs != null)
             {
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    Marshal.GetNativeVariantForObject(SelectedDomainPath, pOutValue);
+                    var optionsStr = OptionsAccessor.SearchOptions;
+                    string[] options = optionsStr.Split(';');
+                    Marshal.GetNativeVariantForObject(options, pOutValue);
                 }
             }
         }

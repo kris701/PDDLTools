@@ -36,12 +36,32 @@
     </Bitmaps>
 
 		<Combos>
-			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileCommandListID" defaultWidth="100" priority="0x0100" type="DropDownCombo">
+			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileListCommandID" defaultWidth="100" priority="0x0100" type="DropDownCombo">
 				<CommandFlag>DefaultDisabled</CommandFlag>
 				<CommandFlag>CommandWellOnly</CommandFlag>
 				<CommandFlag>StretchHorizontally</CommandFlag>
+				<CommandFlag>IconAndText</CommandFlag>
 				<Strings>
-					<ButtonText>Selected Domain: </ButtonText>
+					<MenuText>Selected Domain: </MenuText>
+					<ButtonText>Domain: </ButtonText>
+					<ToolTipText>Select what domain to run Fast Downward with</ToolTipText>
+					<CanonicalName>Selected Domain</CanonicalName>
+					<LocCanonicalName>Selected Domain</LocCanonicalName>
+					<CommandName>Selected Domain</CommandName>
+				</Strings>
+			</Combo>
+			<Combo guid="PDDLCommandSetGuid" id="SelectSearchCommandID" idCommandList="SelectSearchListCommandID" defaultWidth="100" priority="0x0101" type="DropDownCombo">
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<CommandFlag>CommandWellOnly</CommandFlag>
+				<CommandFlag>StretchHorizontally</CommandFlag>
+				<CommandFlag>IconAndText</CommandFlag>
+				<Strings>
+					<MenuText>Selected Search: </MenuText>
+					<ButtonText>Search: </ButtonText>
+					<ToolTipText>Select what seach option to run Fast Downward with</ToolTipText>
+					<CanonicalName>Selected Search</CanonicalName>
+					<LocCanonicalName>Selected Search</LocCanonicalName>
+					<CommandName>Selected Search</CommandName>
 				</Strings>
 			</Combo>
 		</Combos>
@@ -81,6 +101,10 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x101">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x101">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+		
 		<CommandPlacement guid="PDDLCommandSetGuid" id="GithubCommandID" priority="0x104">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
@@ -94,6 +118,10 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x101">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x101">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
+		</CommandPlacement>
+		
 	</CommandPlacements>
 
 	<Symbols>
@@ -104,10 +132,14 @@
 			<IDSymbol name="PDDLToolsToolbarGroup" value="0x1021" />
 			<IDSymbol name="RunPDDLFileCommandID" value="256" />
 			<IDSymbol name="SelectDomainFileCommandID" value="257" />
-			<IDSymbol name="SelectDomainFileCommandListID" value="259" />
+			<IDSymbol name="SelectDomainFileListCommandID" value="259" />
 			<IDSymbol name="GithubCommandID" value="258" />
 			<IDSymbol name="InstallFDWindowCommandID" value="261" />
 			<IDSymbol name="WelcomeWindowCommandID" value="262" />
+
+			<IDSymbol name="SelectSearchCommandID" value="263" />
+			<IDSymbol name="SelectSearchListCommandID" value="264" />
+
 			<IDSymbol name="PDDLToolsMenu" value="0x1022" />
 			<IDSymbol name="PDDLToolsToolbar" value="0x1023" />
 		</GuidSymbol>

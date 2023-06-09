@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />
+    <Compile Include="Commands\SelectSearchListCommand.cs" />
+    <Compile Include="Commands\SelectSearchCommand.cs" />
     <Compile Include="Commands\SelectDomainListCommand.cs" />
     <Compile Include="Commands\SelectDomainCommand.cs" />
     <Compile Include="Constants.cs" />

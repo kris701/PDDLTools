@@ -49,5 +49,18 @@ namespace PDDLTools.Options
                 Instance.SaveSettingsToStorage();
             }
         }
+
+        public static string SearchOptions
+        {
+            get
+            {
+                return Instance.SearchOptions;
+            }
+            set
+            {
+                Instance.SearchOptions = value;
+                Instance.SaveSettingsToStorage();
+            }
+        }
     }
 }
