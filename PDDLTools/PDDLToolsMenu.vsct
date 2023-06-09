@@ -36,8 +36,7 @@
     </Bitmaps>
 
 		<Combos>
-			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileListCommandID" defaultWidth="100" priority="0x0100" type="DropDownCombo">
-				<CommandFlag>DefaultDisabled</CommandFlag>
+			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileListCommandID" defaultWidth="150" priority="0x0100" type="DropDownCombo">
 				<CommandFlag>CommandWellOnly</CommandFlag>
 				<CommandFlag>StretchHorizontally</CommandFlag>
 				<CommandFlag>IconAndText</CommandFlag>
@@ -50,8 +49,20 @@
 					<CommandName>Selected Domain</CommandName>
 				</Strings>
 			</Combo>
-			<Combo guid="PDDLCommandSetGuid" id="SelectSearchCommandID" idCommandList="SelectSearchListCommandID" defaultWidth="100" priority="0x0101" type="DropDownCombo">
-				<CommandFlag>DefaultDisabled</CommandFlag>
+			<Combo guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" idCommandList="SelectProblemFileListCommandID" defaultWidth="150" priority="0x0101" type="DropDownCombo">
+				<CommandFlag>CommandWellOnly</CommandFlag>
+				<CommandFlag>StretchHorizontally</CommandFlag>
+				<CommandFlag>IconAndText</CommandFlag>
+				<Strings>
+					<MenuText>Selected Problem: </MenuText>
+					<ButtonText>Problem: </ButtonText>
+					<ToolTipText>Select what Problem to run Fast Downward with</ToolTipText>
+					<CanonicalName>Selected Problem</CanonicalName>
+					<LocCanonicalName>Selected Problem</LocCanonicalName>
+					<CommandName>Selected Problem</CommandName>
+				</Strings>
+			</Combo>
+			<Combo guid="PDDLCommandSetGuid" id="SelectSearchCommandID" idCommandList="SelectSearchListCommandID" defaultWidth="150" priority="0x0102" type="DropDownCombo">
 				<CommandFlag>CommandWellOnly</CommandFlag>
 				<CommandFlag>StretchHorizontally</CommandFlag>
 				<CommandFlag>IconAndText</CommandFlag>
@@ -70,7 +81,6 @@
 			<Button guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x0100" type="Button">
 				<Icon guid="RunPDDLFileImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
-				<CommandFlag>DefaultDisabled</CommandFlag>
 				<Strings>
 					<ButtonText>Run </ButtonText>
 					<MenuText>Run PDDL File</MenuText>
@@ -101,7 +111,10 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x101">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
-		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x101">
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" priority="0x102">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
 		
@@ -118,7 +131,10 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x101">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
-		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x101">
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" priority="0x102">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
 		
@@ -139,6 +155,9 @@
 
 			<IDSymbol name="SelectSearchCommandID" value="263" />
 			<IDSymbol name="SelectSearchListCommandID" value="264" />
+
+			<IDSymbol name="SelectProblemFileCommandID" value="265" />
+			<IDSymbol name="SelectProblemFileListCommandID" value="266" />
 
 			<IDSymbol name="PDDLToolsMenu" value="0x1022" />
 			<IDSymbol name="PDDLToolsToolbar" value="0x1023" />

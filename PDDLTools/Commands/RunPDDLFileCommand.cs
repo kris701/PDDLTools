@@ -17,6 +17,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
+using HaskellTools.Helpers;
 
 namespace PDDLTools.Commands
 {
@@ -28,7 +29,8 @@ namespace PDDLTools.Commands
         private PowershellProcess _process;
         private bool _isRunning = false;
 
-        private string _sourceFilePath = "";
+        private string _domainFilePath = "";
+        private string _problemFilePath = "";
 
         private RunPDDLFileCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
         {
@@ -42,18 +44,50 @@ namespace PDDLTools.Commands
         public override async Task ExecuteAsync(object sender, EventArgs e)
         {
             if (_isRunning)
-            {
                 return;
-            }
 
-            if (!await DTE2Helper.IsValidFileOpenAsync())
-            {
-                MessageBox.Show("File must be a '.pddl' file!");
-                return;
-            }
             await DTE2Helper.SaveActiveDocumentAsync();
 
-            _sourceFilePath = await DTE2Helper.GetSourceFilePathAsync();
+            if (SelectDomainCommand.SelectedDomainPath == SelectDomainListCommand.ActiveDocumentComboboxName)
+            {
+                var openDocument = await DTE2Helper.GetSourceFilePathAsync();
+                if (!PDDLHelper.IsFileDomain(openDocument))
+                {
+                    MessageBox.Show("Active document must be a valid PDDL domain file!");
+                    return;
+                }
+                _domainFilePath = openDocument;
+            }
+            else
+            {
+                if (!PDDLHelper.IsFileDomain(SelectDomainCommand.SelectedDomainPath))
+                {
+                    MessageBox.Show("Selected document must be a valid PDDL domain file!");
+                    return;
+                }
+                _domainFilePath = SelectDomainCommand.SelectedDomainPath;
+            }
+
+
+            if (SelectProblemCommand.SelectedProblemPath == SelectProblemListCommand.ActiveDocumentComboboxName)
+            {
+                var openDocument = await DTE2Helper.GetSourceFilePathAsync();
+                if (!PDDLHelper.IsFileProblem(openDocument))
+                {
+                    MessageBox.Show("Active document must be a valid PDDL problem file!");
+                    return;
+                }
+                _problemFilePath = openDocument;
+            }
+            else
+            {
+                if (!PDDLHelper.IsFileProblem(SelectProblemCommand.SelectedProblemPath))
+                {
+                    MessageBox.Show("Selected document must be a valid PDDL Problem file!");
+                    return;
+                }
+                _problemFilePath = SelectProblemCommand.SelectedProblemPath;
+            }
 
             _isRunning = true;
 
@@ -69,7 +103,7 @@ namespace PDDLTools.Commands
             _process.ErrorDataRecieved += RecieveErrorData;
             _process.OutputDataRecieved += RecieveOutputData;
             _process.StopOnError = true;
-             await _process.StartProcessAsync($"& {OptionsAccessor.PythonPrefix} '{OptionsAccessor.FDPPath}' '{SelectDomainCommand.SelectedDomainPath}' '{_sourceFilePath}' --search '{SelectSearchCommand.SelectedSearch}'");
+             await _process.StartProcessAsync($"& {OptionsAccessor.PythonPrefix} '{OptionsAccessor.FDPPath}' '{_domainFilePath}' '{_problemFilePath}' --search '{SelectSearchCommand.SelectedSearch}'");
 
             var timeoutSpan = TimeSpan.FromSeconds(OptionsAccessor.FDFileExecutionTimeout);
             var res = await _process.WaitForExitAsync(timeoutSpan);

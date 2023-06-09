@@ -21,19 +21,19 @@ using System.Runtime.InteropServices;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectDomainCommand : BaseCommand
+    internal sealed class SelectProblemCommand : BaseCommand
     {
-        public override int CommandId { get; } = 257;
-        public static SelectDomainCommand Instance { get; internal set; }
-        public static string SelectedDomainPath { get; internal set; }
+        public override int CommandId { get; } = 265;
+        public static SelectProblemCommand Instance { get; internal set; }
+        public static string SelectedProblemPath { get; internal set; }
 
-        private SelectDomainCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
         {
         }
 
         public static async Task InitializeAsync(AsyncPackage package)
         {
-            Instance = new SelectDomainCommand(package, await InitializeCommandServiceAsync(package));
+            Instance = new SelectProblemCommand(package, await InitializeCommandServiceAsync(package));
         }
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
@@ -42,15 +42,15 @@ namespace PDDLTools.Commands
             if (eventArgs.InValue != null)
             {
                 var selectedStr = eventArgs.InValue as string;
-                if (selectedStr != SelectDomainListCommand.NoneFoundComboboxName)
-                    SelectedDomainPath = selectedStr;
+                if (selectedStr != SelectProblemListCommand.NoneFoundComboboxName)
+                    SelectedProblemPath = selectedStr;
             }
-            if (eventArgs.OutValue != null && SelectedDomainPath != "")
+            if (eventArgs.OutValue != null && SelectedProblemPath != "")
             {
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    Marshal.GetNativeVariantForObject(SelectedDomainPath, pOutValue);
+                    Marshal.GetNativeVariantForObject(SelectedProblemPath, pOutValue);
                 }
             }
         }

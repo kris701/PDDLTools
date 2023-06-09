@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />
+    <Compile Include="Commands\SelectProblemListCommand.cs" />
+    <Compile Include="Commands\SelectProblemCommand.cs" />
     <Compile Include="Commands\SelectSearchListCommand.cs" />
     <Compile Include="Commands\SelectSearchCommand.cs" />
     <Compile Include="Commands\SelectDomainListCommand.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManager.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManagerConnectionListener.cs" />
+    <Compile Include="Helpers\PDDLHelper.cs" />
     <Compile Include="Helpers\PowershellProcess.cs" />
     <Compile Include="Options\OptionsAccessor.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceConnectionListener.cs" />

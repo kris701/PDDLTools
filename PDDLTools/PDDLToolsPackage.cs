@@ -53,6 +53,9 @@ namespace PDDLTools
             await SelectDomainCommand.InitializeAsync(this);
             await SelectDomainListCommand.InitializeAsync(this);
 
+            await SelectProblemCommand.InitializeAsync(this);
+            await SelectProblemListCommand.InitializeAsync(this);
+
             await SelectSearchCommand.InitializeAsync(this);
             await SelectSearchListCommand.InitializeAsync(this);
 
