@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<Extern href="stdidcmd.h" />
+	<Extern href="vsshlids.h" />
+
+	<Commands package="PDDLPackageGuid">
+		<Groups>
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" priority="0x0600">
+				<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenu" />
+			</Group>
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" priority="0x0600">
+				<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbar" />
+			</Group>
+		</Groups>
+
+		<Menus>
+			<Menu guid="PDDLCommandSetGuid" id="PDDLToolsToolbar" type="Toolbar">
+				<CommandFlag>DefaultDocked</CommandFlag>
+				<CommandFlag>AlwaysCreate</CommandFlag>
+				<Strings>
+					<ButtonText>PDDL Toolbar</ButtonText>
+				</Strings>
+			</Menu>
+			<Menu guid="PDDLCommandSetGuid" id="PDDLToolsMenu" priority="0x700" type="Menu">
+				<Parent guid="guidSHLMainMenu" id="IDG_VS_MM_FILEEDITVIEW" />
+				<Strings>
+					<ButtonText>PDDL Tools</ButtonText>
+				</Strings>
+			</Menu>
+		</Menus>
+
+		<Bitmaps>
+			<Bitmap guid="RunPDDLFileImageGuid" href="Commands\Resources\RunFile.png" />
+			<Bitmap guid="GithubImageGuid" href="Commands\Resources\GitHub.png" />
+			<Bitmap guid="WelcomeWindowImageGuid" href="Commands\Resources\Welcome.png" />
+    </Bitmaps>
+
+		<Combos>
+			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileCommandListID" defaultWidth="100" priority="0x0100" type="DropDownCombo">
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<CommandFlag>CommandWellOnly</CommandFlag>
+				<CommandFlag>StretchHorizontally</CommandFlag>
+				<Strings>
+					<ButtonText>Selected Domain: </ButtonText>
+				</Strings>
+			</Combo>
+		</Combos>
+		
+		<Buttons>
+			<Button guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x0100" type="Button">
+				<Icon guid="RunPDDLFileImageGuid" id="bmpPic1" />
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DefaultDisabled</CommandFlag>
+				<Strings>
+					<ButtonText>Run </ButtonText>
+					<MenuText>Run PDDL File</MenuText>
+					<ToolTipText>Execute currently open PDDL file</ToolTipText>
+				</Strings>
+			</Button>			
+			<Button guid="PDDLCommandSetGuid" id="GithubCommandID" priority="0x0104" type="Button">
+				<Icon guid="GithubImageGuid" id="bmpPic1" />
+				<Strings>
+					<ButtonText>GitHub</ButtonText>
+					<ToolTipText>Open the GitHub page</ToolTipText>
+				</Strings>
+			</Button>
+			<Button guid="PDDLCommandSetGuid" id="WelcomeWindowCommandID" priority="0x0105" type="Button">
+				<Icon guid="WelcomeWindowImageGuid" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Help</ButtonText>
+					<ToolTipText>Opens the welcome page with info on how to use this extension.</ToolTipText>
+				</Strings>
+			</Button>
+    </Buttons>
+	</Commands>
+
+	<CommandPlacements>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x100">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x101">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="GithubCommandID" priority="0x104">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="WelcomeWindowCommandID" priority="0x105">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+
+		<CommandPlacement guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x100">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x101">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
+		</CommandPlacement>
+	</CommandPlacements>
+
+	<Symbols>
+		<GuidSymbol value="{6eaa553c-a41f-487b-99a1-a8383b6d1f78}" name="PDDLPackageGuid" />
+
+		<GuidSymbol value="{c8d29eda-f85f-4c3f-8620-6b8c0c6ebd58}" name="PDDLCommandSetGuid">
+			<IDSymbol name="PDDLToolsMenuGroup" value="0x1020" />
+			<IDSymbol name="PDDLToolsToolbarGroup" value="0x1021" />
+			<IDSymbol name="RunPDDLFileCommandID" value="256" />
+			<IDSymbol name="SelectDomainFileCommandID" value="257" />
+			<IDSymbol name="SelectDomainFileCommandListID" value="259" />
+			<IDSymbol name="GithubCommandID" value="258" />
+			<IDSymbol name="InstallFDWindowCommandID" value="261" />
+			<IDSymbol name="WelcomeWindowCommandID" value="262" />
+			<IDSymbol name="PDDLToolsMenu" value="0x1022" />
+			<IDSymbol name="PDDLToolsToolbar" value="0x1023" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{bb64ec71-4259-41eb-9775-43fbb84988af}" name="RunPDDLFileImageGuid">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{ff48a4e6-0aab-49a4-987a-0a3ed7ff4d23}" name="GithubImageGuid">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{00f2ca33-0f42-4576-a4f2-255ec77838d9}" name="WelcomeWindowImageGuid">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
+  </Symbols>
+</CommandTable>
