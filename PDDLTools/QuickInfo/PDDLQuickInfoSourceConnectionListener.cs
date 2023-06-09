@@ -20,7 +20,7 @@ namespace PDDLTools.ErrorList
     {
         public void SubjectBuffersConnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
-            if (PDDLInfo.PreludeContent.Count == 0)
+            if (PDDLInfo.QuickInfoContent.Count == 0)
             {
                 PDDLInfo.IsLoading = true;
                 PDDLInfoInitializer initializer = new PDDLInfoInitializer();

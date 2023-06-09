@@ -67,13 +67,13 @@ namespace PDDLTools.QuickInfo
                 }
                 else
                 {
-                    foreach (string key in PDDLInfo.PDDLInfo.PreludeContent.Keys.OrderByDescending(x => x.Length))
+                    foreach (string key in PDDLInfo.PDDLInfo.QuickInfoContent.Keys.OrderByDescending(x => x.Length))
                     {
                         int foundIdx = searchText.IndexOf(key, StringComparison.CurrentCultureIgnoreCase);
                         if (foundIdx > -1)
                         {
                             ITrackingSpan applicable = currentSnapshot.CreateTrackingSpan(extent.Span.Start + foundIdx, key.Length, SpanTrackingMode.EdgeInclusive);
-                            return new QuickInfoItem(applicable, PDDLInfo.PDDLInfo.PreludeContent[key]);
+                            return new QuickInfoItem(applicable, PDDLInfo.PDDLInfo.QuickInfoContent[key]);
                         }
                     }
                     return new QuickInfoItem(null, "");

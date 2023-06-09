@@ -25,7 +25,7 @@ namespace PDDLTools.Commands
     {
         public override int CommandId { get; } = 265;
         public static SelectProblemCommand Instance { get; internal set; }
-        public static string SelectedProblemPath { get; internal set; }
+        public static string SelectedProblemPath { get; internal set; } = "";
 
         private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
         {

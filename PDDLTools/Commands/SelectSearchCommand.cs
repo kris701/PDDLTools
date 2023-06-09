@@ -25,7 +25,7 @@ namespace PDDLTools.Commands
     {
         public override int CommandId { get; } = 263;
         public static SelectSearchCommand Instance { get; internal set; }
-        public static string SelectedSearch { get; internal set; }
+        public static string SelectedSearch { get; internal set; } = "";
 
         private SelectSearchCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
         {

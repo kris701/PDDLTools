@@ -13,7 +13,7 @@ using PDDLTools.Options;
 namespace PDDLTools.QuickInfo
 {
     [Export(typeof(IAsyncQuickInfoSourceProvider))]
-    [Name("Haskell QuickInfo Source")]
+    [Name("PDDL QuickInfo Source")]
     [ContentType(Constants.PDDLLanguageName)]
     [Order]
     internal class PDDLQuickInfoSourceProvider : IAsyncQuickInfoSourceProvider

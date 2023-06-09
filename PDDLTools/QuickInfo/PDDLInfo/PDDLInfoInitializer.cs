@@ -10,7 +10,7 @@ namespace PDDLTools.QuickInfo.PDDLInfo
     {
         public void InitializeQuickInfo()
         {
-            PDDLInfo.PreludeContent.Add("predicates", GenerateElement("test info"));
+            PDDLInfo.QuickInfoContent.Add("predicates", GenerateElement("test info"));
         }
 
         private ContainerElement GenerateElement(string text)

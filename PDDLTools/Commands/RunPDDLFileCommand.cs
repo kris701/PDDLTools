@@ -89,6 +89,12 @@ namespace PDDLTools.Commands
                 _problemFilePath = SelectProblemCommand.SelectedProblemPath;
             }
 
+            if (SelectSearchCommand.SelectedSearch == "")
+            {
+                MessageBox.Show("Please select a search option.");
+                return;
+            }
+
             _isRunning = true;
 
             await OutputPanel.InitializeAsync();

@@ -11,6 +11,6 @@ namespace PDDLTools.QuickInfo.PDDLInfo
     public static class PDDLInfo
     {
         public static bool IsLoading = false;
-        public static Dictionary<string, ContainerElement> PreludeContent = new Dictionary<string, ContainerElement>();
+        public static Dictionary<string, ContainerElement> QuickInfoContent = new Dictionary<string, ContainerElement>();
     }
 }

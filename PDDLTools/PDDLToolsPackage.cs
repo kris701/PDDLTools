@@ -28,8 +28,7 @@ namespace PDDLTools
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(Constants.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideOptionPage(typeof(OptionPageGrid),
-    "PDDL Tools", "Options", 0, 0, true)]
+    [ProvideOptionPage(typeof(OptionPageGrid), "PDDL Tools", "Options", 0, 0, true)]
     [ProvideToolWindow(typeof(WelcomeWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     public sealed class PDDLToolsPackage : AsyncPackage
     {
