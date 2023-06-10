@@ -141,7 +141,7 @@
 	</CommandPlacements>
 
 	<Symbols>
-		<GuidSymbol value="{6eaa553c-a41f-487b-99a1-a8383b6d1f78}" name="PDDLPackageGuid" />
+		<GuidSymbol value="{956B19CF-953A-4E2A-9813-9EC5626CC12E}" name="PDDLPackageGuid" />
 
 		<GuidSymbol value="{c8d29eda-f85f-4c3f-8620-6b8c0c6ebd58}" name="PDDLCommandSetGuid">
 			<IDSymbol name="PDDLToolsMenuGroup" value="0x1020" />

@@ -12,6 +12,8 @@ namespace PDDLTools
         public FDResultsWindow() : base(null)
         {
             this.Caption = "PDDL Tools - Fast Downward Results";
+
+            this.Content = new FDResultsWindowControl();
         }
     }
 }

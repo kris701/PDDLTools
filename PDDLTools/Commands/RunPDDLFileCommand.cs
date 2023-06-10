@@ -108,11 +108,11 @@ namespace PDDLTools.Commands
             var resultData = await RunAsync();
 
             ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
-            window.Content = new FDResultsWindowControl(resultData);
             if ((null == window) || (null == window.Frame))
             {
                 throw new NotSupportedException("Cannot create tool window");
             }
+            await ((window as FDResultsWindow).Content as FDResultsWindowControl).SetupResultDataAsync(resultData);
         }
 
         private async Task<FDResults> RunAsync()
