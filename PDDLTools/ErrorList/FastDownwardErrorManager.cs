@@ -52,7 +52,7 @@ namespace PDDLTools.ErrorList
             var dte2 = DTE2Helper.GetDTE2();
             var docEvent = dte2.Events.DocumentEvents;
             events.Add(docEvent);
-            docEvent.DocumentSaved += CheckGHCi;
+            //docEvent.DocumentSaved += CheckGHCi;
         }
 
         public void Initialize(ITextView textField)
