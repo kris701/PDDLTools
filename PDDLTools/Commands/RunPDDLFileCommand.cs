@@ -18,6 +18,8 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
 using HaskellTools.Helpers;
+using System.Collections.Generic;
+using PDDLTools.Models;
 
 namespace PDDLTools.Commands
 {
@@ -31,6 +33,9 @@ namespace PDDLTools.Commands
 
         private string _domainFilePath = "";
         private string _problemFilePath = "";
+
+        private List<string> _resultLines = new List<string>();
+        private List<string> _resultErrLines = new List<string>();
 
         private RunPDDLFileCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
         {
@@ -100,11 +105,21 @@ namespace PDDLTools.Commands
             await OutputPanel.InitializeAsync();
             await OutputPanel.ClearOutputAsync();
             await OutputPanel.WriteLineAsync("Executing PDDL File");
-            await RunAsync();
+            var resultData = await RunAsync();
+
+            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
+            window.Content = new FDResultsWindowControl(resultData);
+            if ((null == window) || (null == window.Frame))
+            {
+                throw new NotSupportedException("Cannot create tool window");
+            }
         }
 
-        private async Task RunAsync()
+        private async Task<FDResults> RunAsync()
         {
+            _resultErrLines.Clear();
+            _resultLines.Clear();
+
             _process = new PowershellProcess();
             _process.ErrorDataRecieved += RecieveErrorData;
             _process.OutputDataRecieved += RecieveOutputData;
@@ -130,15 +145,19 @@ namespace PDDLTools.Commands
                     break;
             }
             _isRunning = false;
+
+            return new FDResults(_resultLines, _resultErrLines);
         }
 
         private async void RecieveErrorData(object sender, DataReceivedEventArgs e)
         {
+            _resultErrLines.Add(e.Data);
             await OutputPanel.WriteLineAsync($"ERROR! {e.Data}");
         }
 
         private async void RecieveOutputData(object sender, DataReceivedEventArgs e)
         {
+            _resultLines.Add(e.Data);
             await OutputPanel.WriteLineAsync($"{e.Data}");
         }
     }

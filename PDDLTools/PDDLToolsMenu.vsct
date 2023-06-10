@@ -158,7 +158,7 @@
 
 			<IDSymbol name="SelectProblemFileCommandID" value="265" />
 			<IDSymbol name="SelectProblemFileListCommandID" value="266" />
-
+			
 			<IDSymbol name="PDDLToolsMenu" value="0x1022" />
 			<IDSymbol name="PDDLToolsToolbar" value="0x1023" />
 		</GuidSymbol>
