@@ -112,7 +112,7 @@
   <ItemGroup>
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
-    <Resource Include="Windows\WelcomeWindow\Resources\HaskellLogo.png" />
+    <Resource Include="Windows\WelcomeWindow\Resources\WelcomeLogo.png" />
     <Content Include="Commands\Resources\RunFIle.png" />
     <None Include="Grammars\pddl.tmLanguage" />
     <EmbeddedResource Include="QuickInfo\PDDLInfo\PDDLDefinition.json" />

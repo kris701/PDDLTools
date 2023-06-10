@@ -8,7 +8,7 @@ namespace PDDLTools
 {
     public partial class WelcomeWindowControl : UserControl
     {
-        private static string ReadmeURL = "https://github.com/kris701/VSHaskellTools/blob/master/README.md";
+        private static string ReadmeURL = "https://github.com/kris701/PDDLTools/blob/master/README.md";
         private static string ReadmeStart = "<article class=\"markdown-body entry-content container-lg\" itemprop=\"text\">";
         private static string ReadmeEnd = "</article>";
 

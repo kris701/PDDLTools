@@ -21,7 +21,7 @@ namespace PDDLTools.Commands
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
         {
-            await Task.Run(() => System.Diagnostics.Process.Start("https://github.com/kris701/HaskellRunner"));
+            await Task.Run(() => System.Diagnostics.Process.Start("https://github.com/kris701/PDDLTools"));
         }
     }
 }
