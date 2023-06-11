@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PDDLTools.ErrorList.PDDLParser.Domain
 {
-    public class Predicate : IExp
+    public class TypeDefinition
     {
         public string Name { get; set; }
-        public List<NameNode> Arguments { get; set; }
+        public List<string> SubTypes { get; set; }
     }
 }

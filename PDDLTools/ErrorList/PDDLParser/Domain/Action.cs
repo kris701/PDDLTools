@@ -9,5 +9,9 @@ namespace PDDLTools.ErrorList.PDDLParser.Domain
     public class Action
     {
         public string Name { get; set; }
+
+        public List<Parameter> Parameters { get; set; }
+        public IExp Preconditions { get; set; }
+        public IExp Effects { get; set; }
     }
 }
