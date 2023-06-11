@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.ErrorList.PDDLParser.AST
+namespace PDDLParser.AST
 {
     public class ASTNode
     {

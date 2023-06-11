@@ -1,13 +1,12 @@
-﻿using PDDLTools.ErrorList.PDDLParser.Exceptions;
+﻿using PDDLParser.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.Shell;
 
-namespace PDDLTools.ErrorList.PDDLParser.Domain
+namespace PDDLParser.Domain
 {
     public class DomainFile
     {

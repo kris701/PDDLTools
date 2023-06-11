@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.ErrorList.PDDLParser.Domain
+namespace PDDLParser.Domain
 {
-    public class NameNode
+    public class Predicate : IExp
     {
         public string Name { get; set; }
-        public string Type { get; set; }
+        public List<NameNode> Arguments { get; set; }
     }
 }

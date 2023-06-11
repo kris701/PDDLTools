@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.ErrorList.PDDLParser.Domain
+namespace PDDLParser.Domain
 {
-    public interface IExp
+    public class AndExp : IExp
     {
+        public List<IExp> Children { get; set; }
     }
 }

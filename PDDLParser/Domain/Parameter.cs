@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.ErrorList.PDDLParser.Domain
+namespace PDDLParser.Domain
 {
-    public class NotExp : IExp
+    public class Parameter
     {
-        public IExp Child { get; set; }
+        public NameNode Name { get; set; }
     }
 }

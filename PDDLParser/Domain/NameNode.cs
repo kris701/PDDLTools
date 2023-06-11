@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.ErrorList.PDDLParser.Domain
+namespace PDDLParser.Domain
 {
-    public class TypeDefinition
+    public class NameNode
     {
         public string Name { get; set; }
-        public List<string> SubTypes { get; set; }
+        public string Type { get; set; }
     }
 }

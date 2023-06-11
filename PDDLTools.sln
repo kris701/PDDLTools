@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLTools", "PDDLTools\PDDLTools.csproj", "{D1F9B2DB-F80F-4C35-B693-2C2B486DA250}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLParser", "PDDLParser\PDDLParser.csproj", "{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,14 @@ Global
 		{D1F9B2DB-F80F-4C35-B693-2C2B486DA250}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D1F9B2DB-F80F-4C35-B693-2C2B486DA250}.Release|x86.ActiveCfg = Release|x86
 		{D1F9B2DB-F80F-4C35-B693-2C2B486DA250}.Release|x86.Build.0 = Release|x86
+		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Debug|x86.Build.0 = Debug|Any CPU
+		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Release|x86.ActiveCfg = Release|Any CPU
+		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

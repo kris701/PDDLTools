@@ -74,18 +74,6 @@
     <Compile Include="Constants.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManager.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManagerConnectionListener.cs" />
-    <Compile Include="ErrorList\PDDLParser\AST\ASTNode.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\Action.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\AndExp.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\DomainFile.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\IExp.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\NameNode.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\NotExp.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\Parameter.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\Predicate.cs" />
-    <Compile Include="ErrorList\PDDLParser\Domain\TypeDefinition.cs" />
-    <Compile Include="ErrorList\PDDLParser\Exceptions\ParseException.cs" />
-    <Compile Include="ErrorList\PDDLParser\Parser.cs" />
     <Compile Include="Helpers\PDDLHelper.cs" />
     <Compile Include="Helpers\PowershellProcess.cs" />
     <Compile Include="Models\FDResults.cs" />
@@ -189,8 +177,13 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ErrorList\PDDLParser\Problem\" />
     <Folder Include="Windows\FDResultsWindow\Resources\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">
+      <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
+      <Name>PDDLParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />

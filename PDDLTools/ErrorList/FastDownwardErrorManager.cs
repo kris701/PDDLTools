@@ -18,9 +18,11 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
 using HaskellTools.Helpers;
-using PDDLTools.ErrorList.PDDLParser.Exceptions;
-using PDDLTools.ErrorList.PDDLParser.Domain;
-using PDDLTools.ErrorList.PDDLParser;
+using PDDLParser;
+using PDDLParser.Exceptions;
+using Microsoft.Build.Framework.XamlTypes;
+using Microsoft.VisualStudio.Text.Classification;
+using System.Windows.Shapes;
 
 namespace PDDLTools.ErrorList
 {
@@ -75,8 +77,26 @@ namespace PDDLTools.ErrorList
             }
             catch (ParseException ex)
             {
-                ex.Error.Navigate += JumpToError;
-                _errorProvider.Tasks.Add(ex.Error);
+                ErrorTask newError = new ErrorTask();
+
+                switch (ex.Category)
+                {
+                    case ParseErrorCategory.Error: newError.ErrorCategory = TaskErrorCategory.Error; break;
+                    case ParseErrorCategory.Warning: newError.ErrorCategory = TaskErrorCategory.Warning; break;
+                    case ParseErrorCategory.Message: newError.ErrorCategory = TaskErrorCategory.Message; break;
+                }
+                switch (ex.Level)
+                {
+                    case ParserErrorLevel.Low: newError.Priority = TaskPriority.Low; break;
+                    case ParserErrorLevel.Medium: newError.Priority = TaskPriority.Normal; break;
+                    case ParserErrorLevel.High: newError.Priority = TaskPriority.High; break;
+                }
+
+                newError.Text = ex.Message;
+                newError.Line = ex.Line;
+                newError.Document = "";
+                newError.Navigate += JumpToError;
+                _errorProvider.Tasks.Add(newError);
             }
 
             if (_errorProvider.Tasks.Count > 0)

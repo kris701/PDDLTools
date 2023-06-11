@@ -1,14 +1,13 @@
-﻿using Microsoft.VisualStudio.Shell;
-using PDDLTools.ErrorList.PDDLParser.AST;
-using PDDLTools.ErrorList.PDDLParser.Domain;
-using PDDLTools.ErrorList.PDDLParser.Exceptions;
+﻿using PDDLParser.AST;
+using PDDLParser.Domain;
+using PDDLParser.Exceptions;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.ErrorList.PDDLParser
+namespace PDDLParser
 {
     public class Parser
     {
@@ -64,9 +63,9 @@ namespace PDDLTools.ErrorList.PDDLParser
             {
                 throw new ParseException(
                     $"Parentheses missmatch! There are {leftCount} '(' but {rightCount} ')'!",
-                    TaskErrorCategory.Error,
-                    -1,
-                    TaskPriority.High
+                    ParserErrorLevel.High,
+                    ParseErrorCategory.Error,
+                    - 1
                     );
             }
         }
