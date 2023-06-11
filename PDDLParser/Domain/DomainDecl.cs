@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public class DomainFile
+    public class DomainDecl
     {
         public string Name { get; set; }
         public List<string> Requirements { get; set; }
-        public List<TypeDefinition> Types { get; set; }
-        public List<NameNode> Constants { get; set; }
-        public List<Predicate> Predicates { get; set; }
-        public List<Action> Actions { get; set; }
+        public List<TypeDecl> Types { get; set; }
+        public List<NameExp> Constants { get; set; }
+        public List<PredicateStmt> Predicates { get; set; }
+        public List<ActionStmt> Actions { get; set; }
 
-        public DomainFile(string name, List<string> requirements, List<TypeDefinition> types, List<NameNode> constants, List<Predicate> predicates, List<Action> actions)
+        public DomainDecl(string name, List<string> requirements, List<TypeDecl> types, List<NameExp> constants, List<PredicateStmt> predicates, List<ActionStmt> actions)
         {
             Name = name;
             Requirements = requirements;

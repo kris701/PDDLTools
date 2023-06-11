@@ -42,15 +42,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\ASTNode.cs" />
-    <Compile Include="Domain\Action.cs" />
+    <Compile Include="Domain\ActionStmt.cs" />
     <Compile Include="Domain\AndExp.cs" />
-    <Compile Include="Domain\DomainFile.cs" />
+    <Compile Include="Domain\DomainDecl.cs" />
     <Compile Include="Domain\IExp.cs" />
-    <Compile Include="Domain\NameNode.cs" />
+    <Compile Include="Domain\NameExp.cs" />
     <Compile Include="Domain\NotExp.cs" />
-    <Compile Include="Domain\Parameter.cs" />
-    <Compile Include="Domain\Predicate.cs" />
-    <Compile Include="Domain\TypeDefinition.cs" />
+    <Compile Include="Domain\PredicateStmt.cs" />
+    <Compile Include="Domain\TypeDecl.cs" />
     <Compile Include="Exceptions\ParseException.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

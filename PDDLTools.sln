@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLTools", "PDDLTools\PDDL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLParser", "PDDLParser\PDDLParser.csproj", "{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLParserCMD", "PDDLParserCMD\PDDLParserCMD.csproj", "{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,14 @@ Global
 		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Release|x86.ActiveCfg = Release|Any CPU
 		{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}.Release|x86.Build.0 = Release|Any CPU
+		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Debug|x86.Build.0 = Debug|Any CPU
+		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Release|x86.ActiveCfg = Release|Any CPU
+		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -16,5 +16,10 @@ namespace PDDLParser.AST
             Content = content;
             Children = children;
         }
+
+        public override string ToString()
+        {
+            return Content;
+        }
     }
 }
