@@ -39,7 +39,7 @@ namespace PDDLTools.QuickInfo.PDDLInfo
             List<ClassifiedTextRun> textElements = new List<ClassifiedTextRun>();
             foreach(var block in element.Blocks)
             {
-                textElements.Add(new ClassifiedTextRun(block.Type, block.Text + Environment.NewLine));
+                textElements.Add(new ClassifiedTextRun(block.Type, block.Text + Environment.NewLine, ClassifiedTextRunStyle.Bold));
             }
 
             var textElement = new ClassifiedTextElement(

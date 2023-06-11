@@ -45,42 +45,43 @@ namespace PDDLTools.QuickInfo
 
         public Task<QuickInfoItem> GetQuickInfoItemAsync(IAsyncQuickInfoSession session, CancellationToken cancellationToken)
         {
-            Task<QuickInfoItem> t = new Task<QuickInfoItem>(() =>
+            SnapshotPoint? subjectTriggerPoint = session.GetTriggerPoint(_textBuffer.CurrentSnapshot);
+            if (subjectTriggerPoint != null)
             {
-                SnapshotPoint? subjectTriggerPoint = session.GetTriggerPoint(_textBuffer.CurrentSnapshot);
-                ITextSnapshot currentSnapshot = subjectTriggerPoint.Value.Snapshot;
-                SnapshotSpan querySpan = new SnapshotSpan(subjectTriggerPoint.Value, 0);
-
-                ITextStructureNavigator navigator = _toolTipProvider.NavigatorService.GetTextStructureNavigator(_textBuffer);
-                TextExtent extent = navigator.GetExtentOfWord(subjectTriggerPoint.Value);
-                string searchText = extent.Span.GetText();
-
-                if (!subjectTriggerPoint.HasValue)
+                Task<QuickInfoItem> t = new Task<QuickInfoItem>(() =>
                 {
-                    return new QuickInfoItem(null, "");
-                }
+                    ITextSnapshotLine line = subjectTriggerPoint.Value.GetContainingLine();
+                    ITrackingSpan lineSpan = _textBuffer.CurrentSnapshot.CreateTrackingSpan(line.Extent, SpanTrackingMode.EdgeInclusive);
 
-                if (PDDLInfo.PDDLInfo.QuickInfoContent.Count == 0)
-                {
-                    ITrackingSpan applicable = currentSnapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
-                    return new QuickInfoItem(applicable, "Quickinfo is loading...");
-                }
-                else
-                {
-                    foreach (string key in PDDLInfo.PDDLInfo.QuickInfoContent.Keys.OrderByDescending(x => x.Length))
+                    if (PDDLInfo.PDDLInfo.QuickInfoContent.Count == 0)
+                        return new QuickInfoItem(lineSpan, "Quickinfo is loading...");
+                    else
                     {
-                        int foundIdx = searchText.IndexOf(key, StringComparison.CurrentCultureIgnoreCase);
-                        if (foundIdx > -1)
-                        {
-                            ITrackingSpan applicable = currentSnapshot.CreateTrackingSpan(extent.Span.Start + foundIdx, key.Length, SpanTrackingMode.EdgeInclusive);
-                            return new QuickInfoItem(applicable, PDDLInfo.PDDLInfo.QuickInfoContent[key]);
-                        }
+                        string lineText = line.GetText();
+                        string hoverText = GetWordUnderCursor(subjectTriggerPoint);
+
+                        foreach (string key in PDDLInfo.PDDLInfo.QuickInfoContent.Keys.OrderByDescending(x => x.Length))
+                            if (lineText.Contains(key))
+                                if (key.Contains(hoverText))
+                                    return new QuickInfoItem(lineSpan, PDDLInfo.PDDLInfo.QuickInfoContent[key]);
+                        return new QuickInfoItem(null, "");
                     }
-                    return new QuickInfoItem(null, "");
-                }
-            });
-            t.Start();
-            return t;
+                });
+                t.Start();
+                return t;
+            }
+
+            return Task.FromResult<QuickInfoItem>(null);
+        }
+
+        private string GetWordUnderCursor(SnapshotPoint? subjectTriggerPoint)
+        {
+            SnapshotSpan querySpan = new SnapshotSpan(subjectTriggerPoint.Value, 0);
+            ITextStructureNavigator navigator = _toolTipProvider.NavigatorService.GetTextStructureNavigator(_textBuffer);
+            var test = navigator.GetSpanOfEnclosing(querySpan);
+            TextExtent extent = navigator.GetExtentOfWord(subjectTriggerPoint.Value);
+            string searchText = extent.Span.GetText();
+            return searchText;
         }
     }
 }

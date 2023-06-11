@@ -4,11 +4,180 @@
       "Key": "define",
       "Blocks": [
         {
-          "Text": "Example text",
+          "Text": "PDDL Keyword",
           "Type": "type"
         },
         {
-          "Text": "Example text 2",
+          "Text": "Defines the start of a problem or domain file.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": "domain",
+      "Blocks": [
+        {
+          "Text": "Domain Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines that this is a domain file. It is followed by the name of this domain.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":predicates",
+      "Blocks": [
+        {
+          "Text": "Domain Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines what predicates are in this domain. These all consists of a name, and an arbitrary amount of arguments.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":action",
+      "Blocks": [
+        {
+          "Text": "Domain Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines an action in this domain. Each of these actions have a corresponding ':parameters', ':preconditions' and ':effect'.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":parameters",
+      "Blocks": [
+        {
+          "Text": "Action Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines the parameters for a given action.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":precondition",
+      "Blocks": [
+        {
+          "Text": "Action Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines the preconditions for a given action to run.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":effect",
+      "Blocks": [
+        {
+          "Text": "Action Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines the effects that should be set when this action has executed.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": "and",
+      "Blocks": [
+        {
+          "Text": "PDDL Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Compounds several predicates. You only need one 'and' for a large and statement (i.e. the and is a sufix and not infix)",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": "not",
+      "Blocks": [
+        {
+          "Text": "PDDL Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Inverts a given predicate.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": "problem",
+      "Blocks": [
+        {
+          "Text": "Problem Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines that this is a problem file. It is followed by the name of this problem.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":domain",
+      "Blocks": [
+        {
+          "Text": "Problem Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines what domain this problem file belongs to. This name is set in the start of the domain file.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":objects",
+      "Blocks": [
+        {
+          "Text": "Problem Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines what objects are in this problem.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":init",
+      "Blocks": [
+        {
+          "Text": "Problem Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines what all these objects belong to and what predicates they should be initialised with.",
+          "Type": "comment"
+        }
+      ]
+    },
+    {
+      "Key": ":goal",
+      "Blocks": [
+        {
+          "Text": "Problem Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "The predicates that should be true for the problem file to reach its goal state.",
           "Type": "comment"
         }
       ]
