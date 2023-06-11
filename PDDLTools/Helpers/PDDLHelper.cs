@@ -11,6 +11,8 @@ namespace HaskellTools.Helpers
     {
         public static bool IsFileDomain(string path)
         {
+            if (path == null)
+                return false;
             var info = new FileInfo(path);
             if (info.Exists && info.Extension.ToLower() == ".pddl")
             {
@@ -23,6 +25,8 @@ namespace HaskellTools.Helpers
 
         public static bool IsFileProblem(string path)
         {
+            if (path == null)
+                return false;
             var info = new FileInfo(path);
             if (info.Exists && info.Extension.ToLower() == ".pddl")
             {

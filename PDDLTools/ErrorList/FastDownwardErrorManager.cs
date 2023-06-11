@@ -20,13 +20,13 @@ using System.Windows.Threading;
 using HaskellTools.Helpers;
 using PDDLTools.ErrorList.PDDLParser.Exceptions;
 using PDDLTools.ErrorList.PDDLParser.Domain;
+using PDDLTools.ErrorList.PDDLParser;
 
 namespace PDDLTools.ErrorList
 {
     internal class FastDownwardErrorManager
     {
         public static FastDownwardErrorManager Instance;
-        public string FileName { get; set; }
         public ITextView TextField { get; set; }
 
         private ErrorListProvider _errorProvider;
@@ -62,11 +62,13 @@ namespace PDDLTools.ErrorList
 
             try
             {
-                if (PDDLHelper.IsFileDomain(FileName))
+                var file = await DTE2Helper.GetSourceFilePathAsync();
+                var parser = new Parser();
+                if (PDDLHelper.IsFileDomain(file))
                 {
-                    var fullDomain = new DomainFile(FileName);
+                    var fullDomain = parser.ParseDomainFile(file);
                 } 
-                else if (PDDLHelper.IsFileProblem(FileName))
+                else if (PDDLHelper.IsFileProblem(file))
                 {
 
                 }

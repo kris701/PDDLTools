@@ -18,25 +18,14 @@ namespace PDDLTools.ErrorList.PDDLParser.Domain
         public List<Predicate> Predicates { get; set; }
         public List<Action> Actions { get; set; }
 
-        public DomainFile(string parseFile)
+        public DomainFile(string name, List<string> requirements, List<TypeDefinition> types, List<NameNode> constants, List<Predicate> predicates, List<Action> actions)
         {
-            var text = File.ReadAllText(parseFile);
-            CheckParenthesesMissmatch(text);
-        }
-
-        private void CheckParenthesesMissmatch(string text)
-        {
-            var leftCount = text.Count(x => x == '(');
-            var rightCount = text.Count(x => x == ')');
-            if (leftCount != rightCount)
-            {
-                throw new ParseException(
-                    $"Parentheses missmatch! There are {leftCount} '(' but {rightCount} ')'!", 
-                    TaskErrorCategory.Error,
-                    -1, 
-                    TaskPriority.High
-                    );
-            }
+            Name = name;
+            Requirements = requirements;
+            Types = types;
+            Constants = constants;
+            Predicates = predicates;
+            Actions = actions;
         }
     }
 }
