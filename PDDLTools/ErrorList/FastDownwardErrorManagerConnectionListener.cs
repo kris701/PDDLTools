@@ -18,15 +18,13 @@ namespace PDDLTools.ErrorList
         public void SubjectBuffersConnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
             if (FastDownwardErrorManager.Instance != null)
-                if (!FastDownwardErrorManager.Instance.IsStarted)
-                    FastDownwardErrorManager.Instance.Initialize(textView);
+                FastDownwardErrorManager.Instance.Initialize(textView);
         }
 
         public void SubjectBuffersDisconnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
             if (FastDownwardErrorManager.Instance != null)
-                if (FastDownwardErrorManager.Instance.IsStarted)
-                    FastDownwardErrorManager.Instance.Stop();
+                FastDownwardErrorManager.Instance.Dispose();
         }
     }
 }

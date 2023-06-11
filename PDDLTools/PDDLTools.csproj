@@ -175,6 +175,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ErrorList\PDDLParser\" />
     <Folder Include="Windows\FDResultsWindow\Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
