@@ -9,9 +9,9 @@ namespace PDDLParser.Models.Domain
 {
     public class PredicatesDecl : BaseNode, IDecl
     {
-        public List<PredicateDecl> Predicates { get; set; }
+        public List<PredicateExp> Predicates { get; set; }
 
-        public PredicatesDecl(ASTNode node, List<PredicateDecl> predicates) : base(node)
+        public PredicatesDecl(ASTNode node, List<PredicateExp> predicates) : base(node)
         {
             Predicates = predicates;
         }

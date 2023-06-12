@@ -50,6 +50,20 @@ namespace PDDLParser.Visitors
                 }
                 return new NotExp(node, Visit(node.Children[0], listener));
             } 
+            else if (node.Content.Contains("?"))
+            {
+                var predicateName = node.Content.Split(' ')[0];
+                var parseStr = node.Content.Replace(predicateName, "").Trim();
+                List<NameExp> parameters = new List<NameExp>();
+
+                var paramSplit = parseStr.Split('?');
+                foreach (var param in paramSplit)
+                    if (param != "")
+                        parameters.Add(Visit(new ASTNode(node.Character, node.Line, param), listener) as NameExp);
+                foreach (var param in parameters)
+                    param.Name = $"?{param.Name}";
+                return new PredicateExp(node, predicateName, parameters);
+            }
             else
             {
                 if (node.Content.Contains(" - "))
