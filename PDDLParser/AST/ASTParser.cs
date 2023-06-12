@@ -11,19 +11,31 @@ namespace PDDLParser.AST
     {
         public IErrorListener Listener { get; }
 
+        private string _currentSource = "";
+        private int _currentCharacter = -1;
+
         public ASTParser(IErrorListener listener)
         {
             Listener = listener;
         }
 
-        public ASTNode ASTParse(string text)
+        public ASTNode Parse(string text)
         {
+            _currentSource = text;
+            var node = ParseAsNodeRec(text);
+            SetLineNumberByCharacterNumberRec(text, node);
+            return node;
+        }
+
+        private ASTNode ParseAsNodeRec(string text)
+        {
+            _currentCharacter = _currentSource.IndexOf("(", _currentCharacter + 1);
+
             if (text.Count(x => x == ')') > 1)
             {
-                var children = new List<ASTNode>();
-
                 int thisP = text.IndexOf("(");
 
+                var children = new List<ASTNode>();
                 while (text.Count(x => x == ')' || x == '(') > 2)
                 {
                     int currentLevel = 0;
@@ -44,18 +56,30 @@ namespace PDDLParser.AST
                         }
                     }
 
-                    children.Add(ASTParse(text.Substring(startP, endP - startP + 1)));
+                    children.Add(ParseAsNodeRec(text.Substring(startP, endP - startP + 1)));
                     text = text.Remove(startP, endP - startP + 1);
                 }
+                var newText = text.Replace("(", "").Replace(")", "").Trim();
                 return new ASTNode(
-                    text.Replace("(", "").Replace(")", "").Trim(),
+                    _currentCharacter + 1,
+                    newText,
                     children);
             }
             else
             {
+                var newText = text.Replace("(", "").Replace(")", "").Trim();
                 return new ASTNode(
-                    text.Replace("(", "").Replace(")", "").Trim());
+                    _currentCharacter + 1,
+                    newText);
             }
+        }
+
+        private void SetLineNumberByCharacterNumberRec(string source, ASTNode node)
+        {
+            foreach (var child in node.Children)
+                SetLineNumberByCharacterNumberRec(source, child);
+            var partStr = source.Substring(0, node.Character);
+            node.Line = partStr.Count(c => c == '\n') + 1;
         }
     }
 }

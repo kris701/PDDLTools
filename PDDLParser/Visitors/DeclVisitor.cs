@@ -74,7 +74,7 @@ namespace PDDLParser.Visitors
                     var args = argsStr.Split('?');
                     foreach (var arg in args)
                         if (arg != "")
-                            argList.Add(ExpVisitor.Visit(new ASTNode(arg), listener) as NameExp);
+                            argList.Add(ExpVisitor.Visit(new ASTNode($"?{arg}"), listener) as NameExp);
                     predicates.Add(new PredicateDecl(predicateName, argList));
                 }
                 return new PredicatesDecl(predicates);
@@ -85,10 +85,10 @@ namespace PDDLParser.Visitors
 
                 // Parameters
                 List<NameExp> parameters = new List<NameExp>();
-                var split = node.Children[0].Content.Split('?');
-                foreach(var item in split)
-                    if (item != "")
-                        parameters.Add(ExpVisitor.Visit(new ASTNode(item), listener) as NameExp);
+                var paramSplit = node.Children[0].Content.Split('?');
+                foreach(var param in paramSplit)
+                    if (param != "")
+                        parameters.Add(ExpVisitor.Visit(new ASTNode($"?{param}"), listener) as NameExp);
 
                 // Preconditions
                 IExp precondition = ExpVisitor.Visit(node.Children[1], listener);
@@ -106,8 +106,7 @@ namespace PDDLParser.Visitors
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.Content}",
                 ParserErrorLevel.High,
-                ParseErrorType.Error,
-                -1));
+                ParseErrorType.Error));
             return default;
         }
 

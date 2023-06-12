@@ -23,7 +23,7 @@ namespace PDDLParser
             CheckParenthesesMissmatch(text, errorListener);
 
             var astParser = new ASTParser(errorListener);
-            var absAST = astParser.ASTParse(text);
+            var absAST = astParser.Parse(text);
 
             var returnDomain = new DomainDecl();
 
@@ -59,17 +59,23 @@ namespace PDDLParser
                     ParserErrorLevel.High,
                     ParseErrorType.Error));
             }
-            string text = RemoveCommentsAndCombine(File.ReadAllLines(path).ToList());
+            string text = ReplaceCommentsWithWhiteSpace(File.ReadAllLines(path).ToList());
             text = text.ToLower();
             return text;
         }
 
-        private string RemoveCommentsAndCombine(List<string> lines)
+        private string ReplaceCommentsWithWhiteSpace(List<string> lines)
         {
             string returnStr = "";
             foreach (var line in lines)
-                if (!line.Trim().StartsWith(";"))
+            {
+                if (line.Trim().StartsWith(";"))
+                {
+                    returnStr += new string(' ', line.Length) + "\n";
+                }
+                else
                     returnStr += line + "\n";
+            }
             return returnStr;
         }
 

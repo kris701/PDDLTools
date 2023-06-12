@@ -14,13 +14,15 @@ namespace PDDLParser.Listener
         public ParserErrorLevel Level { get; internal set; }
         public ParseErrorType Type { get; internal set; }
         public int Line { get; internal set; }
+        public int Character { get; internal set; }
 
-        public ParseError(string message, ParserErrorLevel level, ParseErrorType type, int line)
+        public ParseError(string message, ParserErrorLevel level, ParseErrorType type, int line, int character)
         {
             Message = message;
             Level = level;
             Type = type;
             Line = line;
+            Character = character;
         }
 
         public ParseError(string message, ParserErrorLevel level, ParseErrorType type)

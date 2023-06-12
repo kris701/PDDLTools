@@ -18,10 +18,26 @@ namespace PDDLParser.Visitors
                 List<IExp> children = new List<IExp>();
                 foreach(var child in node.Children)
                     children.Add(Visit(child, listener));
+                if (children.Count == 0)
+                {
+                    listener.AddError(new ParseError(
+                        $"'and' node does not have any children!",
+                        ParserErrorLevel.High,
+                        ParseErrorType.Warning));
+                }
                 return new AndExp(children);
             } 
             else if (node.Content.StartsWith("not"))
             {
+                if (node.Children.Count == 0)
+                {
+                    listener.AddError(new ParseError(
+                        $"'not' node does not have any children!",
+                        ParserErrorLevel.High,
+                        ParseErrorType.Warning,
+                        node.Line,
+                        node.Character));
+                }
                 return new NotExp(Visit(node.Children[0], listener));
             } 
             else
@@ -29,6 +45,12 @@ namespace PDDLParser.Visitors
                 if (node.Content.Contains("-"))
                 {
                     var contentSplit = node.Content.Split('-');
+                    if (contentSplit.Length < 2) {
+                        listener.AddError(new ParseError(
+                            $"A content node with an intended type did not have any! Content was: '{node.Content}'",
+                            ParserErrorLevel.High,
+                            ParseErrorType.Error));
+                    }
                     return new NameExp(contentSplit[0], contentSplit[1]);
                 }
                 else
@@ -40,8 +62,7 @@ namespace PDDLParser.Visitors
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.Content}",
                 ParserErrorLevel.High,
-                ParseErrorType.Error,
-                -1));
+                ParseErrorType.Error));
             return default;
         }
     }
