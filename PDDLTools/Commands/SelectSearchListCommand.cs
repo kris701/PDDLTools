@@ -27,7 +27,7 @@ namespace PDDLTools.Commands
         public override int CommandId { get; } = 264;
         public static SelectSearchListCommand Instance { get; internal set; }
 
-        private SelectSearchListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private SelectSearchListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 

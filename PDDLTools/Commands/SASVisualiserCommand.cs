@@ -27,7 +27,7 @@ namespace PDDLTools.Commands
         public static SASVisualiserCommand Instance { get; internal set; }
         public static string SelectedDomainPath { get; internal set; } = "";
 
-        private SASVisualiserCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private SASVisualiserCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 

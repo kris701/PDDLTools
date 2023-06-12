@@ -27,7 +27,7 @@ namespace PDDLTools.Commands
         public static SelectSearchCommand Instance { get; internal set; }
         public static string SelectedSearch { get; internal set; } = "";
 
-        private SelectSearchCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private SelectSearchCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 

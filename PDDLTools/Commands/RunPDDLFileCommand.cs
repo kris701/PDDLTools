@@ -39,7 +39,7 @@ namespace PDDLTools.Commands
         private List<string> _resultLines = new List<string>();
         private List<string> _resultErrLines = new List<string>();
 
-        private RunPDDLFileCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private RunPDDLFileCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 

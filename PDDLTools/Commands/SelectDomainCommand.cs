@@ -27,7 +27,7 @@ namespace PDDLTools.Commands
         public static SelectDomainCommand Instance { get; internal set; }
         public static string SelectedDomainPath { get; internal set; } = "";
 
-        private SelectDomainCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private SelectDomainCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 

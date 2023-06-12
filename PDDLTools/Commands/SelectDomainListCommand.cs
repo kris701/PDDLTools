@@ -32,7 +32,7 @@ namespace PDDLTools.Commands
         public static string ActiveDocumentComboboxName = "Active Document (If Valid)";
         public static string NoneFoundComboboxName = "No open valid PDDL domains found";
 
-        private SelectDomainListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private SelectDomainListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 

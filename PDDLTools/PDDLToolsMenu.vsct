@@ -37,7 +37,6 @@
 
 		<Combos>
 			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileListCommandID" defaultWidth="150" priority="0x0100" type="DropDownCombo">
-				<CommandFlag>CommandWellOnly</CommandFlag>
 				<CommandFlag>StretchHorizontally</CommandFlag>
 				<CommandFlag>IconAndText</CommandFlag>
 				<Strings>
@@ -50,7 +49,6 @@
 				</Strings>
 			</Combo>
 			<Combo guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" idCommandList="SelectProblemFileListCommandID" defaultWidth="150" priority="0x0101" type="DropDownCombo">
-				<CommandFlag>CommandWellOnly</CommandFlag>
 				<CommandFlag>StretchHorizontally</CommandFlag>
 				<CommandFlag>IconAndText</CommandFlag>
 				<Strings>
@@ -63,7 +61,6 @@
 				</Strings>
 			</Combo>
 			<Combo guid="PDDLCommandSetGuid" id="SelectSearchCommandID" idCommandList="SelectSearchListCommandID" defaultWidth="150" priority="0x0102" type="DropDownCombo">
-				<CommandFlag>CommandWellOnly</CommandFlag>
 				<CommandFlag>StretchHorizontally</CommandFlag>
 				<CommandFlag>IconAndText</CommandFlag>
 				<Strings>

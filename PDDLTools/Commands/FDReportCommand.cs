@@ -27,7 +27,7 @@ namespace PDDLTools.Commands
         public static FDReportCommand Instance { get; internal set; }
         public static string SelectedDomainPath { get; internal set; } = "";
 
-        private FDReportCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService)
+        private FDReportCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 
