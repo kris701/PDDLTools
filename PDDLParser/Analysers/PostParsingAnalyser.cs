@@ -14,7 +14,8 @@ namespace PDDLParser.Analysers
     {
         public static void AnalyseDomain(DomainDecl domain, IErrorListener listener)
         {
-            CheckDeclaredVsUsedTypes(domain, listener);
+            if (domain.Types != null)
+                CheckDeclaredVsUsedTypes(domain, listener);
         }
 
         private static void CheckDeclaredVsUsedTypes(DomainDecl domain, IErrorListener listener)

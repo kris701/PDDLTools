@@ -23,6 +23,7 @@ using PDDLParser.Exceptions;
 using Microsoft.Build.Framework.XamlTypes;
 using Microsoft.VisualStudio.Text.Classification;
 using System.Windows.Shapes;
+using PDDLParser.Listener;
 
 namespace PDDLTools.ErrorList
 {
@@ -62,9 +63,9 @@ namespace PDDLTools.ErrorList
         {
             _errorProvider.Tasks.Clear();
 
+            var file = await DTE2Helper.GetSourceFilePathAsync();
             try
             {
-                var file = await DTE2Helper.GetSourceFilePathAsync();
                 var parser = new Parser();
                 if (PDDLHelper.IsFileDomain(file))
                 {
@@ -77,45 +78,64 @@ namespace PDDLTools.ErrorList
             }
             catch (ParseException ex)
             {
-                ErrorTask newError = new ErrorTask();
+                var sourceDocumentLines = File.ReadAllLines(file);
 
-                switch (ex.Category)
+                foreach(var error in ex.Errors)
                 {
-                    case ParseErrorCategory.Error: newError.ErrorCategory = TaskErrorCategory.Error; break;
-                    case ParseErrorCategory.Warning: newError.ErrorCategory = TaskErrorCategory.Warning; break;
-                    case ParseErrorCategory.Message: newError.ErrorCategory = TaskErrorCategory.Message; break;
-                }
-                switch (ex.Level)
-                {
-                    case ParserErrorLevel.Low: newError.Priority = TaskPriority.Low; break;
-                    case ParserErrorLevel.Medium: newError.Priority = TaskPriority.Normal; break;
-                    case ParserErrorLevel.High: newError.Priority = TaskPriority.High; break;
-                }
+                    ErrorTask newError = new ErrorTask();
 
-                newError.Text = ex.Message;
-                newError.Line = ex.Line;
-                newError.Document = "";
-                newError.Navigate += JumpToError;
-                _errorProvider.Tasks.Add(newError);
+                    switch (error.Type)
+                    {
+                        case ParseErrorType.Error: newError.ErrorCategory = TaskErrorCategory.Error; break;
+                        case ParseErrorType.Warning: newError.ErrorCategory = TaskErrorCategory.Warning; break;
+                        case ParseErrorType.Message: newError.ErrorCategory = TaskErrorCategory.Message; break;
+                    }
+                    switch (error.Level)
+                    {
+                        case ParserErrorLevel.Low: newError.Priority = TaskPriority.Low; break;
+                        case ParserErrorLevel.Medium: newError.Priority = TaskPriority.Normal; break;
+                        case ParserErrorLevel.High: newError.Priority = TaskPriority.High; break;
+                    }
+
+                    newError.Text = error.Message;
+                    newError.Line = error.Line;
+                    newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
+                    newError.Document = "";
+                    newError.Navigate += JumpToError;
+                    _errorProvider.Tasks.Add(newError);
+                }
             }
 
             if (_errorProvider.Tasks.Count > 0)
                 _errorProvider.Show();
         }
 
+        private int GetColumnFromCharacter(string[] sourceDocumentLines, int lineNumber, int characterNumber)
+        {
+            int offset = 0;
+            for (int i = 0; i < lineNumber - 1; i++)
+            {
+                if (i > sourceDocumentLines.Length)
+                    break;
+                offset += sourceDocumentLines[i].Length + 1;
+            }
+            return characterNumber - offset - 1;
+        }
+
         private async void JumpToError(object sender, EventArgs e)
         {
             if (sender is ErrorTask item) {
+                int lineCounter = 1;
                 foreach(var line in TextField.TextViewLines)
                 {
-                    var lineText = line.Extent.GetText().Trim();
-                    if (lineText == item.Document)
+                    if (lineCounter == item.Line)
                     {
-                        var newSpan = new Microsoft.VisualStudio.Text.SnapshotSpan(line.Extent.Snapshot, line.Extent.Span);
+                        var newSpan = new Microsoft.VisualStudio.Text.SnapshotSpan(line.Extent.Snapshot, line.Extent.Start + item.Column, line.Extent.End - line.Extent.Start - item.Column);
                         TextField.Selection.Select(newSpan, false);
                         await DTE2Helper.FocusActiveDocumentAsync();
                         break;
                     }
+                    lineCounter++;
                 }
             }
         }
