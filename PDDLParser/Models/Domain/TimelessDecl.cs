@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class TypesDecl : IDecl
+    public class TimelessDecl : IDecl
     {
-        public List<TypeDecl> Types { get; set; }
+        public List<NameExp> Objs { get; set; }
 
-        public TypesDecl(List<TypeDecl> types)
+        public TimelessDecl(List<NameExp> types)
         {
-            Types = types;
+            Objs = types;
         }
 
         public override string ToString()
         {
             string retStr = "";
-            foreach(var type in Types)
+            foreach (var type in Objs)
                 retStr += $" {type}{Environment.NewLine}";
-            return $"(:types{retStr})";
+            return $"(:timeless{retStr})";
         }
     }
 }

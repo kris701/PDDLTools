@@ -35,17 +35,25 @@ namespace PDDLParser
                     returnDomain.Name = DomainVisitor.Visit(node, errorListener) as DomainNameDecl;
                 else if (node.Content.StartsWith(":requirements"))
                     returnDomain.Requirements = DomainVisitor.Visit(node, errorListener) as RequirementsDecl;
-                if (node.Content.StartsWith(":types"))
+                else if (node.Content.StartsWith(":types"))
                     returnDomain.Types = DomainVisitor.Visit(node, errorListener) as TypesDecl;
-                if (node.Content.StartsWith(":constants"))
+                else if (node.Content.StartsWith(":constants"))
                     returnDomain.Constants = DomainVisitor.Visit(node, errorListener) as ConstantsDecl;
-                if (node.Content.StartsWith(":predicates"))
+                else if (node.Content.StartsWith(":timeless"))
+                    returnDomain.Timeless = DomainVisitor.Visit(node, errorListener) as TimelessDecl;
+                else if (node.Content.StartsWith(":predicates"))
                     returnDomain.Predicates = DomainVisitor.Visit(node, errorListener) as PredicatesDecl;
-                if (node.Content.StartsWith(":action"))
+                else if (node.Content.StartsWith(":action"))
                 {
                     if (returnDomain.Actions == null)
                         returnDomain.Actions = new List<ActionDecl>();
                     returnDomain.Actions.Add(DomainVisitor.Visit(node, errorListener) as ActionDecl);
+                }
+                else if (node.Content.StartsWith(":axiom"))
+                {
+                    if (returnDomain.Axioms == null)
+                        returnDomain.Axioms = new List<AxiomDecl>();
+                    returnDomain.Axioms.Add(DomainVisitor.Visit(node, errorListener) as AxiomDecl);
                 }
             }
 

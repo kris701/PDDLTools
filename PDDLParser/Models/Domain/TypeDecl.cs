@@ -8,12 +8,12 @@ namespace PDDLParser.Models.Domain
 {
     public class TypeDecl : IDecl
     {
-        public string Name { get; set; }
+        public string TypeName { get; set; }
         public List<string> SubTypes { get; set; }
 
         public TypeDecl(string name, List<string> subTypes)
         {
-            Name = name;
+            TypeName = name;
             SubTypes = subTypes;
         }
 
@@ -22,7 +22,7 @@ namespace PDDLParser.Models.Domain
             string retStr = "";
             foreach (var subType in SubTypes)
                 retStr += $"{subType} ";
-            return $"{retStr} - {Name}";
+            return $"{retStr} - {TypeName}";
         }
     }
 }

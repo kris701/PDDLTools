@@ -31,7 +31,21 @@ namespace PDDLParser.Visitors
                 {
                     var removedType = objDecl.Replace(":objects", "").Trim();
                     if (removedType != "")
-                        objs.Add(ExpVisitor.Visit(new ASTNode(removedType), listener) as NameExp);
+                    {
+                        if (removedType.Contains(" - "))
+                        {
+                            var left = removedType.Substring(0, removedType.IndexOf(" - "));
+                            var right = removedType.Substring(removedType.IndexOf(" - ") + 3);
+
+                            foreach (var obj in left.Split(' '))
+                                objs.Add(new NameExp(obj, right));
+                        }
+                        else
+                        {
+                            foreach (var obj in removedType.Split(' '))
+                                objs.Add(new NameExp(obj));
+                        }
+                    }
                 }
                 return new ObjectsDecl(objs);
             }

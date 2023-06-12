@@ -45,9 +45,11 @@
     <Compile Include="AST\ASTParser.cs" />
     <Compile Include="Models\Domain\ActionDecl.cs" />
     <Compile Include="Models\AndExp.cs" />
+    <Compile Include="Models\Domain\AxiomDecl.cs" />
     <Compile Include="Models\Domain\ConstantsDecl.cs" />
     <Compile Include="Models\Domain\DomainDecl.cs" />
     <Compile Include="Models\Domain\DomainNameDecl.cs" />
+    <Compile Include="Models\Domain\TimelessDecl.cs" />
     <Compile Include="Models\IDecl.cs" />
     <Compile Include="Models\IExp.cs" />
     <Compile Include="Models\INode.cs" />
