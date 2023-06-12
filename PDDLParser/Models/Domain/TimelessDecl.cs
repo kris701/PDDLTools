@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class TimelessDecl : IDecl
+    public class TimelessDecl : BaseNode, IDecl
     {
         public List<NameExp> Objs { get; set; }
 
-        public TimelessDecl(List<NameExp> types)
+        public TimelessDecl(ASTNode node, List<NameExp> types) : base(node)
         {
             Objs = types;
         }

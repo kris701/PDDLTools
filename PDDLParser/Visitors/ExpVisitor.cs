@@ -25,7 +25,7 @@ namespace PDDLParser.Visitors
                         ParserErrorLevel.High,
                         ParseErrorType.Warning));
                 }
-                return new AndExp(children);
+                return new AndExp(node, children);
             } 
             else if (node.Content.StartsWith("not"))
             {
@@ -38,20 +38,20 @@ namespace PDDLParser.Visitors
                         node.Line,
                         node.Character));
                 }
-                return new NotExp(Visit(node.Children[0], listener));
+                return new NotExp(node, Visit(node.Children[0], listener));
             } 
             else
             {
                 if (node.Content.Contains(" - "))
                 {
-                    var left = node.Content.Substring(0, node.Content.IndexOf(" - "));
-                    var right = node.Content.Substring(node.Content.IndexOf(" - ") + 3);
+                    var left = node.Content.Substring(0, node.Content.IndexOf(" - ")).Trim();
+                    var right = node.Content.Substring(node.Content.IndexOf(" - ") + 3).Trim();
 
-                    return new NameExp(left, right);
+                    return new NameExp(node, left, right);
                 }
                 else
                 {
-                    return new NameExp(node.Content);
+                    return new NameExp(node, node.Content.Trim());
                 }
             }
 

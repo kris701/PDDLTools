@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class PredicateDecl : IDecl
+    public class PredicateDecl : BaseNode, IDecl
     {
         public string Name { get; set; }
         public List<NameExp> Arguments { get; set; }
 
-        public PredicateDecl(string name, List<NameExp> arguments)
+        public PredicateDecl(ASTNode node, string name, List<NameExp> arguments) : base(node)
         {
             Name = name;
             Arguments = arguments;

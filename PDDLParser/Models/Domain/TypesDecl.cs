@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class TypesDecl : IDecl
+    public class TypesDecl : BaseNode, IDecl
     {
         public List<TypeDecl> Types { get; set; }
 
-        public TypesDecl(List<TypeDecl> types)
+        public TypesDecl(ASTNode node, List<TypeDecl> types) : base(node)
         {
             Types = types;
         }

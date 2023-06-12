@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class AndExp : IExp
+    public class AndExp : BaseNode, IExp
     {
         public List<IExp> Children { get; set; }
 
-        public AndExp(List<IExp> children)
+        public AndExp(ASTNode node, List<IExp> children) : base(node)
         {
             Children = children;
         }

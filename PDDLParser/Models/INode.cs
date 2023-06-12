@@ -8,5 +8,7 @@ namespace PDDLParser.Models
 {
     public interface INode
     {
+        int Character { get; set; }
+        int Line { get; set; }
     }
 }

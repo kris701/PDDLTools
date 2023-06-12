@@ -17,12 +17,12 @@ namespace PDDLParser.Visitors
             if (node.Content.StartsWith("problem"))
             {
                 var name = PurgeEscapeChars(node.Content).Remove(0, "problem".Length).Trim();
-                return new ProblemNameDecl(name);
+                return new ProblemNameDecl(node, name);
             } 
             else if (node.Content.StartsWith(":domain"))
             {
                 var name = PurgeEscapeChars(node.Content).Remove(0, ":domain".Length).Trim();
-                return new DomainNameRefDecl(name);
+                return new DomainNameRefDecl(node, name);
             } 
             else if (node.Content.StartsWith(":objects"))
             {
@@ -38,27 +38,27 @@ namespace PDDLParser.Visitors
                             var right = removedType.Substring(removedType.IndexOf(" - ") + 3);
 
                             foreach (var obj in left.Split(' '))
-                                objs.Add(new NameExp(obj, right));
+                                objs.Add(new NameExp(node, obj, right));
                         }
                         else
                         {
                             foreach (var obj in removedType.Split(' '))
-                                objs.Add(new NameExp(obj));
+                                objs.Add(new NameExp(node, obj));
                         }
                     }
                 }
-                return new ObjectsDecl(objs);
+                return new ObjectsDecl(node, objs);
             }
             else if (node.Content.StartsWith(":init"))
             {
                 List<NameExp> inits = new List<NameExp>();
                 foreach(var child in node.Children)
-                    inits.Add(ExpVisitor.Visit(new ASTNode(child.Content), listener) as NameExp);
-                return new InitDecl(inits);
+                    inits.Add(ExpVisitor.Visit(new ASTNode(child.Character, child.Line, child.Content), listener) as NameExp);
+                return new InitDecl(node, inits);
             }
             else if (node.Content.StartsWith(":goal"))
             {
-                return new GoalDecl(ExpVisitor.Visit(node.Children[0], listener));
+                return new GoalDecl(node, ExpVisitor.Visit(node.Children[0], listener));
             }
 
             listener.AddError(new ParseError(

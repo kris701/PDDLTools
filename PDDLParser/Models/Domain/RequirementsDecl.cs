@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class RequirementsDecl : IDecl
+    public class RequirementsDecl : BaseNode, IDecl
     {
         public List<string> Requirements {  get; set; }
 
-        public RequirementsDecl(List<string> requirements)
+        public RequirementsDecl(ASTNode node, List<string> requirements) : base(node)
         {
             Requirements = requirements;
         }

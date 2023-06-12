@@ -1,4 +1,5 @@
-﻿using PDDLParser.Exceptions;
+﻿using PDDLParser.AST;
+using PDDLParser.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class DomainDecl : IDecl
+    public class DomainDecl : BaseNode, IDecl
     {
         public DomainNameDecl Name { get; set; }
         public RequirementsDecl Requirements { get; set; }
@@ -18,5 +19,7 @@ namespace PDDLParser.Models.Domain
         public PredicatesDecl Predicates { get; set; }
         public List<ActionDecl> Actions { get; set; }
         public List<AxiomDecl> Axioms { get; set; }
+
+        public DomainDecl(ASTNode node) : base(node) { }
     }
 }

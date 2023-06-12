@@ -30,6 +30,7 @@ namespace PDDLParser.AST
         private ASTNode ParseAsNodeRec(string text)
         {
             _currentCharacter = _currentSource.IndexOf("(", _currentCharacter + 1);
+            int thisCharacter = _currentCharacter;
 
             if (text.Count(x => x == ')') > 1)
             {
@@ -61,7 +62,7 @@ namespace PDDLParser.AST
                 }
                 var newText = text.Replace("(", "").Replace(")", "").Trim();
                 return new ASTNode(
-                    _currentCharacter + 1,
+                    thisCharacter + 1,
                     newText,
                     children);
             }
@@ -69,7 +70,7 @@ namespace PDDLParser.AST
             {
                 var newText = text.Replace("(", "").Replace(")", "").Trim();
                 return new ASTNode(
-                    _currentCharacter + 1,
+                    thisCharacter + 1,
                     newText);
             }
         }

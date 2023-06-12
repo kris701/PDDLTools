@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Problem
 {
-    public class InitDecl : IDecl
+    public class InitDecl : BaseNode, IDecl
     {
         public List<NameExp> Predicates { get; set; }
 
-        public InitDecl(List<NameExp> predicates)
+        public InitDecl(ASTNode node, List<NameExp> predicates) : base(node)
         {
             Predicates = predicates;
         }

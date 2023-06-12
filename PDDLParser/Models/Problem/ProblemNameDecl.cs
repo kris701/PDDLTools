@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Problem
 {
-    public class ProblemNameDecl : IDecl
+    public class ProblemNameDecl : BaseNode, IDecl
     {
         public string Name { get; set; }
 
-        public ProblemNameDecl(string name)
+        public ProblemNameDecl(ASTNode node, string name) : base(node)
         {
             Name = name;
         }

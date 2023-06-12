@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PDDLParser.Models.Domain;
 using PDDLParser.Models.Problem;
+using PDDLParser.Analysers;
 
 namespace PDDLParser
 {
@@ -21,13 +22,9 @@ namespace PDDLParser
             IErrorListener errorListener = new ErrorListener();
             errorListener.ThrowIfTypeAbove = ParseErrorType.Warning;
 
-            var text = ReadDataAsString(parseFile, errorListener);
-            CheckParenthesesMissmatch(text, errorListener);
+            var absAST = ParseAsASTTree(parseFile, errorListener);
 
-            var astParser = new ASTParser(errorListener);
-            var absAST = astParser.Parse(text);
-
-            var returnDomain = new DomainDecl();
+            var returnDomain = new DomainDecl(absAST);
 
             foreach (var node in absAST.Children)
             {
@@ -57,6 +54,8 @@ namespace PDDLParser
                 }
             }
 
+            PostParsingAnalyser.AnalyseDomain(returnDomain, errorListener);
+
             return returnDomain;
         }
 
@@ -65,13 +64,9 @@ namespace PDDLParser
             IErrorListener errorListener = new ErrorListener();
             errorListener.ThrowIfTypeAbove = ParseErrorType.Warning;
 
-            var text = ReadDataAsString(parseFile, errorListener);
-            CheckParenthesesMissmatch(text, errorListener);
+            var absAST = ParseAsASTTree(parseFile, errorListener);
 
-            var astParser = new ASTParser(errorListener);
-            var absAST = astParser.Parse(text);
-
-            var returnProblem = new ProblemDecl();
+            var returnProblem = new ProblemDecl(absAST);
 
             foreach (var node in absAST.Children)
             {
@@ -87,7 +82,19 @@ namespace PDDLParser
                     returnProblem.Goal = ProblemVisitor.Visit(node, errorListener) as GoalDecl;
             }
 
+            PostParsingAnalyser.AnalyseProblem(returnProblem, errorListener);
+
             return returnProblem;
+        }
+
+        private ASTNode ParseAsASTTree(string path, IErrorListener listener)
+        {
+            var text = ReadDataAsString(path, listener);
+            PreParsingAnalyser.AnalyseText(text, listener);
+
+            var astParser = new ASTParser(listener);
+            var absAST = astParser.Parse(text);
+            return absAST;
         }
 
         private string ReadDataAsString(string path, IErrorListener listener)
@@ -117,19 +124,6 @@ namespace PDDLParser
                     returnStr += line + "\n";
             }
             return returnStr;
-        }
-
-        private void CheckParenthesesMissmatch(string text, IErrorListener listener)
-        {
-            var leftCount = text.Count(x => x == '(');
-            var rightCount = text.Count(x => x == ')');
-            if (leftCount != rightCount)
-            {
-                listener.AddError(new ParseError(
-                    $"Parentheses missmatch! There are {leftCount} '(' but {rightCount} ')'!",
-                    ParserErrorLevel.High,
-                    ParseErrorType.Error));
-            }
         }
     }
 }

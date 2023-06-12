@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class ActionDecl : IDecl
+    public class ActionDecl :  BaseNode, IDecl
     {
         public string Name { get; set; }
 
@@ -14,7 +15,7 @@ namespace PDDLParser.Models.Domain
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 
-        public ActionDecl(string name, List<NameExp> parameters, IExp preconditions, IExp effects)
+        public ActionDecl(ASTNode node, string name, List<NameExp> parameters, IExp preconditions, IExp effects) : base(node)
         {
             Name = name;
             Parameters = parameters;

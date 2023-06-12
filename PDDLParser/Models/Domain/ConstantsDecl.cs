@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class ConstantsDecl : IDecl
+    public class ConstantsDecl : BaseNode, IDecl
     {
         public List<NameExp> Constants { get; set; }
 
-        public ConstantsDecl(List<NameExp> constants)
+        public ConstantsDecl(ASTNode node, List<NameExp> constants) : base(node) 
         {
             Constants = constants;
         }

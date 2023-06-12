@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.AST;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class DomainNameDecl : IDecl
+    public class DomainNameDecl : BaseNode, IDecl
     {
         public string Name { get; set; }
 
-        public DomainNameDecl(string name)
+        public DomainNameDecl(ASTNode node, string name) : base(node)
         {
             Name = name;
         }
