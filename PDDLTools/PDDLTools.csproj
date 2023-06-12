@@ -189,6 +189,7 @@
   <ItemGroup>
     <Folder Include="Windows\FDResultsWindow\Resources\" />
     <Folder Include="Windows\SASSolutionWindow\Resources\" />
+    <Folder Include="Windows\SASSolutionWindow\UserControls\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">

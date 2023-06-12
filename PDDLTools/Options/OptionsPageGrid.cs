@@ -41,8 +41,8 @@ namespace PDDLTools.Options
         [Category("PDDL Tools")]
         [DisplayName("Fast Downward Search Options")]
         [Description("What options that is available to run with Fast Downward. Note, this is the '--search' parameter of FD. Semi-colon seperated!")]
-        [DefaultValue("astar(lmcut());lazy_greedy([hff], preferred=[hff])")]
-        public string SearchOptions { get; set; } = "astar(lmcut());lazy_greedy([hff], preferred=[hff])";
+        [DefaultValue("astar(lmcut());astar(ipdb());astar(blind())")]
+        public string SearchOptions { get; set; } = "astar(lmcut());astar(ipdb());astar(blind())";
 
         [Category("PDDL Tools")]
         [DisplayName("General Result Report")]

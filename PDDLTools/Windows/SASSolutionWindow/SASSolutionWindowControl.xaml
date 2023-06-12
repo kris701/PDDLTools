@@ -20,7 +20,7 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <Label Content="Resulting Plan" Foreground="White" FontSize="20"/>
+        <Label Content="Resulting Plan" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <ScrollViewer Grid.Row="1" >
             <TextBlock x:Name="TextPlan" IsEnabled="False" Margin="5" Foreground="White"/>
         </ScrollViewer>
