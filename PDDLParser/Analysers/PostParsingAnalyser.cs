@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PDDLParser.Analysers
 {
@@ -15,11 +16,19 @@ namespace PDDLParser.Analysers
     {
         public static void AnalyseDomain(DomainDecl domain, IErrorListener listener)
         {
+            Dictionary<string, List<string>> typeTable = new Dictionary<string, List<string>>();
+            if (domain.Types != null)
+            {
+                foreach (var typeDecl in domain.Types.Types)
+                    typeTable.Add(typeDecl.TypeName, typeDecl.SubTypes);
+            }
+
+
             CheckDeclaredVsUsedTypes(domain, listener);
             CheckForUniquePredicateNames(domain, listener);
             CheckForUniqueActionParameterNames(domain, listener);
             CheckForUniqueAxiomParameterNames(domain, listener);
-            CheckActionUsesValidPredicates(domain, listener);
+            CheckActionUsesValidPredicates(domain, listener, typeTable);
         }
 
         private static void CheckDeclaredVsUsedTypes(DomainDecl domain, IErrorListener listener)
@@ -176,50 +185,89 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private static void CheckActionUsesValidPredicates(DomainDecl domain, IErrorListener listener)
+        private static void CheckActionUsesValidPredicates(DomainDecl domain, IErrorListener listener, Dictionary<string, List<string>> typeTable)
         {
             if (domain.Actions != null)
             {
-                List<string> predicateNames = new List<string>();
+                List<PredicateExp> predicates = new List<PredicateExp>();
                 if (domain.Predicates != null)
                     foreach (var predicate in domain.Predicates.Predicates)
-                        predicateNames.Add(predicate.Name);
+                        predicates.Add(predicate);
 
                 foreach(var action in domain.Actions)
                 {
-                    CheckExpUsesPredicates(action.Preconditions, predicateNames, listener);
-                    CheckExpUsesPredicates(action.Effects, predicateNames, listener);
+                    CheckExpUsesPredicates(action.Preconditions, predicates, listener, typeTable);
+                    CheckExpUsesPredicates(action.Effects, predicates, listener, typeTable);
                 }
             }
         }
-        private static void CheckExpUsesPredicates(IExp node, List<string> predicateNames, IErrorListener listener)
+        private static void CheckExpUsesPredicates(IExp node, List<PredicateExp> predicates, IErrorListener listener, Dictionary<string, List<string>> typeTable)
         {
             if (node is AndExp and)
             {
                 foreach(var child in and.Children)
-                    CheckExpUsesPredicates(child, predicateNames, listener);
+                    CheckExpUsesPredicates(child, predicates, listener, typeTable);
             }
             else if (node is OrExp or)
             {
-                CheckExpUsesPredicates(or.Option1, predicateNames, listener);
-                CheckExpUsesPredicates(or.Option2, predicateNames, listener);
+                CheckExpUsesPredicates(or.Option1, predicates, listener, typeTable);
+                CheckExpUsesPredicates(or.Option2, predicates, listener, typeTable);
             }
             else if (node is NotExp not)
             {
-                CheckExpUsesPredicates(not.Child, predicateNames, listener);
+                CheckExpUsesPredicates(not.Child, predicates, listener, typeTable);
             }
-            else if (node is NameExp name)
+            else if (node is PredicateExp pred)
             {
-                if (!predicateNames.Contains(name.Name))
+                bool any = false;
+                bool wasTypeMissmatch = false;
+                foreach(var predicate in predicates)
                 {
-                    listener.AddError(new ParseError(
-                        $"Undefined predicate used '{name.Name}'",
-                        ParserErrorLevel.High,
-                        ParseErrorType.Error,
-                        name.Line,
-                        name.Character));
+                    if (predicate.Name == pred.Name && predicate.Arguments.Count == pred.Arguments.Count)
+                    {
+                        any = true;
+                        for (int i = 0; i < predicate.Arguments.Count; i++)
+                        {
+                            if (!IsTypeOrSubType(pred.Arguments[i].Type, predicate.Arguments[i].Type, typeTable))
+                            {
+                                wasTypeMissmatch = true;
+                                any = false;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!any)
+                {
+                    if (wasTypeMissmatch)
+                        listener.AddError(new ParseError(
+                            $"Used predicate '{pred.Name}' did not match the type definitions from the parameters!",
+                            ParserErrorLevel.High,
+                            ParseErrorType.Error,
+                            pred.Line,
+                            pred.Character));
+                    else
+                        listener.AddError(new ParseError(
+                            $"Undefined predicate used '{pred.Name}'",
+                            ParserErrorLevel.High,
+                            ParseErrorType.Error,
+                            pred.Line,
+                            pred.Character));
                 }
             }
+        }
+        private static bool IsTypeOrSubType(string typeName, string targetType, Dictionary<string, List<string>> typeTable)
+        {
+            if (typeName == targetType)
+                return true;
+
+            if (typeTable.ContainsKey(targetType))
+            {
+                if (typeTable[targetType].Contains(typeName))
+                    return true;
+            }
+
+            return false;
         }
 
         public static void AnalyseProblem(ProblemDecl problem, IErrorListener listener)

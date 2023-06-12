@@ -53,7 +53,7 @@ namespace PDDLParser.Visitors
             else if (node.Content.Contains("?"))
             {
                 var predicateName = node.Content.Split(' ')[0];
-                var parseStr = node.Content.Replace(predicateName, "").Trim();
+                var parseStr = node.Content.Remove(0,predicateName.Length).Trim();
                 List<NameExp> parameters = new List<NameExp>();
 
                 var paramSplit = parseStr.Split('?');
