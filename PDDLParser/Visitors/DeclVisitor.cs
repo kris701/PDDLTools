@@ -1,6 +1,7 @@
 ﻿using PDDLParser.AST;
 using PDDLParser.Domain;
 using PDDLParser.Exceptions;
+using PDDLParser.Listener;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace PDDLParser.Visitors
 {
     public static class DeclVisitor
     {
-        public static IDecl Visit(ASTNode node)
+        public static IDecl Visit(ASTNode node, IErrorListener listener)
         {
             if (node.Content.StartsWith("domain"))
             {
@@ -57,18 +58,7 @@ namespace PDDLParser.Visitors
                 foreach (var typeDec in node.Content.Split('\n'))
                 {
                     var removedType = typeDec.Replace(":constants", "").Trim();
-                    if (removedType.Contains("-"))
-                    {
-                        string[] split = removedType.Split('-');
-                        string left = split[0];
-                        string right = split[1];
-
-                        constants.Add(new NameExp(left, right));
-                    }
-                    else
-                    {
-                        constants.Add(new NameExp(removedType));
-                    }
+                    constants.Add(ExpVisitor.Visit(new ASTNode(removedType), listener) as NameExp);
                 }
                 return new ConstantsDecl(constants);
             }
@@ -83,22 +73,8 @@ namespace PDDLParser.Visitors
                     var argsStr = predicate.Content.Replace(predicateName, "").Trim();
                     var args = argsStr.Split('?');
                     foreach (var arg in args)
-                    {
                         if (arg != "")
-                        {
-                            if (arg.Contains("-"))
-                            {
-                                var argSplit = arg.Split('-');
-                                var left = argSplit[0];
-                                var right = argSplit[1];
-                                argList.Add(new NameExp(left, right));
-                            }
-                            else
-                            {
-                                argList.Add(new NameExp(arg));
-                            }
-                        }
-                    }
+                            argList.Add(ExpVisitor.Visit(new ASTNode(arg), listener) as NameExp);
                     predicates.Add(new PredicateDecl(predicateName, argList));
                 }
                 return new PredicatesDecl(predicates);
@@ -112,13 +88,13 @@ namespace PDDLParser.Visitors
                 var split = node.Children[0].Content.Split('?');
                 foreach(var item in split)
                     if (item != "")
-                        parameters.Add(ExpVisitor.Visit(new ASTNode(item)) as NameExp);
+                        parameters.Add(ExpVisitor.Visit(new ASTNode(item), listener) as NameExp);
 
                 // Preconditions
-                IExp precondition = ExpVisitor.Visit(node.Children[1]);
+                IExp precondition = ExpVisitor.Visit(node.Children[1], listener);
 
                 // Effects
-                IExp effects = ExpVisitor.Visit(node.Children[2]);
+                IExp effects = ExpVisitor.Visit(node.Children[2], listener);
 
                 return new ActionDecl(
                     actionName,
@@ -127,12 +103,12 @@ namespace PDDLParser.Visitors
                     effects);
             }
 
-            throw new ParseException(
+            listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.Content}",
                 ParserErrorLevel.High,
-                ParseErrorCategory.Error,
-                -1
-                );
+                ParseErrorType.Error,
+                -1));
+            return default;
         }
 
         private static string PurgeEscapeChars(string str) => str.Replace("\r", "").Replace("\n", "").Replace("\t", "");

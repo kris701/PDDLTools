@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.Listener;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,13 @@ namespace PDDLParser.AST
 {
     public class ASTParser
     {
+        public IErrorListener Listener { get; }
+
+        public ASTParser(IErrorListener listener)
+        {
+            Listener = listener;
+        }
+
         public ASTNode ASTParse(string text)
         {
             if (text.Count(x => x == ')') > 1)

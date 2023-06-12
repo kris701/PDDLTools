@@ -1,6 +1,7 @@
 ﻿using PDDLParser.AST;
 using PDDLParser.Domain;
 using PDDLParser.Exceptions;
+using PDDLParser.Listener;
 using PDDLParser.Visitors;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace PDDLParser
     {
         public DomainDecl ParseDomainFile(string parseFile)
         {
-            string text = RemoveCommentsAndCombine(File.ReadAllLines(parseFile).ToList());
-            text = text.ToLower();
-            CheckParenthesesMissmatch(text);
+            IErrorListener errorListener = new ErrorListener();
+            errorListener.ThrowIfTypeAbove = ParseErrorType.Warning;
 
-            var astParser = new ASTParser();
+            var text = ReadDataAsString(parseFile, errorListener);
+            CheckParenthesesMissmatch(text, errorListener);
+
+            var astParser = new ASTParser(errorListener);
             var absAST = astParser.ASTParse(text);
 
             var returnDomain = new DomainDecl();
@@ -27,24 +30,38 @@ namespace PDDLParser
             foreach (var node in absAST.Children)
             {
                 if (node.Content.StartsWith("domain"))
-                    returnDomain.Name = DeclVisitor.Visit(node) as DomainNameDecl;
+                    returnDomain.Name = DeclVisitor.Visit(node, errorListener) as DomainNameDecl;
                 else if (node.Content.StartsWith(":requirements"))
-                    returnDomain.Requirements = DeclVisitor.Visit(node) as RequirementsDecl;
+                    returnDomain.Requirements = DeclVisitor.Visit(node, errorListener) as RequirementsDecl;
                 if (node.Content.StartsWith(":types"))
-                    returnDomain.Types = DeclVisitor.Visit(node) as TypesDecl;
+                    returnDomain.Types = DeclVisitor.Visit(node, errorListener) as TypesDecl;
                 if (node.Content.StartsWith(":constants"))
-                    returnDomain.Constants = DeclVisitor.Visit(node) as ConstantsDecl;
+                    returnDomain.Constants = DeclVisitor.Visit(node, errorListener) as ConstantsDecl;
                 if (node.Content.StartsWith(":predicates"))
-                    returnDomain.Predicates = DeclVisitor.Visit(node) as PredicatesDecl;
+                    returnDomain.Predicates = DeclVisitor.Visit(node, errorListener) as PredicatesDecl;
                 if (node.Content.StartsWith(":action"))
                 {
                     if (returnDomain.Actions == null)
                         returnDomain.Actions = new List<ActionDecl>();
-                    returnDomain.Actions.Add(DeclVisitor.Visit(node) as ActionDecl);
+                    returnDomain.Actions.Add(DeclVisitor.Visit(node, errorListener) as ActionDecl);
                 }
             }
 
             return returnDomain;
+        }
+
+        private string ReadDataAsString(string path, IErrorListener listener)
+        {
+            if (!File.Exists(path))
+            {
+                listener.AddError(new ParseError(
+                    $"Could not find the file to parse: '{path}'",
+                    ParserErrorLevel.High,
+                    ParseErrorType.Error));
+            }
+            string text = RemoveCommentsAndCombine(File.ReadAllLines(path).ToList());
+            text = text.ToLower();
+            return text;
         }
 
         private string RemoveCommentsAndCombine(List<string> lines)
@@ -56,18 +73,16 @@ namespace PDDLParser
             return returnStr;
         }
 
-        private void CheckParenthesesMissmatch(string text)
+        private void CheckParenthesesMissmatch(string text, IErrorListener listener)
         {
             var leftCount = text.Count(x => x == '(');
             var rightCount = text.Count(x => x == ')');
             if (leftCount != rightCount)
             {
-                throw new ParseException(
+                listener.AddError(new ParseError(
                     $"Parentheses missmatch! There are {leftCount} '(' but {rightCount} ')'!",
                     ParserErrorLevel.High,
-                    ParseErrorCategory.Error,
-                    - 1
-                    );
+                    ParseErrorType.Error));
             }
         }
     }

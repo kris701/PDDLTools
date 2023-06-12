@@ -58,6 +58,9 @@
     <Compile Include="Domain\RequirementsDecl.cs" />
     <Compile Include="Domain\TypeDecl.cs" />
     <Compile Include="Domain\TypesDecl.cs" />
+    <Compile Include="Listener\ErrorListener.cs" />
+    <Compile Include="Listener\IErrorListener.cs" />
+    <Compile Include="Listener\ParseError.cs" />
     <Compile Include="Exceptions\ParseException.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
