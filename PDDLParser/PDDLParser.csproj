@@ -67,6 +67,7 @@
     <Compile Include="Listener\IErrorListener.cs" />
     <Compile Include="Listener\ParseError.cs" />
     <Compile Include="Exceptions\ParseException.cs" />
+    <Compile Include="Models\OrExp.cs" />
     <Compile Include="Models\Problem\DomainNameRefDecl.cs" />
     <Compile Include="Models\Problem\GoalDecl.cs" />
     <Compile Include="Models\Problem\InitDecl.cs" />
