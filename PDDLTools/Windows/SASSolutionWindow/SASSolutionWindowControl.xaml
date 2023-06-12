@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PDDLTools.Windows.SASSolutionWindow"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary Source="../ResourceDictionary/Styles.xaml"/>
     </UserControl.Resources>
@@ -21,7 +21,9 @@
         </Grid.ColumnDefinitions>
 
         <Label Content="Resulting Plan" Foreground="White" FontSize="20"/>
-        <TextBlock x:Name="TextPlan" Grid.Row="1" IsEnabled="False" Margin="5" Foreground="White"/>
-        <Canvas x:Name="VisualPlan" Grid.Column="1" Grid.RowSpan="2" Margin="5"/>
+        <ScrollViewer Grid.Row="1" >
+            <TextBlock x:Name="TextPlan" IsEnabled="False" Margin="5" Foreground="White"/>
+        </ScrollViewer>
+        <Canvas x:Name="VisualPlan" Grid.Column="1" Grid.RowSpan="2" Margin="5" Background="DarkGray"/>
     </Grid>
 </UserControl>

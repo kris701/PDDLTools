@@ -61,6 +61,9 @@ namespace PDDLTools
             await SelectSearchCommand.InitializeAsync(this);
             await SelectSearchListCommand.InitializeAsync(this);
 
+            await FDReportCommand.InitializeAsync(this);
+            await SASVisualiserCommand.InitializeAsync(this);
+
             new FastDownwardErrorManager(this);
         }
     }

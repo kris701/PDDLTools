@@ -21,6 +21,7 @@ using HaskellTools.Helpers;
 using System.Collections.Generic;
 using PDDLTools.Models;
 using PDDLTools.Windows.FDResultsWindow;
+using PDDLTools.Windows.SASSolutionWindow;
 
 namespace PDDLTools.Commands
 {
@@ -89,7 +90,7 @@ namespace PDDLTools.Commands
             {
                 if (!PDDLHelper.IsFileProblem(SelectProblemCommand.SelectedProblemPath))
                 {
-                    MessageBox.Show("Selected document must be a valid PDDL Problem file!");
+                    MessageBox.Show("Selected document must be a valid PDDL problem file!");
                     return;
                 }
                 _problemFilePath = SelectProblemCommand.SelectedProblemPath;
@@ -108,12 +109,24 @@ namespace PDDLTools.Commands
             await OutputPanel.WriteLineAsync("Executing PDDL File");
             var resultData = await RunAsync();
 
-            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
-            if ((null == window) || (null == window.Frame))
+            if (OptionsAccessor.OpenResultReport)
             {
-                throw new NotSupportedException("Cannot create tool window");
+                ToolWindowPane resultsWindow = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
+                if ((null == resultsWindow) || (null == resultsWindow.Frame))
+                {
+                    throw new NotSupportedException("Cannot create tool window");
+                }
+                await ((resultsWindow as FDResultsWindow).Content as FDResultsWindowControl).SetupResultDataAsync(resultData);
             }
-            await ((window as FDResultsWindow).Content as FDResultsWindowControl).SetupResultDataAsync(resultData);
+
+            if (resultData.WasSolutionFound && OptionsAccessor.OpenSASSolutionVisualiser)
+            {
+                ToolWindowPane sasWindow = await this.package.ShowToolWindowAsync(typeof(SASSolutionWindow), 0, true, this.package.DisposalToken);
+                if ((null == sasWindow) || (null == sasWindow.Frame))
+                {
+                    throw new NotSupportedException("Cannot create tool window");
+                }
+            }
         }
 
         private async Task<FDResults> RunAsync()

@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace PDDLTools.Commands
 {
-    internal abstract class BaseCommand
+    internal abstract class BaseCommand : IDisposable
     {
         public abstract int CommandId { get; }
         public static readonly Guid CommandSet = new Guid(Constants.CommandSetGuid);
+
         internal readonly AsyncPackage package;
+        internal readonly OleMenuCommand command;
 
         public bool CanBeDisabled { get; } = true;
 
@@ -21,10 +23,10 @@ namespace PDDLTools.Commands
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
-            var menuItem = new OleMenuCommand(this.Execute, menuCommandID);
+            command = new OleMenuCommand(this.Execute, menuCommandID);
             if (CanBeDisabled)
-                menuItem.BeforeQueryStatus += CheckQueryStatus;
-            commandService.AddCommand(menuItem);
+                command.BeforeQueryStatus += CheckQueryStatus;
+            commandService.AddCommand(command);
         }
 
         public static async Task<OleMenuCommandService> InitializeCommandServiceAsync(AsyncPackage package)
@@ -48,6 +50,16 @@ namespace PDDLTools.Commands
         {
             var button = (MenuCommand)sender;
             button.Enabled = await DTE2Helper.IsValidFileOpenAsync();
+        }
+
+        public void Dispose()
+        {
+            this.command.BeforeQueryStatus -= this.CheckQueryStatus;
+        }
+
+        public void SetToggleState(bool toState)
+        {
+            command.Checked = toState;
         }
     }
 }

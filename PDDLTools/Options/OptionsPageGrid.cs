@@ -43,5 +43,17 @@ namespace PDDLTools.Options
         [Description("What options that is available to run with Fast Downward. Note, this is the '--search' parameter of FD. Semi-colon seperated!")]
         [DefaultValue("astar(lmcut());lazy_greedy([hff], preferred=[hff])")]
         public string SearchOptions { get; set; } = "astar(lmcut());lazy_greedy([hff], preferred=[hff])";
+
+        [Category("PDDL Tools")]
+        [DisplayName("General Result Report")]
+        [Description("If the result of a FD run should be generated into a report.")]
+        [DefaultValue(true)]
+        public bool OpenResultReport { get; set; } = true;
+
+        [Category("PDDL Tools")]
+        [DisplayName("SAS Solution Visualiser")]
+        [Description("If the resulting plan should be displayed in the visualiser.")]
+        [DefaultValue(true)]
+        public bool OpenSASSolutionVisualiser { get; set; } = true;
     }
 }

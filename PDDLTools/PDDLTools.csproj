@@ -64,7 +64,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\SASVisualiserCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />
+    <Compile Include="Commands\FDReportCommand.cs" />
     <Compile Include="Commands\SelectProblemListCommand.cs" />
     <Compile Include="Commands\SelectProblemCommand.cs" />
     <Compile Include="Commands\SelectSearchListCommand.cs" />

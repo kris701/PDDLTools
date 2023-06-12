@@ -75,5 +75,31 @@ namespace PDDLTools.Options
                 Instance.SaveSettingsToStorage();
             }
         }
+
+        public static bool OpenResultReport
+        {
+            get
+            {
+                return Instance.OpenResultReport;
+            }
+            set
+            {
+                Instance.OpenResultReport = value;
+                Instance.SaveSettingsToStorage();
+            }
+        }
+
+        public static bool OpenSASSolutionVisualiser
+        {
+            get
+            {
+                return Instance.OpenSASSolutionVisualiser;
+            }
+            set
+            {
+                Instance.OpenSASSolutionVisualiser = value;
+                Instance.SaveSettingsToStorage();
+            }
+        }
     }
 }
