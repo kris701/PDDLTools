@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public class TypeDecl
+    public class TypeDecl : IDecl
     {
         public string Name { get; set; }
         public List<string> SubTypes { get; set; }
@@ -20,7 +20,7 @@ namespace PDDLParser.Domain
         public override string ToString()
         {
             string retStr = "";
-            foreach(var subType in SubTypes)
+            foreach (var subType in SubTypes)
                 retStr += $"{subType} ";
             return $"{retStr} - {Name}";
         }

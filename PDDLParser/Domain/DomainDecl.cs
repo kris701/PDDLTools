@@ -8,23 +8,13 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public class DomainDecl
+    public class DomainDecl : IDecl
     {
-        public string Name { get; set; }
-        public List<string> Requirements { get; set; }
-        public List<TypeDecl> Types { get; set; }
-        public List<NameExp> Constants { get; set; }
-        public List<PredicateStmt> Predicates { get; set; }
-        public List<ActionStmt> Actions { get; set; }
-
-        public DomainDecl(string name, List<string> requirements, List<TypeDecl> types, List<NameExp> constants, List<PredicateStmt> predicates, List<ActionStmt> actions)
-        {
-            Name = name;
-            Requirements = requirements;
-            Types = types;
-            Constants = constants;
-            Predicates = predicates;
-            Actions = actions;
-        }
+        public DomainNameDecl Name { get; set; }
+        public RequirementsDecl Requirements { get; set; }
+        public TypesDecl Types { get; set; }
+        public ConstantsDecl Constants { get; set; }
+        public PredicatesDecl Predicates { get; set; }
+        public List<ActionDecl> Actions { get; set; }
     }
 }

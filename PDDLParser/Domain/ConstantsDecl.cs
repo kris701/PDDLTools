@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public class AndExp : IExp
+    public class ConstantsDecl : IDecl
     {
-        public List<IExp> Children { get; set; }
+        public List<NameExp> Constants { get; set; }
 
-        public AndExp(List<IExp> children)
+        public ConstantsDecl(List<NameExp> constants)
         {
-            Children = children;
+            Constants = constants;
         }
 
         public override string ToString()
         {
             string retStr = "";
-            foreach (var type in Children)
+            foreach (var type in Constants)
                 retStr += $" {type}{Environment.NewLine}";
-            return $"(and{retStr})";
+            return $"(:constants{retStr})";
         }
     }
 }

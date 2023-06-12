@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public class AndExp : IExp
+    public class PredicatesDecl : IDecl
     {
-        public List<IExp> Children { get; set; }
+        public List<PredicateDecl> Predicates { get; set; }
 
-        public AndExp(List<IExp> children)
+        public PredicatesDecl(List<PredicateDecl> predicates)
         {
-            Children = children;
+            Predicates = predicates;
         }
 
         public override string ToString()
         {
             string retStr = "";
-            foreach (var type in Children)
+            foreach (var type in Predicates)
                 retStr += $" {type}{Environment.NewLine}";
-            return $"(and{retStr})";
+            return $"(:predicates{retStr})";
         }
     }
 }

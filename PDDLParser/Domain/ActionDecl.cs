@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public class ActionStmt
+    public class ActionDecl : IDecl
     {
         public string Name { get; set; }
 
         public List<NameExp> Parameters { get; set; }
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
+
+        public ActionDecl(string name, List<NameExp> parameters, IExp preconditions, IExp effects)
+        {
+            Name = name;
+            Parameters = parameters;
+            Preconditions = preconditions;
+            Effects = effects;
+        }
     }
 }

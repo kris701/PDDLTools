@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public class PredicateStmt : IExp
+    public class PredicateDecl : IDecl
     {
         public string Name { get; set; }
         public List<NameExp> Arguments { get; set; }
 
-        public PredicateStmt(string name, List<NameExp> arguments)
+        public PredicateDecl(string name, List<NameExp> arguments)
         {
             Name = name;
             Arguments = arguments;
@@ -22,7 +22,7 @@ namespace PDDLParser.Domain
             var paramRetStr = "";
             foreach(var arg in Arguments)
                 paramRetStr += arg.ToString();
-            return $"{Name} {paramRetStr}";
+            return $"({Name} {paramRetStr})";
         }
     }
 }

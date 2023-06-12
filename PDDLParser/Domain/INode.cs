@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public interface IExp : INode
+    public interface INode
     {
     }
 }

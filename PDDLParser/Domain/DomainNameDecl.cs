@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Domain
 {
-    public class NotExp : IExp
+    public class DomainNameDecl : IDecl
     {
-        public IExp Child { get; set; }
+        public string Name { get; set; }
 
-        public NotExp(IExp child)
+        public DomainNameDecl(string name)
         {
-            Child = child;
+            Name = name;
         }
 
         public override string ToString()
         {
-            return $"(not {Child})";
+            return $"(domain {Name})";
         }
     }
 }

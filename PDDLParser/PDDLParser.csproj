@@ -42,17 +42,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AST\ASTNode.cs" />
-    <Compile Include="Domain\ActionStmt.cs" />
+    <Compile Include="AST\ASTParser.cs" />
+    <Compile Include="Domain\ActionDecl.cs" />
     <Compile Include="Domain\AndExp.cs" />
+    <Compile Include="Domain\ConstantsDecl.cs" />
     <Compile Include="Domain\DomainDecl.cs" />
+    <Compile Include="Domain\DomainNameDecl.cs" />
+    <Compile Include="Domain\IDecl.cs" />
     <Compile Include="Domain\IExp.cs" />
+    <Compile Include="Domain\INode.cs" />
     <Compile Include="Domain\NameExp.cs" />
     <Compile Include="Domain\NotExp.cs" />
-    <Compile Include="Domain\PredicateStmt.cs" />
+    <Compile Include="Domain\PredicateDecl.cs" />
+    <Compile Include="Domain\PredicatesDecl.cs" />
+    <Compile Include="Domain\RequirementsDecl.cs" />
     <Compile Include="Domain\TypeDecl.cs" />
+    <Compile Include="Domain\TypesDecl.cs" />
     <Compile Include="Exceptions\ParseException.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visitors\DeclVisitor.cs" />
+    <Compile Include="Visitors\ExpVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Problem\" />

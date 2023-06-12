@@ -26,9 +26,9 @@ namespace PDDLParser.Domain
         public override string ToString()
         {
             if (Type == "")
-                return $"{Name}";
+                return $"({Name})";
             else
-                return $"{Name} - {Type}";
+                return $"({Name} - {Type})";
         }
     }
 }
