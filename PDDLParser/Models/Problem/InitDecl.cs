@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Domain
+namespace PDDLParser.Models.Problem
 {
-    public class PredicatesDecl : IDecl
+    public class InitDecl : IDecl
     {
-        public List<PredicateDecl> Predicates { get; set; }
+        public List<NameExp> Predicates { get; set; }
 
-        public PredicatesDecl(List<PredicateDecl> predicates)
+        public InitDecl(List<NameExp> predicates)
         {
             Predicates = predicates;
         }
@@ -20,7 +20,7 @@ namespace PDDLParser.Domain
             string retStr = "";
             foreach (var type in Predicates)
                 retStr += $" {type}{Environment.NewLine}";
-            return $"(:predicates{retStr})";
+            return $"(:init{retStr})";
         }
     }
 }

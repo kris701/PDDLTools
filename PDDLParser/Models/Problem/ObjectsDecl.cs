@@ -4,23 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Domain
+namespace PDDLParser.Models.Problem
 {
-    public class TypesDecl : IDecl
+    public class ObjectsDecl : IDecl
     {
-        public List<TypeDecl> Types { get; set; }
+        public List<NameExp> Objs { get; set; }
 
-        public TypesDecl(List<TypeDecl> types)
+        public ObjectsDecl(List<NameExp> types)
         {
-            Types = types;
+            Objs = types;
         }
 
         public override string ToString()
         {
             string retStr = "";
-            foreach(var type in Types)
+            foreach (var type in Objs)
                 retStr += $"{type}{Environment.NewLine}";
-            return $"(:types{retStr})";
+            return $"(:objects{retStr})";
         }
     }
 }

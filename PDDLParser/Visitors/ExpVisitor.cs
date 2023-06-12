@@ -1,5 +1,5 @@
 ﻿using PDDLParser.AST;
-using PDDLParser.Domain;
+using PDDLParser.Models;
 using PDDLParser.Listener;
 using System;
 using System.Collections.Generic;

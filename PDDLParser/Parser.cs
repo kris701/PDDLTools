@@ -1,5 +1,5 @@
 ﻿using PDDLParser.AST;
-using PDDLParser.Domain;
+using PDDLParser.Models;
 using PDDLParser.Exceptions;
 using PDDLParser.Listener;
 using PDDLParser.Visitors;
@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLParser.Models.Domain;
 
 namespace PDDLParser
 {
@@ -30,20 +31,20 @@ namespace PDDLParser
             foreach (var node in absAST.Children)
             {
                 if (node.Content.StartsWith("domain"))
-                    returnDomain.Name = DeclVisitor.Visit(node, errorListener) as DomainNameDecl;
+                    returnDomain.Name = DomainVisitor.Visit(node, errorListener) as DomainNameDecl;
                 else if (node.Content.StartsWith(":requirements"))
-                    returnDomain.Requirements = DeclVisitor.Visit(node, errorListener) as RequirementsDecl;
+                    returnDomain.Requirements = DomainVisitor.Visit(node, errorListener) as RequirementsDecl;
                 if (node.Content.StartsWith(":types"))
-                    returnDomain.Types = DeclVisitor.Visit(node, errorListener) as TypesDecl;
+                    returnDomain.Types = DomainVisitor.Visit(node, errorListener) as TypesDecl;
                 if (node.Content.StartsWith(":constants"))
-                    returnDomain.Constants = DeclVisitor.Visit(node, errorListener) as ConstantsDecl;
+                    returnDomain.Constants = DomainVisitor.Visit(node, errorListener) as ConstantsDecl;
                 if (node.Content.StartsWith(":predicates"))
-                    returnDomain.Predicates = DeclVisitor.Visit(node, errorListener) as PredicatesDecl;
+                    returnDomain.Predicates = DomainVisitor.Visit(node, errorListener) as PredicatesDecl;
                 if (node.Content.StartsWith(":action"))
                 {
                     if (returnDomain.Actions == null)
                         returnDomain.Actions = new List<ActionDecl>();
-                    returnDomain.Actions.Add(DeclVisitor.Visit(node, errorListener) as ActionDecl);
+                    returnDomain.Actions.Add(DomainVisitor.Visit(node, errorListener) as ActionDecl);
                 }
             }
 

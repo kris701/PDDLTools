@@ -4,20 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Domain
+namespace PDDLParser.Models
 {
-    public class DomainNameDecl : IDecl
+    public class NotExp : IExp
     {
-        public string Name { get; set; }
+        public IExp Child { get; set; }
 
-        public DomainNameDecl(string name)
+        public NotExp(IExp child)
         {
-            Name = name;
+            Child = child;
         }
 
         public override string ToString()
         {
-            return $"(domain {Name})";
+            return $"(not {Child})";
         }
     }
 }

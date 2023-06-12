@@ -1,5 +1,5 @@
 ﻿using PDDLParser.AST;
-using PDDLParser.Domain;
+using PDDLParser.Models;
 using PDDLParser.Exceptions;
 using PDDLParser.Listener;
 using System;
@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using PDDLParser.Models.Domain;
 
 namespace PDDLParser.Visitors
 {
-    public static class DeclVisitor
+    public static class DomainVisitor
     {
         public static IDecl Visit(ASTNode node, IErrorListener listener)
         {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Domain
+namespace PDDLParser.Models
 {
-    public interface IExp : INode
+    public interface IDecl : INode
     {
     }
 }

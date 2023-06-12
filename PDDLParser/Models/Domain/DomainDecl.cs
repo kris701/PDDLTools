@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Domain
+namespace PDDLParser.Models.Domain
 {
     public class DomainDecl : IDecl
     {
