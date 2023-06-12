@@ -42,16 +42,12 @@ namespace PDDLParser.Visitors
             } 
             else
             {
-                if (node.Content.Contains("-"))
+                if (node.Content.Contains(" - "))
                 {
-                    var contentSplit = node.Content.Split('-');
-                    if (contentSplit.Length < 2) {
-                        listener.AddError(new ParseError(
-                            $"A content node with an intended type did not have any! Content was: '{node.Content}'",
-                            ParserErrorLevel.High,
-                            ParseErrorType.Error));
-                    }
-                    return new NameExp(contentSplit[0], contentSplit[1]);
+                    var left = node.Content.Substring(0, node.Content.IndexOf(" - "));
+                    var right = node.Content.Substring(node.Content.IndexOf(" - ") + 3);
+
+                    return new NameExp(left, right);
                 }
                 else
                 {

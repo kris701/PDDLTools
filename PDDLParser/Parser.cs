@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PDDLParser.Models.Domain;
+using PDDLParser.Models.Problem;
 
 namespace PDDLParser
 {
@@ -49,6 +50,36 @@ namespace PDDLParser
             }
 
             return returnDomain;
+        }
+
+        public ProblemDecl ParseProblemFile(string parseFile)
+        {
+            IErrorListener errorListener = new ErrorListener();
+            errorListener.ThrowIfTypeAbove = ParseErrorType.Warning;
+
+            var text = ReadDataAsString(parseFile, errorListener);
+            CheckParenthesesMissmatch(text, errorListener);
+
+            var astParser = new ASTParser(errorListener);
+            var absAST = astParser.Parse(text);
+
+            var returnProblem = new ProblemDecl();
+
+            foreach (var node in absAST.Children)
+            {
+                if (node.Content.StartsWith("problem"))
+                    returnProblem.Name = ProblemVisitor.Visit(node, errorListener) as ProblemNameDecl;
+                else if (node.Content.StartsWith(":domain"))
+                    returnProblem.DomainName = ProblemVisitor.Visit(node, errorListener) as DomainNameRefDecl;
+                if (node.Content.StartsWith(":objects"))
+                    returnProblem.Objects = ProblemVisitor.Visit(node, errorListener) as ObjectsDecl;
+                if (node.Content.StartsWith(":init"))
+                    returnProblem.Init = ProblemVisitor.Visit(node, errorListener) as InitDecl;
+                if (node.Content.StartsWith(":goal"))
+                    returnProblem.Goal = ProblemVisitor.Visit(node, errorListener) as GoalDecl;
+            }
+
+            return returnProblem;
         }
 
         private string ReadDataAsString(string path, IErrorListener listener)
