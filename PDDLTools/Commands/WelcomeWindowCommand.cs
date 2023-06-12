@@ -9,8 +9,9 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
+using PDDLTools.Windows.WelcomeWindow;
 
-namespace PDDLTools
+namespace PDDLTools.Commands
 {
     internal sealed class WelcomeWindowCommand : BaseCommand
     {

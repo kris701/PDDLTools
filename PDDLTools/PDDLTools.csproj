@@ -86,6 +86,10 @@
     <Compile Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml.cs">
       <DependentUpon>FDResultsWindowControl..xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SASSolutionWindow\SASSolutionWindow.cs" />
+    <Compile Include="Windows\SASSolutionWindow\SASSolutionWindowControl.xaml.cs">
+      <DependentUpon>SASSolutionWindowControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\WelcomeWindow\WelcomeWindow.cs" />
     <Compile Include="Commands\WelcomeWindowCommand.cs" />
     <Compile Include="Windows\WelcomeWindow\WelcomeWindowControl.xaml.cs">
@@ -167,6 +171,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\SASSolutionWindow\SASSolutionWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\WelcomeWindow\WelcomeWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -178,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\FDResultsWindow\Resources\" />
+    <Folder Include="Windows\SASSolutionWindow\Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">

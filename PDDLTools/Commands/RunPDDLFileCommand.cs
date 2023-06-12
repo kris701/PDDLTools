@@ -20,6 +20,7 @@ using Task = System.Threading.Tasks.Task;
 using HaskellTools.Helpers;
 using System.Collections.Generic;
 using PDDLTools.Models;
+using PDDLTools.Windows.FDResultsWindow;
 
 namespace PDDLTools.Commands
 {

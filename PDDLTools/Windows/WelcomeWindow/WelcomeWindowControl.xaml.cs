@@ -4,7 +4,7 @@ using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace PDDLTools
+namespace PDDLTools.Windows.WelcomeWindow
 {
     public partial class WelcomeWindowControl : UserControl
     {

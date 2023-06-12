@@ -13,6 +13,8 @@ using System.Management.Instrumentation;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
+using PDDLTools.Windows.FDResultsWindow;
+using PDDLTools.Windows.SASSolutionWindow;
 
 namespace PDDLTools
 {
@@ -30,6 +32,7 @@ namespace PDDLTools
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(OptionPageGrid), "PDDL Tools", "Options", 0, 0, true)]
     [ProvideToolWindow(typeof(FDResultsWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
+    [ProvideToolWindow(typeof(SASSolutionWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     public sealed class PDDLToolsPackage : AsyncPackage
     {
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)

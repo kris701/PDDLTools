@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace PDDLTools
+namespace PDDLTools.Windows.FDResultsWindow
 {
     public partial class FDResultsWindowControl : UserControl
     {
