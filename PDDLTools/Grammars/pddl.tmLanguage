@@ -129,7 +129,7 @@
             <key>name</key>
             <string>keyword.control.pddl.global</string>
             <key>match</key>
-            <string>:(requirements|types|constants|predicates|functions|derived|action|durative-action|event|process|domain|objects|init|goal|metric)\b</string>
+            <string>:(requirements|types|constants|predicates|functions|derived|action|durative-action|event|process|domain|objects|init|goal|metric|extends|timeless|axiom)\b</string>
           </dict>
           <dict>
             <key>name</key>
