@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.PlatformUI;
-using Microsoft.VisualStudio.Threading;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -8,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace PDDLTools.Helpers
+namespace FastDownwardRunner.Helpers
 {
     public enum ProcessCompleteReson { None, ProcessNotRunning, RanToCompletion, StoppedOnError, ForceKilled }
     public class PowershellProcess
@@ -74,7 +72,8 @@ namespace PDDLTools.Helpers
                 if (_OutputTimer != null)
                     _OutputTimer.Stop();
                 ProcessHelper.KillProcessAndChildrens(_process.Id);
-                await _process.WaitForExitAsync();
+                while (!_process.HasExited)
+                    await Task.Delay(100);
             }
             IsRunning = false;
         }
@@ -123,7 +122,8 @@ namespace PDDLTools.Helpers
                 return ProcessCompleteReson.StoppedOnError;
             if (IsRunning)
             {
-                await _process.WaitForExitAsync();
+                while (!_process.HasExited)
+                    await Task.Delay(100);
                 if (_didForceKill)
                     return ProcessCompleteReson.ForceKilled;
                 if (_didEncounterError)

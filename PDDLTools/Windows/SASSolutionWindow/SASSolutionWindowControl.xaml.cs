@@ -1,6 +1,6 @@
-﻿using PDDLParser.Models;
+﻿using FastDownwardRunner.Models;
+using PDDLParser.Models;
 using PDDLTools.Helpers;
-using PDDLTools.Models;
 using PDDLTools.Options;
 using System;
 using System.Collections.Generic;
@@ -23,14 +23,17 @@ namespace PDDLTools.Windows.SASSolutionWindow
     public partial class SASSolutionWindowControl : UserControl
     {
         private FDResults _data;
+        private PDDLDecl _pddlData;
+
         public SASSolutionWindowControl()
         {
             InitializeComponent();
         }
 
-        public void SetupResultData(FDResults data)
+        public void SetupResultData(FDResults data, PDDLDecl pddlData)
         {
             _data = data;
+            _pddlData = pddlData;
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -45,6 +48,16 @@ namespace PDDLTools.Windows.SASSolutionWindow
             }
             else
             {
+                List<PredicateExp> currentState = new List<PredicateExp>();
+                foreach (var state in _pddlData.Problem.Init.Predicates)
+                {
+                    var name = state.Name.Split(' ')[0];
+                    List<NameExp> args = new List<NameExp>();
+                    foreach(var item in state.Name.Split(' '))
+                        if (item != name && item != "")
+                            args.Add(new NameExp(null, item));
+                    currentState.Add(new PredicateExp(null, name, args));
+                }
                 TextPlan.Text = File.ReadAllText(path);
                 foreach(var line in File.ReadLines(path))
                 {

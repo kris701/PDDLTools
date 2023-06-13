@@ -19,10 +19,12 @@ using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
 using HaskellTools.Helpers;
 using System.Collections.Generic;
-using PDDLTools.Models;
 using PDDLTools.Windows.FDResultsWindow;
 using PDDLTools.Windows.SASSolutionWindow;
 using PDDLParser;
+using FastDownwardRunner;
+using FastDownwardRunner.Helpers;
+using FastDownwardRunner.Models;
 
 namespace PDDLTools.Commands
 {
@@ -31,14 +33,7 @@ namespace PDDLTools.Commands
         private static OutputPanelController OutputPanel = new OutputPanelController("Fast Downward Output");
         public override int CommandId { get; } = 256;
         public static RunPDDLFileCommand Instance { get; internal set; }
-        private PowershellProcess _process;
         private bool _isRunning = false;
-
-        private string _domainFilePath = "";
-        private string _problemFilePath = "";
-
-        private List<string> _resultLines = new List<string>();
-        private List<string> _resultErrLines = new List<string>();
 
         private RunPDDLFileCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
@@ -54,6 +49,9 @@ namespace PDDLTools.Commands
             if (_isRunning)
                 return;
 
+            string domainFilePath = "";
+            string problemFilePath = "";
+
             await DTE2Helper.SaveActiveDocumentAsync();
 
             if (SelectDomainCommand.SelectedDomainPath == SelectDomainListCommand.ActiveDocumentComboboxName)
@@ -64,7 +62,7 @@ namespace PDDLTools.Commands
                     MessageBox.Show("Active document must be a valid PDDL domain file!");
                     return;
                 }
-                _domainFilePath = openDocument;
+                domainFilePath = openDocument;
             }
             else
             {
@@ -73,7 +71,7 @@ namespace PDDLTools.Commands
                     MessageBox.Show("Selected document must be a valid PDDL domain file!");
                     return;
                 }
-                _domainFilePath = SelectDomainCommand.SelectedDomainPath;
+                domainFilePath = SelectDomainCommand.SelectedDomainPath;
             }
 
 
@@ -85,7 +83,7 @@ namespace PDDLTools.Commands
                     MessageBox.Show("Active document must be a valid PDDL problem file!");
                     return;
                 }
-                _problemFilePath = openDocument;
+                problemFilePath = openDocument;
             }
             else
             {
@@ -94,7 +92,7 @@ namespace PDDLTools.Commands
                     MessageBox.Show("Selected document must be a valid PDDL problem file!");
                     return;
                 }
-                _problemFilePath = SelectProblemCommand.SelectedProblemPath;
+                problemFilePath = SelectProblemCommand.SelectedProblemPath;
             }
 
             if (SelectSearchCommand.SelectedSearch == "")
@@ -108,12 +106,45 @@ namespace PDDLTools.Commands
             await OutputPanel.InitializeAsync();
             await OutputPanel.ClearOutputAsync();
             await OutputPanel.WriteLineAsync("Executing PDDL File");
-            var resultData = await RunAsync();
 
-            var parser = new Parser();
-            resultData.Domain = parser.ParseDomainFile(_domainFilePath);
-            resultData.Problem = parser.ParseProblemFile(_problemFilePath);
+            IRunner fdRunner = new FDRunner(OptionsAccessor.FDPPath, OptionsAccessor.PythonPrefix, OptionsAccessor.FDFileExecutionTimeout);
+            var resultData = await fdRunner.RunAsync(domainFilePath, problemFilePath, SelectSearchCommand.SelectedSearch);
 
+            await WriteToOutputWindowAsync(resultData);
+            await SetupResultWindowsAsync(resultData, domainFilePath, problemFilePath);
+
+            _isRunning = false;
+        }
+
+        private async Task WriteToOutputWindowAsync(FDResults resultData)
+        {
+            await OutputPanel.ActivateOutputWindowAsync();
+            foreach(var item in resultData.Log)
+            {
+                if (item.Type == LogItem.ItemType.Error)
+                    await OutputPanel.WriteLineAsync($"[{item.Time}] (ERR) {item.Content}");
+                if (item.Type == LogItem.ItemType.Log)
+                    await OutputPanel.WriteLineAsync($"[{item.Time}]       {item.Content}");
+            }
+            switch (resultData.ResultReason)
+            {
+                case ProcessCompleteReson.ForceKilled:
+                    await OutputPanel.WriteLineAsync($"ERROR! FD ran for longer than {OptionsAccessor.FDFileExecutionTimeout}! Killing process...");
+                    break;
+                case ProcessCompleteReson.StoppedOnError:
+                    await OutputPanel.WriteLineAsync($"Errors encountered!");
+                    break;
+                case ProcessCompleteReson.RanToCompletion:
+                    await OutputPanel.WriteLineAsync("FD ran to completion!");
+                    break;
+                case ProcessCompleteReson.ProcessNotRunning:
+                    await OutputPanel.WriteLineAsync("Process is not running!");
+                    break;
+            }
+        }
+
+        private async Task SetupResultWindowsAsync(FDResults resultData, string domainFilePath, string problemFilePath)
+        {
             if (OptionsAccessor.OpenResultReport)
             {
                 ToolWindowPane resultsWindow = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
@@ -126,59 +157,16 @@ namespace PDDLTools.Commands
 
             if (resultData.WasSolutionFound && OptionsAccessor.OpenSASSolutionVisualiser)
             {
+                IPDDLParser parser = new PDDLParser.PDDLParser();
+                var pddlDoc = parser.ParseDomainAndProblemFiles(domainFilePath, problemFilePath);
+
                 ToolWindowPane sasWindow = await this.package.ShowToolWindowAsync(typeof(SASSolutionWindow), 0, true, this.package.DisposalToken);
                 if ((null == sasWindow) || (null == sasWindow.Frame))
                 {
                     throw new NotSupportedException("Cannot create tool window");
                 }
-                ((sasWindow as SASSolutionWindow).Content as SASSolutionWindowControl).SetupResultData(resultData);
+                ((sasWindow as SASSolutionWindow).Content as SASSolutionWindowControl).SetupResultData(resultData, pddlDoc);
             }
-        }
-
-        private async Task<FDResults> RunAsync()
-        {
-            _resultErrLines.Clear();
-            _resultLines.Clear();
-
-            _process = new PowershellProcess();
-            _process.ErrorDataRecieved += RecieveErrorData;
-            _process.OutputDataRecieved += RecieveOutputData;
-            _process.StopOnError = true;
-             await _process.StartProcessAsync($"& {OptionsAccessor.PythonPrefix} '{OptionsAccessor.FDPPath}' '{_domainFilePath}' '{_problemFilePath}' --search '{SelectSearchCommand.SelectedSearch}'");
-
-            var timeoutSpan = TimeSpan.FromSeconds(OptionsAccessor.FDFileExecutionTimeout);
-            var res = await _process.WaitForExitAsync(timeoutSpan);
-            await OutputPanel.ActivateOutputWindowAsync();
-            switch (res)
-            {
-                case ProcessCompleteReson.ForceKilled:
-                    await OutputPanel.WriteLineAsync($"ERROR! FD ran for longer than {timeoutSpan}! Killing process...");
-                    break;
-                case ProcessCompleteReson.StoppedOnError:
-                    await OutputPanel.WriteLineAsync($"Errors encountered!");
-                    break;
-                case ProcessCompleteReson.RanToCompletion:
-                    await OutputPanel.WriteLineAsync("FD ran to completion!");
-                    break;
-                case ProcessCompleteReson.ProcessNotRunning:
-                    await OutputPanel.WriteLineAsync("Process is not running!");
-                    break;
-            }
-            _isRunning = false;
-
-            return new FDResults(_resultLines, _resultErrLines);
-        }
-
-        private async void RecieveErrorData(object sender, DataReceivedEventArgs e)
-        {
-            _resultErrLines.Add(e.Data);
-            await OutputPanel.WriteLineAsync($"ERROR! {e.Data}");
-        }
-
-        private async void RecieveOutputData(object sender, DataReceivedEventArgs e)
-        {
-            _resultLines.Add(e.Data);
-            await OutputPanel.WriteLineAsync($"{e.Data}");
         }
     }
 }

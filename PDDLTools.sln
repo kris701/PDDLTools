@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLTools", "PDDLTools\PDDL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLParser", "PDDLParser\PDDLParser.csproj", "{07627E9C-F6C2-468F-9855-9FF30ADFD6DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDLParserCMD", "PDDLParserCMD\PDDLParserCMD.csproj", "{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCMD", "PDDLParserCMD\TestCMD.csproj", "{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C33D06E1-C277-4751-9F18-3C53CCA78F13}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SASSimulator", "SASSimulator\SASSimulator.csproj", "{87D73118-449A-4054-9B54-60D0A440D87A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastDownwardRunner", "FastDownwardRunner\FastDownwardRunner.csproj", "{463BC2C9-3237-4251-BCAC-CC0003DFEE81}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,6 +52,22 @@ Global
 		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Release|x86.ActiveCfg = Release|Any CPU
 		{1873F433-02EC-47AC-9F1E-EA5BDCB8D82A}.Release|x86.Build.0 = Release|Any CPU
+		{87D73118-449A-4054-9B54-60D0A440D87A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D73118-449A-4054-9B54-60D0A440D87A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D73118-449A-4054-9B54-60D0A440D87A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{87D73118-449A-4054-9B54-60D0A440D87A}.Debug|x86.Build.0 = Debug|Any CPU
+		{87D73118-449A-4054-9B54-60D0A440D87A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D73118-449A-4054-9B54-60D0A440D87A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D73118-449A-4054-9B54-60D0A440D87A}.Release|x86.ActiveCfg = Release|Any CPU
+		{87D73118-449A-4054-9B54-60D0A440D87A}.Release|x86.Build.0 = Release|Any CPU
+		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Debug|x86.Build.0 = Debug|Any CPU
+		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Release|x86.ActiveCfg = Release|Any CPU
+		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

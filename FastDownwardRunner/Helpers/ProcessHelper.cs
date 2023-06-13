@@ -6,7 +6,7 @@ using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.Helpers
+namespace FastDownwardRunner.Helpers
 {
     public static class ProcessHelper
     {

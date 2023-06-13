@@ -1,8 +1,8 @@
 ﻿using PDDLParser;
 
-var parser = new Parser();
+var parser = new PDDLParser.PDDLParser();
 
-var domain = parser.ParseDomainFile("C:\\Users\\kris7\\Downloads\\domain2.pddl");
-var problem = parser.ParseProblemFile("C:\\Users\\kris7\\Downloads\\problem2.pddl");
+var domain = parser.ParseDomainFile("C:\\Users\\kris7\\Downloads\\domain.pddl");
+var problem = parser.ParseProblemFile("C:\\Users\\kris7\\Downloads\\problem.pddl");
 
 Console.WriteLine("a");

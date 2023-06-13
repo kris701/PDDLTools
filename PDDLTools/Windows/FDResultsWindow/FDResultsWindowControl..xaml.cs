@@ -1,4 +1,4 @@
-﻿using PDDLTools.Models;
+﻿using FastDownwardRunner.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -60,7 +60,6 @@ namespace PDDLTools.Windows.FDResultsWindow
             SearchExpanderPanel.Children.Add(GenerateLabel("Number Of Registered States: ", data.NumberOfRegisteredStates));
             SearchExpanderPanel.Children.Add(GenerateLabel("Int Hash Set Load Factor: ", data.IntHashSetLoadFactor));
             SearchExpanderPanel.Children.Add(GenerateLabel("Int Hash Set Resizes: ", data.IntHashSetResizes));
-
         }
 
         private Grid GenerateLabel(string title, object content)

@@ -15,8 +15,15 @@ using PDDLParser.Analysers;
 
 namespace PDDLParser
 {
-    public class Parser
+    public class PDDLParser : IPDDLParser
     {
+        public PDDLDecl ParseDomainAndProblemFiles(string domainFile, string problemFile)
+        {
+            return new PDDLDecl(
+                ParseDomainFile(domainFile),
+                ParseProblemFile(problemFile));
+        }
+
         public DomainDecl ParseDomainFile(string parseFile)
         {
             IErrorListener errorListener = new ErrorListener();

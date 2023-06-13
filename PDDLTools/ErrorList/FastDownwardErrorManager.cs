@@ -66,7 +66,7 @@ namespace PDDLTools.ErrorList
             var file = await DTE2Helper.GetSourceFilePathAsync();
             try
             {
-                var parser = new Parser();
+                var parser = new PDDLParser.PDDLParser();
                 if (PDDLHelper.IsFileDomain(file))
                 {
                     var fullDomain = parser.ParseDomainFile(file);

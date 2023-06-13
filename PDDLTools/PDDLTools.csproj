@@ -77,8 +77,6 @@
     <Compile Include="ErrorList\FastDownwardErrorManager.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManagerConnectionListener.cs" />
     <Compile Include="Helpers\PDDLHelper.cs" />
-    <Compile Include="Helpers\PowershellProcess.cs" />
-    <Compile Include="Models\FDResults.cs" />
     <Compile Include="Options\OptionsAccessor.cs" />
     <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\InfoElement.cs" />
     <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
@@ -104,7 +102,6 @@
     <Compile Include="QuickInfo\PDDLInfo\PDDLInfo.cs" />
     <Compile Include="Language\PDDLLanguageFactory.cs" />
     <Compile Include="Helpers\DirHelper.cs" />
-    <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSource.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceProvider.cs" />
     <Compile Include="Helpers\ControlsHelper.cs" />
@@ -198,6 +195,10 @@
     <Folder Include="Windows\SASSolutionWindow\Resources\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FastDownwardRunner\FastDownwardRunner.csproj">
+      <Project>{463bc2c9-3237-4251-bcac-cc0003dfee81}</Project>
+      <Name>FastDownwardRunner</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>
