@@ -1,4 +1,6 @@
-﻿using PDDLTools.Helpers;
+﻿using PDDLParser.Models;
+using PDDLTools.Helpers;
+using PDDLTools.Models;
 using PDDLTools.Options;
 using System;
 using System.Collections.Generic;
@@ -20,13 +22,22 @@ namespace PDDLTools.Windows.SASSolutionWindow
 {
     public partial class SASSolutionWindowControl : UserControl
     {
+        private FDResults _data;
         public SASSolutionWindowControl()
         {
             InitializeComponent();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        public void SetupResultData(FDResults data)
         {
+            _data = data;
+        }
+
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            while (_data == null)
+                await Task.Delay(100);
+
             var path = DirHelper.CombinePathAndFile(new FileInfo(OptionsAccessor.FDPPath).Directory.FullName, "sas_plan");
             if (!File.Exists(path))
             {
@@ -35,6 +46,15 @@ namespace PDDLTools.Windows.SASSolutionWindow
             else
             {
                 TextPlan.Text = File.ReadAllText(path);
+                foreach(var line in File.ReadLines(path))
+                {
+                    if (!line.Trim().StartsWith(";"))
+                    {
+                        bool isGoal = true;
+                        bool isPartialGoal = false;
+                        
+                    }
+                }
             }
         }
     }

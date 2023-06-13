@@ -1,2 +1,2 @@
-# VS PDDL Tools Extension
+# Visual Studio PDDL Tools Extension
 WIP

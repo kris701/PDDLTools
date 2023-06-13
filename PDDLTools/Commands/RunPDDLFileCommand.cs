@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using PDDLTools.Models;
 using PDDLTools.Windows.FDResultsWindow;
 using PDDLTools.Windows.SASSolutionWindow;
+using PDDLParser;
 
 namespace PDDLTools.Commands
 {
@@ -109,6 +110,10 @@ namespace PDDLTools.Commands
             await OutputPanel.WriteLineAsync("Executing PDDL File");
             var resultData = await RunAsync();
 
+            var parser = new Parser();
+            resultData.Domain = parser.ParseDomainFile(_domainFilePath);
+            resultData.Problem = parser.ParseProblemFile(_problemFilePath);
+
             if (OptionsAccessor.OpenResultReport)
             {
                 ToolWindowPane resultsWindow = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
@@ -126,6 +131,7 @@ namespace PDDLTools.Commands
                 {
                     throw new NotSupportedException("Cannot create tool window");
                 }
+                ((sasWindow as SASSolutionWindow).Content as SASSolutionWindowControl).SetupResultData(resultData);
             }
         }
 
