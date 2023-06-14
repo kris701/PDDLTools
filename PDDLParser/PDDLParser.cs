@@ -17,6 +17,14 @@ namespace PDDLParser
 {
     public class PDDLParser : IPDDLParser
     {
+        public IErrorListener Listener { get; }
+
+        public PDDLParser()
+        {
+            Listener = new ErrorListener();
+            Listener.ThrowIfTypeAbove = ParseErrorType.Warning;
+        }
+
         public PDDLDecl ParseDomainAndProblemFiles(string domainFile, string problemFile)
         {
             return new PDDLDecl(
@@ -26,70 +34,64 @@ namespace PDDLParser
 
         public DomainDecl ParseDomainFile(string parseFile)
         {
-            IErrorListener errorListener = new ErrorListener();
-            errorListener.ThrowIfTypeAbove = ParseErrorType.Warning;
-
-            var absAST = ParseAsASTTree(parseFile, errorListener);
+            var absAST = ParseAsASTTree(parseFile, Listener);
 
             var returnDomain = new DomainDecl(absAST);
 
             foreach (var node in absAST.Children)
             {
                 if (node.Content.StartsWith("domain"))
-                    returnDomain.Name = DomainVisitor.Visit(node, errorListener) as DomainNameDecl;
+                    returnDomain.Name = DomainVisitor.Visit(node, Listener) as DomainNameDecl;
                 else if (node.Content.StartsWith(":requirements"))
-                    returnDomain.Requirements = DomainVisitor.Visit(node, errorListener) as RequirementsDecl;
+                    returnDomain.Requirements = DomainVisitor.Visit(node, Listener) as RequirementsDecl;
                 else if (node.Content.StartsWith(":types"))
-                    returnDomain.Types = DomainVisitor.Visit(node, errorListener) as TypesDecl;
+                    returnDomain.Types = DomainVisitor.Visit(node, Listener) as TypesDecl;
                 else if (node.Content.StartsWith(":constants"))
-                    returnDomain.Constants = DomainVisitor.Visit(node, errorListener) as ConstantsDecl;
+                    returnDomain.Constants = DomainVisitor.Visit(node, Listener) as ConstantsDecl;
                 else if (node.Content.StartsWith(":timeless"))
-                    returnDomain.Timeless = DomainVisitor.Visit(node, errorListener) as TimelessDecl;
+                    returnDomain.Timeless = DomainVisitor.Visit(node, Listener) as TimelessDecl;
                 else if (node.Content.StartsWith(":predicates"))
-                    returnDomain.Predicates = DomainVisitor.Visit(node, errorListener) as PredicatesDecl;
+                    returnDomain.Predicates = DomainVisitor.Visit(node, Listener) as PredicatesDecl;
                 else if (node.Content.StartsWith(":action"))
                 {
                     if (returnDomain.Actions == null)
                         returnDomain.Actions = new List<ActionDecl>();
-                    returnDomain.Actions.Add(DomainVisitor.Visit(node, errorListener) as ActionDecl);
+                    returnDomain.Actions.Add(DomainVisitor.Visit(node, Listener) as ActionDecl);
                 }
                 else if (node.Content.StartsWith(":axiom"))
                 {
                     if (returnDomain.Axioms == null)
                         returnDomain.Axioms = new List<AxiomDecl>();
-                    returnDomain.Axioms.Add(DomainVisitor.Visit(node, errorListener) as AxiomDecl);
+                    returnDomain.Axioms.Add(DomainVisitor.Visit(node, Listener) as AxiomDecl);
                 }
             }
 
-            PostParsingAnalyser.AnalyseDomain(returnDomain, errorListener);
+            PostParsingAnalyser.AnalyseDomain(returnDomain, Listener);
 
             return returnDomain;
         }
 
         public ProblemDecl ParseProblemFile(string parseFile)
         {
-            IErrorListener errorListener = new ErrorListener();
-            errorListener.ThrowIfTypeAbove = ParseErrorType.Warning;
-
-            var absAST = ParseAsASTTree(parseFile, errorListener);
+            var absAST = ParseAsASTTree(parseFile, Listener);
 
             var returnProblem = new ProblemDecl(absAST);
 
             foreach (var node in absAST.Children)
             {
                 if (node.Content.StartsWith("problem"))
-                    returnProblem.Name = ProblemVisitor.Visit(node, errorListener) as ProblemNameDecl;
+                    returnProblem.Name = ProblemVisitor.Visit(node, Listener) as ProblemNameDecl;
                 else if (node.Content.StartsWith(":domain"))
-                    returnProblem.DomainName = ProblemVisitor.Visit(node, errorListener) as DomainNameRefDecl;
+                    returnProblem.DomainName = ProblemVisitor.Visit(node, Listener) as DomainNameRefDecl;
                 if (node.Content.StartsWith(":objects"))
-                    returnProblem.Objects = ProblemVisitor.Visit(node, errorListener) as ObjectsDecl;
+                    returnProblem.Objects = ProblemVisitor.Visit(node, Listener) as ObjectsDecl;
                 if (node.Content.StartsWith(":init"))
-                    returnProblem.Init = ProblemVisitor.Visit(node, errorListener) as InitDecl;
+                    returnProblem.Init = ProblemVisitor.Visit(node, Listener) as InitDecl;
                 if (node.Content.StartsWith(":goal"))
-                    returnProblem.Goal = ProblemVisitor.Visit(node, errorListener) as GoalDecl;
+                    returnProblem.Goal = ProblemVisitor.Visit(node, Listener) as GoalDecl;
             }
 
-            PostParsingAnalyser.AnalyseProblem(returnProblem, errorListener);
+            PostParsingAnalyser.AnalyseProblem(returnProblem, Listener);
 
             return returnProblem;
         }

@@ -77,9 +77,7 @@
     <Compile Include="EditorMargins\PDDLEditorMargin.xaml.cs">
       <DependentUpon>PDDLEditorMargin.xaml</DependentUpon>
     </Compile>
-    <Compile Include="EditorMargins\PDDLEditorMargin_old.cs" />
     <Compile Include="EditorMargins\PDDLEditorMarginFactory.cs" />
-    <Compile Include="EditorMargins\StatusColors.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManager.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManagerConnectionListener.cs" />
     <Compile Include="Helpers\PDDLHelper.cs" />

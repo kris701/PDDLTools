@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class NameExp : BaseNode, IExp
+    public class NameExp : BaseNode, IExp, ICloneable
     {
         public string Name { get; set; }
         public string Type { get; set; }
@@ -30,6 +30,26 @@ namespace PDDLParser.Models
                 return $"({Name})";
             else
                 return $"({Name} - {Type})";
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = Name.GetHashCode() + Type.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is NameExp exp)
+            {
+                return exp.GetHashCode() == GetHashCode();
+            }
+            return false;
+        }
+
+        public object Clone()
+        {
+            return new NameExp(new ASTNode(Character, Line, ""), Name, Type);
         }
     }
 }

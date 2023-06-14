@@ -1,4 +1,5 @@
-﻿using PDDLParser.Models;
+﻿using PDDLParser.Listener;
+using PDDLParser.Models;
 using PDDLParser.Models.Domain;
 using PDDLParser.Models.Problem;
 using System;
@@ -11,6 +12,8 @@ namespace PDDLParser
 {
     public interface IPDDLParser
     {
+        IErrorListener Listener { get; }
+
         DomainDecl ParseDomainFile(string parseFile);
         ProblemDecl ParseProblemFile(string parseFile);
         PDDLDecl ParseDomainAndProblemFiles(string domainFile, string problemFile);

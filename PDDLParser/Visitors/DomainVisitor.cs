@@ -61,7 +61,13 @@ namespace PDDLParser.Visitors
             {
                 List<PredicateExp> predicates = new List<PredicateExp>();
                 foreach (var predicate in node.Children)
-                    predicates.Add(DomainExpVisitor.Visit(predicate, listener) as PredicateExp);
+                {
+                    var exp = DomainExpVisitor.Visit(predicate, listener);
+                    if (exp is PredicateExp pred)
+                        predicates.Add(pred);
+                    if (exp is NameExp cpred)
+                        predicates.Add(new PredicateExp(new ASTNode(cpred.Character, cpred.Line, ""), cpred.Name, new List<NameExp>()));
+                }
                 return new PredicatesDecl(node, predicates);
             }
             else if (node.Content.StartsWith(":timeless"))

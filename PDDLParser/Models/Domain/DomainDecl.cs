@@ -20,6 +20,9 @@ namespace PDDLParser.Models.Domain
         public List<ActionDecl> Actions { get; set; }
         public List<AxiomDecl> Axioms { get; set; }
 
-        public DomainDecl(ASTNode node) : base(node) { }
+        public DomainDecl(ASTNode node) : base(node) {
+            Actions = new List<ActionDecl>();
+            Axioms = new List<AxiomDecl>();
+        }
     }
 }

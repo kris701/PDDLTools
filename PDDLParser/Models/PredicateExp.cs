@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class PredicateExp : BaseNode, IExp
+    public class PredicateExp : BaseNode, IExp, ICloneable
     {
         public string Name { get; set; }
         public List<NameExp> Arguments { get; set; }
@@ -41,6 +41,14 @@ namespace PDDLParser.Models
                 return exp.GetHashCode() == GetHashCode();
             }
             return false;
+        }
+
+        public object Clone()
+        {
+            List<NameExp> copyNames = new List<NameExp>();
+            foreach (var arg in Arguments)
+                copyNames.Add(new NameExp(new ASTNode(arg.Character, arg.Line, ""), arg.Name));
+            return new PredicateExp(new ASTNode(Character, Line, ""), Name, copyNames);
         }
     }
 }

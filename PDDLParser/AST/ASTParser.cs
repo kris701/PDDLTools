@@ -29,6 +29,8 @@ namespace PDDLParser.AST
 
         private ASTNode ParseAsNodeRec(string text)
         {
+            text = ReduceToSingleSpaces(text);
+
             _currentCharacter = _currentSource.IndexOf("(", _currentCharacter + 1);
             int thisCharacter = _currentCharacter;
 
@@ -73,6 +75,13 @@ namespace PDDLParser.AST
                     thisCharacter + 1,
                     newText);
             }
+        }
+        
+        private string ReduceToSingleSpaces(string text)
+        {
+            while (text.Contains("  "))
+                text = text.Replace("  ", " ");
+            return text;
         }
 
         private void SetLineNumberByCharacterNumberRec(string source, ASTNode node)
