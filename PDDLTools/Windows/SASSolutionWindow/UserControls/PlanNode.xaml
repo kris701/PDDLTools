@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PDDLTools.Windows.SASSolutionWindow.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="100">
+             d:DesignHeight="100" d:DesignWidth="100" Width="50" Height="50">
     <Grid>
         <Ellipse x:Name="EllipseArea" StrokeThickness="2" Stroke="White" Fill="Black"/>
         <Label x:Name="NodeID" Content="0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>

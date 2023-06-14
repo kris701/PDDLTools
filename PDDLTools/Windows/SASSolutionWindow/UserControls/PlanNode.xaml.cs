@@ -17,12 +17,14 @@ namespace PDDLTools.Windows.SASSolutionWindow.UserControls
 {
     public partial class PlanNode : UserControl
     {
-        public PlanNode(int id, string tooltip, bool isGoal, bool isPartialGoal)
+        public PlanNode(int id, string text, bool isGoal, bool isPartialGoal)
         {
             InitializeComponent();
 
             NodeID.Content = id;
-            EllipseArea.ToolTip = tooltip;
+            var toolTip = new ToolTip();
+            toolTip.Content  = text;
+            this.ToolTip = toolTip;
             if (isGoal)
                 EllipseArea.Fill = Brushes.Green;
             else if (isPartialGoal)

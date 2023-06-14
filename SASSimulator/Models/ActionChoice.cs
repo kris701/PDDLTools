@@ -16,5 +16,13 @@ namespace SASSimulator.Models
             Name = name;
             Arguments = arguments;
         }
+
+        public override string ToString()
+        {
+            var argStr = "";
+            foreach (var arg in Arguments)
+                argStr += $" {arg}";
+            return $"({Name}{argStr})";
+        }
     }
 }

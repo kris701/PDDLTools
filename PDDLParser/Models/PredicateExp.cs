@@ -30,7 +30,7 @@ namespace PDDLParser.Models
         {
             int hash = Name.GetHashCode();
             foreach(var  arg in Arguments)
-                hash += arg.Name.GetHashCode();
+                hash *= arg.Name.GetHashCode();
             return hash;
         }
 
