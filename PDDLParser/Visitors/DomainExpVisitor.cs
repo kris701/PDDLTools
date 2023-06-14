@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Visitors
 {
-    public class ExpVisitor
+    public class DomainExpVisitor
     {
         public static IExp Visit(ASTNode node, IErrorListener listener)
         {

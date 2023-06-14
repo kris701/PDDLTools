@@ -25,5 +25,22 @@ namespace PDDLParser.Models
                 paramRetStr += $" {arg}";
             return $"({Name}{paramRetStr})";
         }
+
+        public override int GetHashCode()
+        {
+            int hash = Name.GetHashCode();
+            foreach(var  arg in Arguments)
+                hash += arg.Name.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is PredicateExp exp) 
+            { 
+                return exp.GetHashCode() == GetHashCode();
+            }
+            return false;
+        }
     }
 }

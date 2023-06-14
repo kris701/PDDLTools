@@ -14,8 +14,13 @@ namespace PDDLParser.Models
 
         public BaseNode(ASTNode node)
         {
-            Line = node.Line;
-            Character = node.Character;
+            Line = -1;
+            Character = -1;
+            if (node != null)
+            {
+                Line = node.Line;
+                Character = node.Character;
+            }
         }
     }
 }

@@ -9,9 +9,9 @@ namespace PDDLParser.Models.Problem
 {
     public class InitDecl : BaseNode, IDecl
     {
-        public List<NameExp> Predicates { get; set; }
+        public List<PredicateExp> Predicates { get; set; }
 
-        public InitDecl(ASTNode node, List<NameExp> predicates) : base(node)
+        public InitDecl(ASTNode node, List<PredicateExp> predicates) : base(node)
         {
             Predicates = predicates;
         }

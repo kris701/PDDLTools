@@ -78,8 +78,9 @@
     <Compile Include="Models\Problem\ProblemNameDecl.cs" />
     <Compile Include="PDDLParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visitors\ProblemExpVisitor.cs" />
     <Compile Include="Visitors\DomainVisitor.cs" />
-    <Compile Include="Visitors\ExpVisitor.cs" />
+    <Compile Include="Visitors\DomainExpVisitor.cs" />
     <Compile Include="Visitors\ProblemVisitor.cs" />
   </ItemGroup>
   <ItemGroup />

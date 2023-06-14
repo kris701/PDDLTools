@@ -41,8 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Simulator.cs" />
+    <Compile Include="IPlanParser.cs" />
+    <Compile Include="ISASSimulator.cs" />
+    <Compile Include="Models\ActionChoice.cs" />
+    <Compile Include="PlanParser.cs" />
+    <Compile Include="SASSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">
+      <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
+      <Name>PDDLParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

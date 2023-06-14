@@ -77,6 +77,8 @@ namespace FastDownwardRunner.Models
         {
             ResultReason = resultReason;
 
+            Log = log;
+
             foreach(var item in log)
             {
                 if (item.Type == LogItem.ItemType.Log)

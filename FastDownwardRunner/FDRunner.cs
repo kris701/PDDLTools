@@ -22,6 +22,7 @@ namespace FastDownwardRunner
             FastDownwardFolder = fastDownwardFolder;
             PythonPrefix = pythonPrefix;
             Timeout = timeout;
+            Log = new List<LogItem>();
         }
 
         public async Task<FDResults> RunAsync(string domainPath, string problemPath, string searchArg)

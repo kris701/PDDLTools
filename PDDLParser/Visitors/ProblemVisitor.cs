@@ -51,14 +51,14 @@ namespace PDDLParser.Visitors
             }
             else if (node.Content.StartsWith(":init"))
             {
-                List<NameExp> inits = new List<NameExp>();
+                List<PredicateExp> inits = new List<PredicateExp>();
                 foreach(var child in node.Children)
-                    inits.Add(ExpVisitor.Visit(new ASTNode(child.Character, child.Line, child.Content), listener) as NameExp);
+                    inits.Add(ProblemExpVisitor.Visit(new ASTNode(child.Character, child.Line, child.Content), listener) as PredicateExp);
                 return new InitDecl(node, inits);
             }
             else if (node.Content.StartsWith(":goal"))
             {
-                return new GoalDecl(node, ExpVisitor.Visit(node.Children[0], listener));
+                return new GoalDecl(node, ProblemExpVisitor.Visit(node.Children[0], listener));
             }
 
             listener.AddError(new ParseError(
