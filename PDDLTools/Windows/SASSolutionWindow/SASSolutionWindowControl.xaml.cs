@@ -128,6 +128,8 @@ namespace PDDLTools.Windows.SASSolutionWindow
             }
 
             bool changed = true;
+            int tries = 0;
+            int maxTries = 1000;
             while (changed)
             {
                 changed = false;
@@ -177,6 +179,9 @@ namespace PDDLTools.Windows.SASSolutionWindow
                         }
                     }
                 }
+                tries++;
+                if (tries > maxTries)
+                    break;
             }
 
             return points;

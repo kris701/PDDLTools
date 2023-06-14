@@ -111,7 +111,8 @@ namespace PDDLTools.Commands
             var resultData = await fdRunner.RunAsync(domainFilePath, problemFilePath, SelectSearchCommand.SelectedSearch);
 
             await WriteToOutputWindowAsync(resultData);
-            await SetupResultWindowsAsync(resultData, domainFilePath, problemFilePath);
+            if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
+                await SetupResultWindowsAsync(resultData, domainFilePath, problemFilePath);
 
             _isRunning = false;
         }

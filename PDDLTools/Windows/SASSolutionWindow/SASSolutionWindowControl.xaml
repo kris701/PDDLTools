@@ -26,6 +26,5 @@
         </ScrollViewer>
         <Canvas x:Name="VisualPlan" Grid.Column="1" Grid.RowSpan="2" Margin="5" Background="DarkGray"/>
         <Label x:Name="PlanTooLargeLable" Grid.Column="1" Grid.RowSpan="2" Content="Cannot display plans larger then 50 steps!" Margin="5" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
-        <Label Grid.Column="1" Grid.RowSpan="2" Content="Hover over nodes to see what step they correspond to" Foreground="White" Margin="5"/>
     </Grid>
 </UserControl>

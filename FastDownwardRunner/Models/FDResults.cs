@@ -79,78 +79,81 @@ namespace FastDownwardRunner.Models
 
             Log = log;
 
-            foreach(var item in log)
+            if (resultReason == ProcessCompleteReson.RanToCompletion)
             {
-                if (item.Type == LogItem.ItemType.Log)
+                foreach (var item in log)
                 {
-                    var lowLine = item.Content.ToLower();
+                    if (item.Type == LogItem.ItemType.Log)
+                    {
+                        var lowLine = item.Content.ToLower();
 
-                    // Translator Vars
-                    if (lowLine.Contains("translator variables: "))
-                        TranslatorVariables = Convert.ToInt32(lowLine.Replace("translator variables: ", ""));
-                    else if (lowLine.Contains("translator derived variables: "))
-                        TranslatorDerivedVariables = Convert.ToInt32(lowLine.Replace("translator derived variables: ", ""));
-                    else if (lowLine.Contains("translator facts: "))
-                        TranslatorFacts = Convert.ToInt32(lowLine.Replace("translator facts: ", ""));
-                    else if (lowLine.Contains("translator goal facts: "))
-                        TranslatorGoalFacts = Convert.ToInt32(lowLine.Replace("translator goal facts: ", ""));
-                    else if (lowLine.Contains("translator mutex groups: "))
-                        TranslatorMutexGroups = Convert.ToInt32(lowLine.Replace("translator mutex groups: ", ""));
-                    else if (lowLine.Contains("translator total mutex groups size: "))
-                        TranslatorTotalMutexGroupsSize = Convert.ToInt32(lowLine.Replace("translator total mutex groups size: ", ""));
-                    else if (lowLine.Contains("translator operators: "))
-                        TranslatorOperators = Convert.ToInt32(lowLine.Replace("translator operators: ", ""));
-                    else if (lowLine.Contains("translator axioms: "))
-                        TranslatorAxioms = Convert.ToInt32(lowLine.Replace("translator axioms: ", ""));
-                    else if (lowLine.Contains("translator task size: "))
-                        TranslatorTaskSize = Convert.ToInt32(lowLine.Replace("translator task size: ", ""));
+                        // Translator Vars
+                        if (lowLine.Contains("translator variables: "))
+                            TranslatorVariables = Convert.ToInt32(lowLine.Replace("translator variables: ", ""));
+                        else if (lowLine.Contains("translator derived variables: "))
+                            TranslatorDerivedVariables = Convert.ToInt32(lowLine.Replace("translator derived variables: ", ""));
+                        else if (lowLine.Contains("translator facts: "))
+                            TranslatorFacts = Convert.ToInt32(lowLine.Replace("translator facts: ", ""));
+                        else if (lowLine.Contains("translator goal facts: "))
+                            TranslatorGoalFacts = Convert.ToInt32(lowLine.Replace("translator goal facts: ", ""));
+                        else if (lowLine.Contains("translator mutex groups: "))
+                            TranslatorMutexGroups = Convert.ToInt32(lowLine.Replace("translator mutex groups: ", ""));
+                        else if (lowLine.Contains("translator total mutex groups size: "))
+                            TranslatorTotalMutexGroupsSize = Convert.ToInt32(lowLine.Replace("translator total mutex groups size: ", ""));
+                        else if (lowLine.Contains("translator operators: "))
+                            TranslatorOperators = Convert.ToInt32(lowLine.Replace("translator operators: ", ""));
+                        else if (lowLine.Contains("translator axioms: "))
+                            TranslatorAxioms = Convert.ToInt32(lowLine.Replace("translator axioms: ", ""));
+                        else if (lowLine.Contains("translator task size: "))
+                            TranslatorTaskSize = Convert.ToInt32(lowLine.Replace("translator task size: ", ""));
 
-                    // Search Vars
-                    var ignoreSquareBracketLine = lowLine.Substring(lowLine.IndexOf("]") + 1).Trim();
+                        // Search Vars
+                        var ignoreSquareBracketLine = lowLine.Substring(lowLine.IndexOf("]") + 1).Trim();
 
-                    if (ignoreSquareBracketLine.StartsWith("plan length: ") && ignoreSquareBracketLine.Contains("step(s)."))
-                        PlanLength = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("plan length: ") + "plan length: ".Length).Replace("step(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("plan cost: "))
-                        PlanCost = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("plan cost: ") + "plan cost: ".Length));
-                    else if (ignoreSquareBracketLine.StartsWith("expanded until last jump: ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        ExpandedUntilLastJumpStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("expanded until last jump: ") + "expanded until last jump: ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("reopened until last jump: ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        ReopenedUntilLastJumpStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("reopened until last jump: ") + "reopened until last jump: ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("evaluated until last jump: ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        EvaluatedUntilLastJumpStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("evaluated until last jump: ") + "evaluated until last jump: ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("generated until last jump: ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        GeneratedUntilLastJumpStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("generated until last jump: ") + "generated until last jump: ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("expanded ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        ExpandedStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("expanded ") + "expanded ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("reopened ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        ReopenedStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("reopened ") + "reopened ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("evaluated ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        EvaluatedStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("evaluated ") + "evaluated ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("evaluations: "))
-                        Evaluations = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("evaluations: ") + "evaluations: ".Length));
-                    else if (ignoreSquareBracketLine.StartsWith("generated ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        GeneratedStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("generated ") + "generated ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("dead ends: ") && ignoreSquareBracketLine.Contains("state(s)."))
-                        DeadEndStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("dead ends: ") + "dead ends: ".Length).Replace("state(s).", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("number of registered states: "))
-                        NumberOfRegisteredStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("number of registered states: ") + "number of registered states: ".Length));
-                    else if (ignoreSquareBracketLine.StartsWith("int hash set load factor: "))
-                        IntHashSetLoadFactor = Convert.ToDouble(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("=") + 1));
-                    else if (ignoreSquareBracketLine.StartsWith("int hash set resizes: "))
-                        IntHashSetResizes = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("int hash set resizes: ") + "int hash set resizes: ".Length));
+                        if (ignoreSquareBracketLine.StartsWith("plan length: ") && ignoreSquareBracketLine.Contains("step(s)."))
+                            PlanLength = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("plan length: ") + "plan length: ".Length).Replace("step(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("plan cost: "))
+                            PlanCost = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("plan cost: ") + "plan cost: ".Length));
+                        else if (ignoreSquareBracketLine.StartsWith("expanded until last jump: ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            ExpandedUntilLastJumpStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("expanded until last jump: ") + "expanded until last jump: ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("reopened until last jump: ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            ReopenedUntilLastJumpStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("reopened until last jump: ") + "reopened until last jump: ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("evaluated until last jump: ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            EvaluatedUntilLastJumpStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("evaluated until last jump: ") + "evaluated until last jump: ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("generated until last jump: ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            GeneratedUntilLastJumpStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("generated until last jump: ") + "generated until last jump: ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("expanded ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            ExpandedStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("expanded ") + "expanded ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("reopened ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            ReopenedStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("reopened ") + "reopened ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("evaluated ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            EvaluatedStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("evaluated ") + "evaluated ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("evaluations: "))
+                            Evaluations = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("evaluations: ") + "evaluations: ".Length));
+                        else if (ignoreSquareBracketLine.StartsWith("generated ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            GeneratedStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("generated ") + "generated ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("dead ends: ") && ignoreSquareBracketLine.Contains("state(s)."))
+                            DeadEndStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("dead ends: ") + "dead ends: ".Length).Replace("state(s).", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("number of registered states: "))
+                            NumberOfRegisteredStates = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("number of registered states: ") + "number of registered states: ".Length));
+                        else if (ignoreSquareBracketLine.StartsWith("int hash set load factor: "))
+                            IntHashSetLoadFactor = Convert.ToDouble(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("=") + 1));
+                        else if (ignoreSquareBracketLine.StartsWith("int hash set resizes: "))
+                            IntHashSetResizes = Convert.ToInt32(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("int hash set resizes: ") + "int hash set resizes: ".Length));
 
-                    else if (ignoreSquareBracketLine.StartsWith("search time: "))
-                        SearchTime = Convert.ToDouble(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("search time: ") + "search time: ".Length).Replace("s", ""));
-                    else if (ignoreSquareBracketLine.StartsWith("total time: "))
-                        TotalTime = Convert.ToDouble(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("total time: ") + "total time: ".Length).Replace("s", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("search time: "))
+                            SearchTime = Convert.ToDouble(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("search time: ") + "search time: ".Length).Replace("s", ""));
+                        else if (ignoreSquareBracketLine.StartsWith("total time: "))
+                            TotalTime = Convert.ToDouble(ignoreSquareBracketLine.Substring(ignoreSquareBracketLine.IndexOf("total time: ") + "total time: ".Length).Replace("s", ""));
 
-                    // General Vars
-                    if (lowLine.Contains("search exit code: "))
-                        ExitCode = (FDExitCode)Convert.ToInt32(lowLine.Replace("search exit code: ", ""));
-                    else if (lowLine.Contains("solution found."))
-                        WasSolutionFound = true;
-                    else if (lowLine.Contains("no solution found"))
-                        WasSolutionFound = false;
+                        // General Vars
+                        if (lowLine.Contains("search exit code: "))
+                            ExitCode = (FDExitCode)Convert.ToInt32(lowLine.Replace("search exit code: ", ""));
+                        else if (lowLine.Contains("solution found."))
+                            WasSolutionFound = true;
+                        else if (lowLine.Contains("no solution found"))
+                            WasSolutionFound = false;
+                    }
                 }
             }
         }
