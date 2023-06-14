@@ -64,23 +64,26 @@ namespace PDDLTools.ErrorList
             _errorProvider.Tasks.Clear();
 
             var file = await DTE2Helper.GetSourceFilePathAsync();
+            var parser = new PDDLParser.PDDLParser();
             try
-            {
-                var parser = new PDDLParser.PDDLParser();
-                if (PDDLHelper.IsFileDomain(file))
+            {   if (PDDLHelper.IsFileDomain(file))
                 {
                     var fullDomain = parser.ParseDomainFile(file);
                 } 
                 else if (PDDLHelper.IsFileProblem(file))
                 {
-
+                    var fullProblem = parser.ParseProblemFile(file);
                 }
             }
             catch (ParseException ex)
             {
-                var sourceDocumentLines = File.ReadAllLines(file);
+                
+            }
 
-                foreach(var error in ex.Errors)
+            if (parser.Listener.Errors.Count > 0)
+            {
+                var sourceDocumentLines = File.ReadAllLines(file);
+                foreach (var error in parser.Listener.Errors)
                 {
                     ErrorTask newError = new ErrorTask();
 
@@ -108,6 +111,36 @@ namespace PDDLTools.ErrorList
 
             if (_errorProvider.Tasks.Count > 0)
                 _errorProvider.Show();
+        }
+
+        private void AddErrors(List<ParseError> errors, string file)
+        {
+            var sourceDocumentLines = File.ReadAllLines(file);
+
+            foreach (var error in errors)
+            {
+                ErrorTask newError = new ErrorTask();
+
+                switch (error.Type)
+                {
+                    case ParseErrorType.Error: newError.ErrorCategory = TaskErrorCategory.Error; break;
+                    case ParseErrorType.Warning: newError.ErrorCategory = TaskErrorCategory.Warning; break;
+                    case ParseErrorType.Message: newError.ErrorCategory = TaskErrorCategory.Message; break;
+                }
+                switch (error.Level)
+                {
+                    case ParserErrorLevel.Low: newError.Priority = TaskPriority.Low; break;
+                    case ParserErrorLevel.Medium: newError.Priority = TaskPriority.Normal; break;
+                    case ParserErrorLevel.High: newError.Priority = TaskPriority.High; break;
+                }
+
+                newError.Text = error.Message;
+                newError.Line = error.Line;
+                newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
+                newError.Document = "";
+                newError.Navigate += JumpToError;
+                _errorProvider.Tasks.Add(newError);
+            }
         }
 
         private int GetColumnFromCharacter(string[] sourceDocumentLines, int lineNumber, int characterNumber)

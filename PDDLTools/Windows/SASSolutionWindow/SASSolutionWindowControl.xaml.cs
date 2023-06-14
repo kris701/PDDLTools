@@ -84,7 +84,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
                         }
                         var locs = GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
 
-                        var totalGoal = TotalGoalCount(_pddlData.Problem.Goal.GoalExp);
+                        var totalGoal = _pddlData.Problem.Goal.GoalExpCount;
                         var prevNode = AddNewNode(0, "init", simulator.State, totalGoal, locs[0]);
 
                         for (int i = 0; i < plan.Count; i++)
@@ -113,7 +113,6 @@ namespace PDDLTools.Windows.SASSolutionWindow
             for (int i = 0; i < count - 1; i++)
             {
                 var newPoint = new Point();
-                double dist = double.MaxValue;
                 newPoint = new Point(
                         rnd.Next(radius, width - radius),
                         rnd.Next(radius, height - radius)
@@ -203,7 +202,6 @@ namespace PDDLTools.Windows.SASSolutionWindow
         private bool ccw(Point A, Point B, Point C) => (C.Y - A.Y) * (B.X - A.X) > (B.Y - A.Y) * (C.X - A.X);
         private bool Intersect(Point A, Point B, Point C, Point D) => ccw(A, C, D) != ccw(B, C, D) && ccw(A, B, C) != ccw(A, B, D);
 
-
         private void MakeLineBetweenNodes(PlanNode a, PlanNode b, Line newLine)
         {
             newLine.X1 = a.Margin.Left + a.Width / 2;
@@ -235,13 +233,41 @@ namespace PDDLTools.Windows.SASSolutionWindow
 
         private PlanNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point loc)
         {
-            var goalCount = _pddlData.Problem.Goal.GoalExpCount;
+            var goalCount = GetGoalCountInState(_pddlData.Problem.Goal.GoalExp, state);
             bool isGoal = goalCount == totalGoal;
             bool isPartialGoal = goalCount > 0;
             var newNode = new PlanNode(id, text, isGoal, isPartialGoal);
             newNode.Margin = new Thickness(loc.X, loc.Y, 0, 0);
             VisualPlan.Children.Add(newNode);
             return newNode;
+        }
+
+        private int GetGoalCountInState(IExp exp, List<PredicateExp> state)
+        {
+            if (exp is AndExp and)
+            {
+                int count = 0;
+                foreach (var child in and.Children)
+                    count += GetGoalCountInState(child, state);
+                return count;
+            }
+            else if (exp is NotExp not)
+            {
+                return GetGoalCountInState(not.Child, state);
+            }
+            else if (exp is OrExp or)
+            {
+                return GetGoalCountInState(or.Option1, state) + GetGoalCountInState(or.Option2, state);
+            }
+            else
+            {
+                if (exp is PredicateExp pred)
+                {
+                    if (state.Contains(pred))
+                        return 1;
+                }
+            }
+            return 0;
         }
 
         private int TotalGoalCount(IExp exp)

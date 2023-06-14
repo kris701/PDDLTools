@@ -413,7 +413,6 @@ namespace PDDLParser.Analysers
         {
             CheckForBasicProblem(problem, listener);
 
-            CheckForAnyObjects(problem, listener);
             CheckForUniqueObjectNames(problem, listener);
             CheckDeclaredVsUsedObjects(problem, listener);
             CheckForUndeclaredObjects(problem, listener);
@@ -465,21 +464,6 @@ namespace PDDLParser.Analysers
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
-        }
-        private static void CheckForAnyObjects(ProblemDecl problem, IErrorListener listener)
-        {
-            if (problem.Objects != null)
-            {
-                if (problem.Objects.Objs.Count == 0)
-                {
-                    listener.AddError(new ParseError(
-                        $"No objects declared!",
-                        ParserErrorLevel.High,
-                        ParseErrorType.Warning,
-                        problem.Objects.Line,
-                        problem.Objects.Character));
-                }
-            }
         }
         private static void CheckForUndeclaredObjects(ProblemDecl problem, IErrorListener listener)
         {

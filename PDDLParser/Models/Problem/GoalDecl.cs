@@ -44,9 +44,13 @@ namespace PDDLParser.Models.Problem
             {
                 return GoalStateCount(not.Child);
             }
+            else if (exp is OrExp or)
+            {
+                return GoalStateCount(or.Option1) + GoalStateCount(or.Option2);
+            }
             else
             {
-                if (exp is PredicateExp pred)
+                if (exp is PredicateExp)
                     return 1;
             }
             return 0;

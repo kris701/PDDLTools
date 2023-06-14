@@ -10,13 +10,19 @@ namespace PDDLParser.Listener
     public class ErrorListener : IErrorListener
     {
         public ParseErrorType ThrowIfTypeAbove { get; set; }
+        public List<ParseError> Errors { get; internal set; }
 
-        private List<ParseError> _errors = new List<ParseError>();
+        public ErrorListener()
+        {
+            Errors = new List<ParseError>();
+            ThrowIfTypeAbove = ParseErrorType.None;
+        }
+
         public void AddError(ParseError err)
         {
-            _errors.Add(err);
-            if (_errors.Any(x => x.Type > ThrowIfTypeAbove))
-                throw new ParseException(_errors);
+            Errors.Add(err);
+            if (Errors.Any(x => x.Type > ThrowIfTypeAbove))
+                throw new ParseException(Errors);
         }
     }
 }

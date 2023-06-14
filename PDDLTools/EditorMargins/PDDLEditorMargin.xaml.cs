@@ -59,8 +59,14 @@ namespace PDDLTools.EditorMargins
                 IPDDLParser parser = new PDDLParser.PDDLParser();
                 var domain = parser.ParseDomainFile(file);
 
-                PredicateCountLabel.Content = $"{domain.Predicates.Predicates.Count}";
-                ActionCountLabel.Content = $"{domain.Actions.Count}";
+                if (domain.Predicates == null)
+                    PredicateCountLabel.Content = "?";
+                else
+                    PredicateCountLabel.Content = $"{domain.Predicates.Predicates.Count}";
+                if (domain.Actions == null)
+                    ActionCountLabel.Content = "?";
+                else
+                    ActionCountLabel.Content = $"{domain.Actions.Count}";
             }
             else if (PDDLHelper.IsFileProblem(file))
             {
@@ -69,9 +75,18 @@ namespace PDDLTools.EditorMargins
                 IPDDLParser parser = new PDDLParser.PDDLParser();
                 var problem = parser.ParseProblemFile(file);
 
-                ObjectCountLabel.Content = $"{problem.Objects.Objs.Count}";
-                InitCountLabel.Content = $"{problem.Init.Predicates.Count}";
-                GoalCountLabel.Content = $"{problem.Goal.GoalExpCount}";
+                if (problem.Objects == null)
+                    ObjectCountLabel.Content = "?";
+                else
+                    ObjectCountLabel.Content = $"{problem.Objects.Objs.Count}";
+                if (problem.Init == null)
+                    InitCountLabel.Content = "?";
+                else
+                    InitCountLabel.Content = $"{problem.Init.Predicates.Count}";
+                if (problem.Goal == null)
+                    GoalCountLabel.Content = "?";
+                else
+                    GoalCountLabel.Content = $"{problem.Goal.GoalExpCount}";
             }
         }
 
@@ -110,7 +125,7 @@ namespace PDDLTools.EditorMargins
         }
         public ITextViewMargin GetTextViewMargin(string marginName)
         {
-            return string.Equals(marginName, PDDLEditorMargin_old.MarginName, StringComparison.OrdinalIgnoreCase) ? this : null;
+            return string.Equals(marginName, PDDLEditorMargin.MarginName, StringComparison.OrdinalIgnoreCase) ? this : null;
         }
 
         public void Dispose()
