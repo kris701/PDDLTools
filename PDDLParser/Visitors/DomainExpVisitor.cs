@@ -15,39 +15,48 @@ namespace PDDLParser.Visitors
         {
             if (node.Content.StartsWith("and"))
             {
-                List<IExp> children = new List<IExp>();
-                foreach(var child in node.Children)
-                    children.Add(Visit(child, listener));
-                if (children.Count == 0)
-                {
+                if (node.Children.Count == 0)
                     listener.AddError(new ParseError(
                         $"'and' node does not have any children!",
                         ParserErrorLevel.High,
                         ParseErrorType.Error));
-                }
+                IsChildrenOnly(node, "and", listener);
+
+                List<IExp> children = new List<IExp>();
+                foreach(var child in node.Children)
+                    children.Add(Visit(child, listener));
+
                 return new AndExp(node, children);
-            } else if (node.Content.StartsWith("or"))
+            } 
+            else if (node.Content.StartsWith("or"))
             {
                 if (node.Children.Count != 0)
-                {
                     listener.AddError(new ParseError(
                         $"'or' node must have exactly 2 children!",
                         ParserErrorLevel.High,
                         ParseErrorType.Error));
-                }
+                IsChildrenOnly(node, "or", listener);
+
                 return new OrExp(node, Visit(node.Children[0], listener), Visit(node.Children[1], listener));
             }
             else if (node.Content.StartsWith("not"))
             {
                 if (node.Children.Count == 0)
-                {
                     listener.AddError(new ParseError(
                         $"'not' node does not have any children!",
                         ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
-                }
+                if (node.Children.Count > 1 )
+                    listener.AddError(new ParseError(
+                        $"'not' node should only have one child!",
+                        ParserErrorLevel.High,
+                        ParseErrorType.Error,
+                        node.Line,
+                        node.Character));
+                IsChildrenOnly(node, "not", listener);
+
                 return new NotExp(node, Visit(node.Children[0], listener));
             }
             else if (node.Content.Contains(" "))
@@ -91,6 +100,17 @@ namespace PDDLParser.Visitors
             {
                 return new NameExp(node, node.Content.Replace("?", "").Trim());
             }
+        }
+
+        private static void IsChildrenOnly(ASTNode node, string targetName, IErrorListener listener)
+        {
+            if (node.Content.Replace(targetName, "").Trim() != "")
+                listener.AddError(new ParseError(
+                    $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.Content.Replace(targetName, "").Trim()}",
+                    ParserErrorLevel.High,
+                    ParseErrorType.Error,
+                    node.Line,
+                    node.Character));
         }
     }
 }

@@ -102,9 +102,9 @@ namespace PDDLTools.ErrorList
                     }
 
                     newError.Text = error.Message;
-                    newError.Line = error.Line;
-                    newError.Column = error.Character;
-                    //newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
+                    newError.Line = error.Line - 1;
+                    //newError.Column = error.Character;
+                    newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
                     newError.Document = "";
                     newError.Navigate += JumpToError;
                     _errorProvider.Tasks.Add(newError);
@@ -130,22 +130,9 @@ namespace PDDLTools.ErrorList
         private async void JumpToError(object sender, EventArgs e)
         {
             if (sender is ErrorTask item) {
-                var newSpan = new Microsoft.VisualStudio.Text.SnapshotSpan(TextField.TextSnapshot, item.Column, 10);
-                TextField.Selection.Select(newSpan, false);
+                TextField.Caret.MoveTo(TextField.TextSnapshot.GetLineFromLineNumber(item.Line).Start + item.Column);
+                TextField.Caret.EnsureVisible();
                 await DTE2Helper.FocusActiveDocumentAsync();
-
-                //int lineCounter = 1;
-                //foreach (var line in TextField.TextViewLines)
-                //{
-                //    if (lineCounter == item.Line)
-                //    {
-                //        var newSpan = new Microsoft.VisualStudio.Text.SnapshotSpan(line.Extent.Snapshot, line.Extent.Start + item.Column, line.Extent.End - line.Extent.Start - item.Column);
-                //        TextField.Selection.Select(newSpan, false);
-                //        await DTE2Helper.FocusActiveDocumentAsync();
-                //        break;
-                //    }
-                //    lineCounter++;
-                //}
             }
         }
     }

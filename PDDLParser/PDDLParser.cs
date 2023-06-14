@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using PDDLParser.Models.Domain;
 using PDDLParser.Models.Problem;
 using PDDLParser.Analysers;
+using System.Xml.Linq;
 
 namespace PDDLParser
 {
@@ -36,6 +37,16 @@ namespace PDDLParser
         {
             var absAST = ParseAsASTTree(parseFile, Listener);
 
+            if (!absAST.Content.StartsWith("define"))
+                Listener.AddError(new ParseError(
+                    $"Root 'define' node not found?",
+                    ParserErrorLevel.High,
+                    ParseErrorType.Error,
+                    absAST.Line,
+                    absAST.Character));
+
+            IsChildrenOnly(absAST, "define");
+
             var returnDomain = new DomainDecl(absAST);
 
             foreach (var node in absAST.Children)
@@ -51,7 +62,10 @@ namespace PDDLParser
                 else if (node.Content.StartsWith(":timeless"))
                     returnDomain.Timeless = DomainVisitor.Visit(node, Listener) as TimelessDecl;
                 else if (node.Content.StartsWith(":predicates"))
-                    returnDomain.Predicates = DomainVisitor.Visit(node, Listener) as PredicatesDecl;
+                {
+                    if (IsChildrenOnly(node, ":predicates"))
+                        returnDomain.Predicates = DomainVisitor.Visit(node, Listener) as PredicatesDecl;
+                }
                 else if (node.Content.StartsWith(":action"))
                 {
                     if (returnDomain.Actions == null)
@@ -64,6 +78,13 @@ namespace PDDLParser
                         returnDomain.Axioms = new List<AxiomDecl>();
                     returnDomain.Axioms.Add(DomainVisitor.Visit(node, Listener) as AxiomDecl);
                 }
+                else
+                    Listener.AddError(new ParseError(
+                        $"Could not parse content of AST node: {node.Content}",
+                        ParserErrorLevel.High,
+                        ParseErrorType.Error,
+                        node.Line,
+                        node.Character));
             }
 
             PostParsingAnalyser.AnalyseDomain(returnDomain, Listener);
@@ -75,6 +96,16 @@ namespace PDDLParser
         {
             var absAST = ParseAsASTTree(parseFile, Listener);
 
+            if (!absAST.Content.StartsWith("define"))
+                Listener.AddError(new ParseError(
+                    $"Root 'define' node not found?",
+                    ParserErrorLevel.High,
+                    ParseErrorType.Error,
+                    absAST.Line,
+                    absAST.Character));
+
+            IsChildrenOnly(absAST, "define");
+
             var returnProblem = new ProblemDecl(absAST);
 
             foreach (var node in absAST.Children)
@@ -83,17 +114,43 @@ namespace PDDLParser
                     returnProblem.Name = ProblemVisitor.Visit(node, Listener) as ProblemNameDecl;
                 else if (node.Content.StartsWith(":domain"))
                     returnProblem.DomainName = ProblemVisitor.Visit(node, Listener) as DomainNameRefDecl;
-                if (node.Content.StartsWith(":objects"))
+                else if (node.Content.StartsWith(":objects"))
                     returnProblem.Objects = ProblemVisitor.Visit(node, Listener) as ObjectsDecl;
-                if (node.Content.StartsWith(":init"))
-                    returnProblem.Init = ProblemVisitor.Visit(node, Listener) as InitDecl;
-                if (node.Content.StartsWith(":goal"))
-                    returnProblem.Goal = ProblemVisitor.Visit(node, Listener) as GoalDecl;
+                else if (node.Content.StartsWith(":init")) {
+                    if (IsChildrenOnly(node, ":init"))
+                        returnProblem.Init = ProblemVisitor.Visit(node, Listener) as InitDecl;
+                }
+                else if (node.Content.StartsWith(":goal")) {
+                    if (IsChildrenOnly(node, ":goal"))
+                        returnProblem.Goal = ProblemVisitor.Visit(node, Listener) as GoalDecl;
+                }
+                else
+                    Listener.AddError(new ParseError(
+                        $"Could not parse content of AST node: {node.Content}",
+                        ParserErrorLevel.High,
+                        ParseErrorType.Error,
+                        node.Line,
+                        node.Character));
             }
 
             PostParsingAnalyser.AnalyseProblem(returnProblem, Listener);
 
             return returnProblem;
+        }
+
+        private bool IsChildrenOnly(ASTNode node, string targetName)
+        {
+            if (node.Content.Replace(targetName, "").Trim() != "")
+            {
+                Listener.AddError(new ParseError(
+                    $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.Content.Replace(targetName, "").Trim()}",
+                    ParserErrorLevel.High,
+                    ParseErrorType.Error,
+                    node.Line,
+                    node.Character));
+                return false;
+            }
+            return true;
         }
 
         private ASTNode ParseAsASTTree(string path, IErrorListener listener)

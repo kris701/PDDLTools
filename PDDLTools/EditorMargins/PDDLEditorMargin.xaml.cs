@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using PDDLParser;
+using PDDLParser.Exceptions;
 using PDDLTools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -51,43 +52,43 @@ namespace PDDLTools.EditorMargins
 
         private async Task SetupMarginAsync()
         {
-            var file = await DTE2Helper.GetSourceFilePathAsync();
-            if (PDDLHelper.IsFileDomain(file))
+            PredicateCountLabel.Content = "?";
+            ActionCountLabel.Content = "?";
+            ObjectCountLabel.Content = "?";
+            InitCountLabel.Content = "?";
+            GoalCountLabel.Content = "?";
+
+            try
             {
-                DomainPanel.Visibility = Visibility.Visible;
+                var file = await DTE2Helper.GetSourceFilePathAsync();
+                if (PDDLHelper.IsFileDomain(file))
+                {
+                    DomainPanel.Visibility = Visibility.Visible;
 
-                IPDDLParser parser = new PDDLParser.PDDLParser();
-                var domain = parser.ParseDomainFile(file);
+                    IPDDLParser parser = new PDDLParser.PDDLParser();
+                    var domain = parser.ParseDomainFile(file);
 
-                if (domain.Predicates == null)
-                    PredicateCountLabel.Content = "?";
-                else
-                    PredicateCountLabel.Content = $"{domain.Predicates.Predicates.Count}";
-                if (domain.Actions == null)
-                    ActionCountLabel.Content = "?";
-                else
-                    ActionCountLabel.Content = $"{domain.Actions.Count}";
+                    if (domain.Predicates != null)
+                        PredicateCountLabel.Content = $"{domain.Predicates.Predicates.Count}";
+                    if (domain.Actions != null)
+                        ActionCountLabel.Content = $"{domain.Actions.Count}";
+                }
+                else if (PDDLHelper.IsFileProblem(file))
+                {
+                    ProblemPanel.Visibility = Visibility.Visible;
+
+                    IPDDLParser parser = new PDDLParser.PDDLParser();
+                    var problem = parser.ParseProblemFile(file);
+
+                    if (problem.Objects != null)
+                        ObjectCountLabel.Content = $"{problem.Objects.Objs.Count}";
+                    if (problem.Init != null)
+                        InitCountLabel.Content = $"{problem.Init.Predicates.Count}";
+                    if (problem.Goal != null)
+                        GoalCountLabel.Content = $"{problem.Goal.GoalExpCount}";
+                }
             }
-            else if (PDDLHelper.IsFileProblem(file))
-            {
-                ProblemPanel.Visibility = Visibility.Visible;
-
-                IPDDLParser parser = new PDDLParser.PDDLParser();
-                var problem = parser.ParseProblemFile(file);
-
-                if (problem.Objects == null)
-                    ObjectCountLabel.Content = "?";
-                else
-                    ObjectCountLabel.Content = $"{problem.Objects.Objs.Count}";
-                if (problem.Init == null)
-                    InitCountLabel.Content = "?";
-                else
-                    InitCountLabel.Content = $"{problem.Init.Predicates.Count}";
-                if (problem.Goal == null)
-                    GoalCountLabel.Content = "?";
-                else
-                    GoalCountLabel.Content = $"{problem.Goal.GoalExpCount}";
-            }
+            catch (ParseException) { }
         }
 
         #region IWpfTextViewMargin
