@@ -27,15 +27,15 @@ namespace PDDLParser.Visitors
             else if (node.Content.StartsWith(":objects"))
             {
                 List<NameExp> objs = new List<NameExp>();
-                foreach (var objDecl in node.Content.Split('\n'))
+                foreach (var objDecl in node.Content.Split(ASTTokens.BreakToken))
                 {
                     var removedType = objDecl.Replace(":objects", "").Trim();
                     if (removedType != "")
                     {
-                        if (removedType.Contains(" - "))
+                        if (removedType.Contains(ASTTokens.TypeToken))
                         {
-                            var left = removedType.Substring(0, removedType.IndexOf(" - "));
-                            var right = removedType.Substring(removedType.IndexOf(" - ") + 3);
+                            var left = removedType.Substring(0, removedType.IndexOf(ASTTokens.TypeToken));
+                            var right = removedType.Substring(removedType.IndexOf(ASTTokens.TypeToken) + 3);
 
                             foreach (var obj in left.Split(' '))
                                 objs.Add(new NameExp(node, obj, right));

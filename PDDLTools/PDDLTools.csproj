@@ -207,6 +207,10 @@
       <Project>{463bc2c9-3237-4251-bcac-cc0003dfee81}</Project>
       <Name>FastDownwardRunner</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LocationSpreader\LocationSpreader.csproj">
+      <Project>{d774b8f9-ec43-402c-9001-8cd43d52edcd}</Project>
+      <Name>LocationSpreader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>

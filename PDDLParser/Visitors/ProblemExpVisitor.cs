@@ -49,23 +49,48 @@ namespace PDDLParser.Visitors
                         node.Character));
                 }
                 return new NotExp(node, Visit(node.Children[0], listener));
-            } 
+            }
+            else if (node.Content.Contains(" "))
+            {
+                var predicateName = node.Content.Split(' ')[0];
+                List<NameExp> parameters = new List<NameExp>();
+
+                var paramSplit = node.Content.Split(' ');
+                foreach (var param in paramSplit)
+                    if (param != "" && param != predicateName)
+                        parameters.Add(Visit(new ASTNode(node.Character, node.Line, param), listener) as NameExp);
+                return new PredicateExp(node, predicateName, parameters);
+            }
+            else if (node.Content.Contains(ASTTokens.TypeToken))
+            {
+                var left = node.Content.Substring(0, node.Content.IndexOf(ASTTokens.TypeToken)).Trim();
+                var right = node.Content.Substring(node.Content.IndexOf(ASTTokens.TypeToken) + 3).Trim();
+
+                if (left == "")
+                {
+                    listener.AddError(new ParseError(
+                        $"Context indicated the use of a type, but an object name was not given!",
+                        ParserErrorLevel.High,
+                        ParseErrorType.Error,
+                        node.Line,
+                        node.Character));
+                }
+                if (right == "")
+                {
+                    listener.AddError(new ParseError(
+                        $"Context indicated the use of a type, but a type was not given!",
+                        ParserErrorLevel.High,
+                        ParseErrorType.Error,
+                        node.Line,
+                        node.Character));
+                }
+
+                return new NameExp(node, left.Replace("?", ""), right);
+            }
             else
             {
-                var name = node.Content.Split(' ')[0];
-                var args = new List<NameExp>();
-                foreach (var arg in node.Content.Split(' '))
-                    if (arg != name && arg != "")
-                        args.Add(new NameExp(node, arg));
-                return new PredicateExp(node, name, args);
-
+                return new NameExp(node, node.Content.Replace("?","").Trim());
             }
-
-            listener.AddError(new ParseError(
-                $"Could not parse content of AST node: {node.Content}",
-                ParserErrorLevel.High,
-                ParseErrorType.Error));
-            return default;
         }
     }
 }

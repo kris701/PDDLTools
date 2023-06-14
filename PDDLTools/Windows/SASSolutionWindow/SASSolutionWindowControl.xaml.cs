@@ -1,4 +1,5 @@
 ﻿using FastDownwardRunner.Models;
+using LocationSpreader;
 using PDDLParser.Models;
 using PDDLParser.Models.Problem;
 using PDDLTools.Helpers;
@@ -73,24 +74,17 @@ namespace PDDLTools.Windows.SASSolutionWindow
                             _pddlData,
                             plan);
 
-                        var lines = new List<Line>();
-                        for(int i = 0; i < plan.Count; i++)
-                        {
-                            var newLine = new Line();
-                            newLine.Stroke = Brushes.Black;
-                            newLine.StrokeThickness = 3;
-                            lines.Add(newLine);
-                            VisualPlan.Children.Add(newLine);
-                        }
-                        var locs = GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
+                        var lines = GenerateBaseLines(plan.Count);
 
-                        var totalGoal = _pddlData.Problem.Goal.GoalExpCount;
-                        var prevNode = AddNewNode(0, "init", simulator.State, totalGoal, locs[0]);
+                        ILocationSpreader spreader = new RandomPathCorrectingSpreader();
+                        var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
+
+                        var prevNode = AddNewNode(0, "init", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[0]);
 
                         for (int i = 0; i < plan.Count; i++)
                         {
                             simulator.Step();
-                            var newNode = AddNewNode(i + 1, $"Step {i + 1}: {plan[i]}", simulator.State, totalGoal, locs[i + 1]);
+                            var newNode = AddNewNode(i + 1, $"Step {i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[i + 1]);
 
                             MakeLineBetweenNodes(prevNode, newNode, lines[i]);
 
@@ -102,105 +96,19 @@ namespace PDDLTools.Windows.SASSolutionWindow
             }
         }
 
-        private List<Point> GenerateSuitableLocations(int width, int height, int count, int radius)
+        private List<Line> GenerateBaseLines(int count)
         {
-            Random rnd = new Random();
-            List<Point> points = new List<Point>();
-            points.Add(new Point(
-                        rnd.Next(radius, width - radius),
-                        rnd.Next(radius, height - radius)
-                        ));
-            for (int i = 0; i < count - 1; i++)
+            var lines = new List<Line>();
+            for (int i = 0; i < count; i++)
             {
-                var newPoint = new Point();
-                newPoint = new Point(
-                        rnd.Next(radius, width - radius),
-                        rnd.Next(radius, height - radius)
-                        );
-                while (GetClosestPointDistance(points, newPoint) < radius * 3)
-                    newPoint = new Point(
-                        rnd.Next(radius, width - radius),
-                        rnd.Next(radius, height - radius)
-                        );
-
-                points.Add(newPoint);
+                var newLine = new Line();
+                newLine.Stroke = Brushes.Black;
+                newLine.StrokeThickness = 3;
+                lines.Add(newLine);
+                VisualPlan.Children.Add(newLine);
             }
-
-            bool changed = true;
-            int tries = 0;
-            int maxTries = 1000;
-            while (changed)
-            {
-                changed = false;
-                for (int i = 0; i < points.Count - 1; i++)
-                {
-                    var dist = Distance(points[i], points[i + 1]);
-                    for (int j = i + 2; j < points.Count; j++)
-                    {
-                        var newDist = Distance(points[i], points[j]);
-                        if (newDist < dist)
-                        {
-                            var point1 = points[i + 1];
-                            var point2 = points[j];
-                            points[j] = point1;
-                            points[i + 1] = point2;
-                            changed = true;
-                            break;
-                        }
-                    }
-                }
-                if (!changed)
-                {
-                    for (int i = 0; i < points.Count - 1; i++)
-                    {
-                        var a1 = points[i];
-                        var a2 = points[i + 1];
-
-                        for (int j = i + 2; j < points.Count - 1; j++)
-                        {
-                            var b1 = points[j];
-                            var b2 = points[j + 1];
-
-                            if (Intersect(a1, a2, b1, b2))
-                            {
-                                var rid1 = rnd.Next(0, points.Count);
-                                while (rid1 == i && rid1 != i + 1)
-                                    rid1 = rnd.Next(0, points.Count);
-
-                                var rp1 = points[rid1];
-                                points[rid1] = a1;
-                                points[i] = rp1;
-
-                                changed = true;
-                                i = points.Count;
-                                break;
-                            }
-                        }
-                    }
-                }
-                tries++;
-                if (tries > maxTries)
-                    break;
-            }
-
-            return points;
+            return lines;
         }
-
-        private double GetClosestPointDistance(List<Point> points, Point target)
-        {
-            double dist = double.MaxValue;
-            foreach (var point in points)
-            {
-                var newDist = Distance(point, target);
-                if (newDist < dist)
-                    dist = newDist;
-            }
-            return dist;
-        }
-
-        private double Distance(Point a, Point b) => Math.Sqrt(Math.Pow(b.X - a.X, 2) + Math.Pow(b.Y - a.Y, 2));
-        private bool ccw(Point A, Point B, Point C) => (C.Y - A.Y) * (B.X - A.X) > (B.Y - A.Y) * (C.X - A.X);
-        private bool Intersect(Point A, Point B, Point C, Point D) => ccw(A, C, D) != ccw(B, C, D) && ccw(A, B, C) != ccw(A, B, D);
 
         private void MakeLineBetweenNodes(PlanNode a, PlanNode b, Line newLine)
         {
@@ -268,22 +176,6 @@ namespace PDDLTools.Windows.SASSolutionWindow
                 }
             }
             return 0;
-        }
-
-        private int TotalGoalCount(IExp exp)
-        {
-            if (exp is AndExp and)
-            {
-                int count = 0;
-                foreach (var child in and.Children)
-                    count += TotalGoalCount(child);
-                return count;
-            }
-            else if (exp is NotExp not)
-            {
-                return TotalGoalCount(not.Child);
-            }
-            return 1;
         }
     }
 }

@@ -24,6 +24,7 @@ using Microsoft.Build.Framework.XamlTypes;
 using Microsoft.VisualStudio.Text.Classification;
 using System.Windows.Shapes;
 using PDDLParser.Listener;
+using static System.Windows.Forms.LinkLabel;
 
 namespace PDDLTools.ErrorList
 {
@@ -102,7 +103,8 @@ namespace PDDLTools.ErrorList
 
                     newError.Text = error.Message;
                     newError.Line = error.Line;
-                    newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
+                    newError.Column = error.Character;
+                    //newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
                     newError.Document = "";
                     newError.Navigate += JumpToError;
                     _errorProvider.Tasks.Add(newError);
@@ -111,36 +113,6 @@ namespace PDDLTools.ErrorList
 
             if (_errorProvider.Tasks.Count > 0)
                 _errorProvider.Show();
-        }
-
-        private void AddErrors(List<ParseError> errors, string file)
-        {
-            var sourceDocumentLines = File.ReadAllLines(file);
-
-            foreach (var error in errors)
-            {
-                ErrorTask newError = new ErrorTask();
-
-                switch (error.Type)
-                {
-                    case ParseErrorType.Error: newError.ErrorCategory = TaskErrorCategory.Error; break;
-                    case ParseErrorType.Warning: newError.ErrorCategory = TaskErrorCategory.Warning; break;
-                    case ParseErrorType.Message: newError.ErrorCategory = TaskErrorCategory.Message; break;
-                }
-                switch (error.Level)
-                {
-                    case ParserErrorLevel.Low: newError.Priority = TaskPriority.Low; break;
-                    case ParserErrorLevel.Medium: newError.Priority = TaskPriority.Normal; break;
-                    case ParserErrorLevel.High: newError.Priority = TaskPriority.High; break;
-                }
-
-                newError.Text = error.Message;
-                newError.Line = error.Line;
-                newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
-                newError.Document = "";
-                newError.Navigate += JumpToError;
-                _errorProvider.Tasks.Add(newError);
-            }
         }
 
         private int GetColumnFromCharacter(string[] sourceDocumentLines, int lineNumber, int characterNumber)
@@ -158,18 +130,22 @@ namespace PDDLTools.ErrorList
         private async void JumpToError(object sender, EventArgs e)
         {
             if (sender is ErrorTask item) {
-                int lineCounter = 1;
-                foreach(var line in TextField.TextViewLines)
-                {
-                    if (lineCounter == item.Line)
-                    {
-                        var newSpan = new Microsoft.VisualStudio.Text.SnapshotSpan(line.Extent.Snapshot, line.Extent.Start + item.Column, line.Extent.End - line.Extent.Start - item.Column);
-                        TextField.Selection.Select(newSpan, false);
-                        await DTE2Helper.FocusActiveDocumentAsync();
-                        break;
-                    }
-                    lineCounter++;
-                }
+                var newSpan = new Microsoft.VisualStudio.Text.SnapshotSpan(TextField.TextSnapshot, item.Column, 10);
+                TextField.Selection.Select(newSpan, false);
+                await DTE2Helper.FocusActiveDocumentAsync();
+
+                //int lineCounter = 1;
+                //foreach (var line in TextField.TextViewLines)
+                //{
+                //    if (lineCounter == item.Line)
+                //    {
+                //        var newSpan = new Microsoft.VisualStudio.Text.SnapshotSpan(line.Extent.Snapshot, line.Extent.Start + item.Column, line.Extent.End - line.Extent.Start - item.Column);
+                //        TextField.Selection.Select(newSpan, false);
+                //        await DTE2Helper.FocusActiveDocumentAsync();
+                //        break;
+                //    }
+                //    lineCounter++;
+                //}
             }
         }
     }

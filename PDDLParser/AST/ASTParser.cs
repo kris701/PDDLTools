@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,6 +23,7 @@ namespace PDDLParser.AST
         public ASTNode Parse(string text)
         {
             _currentSource = text;
+            text = text.Replace(" - ", ASTTokens.TypeToken);
             var node = ParseAsNodeRec(text);
             SetLineNumberByCharacterNumberRec(text, node);
             return node;
@@ -89,7 +91,7 @@ namespace PDDLParser.AST
             foreach (var child in node.Children)
                 SetLineNumberByCharacterNumberRec(source, child);
             var partStr = source.Substring(0, node.Character);
-            node.Line = partStr.Count(c => c == '\n') + 1;
+            node.Line = partStr.Count(c => c == ASTTokens.BreakToken) + 1;
         }
     }
 }

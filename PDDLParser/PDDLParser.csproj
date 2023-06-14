@@ -45,6 +45,7 @@
     <Compile Include="Analysers\PreParsingAnalyser.cs" />
     <Compile Include="AST\ASTNode.cs" />
     <Compile Include="AST\ASTParser.cs" />
+    <Compile Include="AST\ASTTokens.cs" />
     <Compile Include="IPDDLParser.cs" />
     <Compile Include="Models\BaseNode.cs" />
     <Compile Include="Models\Domain\ActionDecl.cs" />

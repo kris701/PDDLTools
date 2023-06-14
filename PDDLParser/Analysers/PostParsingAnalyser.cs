@@ -30,6 +30,7 @@ namespace PDDLParser.Analysers
             CheckForUniqueActionParameterNames(domain, listener);
             CheckForUniqueAxiomParameterNames(domain, listener);
             CheckActionUsesValidPredicates(domain, listener, typeTable);
+            CheckAxiomUsesValidPredicates(domain, listener, typeTable);
             CheckForUnusedPredicates(domain, listener);
         }
 
@@ -238,6 +239,22 @@ namespace PDDLParser.Analysers
                 }
             }
         }
+        private static void CheckAxiomUsesValidPredicates(DomainDecl domain, IErrorListener listener, Dictionary<string, List<string>> typeTable)
+        {
+            if (domain.Axioms != null && domain.Predicates != null)
+            {
+                List<PredicateExp> predicates = new List<PredicateExp>();
+                if (domain.Predicates != null)
+                    foreach (var predicate in domain.Predicates.Predicates)
+                        predicates.Add(predicate);
+
+                foreach (var axiom in domain.Axioms)
+                {
+                    CheckExpUsesPredicates(axiom.Context, predicates, listener, typeTable);
+                    CheckExpUsesPredicates(axiom.Implies, predicates, listener, typeTable);
+                }
+            }
+        }
         private static void CheckExpUsesPredicates(IExp node, List<PredicateExp> predicates, IErrorListener listener, Dictionary<string, List<string>> typeTable)
         {
             if (node is AndExp and)
@@ -325,7 +342,7 @@ namespace PDDLParser.Analysers
                                 if (IsPredicateUsed(action.Preconditions, predicates[i].Name))
                                 {
                                     predicates.RemoveAt(i);
-                                    i = 0;
+                                    i = -1;
                                     continue;
                                 }
                             }
@@ -335,7 +352,7 @@ namespace PDDLParser.Analysers
                                 if (IsPredicateUsed(action.Effects, predicates[i].Name))
                                 {
                                     predicates.RemoveAt(i);
-                                    i = 0;
+                                    i = -1;
                                     continue;
                                 }
                             }
@@ -354,7 +371,7 @@ namespace PDDLParser.Analysers
                                 if (IsPredicateUsed(axiom.Context, predicates[i].Name))
                                 {
                                     predicates.RemoveAt(i);
-                                    i = 0;
+                                    i = -1;
                                     continue;
                                 }
                             }
@@ -363,7 +380,7 @@ namespace PDDLParser.Analysers
                                 if (IsPredicateUsed(axiom.Implies, predicates[i].Name))
                                 {
                                     predicates.RemoveAt(i);
-                                    i = 0;
+                                    i = -1;
                                     continue;
                                 }
                             }
@@ -479,7 +496,7 @@ namespace PDDLParser.Analysers
                     {
                         foreach(var arg in init.Arguments)
                         {
-                            if (!objects.Contains(arg))
+                            if (!objects.Any(x => x.Name == arg.Name))
                             {
                                 listener.AddError(new ParseError(
                                     $"Undeclared object detected!",
@@ -516,7 +533,7 @@ namespace PDDLParser.Analysers
             {
                 foreach (var arg in pred.Arguments)
                 {
-                    if (!objects.Contains(arg))
+                    if (!objects.Any(x => x.Name == arg.Name))
                     {
                         listener.AddError(new ParseError(
                             $"Undeclared object detected!",

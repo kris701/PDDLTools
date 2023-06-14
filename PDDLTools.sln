@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SASSimulator", "SASSimulato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FastDownwardRunner", "FastDownwardRunner\FastDownwardRunner.csproj", "{463BC2C9-3237-4251-BCAC-CC0003DFEE81}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationSpreader", "LocationSpreader\LocationSpreader.csproj", "{D774B8F9-EC43-402C-9001-8CD43D52EDCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,14 @@ Global
 		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Release|Any CPU.Build.0 = Release|Any CPU
 		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Release|x86.ActiveCfg = Release|Any CPU
 		{463BC2C9-3237-4251-BCAC-CC0003DFEE81}.Release|x86.Build.0 = Release|Any CPU
+		{D774B8F9-EC43-402C-9001-8CD43D52EDCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D774B8F9-EC43-402C-9001-8CD43D52EDCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D774B8F9-EC43-402C-9001-8CD43D52EDCD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D774B8F9-EC43-402C-9001-8CD43D52EDCD}.Debug|x86.Build.0 = Debug|Any CPU
+		{D774B8F9-EC43-402C-9001-8CD43D52EDCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D774B8F9-EC43-402C-9001-8CD43D52EDCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D774B8F9-EC43-402C-9001-8CD43D52EDCD}.Release|x86.ActiveCfg = Release|Any CPU
+		{D774B8F9-EC43-402C-9001-8CD43D52EDCD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
