@@ -9,7 +9,17 @@ namespace PDDLParser.Models.Problem
 {
     public class GoalDecl : BaseNode, IDecl
     {
-        public IExp GoalExp { get; set; }
+        private IExp _goalExp;
+        public IExp GoalExp { 
+            get 
+            { 
+                return _goalExp; 
+            } set {
+                _goalExp = value;
+                GoalExpCount = GoalStateCount(value);
+            } 
+        }
+        public int GoalExpCount { get; internal set; }
 
         public GoalDecl(ASTNode node, IExp goalExp) : base(node)
         {
@@ -19,6 +29,27 @@ namespace PDDLParser.Models.Problem
         public override string ToString()
         {
             return $"(:goal {GoalExp})";
+        }
+
+        private int GoalStateCount(IExp exp)
+        {
+            if (exp is AndExp and)
+            {
+                int count = 0;
+                foreach (var child in and.Children)
+                    count += GoalStateCount(child);
+                return count;
+            }
+            else if (exp is NotExp not)
+            {
+                return GoalStateCount(not.Child);
+            }
+            else
+            {
+                if (exp is PredicateExp pred)
+                    return 1;
+            }
+            return 0;
         }
     }
 }

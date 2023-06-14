@@ -235,7 +235,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
 
         private PlanNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point loc)
         {
-            var goalCount = GoalStateCount(_pddlData.Problem.Goal.GoalExp, state);
+            var goalCount = _pddlData.Problem.Goal.GoalExpCount;
             bool isGoal = goalCount == totalGoal;
             bool isPartialGoal = goalCount > 0;
             var newNode = new PlanNode(id, text, isGoal, isPartialGoal);
@@ -258,38 +258,6 @@ namespace PDDLTools.Windows.SASSolutionWindow
                 return TotalGoalCount(not.Child);
             }
             return 1;
-        }
-
-        private int GoalStateCount(IExp exp, List<PredicateExp> state, bool inverse = false)
-        {
-            if (exp is AndExp and)
-            {
-                int count = 0;
-                foreach (var child in and.Children)
-                    count += GoalStateCount(child, state);
-                return count;
-            }
-            else if (exp is NotExp not)
-            {
-                return GoalStateCount(not.Child, state, true);
-            }
-            else
-            {
-                if (exp is PredicateExp pred)
-                {
-                    if (inverse)
-                    {
-                        if (!state.Contains(pred))
-                            return 1;
-                    }
-                    else
-                    {
-                        if (state.Contains(pred))
-                            return 1;
-                    }
-                }
-            }
-            return 0;
         }
     }
 }
