@@ -10,23 +10,20 @@ on:
 
 jobs:
   build:
-
     runs-on: windows-latest
-
+    name: Update NuGet 
     steps:
-    - uses: actions/checkout@v3
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
 
-    - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
-
-    - name: Restore NuGet Packages
-      run: nuget restore
-
-    - name: Build extension
-      run: msbuild $env:SolutionPath /t:Rebuild
-      env: 
-        DeployExtension: False
+      - name: Checkout repository
+        uses: actions/checkout@master
+          
+      - name: Build and Publish
+        run: |  
+          cd PDDLTools
+          dotnet nuget add source --username kris701 --password ${{ secrets.API_KEY_GITHUB }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/kris701/index.json"
+          dotnet build --configuration Release
+          dotnet pack --configuration Release
+          cd bin
+          cd Release
+          dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_GITHUB }} --source "github" --skip-duplicate
+          dotnet nuget push "*.nupkg" --api-key ${{ secrets.API_KEY_NUGET }} --source "https://api.nuget.org/v3/index.json" --skip-duplicate
