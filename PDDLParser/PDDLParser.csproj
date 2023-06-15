@@ -54,6 +54,7 @@
     <Compile Include="Models\Domain\ConstantsDecl.cs" />
     <Compile Include="Models\Domain\DomainDecl.cs" />
     <Compile Include="Models\Domain\DomainNameDecl.cs" />
+    <Compile Include="Models\Domain\ExtendsDecl.cs" />
     <Compile Include="Models\Domain\TimelessDecl.cs" />
     <Compile Include="Models\IDecl.cs" />
     <Compile Include="Models\IExp.cs" />
@@ -79,9 +80,9 @@
     <Compile Include="Models\Problem\ProblemNameDecl.cs" />
     <Compile Include="PDDLParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Visitors\ProblemExpVisitor.cs" />
+    <Compile Include="Visitors\BaseVisitor.cs" />
     <Compile Include="Visitors\DomainVisitor.cs" />
-    <Compile Include="Visitors\DomainExpVisitor.cs" />
+    <Compile Include="Visitors\ExpVisitor.cs" />
     <Compile Include="Visitors\ProblemVisitor.cs" />
   </ItemGroup>
   <ItemGroup />

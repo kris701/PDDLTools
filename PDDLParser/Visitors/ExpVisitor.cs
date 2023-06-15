@@ -9,17 +9,14 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Visitors
 {
-    public class DomainExpVisitor
+    public class ExpVisitor : BaseVisitor
     {
         public static IExp Visit(ASTNode node, IErrorListener listener)
         {
             if (node.Content.StartsWith("and"))
             {
-                if (node.Children.Count == 0)
-                    listener.AddError(new ParseError(
-                        $"'and' node does not have any children!",
-                        ParseErrorType.Error));
-                IsChildrenOnly(node, "and", listener);
+                DoesNodeHaveMoreThanNChildren(node, "and", 0, listener);
+                DoesContentContainAnyStrayCharacters(node, "and", listener);
 
                 List<IExp> children = new List<IExp>();
                 foreach(var child in node.Children)
@@ -29,34 +26,22 @@ namespace PDDLParser.Visitors
             } 
             else if (node.Content.StartsWith("or"))
             {
-                if (node.Children.Count != 0)
-                    listener.AddError(new ParseError(
-                        $"'or' node must have exactly 2 children!",
-                        ParseErrorType.Error));
-                IsChildrenOnly(node, "or", listener);
+                DoesNodeHaveSpecificChildCount(node, "or", 2, listener);
+                DoesContentContainAnyStrayCharacters(node, "or", listener);
 
                 return new OrExp(node, Visit(node.Children[0], listener), Visit(node.Children[1], listener));
             }
             else if (node.Content.StartsWith("not"))
             {
-                if (node.Children.Count == 0)
-                    listener.AddError(new ParseError(
-                        $"'not' node does not have any children!",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
-                if (node.Children.Count > 1 )
-                    listener.AddError(new ParseError(
-                        $"'not' node should only have one child!",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
-                IsChildrenOnly(node, "not", listener);
+                DoesNodeHaveSpecificChildCount(node, "not", 1, listener);
+                DoesContentContainAnyStrayCharacters(node, "not", listener);
 
                 return new NotExp(node, Visit(node.Children[0], listener));
             }
             else if (node.Content.Contains(" "))
             {
+                DoesNodeHaveSpecificChildCount(node, "predicate", 0, listener);
+
                 var predicateName = node.Content.Split(' ')[0];
                 List<NameExp> parameters = new List<NameExp>();
 
@@ -68,6 +53,8 @@ namespace PDDLParser.Visitors
             } 
             else if (node.Content.Contains(ASTTokens.TypeToken))
             {
+                DoesNodeHaveSpecificChildCount(node, "name", 0, listener);
+
                 var left = node.Content.Substring(0, node.Content.IndexOf(ASTTokens.TypeToken)).Trim();
                 var right = node.Content.Substring(node.Content.IndexOf(ASTTokens.TypeToken) + 3).Trim();
 
@@ -92,18 +79,10 @@ namespace PDDLParser.Visitors
             } 
             else
             {
+                DoesNodeHaveSpecificChildCount(node, "name", 0, listener);
+
                 return new NameExp(node, node.Content.Replace("?", "").Trim());
             }
-        }
-
-        private static void IsChildrenOnly(ASTNode node, string targetName, IErrorListener listener)
-        {
-            if (node.Content.Replace(targetName, "").Trim() != "")
-                listener.AddError(new ParseError(
-                    $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.Content.Replace(targetName, "").Trim()}",
-                    ParseErrorType.Error,
-                    node.Line,
-                    node.Character));
         }
     }
 }

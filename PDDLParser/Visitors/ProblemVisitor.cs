@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Visitors
 {
-    public static class ProblemVisitor
+    public class ProblemVisitor : BaseVisitor
     {
         public static IDecl Visit(ASTNode node, IErrorListener listener)
         {
@@ -26,39 +26,23 @@ namespace PDDLParser.Visitors
             } 
             else if (node.Content.StartsWith(":objects"))
             {
-                List<NameExp> objs = new List<NameExp>();
-                foreach (var objDecl in node.Content.Split(ASTTokens.BreakToken))
-                {
-                    var removedType = objDecl.Replace(":objects", "").Trim();
-                    if (removedType != "")
-                    {
-                        if (removedType.Contains(ASTTokens.TypeToken))
-                        {
-                            var left = removedType.Substring(0, removedType.IndexOf(ASTTokens.TypeToken));
-                            var right = removedType.Substring(removedType.IndexOf(ASTTokens.TypeToken) + 3);
+                DoesNodeHaveSpecificChildCount(node, ":objects", 0, listener);
 
-                            foreach (var obj in left.Split(' '))
-                                objs.Add(new NameExp(node, obj, right));
-                        }
-                        else
-                        {
-                            foreach (var obj in removedType.Split(' '))
-                                objs.Add(new NameExp(node, obj));
-                        }
-                    }
-                }
+                var parseStr = PurgeEscapeChars(node.Content.Replace(":objects", "")).Trim();
+                var objs = LooseParseString(node, ":objects", parseStr, listener);
+
                 return new ObjectsDecl(node, objs);
             }
             else if (node.Content.StartsWith(":init"))
             {
                 List<PredicateExp> inits = new List<PredicateExp>();
                 foreach(var child in node.Children)
-                    inits.Add(ProblemExpVisitor.Visit(new ASTNode(child.Character, child.Line, child.Content), listener) as PredicateExp);
+                    inits.Add(ExpVisitor.Visit(new ASTNode(child.Character, child.Line, child.Content), listener) as PredicateExp);
                 return new InitDecl(node, inits);
             }
             else if (node.Content.StartsWith(":goal"))
             {
-                return new GoalDecl(node, ProblemExpVisitor.Visit(node.Children[0], listener));
+                return new GoalDecl(node, ExpVisitor.Visit(node.Children[0], listener));
             }
 
             listener.AddError(new ParseError(

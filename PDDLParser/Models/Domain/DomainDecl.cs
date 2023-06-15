@@ -13,6 +13,7 @@ namespace PDDLParser.Models.Domain
     {
         public DomainNameDecl Name { get; set; }
         public RequirementsDecl Requirements { get; set; }
+        public ExtendsDecl Extends { get; set; }
         public TimelessDecl Timeless { get; set; }
         public TypesDecl Types { get; set; }
         public ConstantsDecl Constants { get; set; }

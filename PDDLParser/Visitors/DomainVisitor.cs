@@ -13,7 +13,7 @@ using System.Security.Cryptography;
 
 namespace PDDLParser.Visitors
 {
-    public static class DomainVisitor
+    public class DomainVisitor : BaseVisitor
     {
         public static IDecl Visit(ASTNode node, IErrorListener listener)
         {
@@ -31,6 +31,16 @@ namespace PDDLParser.Visitors
                     if (req != "")
                         requirements.Add(req);
                 return new RequirementsDecl(node, requirements);
+            }
+            else if (node.Content.StartsWith(":extends"))
+            {
+                var str = PurgeEscapeChars(node.Content).Remove(0, ":extends".Length).Trim();
+                var reqs = str.Split(' ');
+                List<string> extends = new List<string>();
+                foreach (var req in reqs)
+                    if (req != "")
+                        extends.Add(req);
+                return new ExtendsDecl(node, extends);
             }
             else if (node.Content.StartsWith(":types"))
             {
@@ -53,7 +63,7 @@ namespace PDDLParser.Visitors
                 foreach (var typeDec in node.Content.Split(ASTTokens.BreakToken))
                 {
                     var removedType = typeDec.Replace(":constants", "").Trim();
-                    constants.Add(DomainExpVisitor.Visit(new ASTNode(node.Character, node.Line, removedType), listener) as NameExp);
+                    constants.Add(ExpVisitor.Visit(new ASTNode(node.Character, node.Line, removedType), listener) as NameExp);
                 }
                 return new ConstantsDecl(node, constants);
             }
@@ -62,7 +72,7 @@ namespace PDDLParser.Visitors
                 List<PredicateExp> predicates = new List<PredicateExp>();
                 foreach (var predicate in node.Children)
                 {
-                    var exp = DomainExpVisitor.Visit(predicate, listener);
+                    var exp = ExpVisitor.Visit(predicate, listener);
                     if (exp is PredicateExp pred)
                         predicates.Add(pred);
                     if (exp is NameExp cpred)
@@ -74,7 +84,7 @@ namespace PDDLParser.Visitors
             {
                 List<NameExp> items = new List<NameExp>();
                 foreach (var child in node.Children)
-                    items.Add(DomainExpVisitor.Visit(child, listener) as NameExp);
+                    items.Add(ExpVisitor.Visit(child, listener) as NameExp);
                 
                 return new TimelessDecl(node, items);
             }
@@ -108,32 +118,14 @@ namespace PDDLParser.Visitors
                         node.Character));
 
                 // Parameters
-                List<NameExp> parameters = new List<NameExp>();
-                var paramSplit = node.Children[0].Content.Split(' ');
-                foreach (var param in paramSplit)
-                {
-                    var parsed = DomainExpVisitor.Visit(new ASTNode(
-                        node.Children[0].Character,
-                        node.Children[0].Line,
-                        param), listener);
-                    if (parsed is NameExp nExp)
-                        parameters.Add(nExp);
-                    else
-                    {
-                        listener.AddError(new ParseError(
-                            $"Unexpected node type while parsing action parameter!",
-                            ParseErrorType.Error,
-                            parsed.Line,
-                            parsed.Character));
-                    }
-                }
+                var parameters = LooseParseString(node, ":action", node.Children[0].Content.Replace(actionName, "").Trim(), listener);
 
                 // Preconditions
-                IExp precondition = DomainExpVisitor.Visit(node.Children[1], listener);
+                IExp precondition = ExpVisitor.Visit(node.Children[1], listener);
                 DecorateExpressions(precondition, parameters, listener);
 
                 // Effects
-                IExp effects = DomainExpVisitor.Visit(node.Children[2], listener);
+                IExp effects = ExpVisitor.Visit(node.Children[2], listener);
                 DecorateExpressions(effects, parameters, listener);
 
                 return new ActionDecl(
@@ -172,32 +164,14 @@ namespace PDDLParser.Visitors
                         node.Character));
 
                 // Vars
-                List<NameExp> vars = new List<NameExp>();
-                var varsSplit = node.Children[0].Content.Split(' ');
-                foreach (var param in varsSplit)
-                {
-                    var parsed = DomainExpVisitor.Visit(new ASTNode(
-                        node.Children[0].Character,
-                        node.Children[0].Line,
-                        param), listener);
-                    if (parsed is NameExp nExp)
-                        vars.Add(nExp);
-                    else
-                    {
-                        listener.AddError(new ParseError(
-                            $"Unexpected node type while parsing action parameter!",
-                            ParseErrorType.Error,
-                            parsed.Line,
-                            parsed.Character));
-                    }
-                }
+                var vars = LooseParseString(node, ":axiom", node.Children[0].Content.Trim(), listener);
 
                 // Context
-                IExp context = DomainExpVisitor.Visit(node.Children[1], listener);
+                IExp context = ExpVisitor.Visit(node.Children[1], listener);
                 DecorateExpressions(context, vars, listener);
 
                 // Implies
-                IExp implies = DomainExpVisitor.Visit(node.Children[2], listener);
+                IExp implies = ExpVisitor.Visit(node.Children[2], listener);
                 DecorateExpressions(implies, vars, listener);
 
                 return new AxiomDecl(

@@ -54,6 +54,8 @@ namespace PDDLParser
                     returnDomain.Name = DomainVisitor.Visit(node, Listener) as DomainNameDecl;
                 else if (node.Content.StartsWith(":requirements"))
                     returnDomain.Requirements = DomainVisitor.Visit(node, Listener) as RequirementsDecl;
+                else if (node.Content.StartsWith(":extends"))
+                    returnDomain.Extends = DomainVisitor.Visit(node, Listener) as ExtendsDecl;
                 else if (node.Content.StartsWith(":types"))
                     returnDomain.Types = DomainVisitor.Visit(node, Listener) as TypesDecl;
                 else if (node.Content.StartsWith(":constants"))

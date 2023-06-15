@@ -5,23 +5,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Models.Problem
+namespace PDDLParser.Models.Domain
 {
-    public class ObjectsDecl : BaseNode, IDecl
+    public class ExtendsDecl : BaseNode, IDecl
     {
-        public List<NameExp> Objs { get; set; }
+        public List<string> Extends { get; set; }
 
-        public ObjectsDecl(ASTNode node, List<NameExp> types) : base(node)
+        public ExtendsDecl(ASTNode node, List<string> extends) : base(node)
         {
-            Objs = types;
+            Extends = extends;
         }
 
         public override string ToString()
         {
             string retStr = "";
-            foreach (var type in Objs)
+            foreach (var type in Extends)
                 retStr += $" {type}{Environment.NewLine}";
-            return $"(:objects{retStr})";
+            return $"(:extends{retStr})";
         }
     }
 }
