@@ -605,7 +605,7 @@ namespace PDDLParser.Analysers
             {
                 return DoesAnyPredicatesExist(not.Child);
             }
-            else if (exp is PredicateExp pred)
+            else if (exp is PredicateExp)
             {
                 return true;
             }

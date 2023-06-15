@@ -37,7 +37,7 @@ namespace PDDLTools.Commands
             Instance.SetToggleState(OptionsAccessor.OpenResultReport);
         }
 
-        public override async Task ExecuteAsync(object sender, EventArgs e)
+        public override void Execute(object sender, EventArgs e)
         {
             OptionsAccessor.OpenResultReport = !OptionsAccessor.OpenResultReport;
             SetToggleState(OptionsAccessor.OpenResultReport);

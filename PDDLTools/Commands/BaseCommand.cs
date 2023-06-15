@@ -36,7 +36,7 @@ namespace PDDLTools.Commands
             return newService;
         }
 
-        public void Execute(object sender, EventArgs e)
+        public virtual void Execute(object sender, EventArgs e)
         {
             this.package.JoinableTaskFactory.RunAsync(async delegate
             {
@@ -44,7 +44,10 @@ namespace PDDLTools.Commands
             });
         }
 
-        public abstract Task ExecuteAsync(object sender, EventArgs e);
+        public virtual async Task ExecuteAsync(object sender, EventArgs e)
+        {
+            await Task.Delay(0);
+        }
 
         private async void CheckQueryStatus(object sender, EventArgs e)
         {

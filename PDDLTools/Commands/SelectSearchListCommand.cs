@@ -36,10 +36,9 @@ namespace PDDLTools.Commands
             Instance = new SelectSearchListCommand(package, await InitializeCommandServiceAsync(package));
         }
 
-        public override async Task ExecuteAsync(object sender, EventArgs e)
+        public override void Execute(object sender, EventArgs e)
         {
-            var eventArgs = e as OleMenuCmdEventArgs;
-            if (eventArgs != null)
+            if (e is OleMenuCmdEventArgs eventArgs)
             {
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)

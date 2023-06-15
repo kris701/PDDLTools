@@ -36,7 +36,7 @@ namespace PDDLTools.Commands
             Instance = new SelectProblemCommand(package, await InitializeCommandServiceAsync(package));
         }
 
-        public override async Task ExecuteAsync(object sender, EventArgs e)
+        public override void Execute(object sender, EventArgs e)
         {
             OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
             if (eventArgs.InValue != null)

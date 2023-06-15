@@ -37,7 +37,7 @@ namespace PDDLTools.Commands
             Instance.SetToggleState(OptionsAccessor.OpenSASSolutionVisualiser);
         }
 
-        public override async Task ExecuteAsync(object sender, EventArgs e)
+        public override void Execute(object sender, EventArgs e)
         {
             OptionsAccessor.OpenSASSolutionVisualiser = !OptionsAccessor.OpenSASSolutionVisualiser;
             SetToggleState(OptionsAccessor.OpenSASSolutionVisualiser);
