@@ -80,6 +80,16 @@ namespace PDDLTools.ErrorList
             {
                 
             }
+            catch (Exception e)
+            {
+                ErrorTask newError = new ErrorTask();
+                newError.Text = "PDDL Parser failed!";
+                newError.Line = 0;
+                newError.Column = 0;
+                newError.Document = "";
+                newError.Navigate += JumpToError;
+                _errorProvider.Tasks.Add(newError);
+            }
 
             if (parser.Listener.Errors.Count > 0)
             {

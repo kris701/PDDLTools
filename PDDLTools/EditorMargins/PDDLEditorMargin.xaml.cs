@@ -88,7 +88,7 @@ namespace PDDLTools.EditorMargins
                         GoalCountLabel.Content = $"{problem.Goal.GoalExpCount}";
                 }
             }
-            catch (ParseException) { }
+            catch (Exception) { }
         }
 
         #region IWpfTextViewMargin
