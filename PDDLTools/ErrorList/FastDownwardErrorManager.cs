@@ -76,7 +76,7 @@ namespace PDDLTools.ErrorList
                     var fullProblem = parser.ParseProblemFile(file);
                 }
             }
-            catch (ParseException ex)
+            catch (ParseException)
             {
                 
             }
@@ -94,16 +94,9 @@ namespace PDDLTools.ErrorList
                         case ParseErrorType.Warning: newError.ErrorCategory = TaskErrorCategory.Warning; break;
                         case ParseErrorType.Message: newError.ErrorCategory = TaskErrorCategory.Message; break;
                     }
-                    switch (error.Level)
-                    {
-                        case ParserErrorLevel.Low: newError.Priority = TaskPriority.Low; break;
-                        case ParserErrorLevel.Medium: newError.Priority = TaskPriority.Normal; break;
-                        case ParserErrorLevel.High: newError.Priority = TaskPriority.High; break;
-                    }
 
                     newError.Text = error.Message;
                     newError.Line = error.Line - 1;
-                    //newError.Column = error.Character;
                     newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
                     newError.Document = "";
                     newError.Navigate += JumpToError;

@@ -63,7 +63,6 @@ namespace PDDLParser.Visitors
 
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.Content}",
-                ParserErrorLevel.High,
                 ParseErrorType.Error));
             return default;
         }

@@ -40,7 +40,6 @@ namespace PDDLParser
             if (!absAST.Content.StartsWith("define"))
                 Listener.AddError(new ParseError(
                     $"Root 'define' node not found?",
-                    ParserErrorLevel.High,
                     ParseErrorType.Error,
                     absAST.Line,
                     absAST.Character));
@@ -81,7 +80,6 @@ namespace PDDLParser
                 else
                     Listener.AddError(new ParseError(
                         $"Could not parse content of AST node: {node.Content}",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
@@ -99,7 +97,6 @@ namespace PDDLParser
             if (!absAST.Content.StartsWith("define"))
                 Listener.AddError(new ParseError(
                     $"Root 'define' node not found?",
-                    ParserErrorLevel.High,
                     ParseErrorType.Error,
                     absAST.Line,
                     absAST.Character));
@@ -127,7 +124,6 @@ namespace PDDLParser
                 else
                     Listener.AddError(new ParseError(
                         $"Could not parse content of AST node: {node.Content}",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
@@ -144,7 +140,6 @@ namespace PDDLParser
             {
                 Listener.AddError(new ParseError(
                     $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.Content.Replace(targetName, "").Trim()}",
-                    ParserErrorLevel.High,
                     ParseErrorType.Error,
                     node.Line,
                     node.Character));
@@ -169,7 +164,6 @@ namespace PDDLParser
             {
                 listener.AddError(new ParseError(
                     $"Could not find the file to parse: '{path}'",
-                    ParserErrorLevel.High,
                     ParseErrorType.Error));
             }
             string text = ReplaceCommentsWithWhiteSpace(File.ReadAllLines(path).ToList());

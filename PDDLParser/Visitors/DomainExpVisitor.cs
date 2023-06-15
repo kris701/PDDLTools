@@ -18,7 +18,6 @@ namespace PDDLParser.Visitors
                 if (node.Children.Count == 0)
                     listener.AddError(new ParseError(
                         $"'and' node does not have any children!",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error));
                 IsChildrenOnly(node, "and", listener);
 
@@ -33,7 +32,6 @@ namespace PDDLParser.Visitors
                 if (node.Children.Count != 0)
                     listener.AddError(new ParseError(
                         $"'or' node must have exactly 2 children!",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error));
                 IsChildrenOnly(node, "or", listener);
 
@@ -44,14 +42,12 @@ namespace PDDLParser.Visitors
                 if (node.Children.Count == 0)
                     listener.AddError(new ParseError(
                         $"'not' node does not have any children!",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
                 if (node.Children.Count > 1 )
                     listener.AddError(new ParseError(
                         $"'not' node should only have one child!",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
@@ -79,7 +75,6 @@ namespace PDDLParser.Visitors
                 {
                     listener.AddError(new ParseError(
                         $"Context indicated the use of a type, but an object name was not given!",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
@@ -88,7 +83,6 @@ namespace PDDLParser.Visitors
                 {
                     listener.AddError(new ParseError(
                         $"Context indicated the use of a type, but a type was not given!",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
@@ -107,7 +101,6 @@ namespace PDDLParser.Visitors
             if (node.Content.Replace(targetName, "").Trim() != "")
                 listener.AddError(new ParseError(
                     $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.Content.Replace(targetName, "").Trim()}",
-                    ParserErrorLevel.High,
                     ParseErrorType.Error,
                     node.Line,
                     node.Character));

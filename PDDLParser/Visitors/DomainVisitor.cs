@@ -85,28 +85,24 @@ namespace PDDLParser.Visitors
                 if (!node.Content.Contains(":parameters"))
                     listener.AddError(new ParseError(
                         $"Action is malformed! missing ':parameters'",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
                 if (!node.Content.Contains(":precondition"))
                     listener.AddError(new ParseError(
                         $"Action is malformed! missing ':precondition'",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
                 if (!node.Content.Contains(":effect"))
                     listener.AddError(new ParseError(
                         $"Action is malformed! missing ':effect'",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
                 if (node.Children.Count != 3)
                     listener.AddError(new ParseError(
                         $"Action has an unexpected number of children! Expected 3, got {node.Children.Count}",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
@@ -126,7 +122,6 @@ namespace PDDLParser.Visitors
                     {
                         listener.AddError(new ParseError(
                             $"Unexpected node type while parsing action parameter!",
-                            ParserErrorLevel.High,
                             ParseErrorType.Error,
                             parsed.Line,
                             parsed.Character));
@@ -154,28 +149,24 @@ namespace PDDLParser.Visitors
                 if (!node.Content.Contains(":vars"))
                     listener.AddError(new ParseError(
                         $"Axiom is malformed! missing ':vars'",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
                 if (!node.Content.Contains(":context"))
                     listener.AddError(new ParseError(
                         $"Axiom is malformed! missing ':context'",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
                 if (!node.Content.Contains(":implies"))
                     listener.AddError(new ParseError(
                         $"Axiom is malformed! missing ':implies'",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
                 if (node.Children.Count != 3)
                     listener.AddError(new ParseError(
                         $"Axiom has an unexpected number of children! Expected 3, got {node.Children.Count}",
-                        ParserErrorLevel.High,
                         ParseErrorType.Error,
                         node.Line,
                         node.Character));
@@ -195,7 +186,6 @@ namespace PDDLParser.Visitors
                     {
                         listener.AddError(new ParseError(
                             $"Unexpected node type while parsing action parameter!",
-                            ParserErrorLevel.High,
                             ParseErrorType.Error,
                             parsed.Line,
                             parsed.Character));
@@ -219,7 +209,6 @@ namespace PDDLParser.Visitors
 
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.Content}",
-                ParserErrorLevel.High,
                 ParseErrorType.Error));
             return default;
         }
@@ -248,7 +237,6 @@ namespace PDDLParser.Visitors
                     {
                         listener.AddError(new ParseError(
                             $"Could not match name of parameters and precondition!",
-                            ParserErrorLevel.High,
                             ParseErrorType.Error,
                             arg.Line,
                             arg.Character));

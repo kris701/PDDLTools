@@ -24,7 +24,6 @@ namespace PDDLParser.Analysers
             {
                 listener.AddError(new ParseError(
                     $"Parentheses missmatch! There are {leftCount} '(' but {rightCount} ')'!",
-                    ParserErrorLevel.High,
                     ParseErrorType.Error));
             }
         }
@@ -35,7 +34,6 @@ namespace PDDLParser.Analysers
             {
                 listener.AddError(new ParseError(
                     $"Upper cased letters are ignored in PDDL",
-                    ParserErrorLevel.Low,
                     ParseErrorType.Message));
             }
         }
@@ -66,7 +64,6 @@ namespace PDDLParser.Analysers
                 {
                     listener.AddError(new ParseError(
                         $"The reqirement '{unsuportedPackage}' is not supported by this parser. Results may not be accurate!",
-                        ParserErrorLevel.Medium,
                         ParseErrorType.Warning));
                 }
             }

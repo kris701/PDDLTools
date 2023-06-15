@@ -39,28 +39,24 @@ namespace PDDLParser.Analysers
             if (domain.Predicates == null)
                 listener.AddError(new ParseError(
                     $"Missing predicates declaration.",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
             if (domain.Predicates != null && domain.Predicates.Predicates.Count == 0)
                 listener.AddError(new ParseError(
                     $"No predicates defined.",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
             if (domain.Actions == null)
                 listener.AddError(new ParseError(
                     $"Missing actions.",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
             if (domain.Actions != null && domain.Actions.Count == 0)
                 listener.AddError(new ParseError(
                     $"Missing actions.",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
@@ -90,7 +86,6 @@ namespace PDDLParser.Analysers
                             {
                                 listener.AddError(new ParseError(
                                     $"Use of undeclared type '{arg.Type}'",
-                                    ParserErrorLevel.High,
                                     ParseErrorType.Error,
                                     arg.Line,
                                     arg.Character));
@@ -108,7 +103,6 @@ namespace PDDLParser.Analysers
                         {
                             listener.AddError(new ParseError(
                                 $"Use of undeclared type '{constant.Type}'",
-                                ParserErrorLevel.High,
                                 ParseErrorType.Error,
                                 constant.Line,
                                 constant.Character));
@@ -127,7 +121,6 @@ namespace PDDLParser.Analysers
                             {
                                 listener.AddError(new ParseError(
                                     $"Use of undeclared type '{param.Type}'",
-                                    ParserErrorLevel.High,
                                     ParseErrorType.Error,
                                     param.Line,
                                     param.Character));
@@ -147,7 +140,6 @@ namespace PDDLParser.Analysers
                             {
                                 listener.AddError(new ParseError(
                                     $"Use of undeclared type '{variable.Type}'",
-                                    ParserErrorLevel.High,
                                     ParseErrorType.Error,
                                     variable.Line,
                                     variable.Character));
@@ -168,7 +160,6 @@ namespace PDDLParser.Analysers
                     {
                         listener.AddError(new ParseError(
                                 $"Multiple declarations of predicates with the same name '{predicate.Name}'",
-                                ParserErrorLevel.High,
                                 ParseErrorType.Error,
                                 predicate.Line,
                                 predicate.Character));
@@ -190,7 +181,6 @@ namespace PDDLParser.Analysers
                         {
                             listener.AddError(new ParseError(
                                     $"Multiple declarations of arguments with the same name '{param.Name}' in the action '{action.Name}'",
-                                    ParserErrorLevel.High,
                                     ParseErrorType.Error,
                                     param.Line,
                                     param.Character));
@@ -213,7 +203,6 @@ namespace PDDLParser.Analysers
                         {
                             listener.AddError(new ParseError(
                                     $"Multiple declarations of arguments with the same name '{param.Name}' in axiom",
-                                    ParserErrorLevel.High,
                                     ParseErrorType.Error,
                                     param.Line,
                                     param.Character));
@@ -296,14 +285,12 @@ namespace PDDLParser.Analysers
                     if (wasTypeMissmatch)
                         listener.AddError(new ParseError(
                             $"Used predicate '{pred.Name}' did not match the type definitions from the parameters!",
-                            ParserErrorLevel.High,
                             ParseErrorType.Error,
                             pred.Line,
                             pred.Character));
                     else
                         listener.AddError(new ParseError(
                             $"Undefined predicate used '{pred.Name}'",
-                            ParserErrorLevel.High,
                             ParseErrorType.Error,
                             pred.Line,
                             pred.Character));
@@ -392,7 +379,6 @@ namespace PDDLParser.Analysers
                 {
                     listener.AddError(new ParseError(
                         $"Unused predicate detected '{predicate}'",
-                        ParserErrorLevel.Medium,
                         ParseErrorType.Message,
                         predicate.Line,
                         predicate.Character));
@@ -442,42 +428,36 @@ namespace PDDLParser.Analysers
             if (domain.DomainName == null)
                 listener.AddError(new ParseError(
                     $"Missing domain name reference",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
             if (domain.Objects == null)
                 listener.AddError(new ParseError(
                     $"Missing objects declaration",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
             if (domain.Objects != null && domain.Objects.Objs.Count == 0)
                 listener.AddError(new ParseError(
                     $"Missing objects",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
             if (domain.Init == null)
                 listener.AddError(new ParseError(
                     $"Missing Init declaration",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
             if (domain.Init != null && domain.Init.Predicates.Count == 0)
                 listener.AddError(new ParseError(
                     $"No init predicates declared",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
             if (domain.Goal == null)
                 listener.AddError(new ParseError(
                     $"Missing Goal declaration",
-                    ParserErrorLevel.High,
                     ParseErrorType.Message,
                     domain.Line,
                     domain.Character));
@@ -500,7 +480,6 @@ namespace PDDLParser.Analysers
                             {
                                 listener.AddError(new ParseError(
                                     $"Undeclared object detected!",
-                                    ParserErrorLevel.High,
                                     ParseErrorType.Error,
                                     arg.Line,
                                     arg.Character));
@@ -537,7 +516,6 @@ namespace PDDLParser.Analysers
                     {
                         listener.AddError(new ParseError(
                             $"Undeclared object detected!",
-                            ParserErrorLevel.High,
                             ParseErrorType.Error,
                             arg.Line,
                             arg.Character));
@@ -556,7 +534,6 @@ namespace PDDLParser.Analysers
                     {
                         listener.AddError(new ParseError(
                                 $"Multiple declarations of object with the same name '{obj.Name}'",
-                                ParserErrorLevel.High,
                                 ParseErrorType.Error,
                                 obj.Line,
                                 obj.Character));
@@ -589,7 +566,6 @@ namespace PDDLParser.Analysers
                     if (!isFound)
                         listener.AddError(new ParseError(
                             $"Unused object detected '{obj.Name}'",
-                            ParserErrorLevel.Medium,
                             ParseErrorType.Message,
                             obj.Line,
                             obj.Character));
@@ -604,7 +580,6 @@ namespace PDDLParser.Analysers
                 {
                     listener.AddError(new ParseError(
                         $"No actual goal predicates in the goal declaration!",
-                        ParserErrorLevel.Medium,
                         ParseErrorType.Warning,
                         problem.Goal.GoalExp.Line,
                         problem.Goal.GoalExp.Character));
