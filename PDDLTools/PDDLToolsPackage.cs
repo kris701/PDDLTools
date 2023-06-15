@@ -15,6 +15,7 @@ using System.Threading;
 using Task = System.Threading.Tasks.Task;
 using PDDLTools.Windows.FDResultsWindow;
 using PDDLTools.Windows.SASSolutionWindow;
+using PDDLTools.Windows.WelcomeWindow;
 
 namespace PDDLTools
 {
@@ -33,6 +34,7 @@ namespace PDDLTools
     [ProvideOptionPage(typeof(OptionPageGrid), "PDDL Tools", "Options", 0, 0, true)]
     [ProvideToolWindow(typeof(FDResultsWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(SASSolutionWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
+    [ProvideToolWindow(typeof(WelcomeWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     public sealed class PDDLToolsPackage : AsyncPackage
     {
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
@@ -47,7 +49,7 @@ namespace PDDLTools
 
             if (OptionsAccessor.IsFirstStart)
 #pragma warning disable VSTHRD103 // Call async methods when in an async method
-                await WelcomeWindowCommand.Instance.ExecuteAsync(null, null);
+                WelcomeWindowCommand.Instance.Execute(null, null);
 #pragma warning restore VSTHRD103 // Call async methods when in an async method
 
             await RunPDDLFileCommand.InitializeAsync(this);

@@ -35,6 +35,7 @@ namespace PDDLTools.Commands
                     return;
                 await Task.Delay(1000);
             }
+            await Task.Delay(10000);
             ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(WelcomeWindow), 0, true, this.package.DisposalToken);
             if ((null == window) || (null == window.Frame))
             {

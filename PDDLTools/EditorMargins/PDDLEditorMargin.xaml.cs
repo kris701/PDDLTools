@@ -6,6 +6,7 @@ using PDDLParser.Exceptions;
 using PDDLTools.Helpers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,8 @@ namespace PDDLTools.EditorMargins
     {
         public const string MarginName = "PDDL Editor Margin";
 
+        private bool _isLoaded = false;
+        private string _latestDocs = "";
         private bool isDisposed;
 
         List<object> events = new List<object>();
@@ -42,25 +45,33 @@ namespace PDDLTools.EditorMargins
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            await SetupMarginAsync();
+            if (!_isLoaded)
+                SetupMargin(await DTE2Helper.GetSourceFilePathAsync());
+            _isLoaded = true;
         }
 
         public async void CheckDocument(EnvDTE.Document document)
         {
-            await SetupMarginAsync();
+            var file = await DTE2Helper.GetSourceFilePathAsync();
+            if (File.ReadAllText(file) != _latestDocs)
+                SetupMargin(file);
         }
 
-        private async Task SetupMarginAsync()
+        private void SetupMargin(string file)
         {
+            _latestDocs = File.ReadAllText(file);
+
             PredicateCountLabel.Content = "?";
             ActionCountLabel.Content = "?";
             ObjectCountLabel.Content = "?";
             InitCountLabel.Content = "?";
             GoalCountLabel.Content = "?";
 
+            DomainPanel.Visibility = Visibility.Hidden;
+            ProblemPanel.Visibility = Visibility.Hidden;
+
             try
             {
-                var file = await DTE2Helper.GetSourceFilePathAsync();
                 if (PDDLHelper.IsFileDomain(file))
                 {
                     DomainPanel.Visibility = Visibility.Visible;
