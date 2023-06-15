@@ -9,17 +9,17 @@ namespace PDDLParser.Models.Domain
 {
     public class TimelessDecl : BaseNode, IDecl
     {
-        public List<NameExp> Objs { get; set; }
+        public List<PredicateExp> Items { get; set; }
 
-        public TimelessDecl(ASTNode node, List<NameExp> types) : base(node)
+        public TimelessDecl(ASTNode node, List<PredicateExp> timeless) : base(node)
         {
-            Objs = types;
+            Items = timeless;
         }
 
         public override string ToString()
         {
             string retStr = "";
-            foreach (var type in Objs)
+            foreach (var type in Items)
                 retStr += $" {type}{Environment.NewLine}";
             return $"(:timeless{retStr})";
         }

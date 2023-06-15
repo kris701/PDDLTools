@@ -25,97 +25,57 @@ namespace PDDLParser.Visitors
             else if (node.Content.StartsWith(":requirements"))
             {
                 var str = PurgeEscapeChars(node.Content).Remove(0, ":requirements".Length).Trim();
-                var reqs = str.Split(' ');
-                List<string> requirements = new List<string>();
-                foreach (var req in reqs)
-                    if (req != "")
-                        requirements.Add(req);
+                var requirements = LooseParseString(node, ":requirements", str, listener);
                 return new RequirementsDecl(node, requirements);
             }
             else if (node.Content.StartsWith(":extends"))
             {
                 var str = PurgeEscapeChars(node.Content).Remove(0, ":extends".Length).Trim();
-                var reqs = str.Split(' ');
-                List<string> extends = new List<string>();
-                foreach (var req in reqs)
-                    if (req != "")
-                        extends.Add(req);
+                var extends = LooseParseString(node, ":extends", str, listener);
                 return new ExtendsDecl(node, extends);
             }
             else if (node.Content.StartsWith(":types"))
             {
                 List<TypeDecl> types = new List<TypeDecl>();
-                foreach (var typeDec in node.Content.Split(ASTTokens.BreakToken))
+                var str = node.Content.Replace(":types", "");
+                foreach (var typeDec in str.Split(ASTTokens.BreakToken))
                 {
-                    var removedType = typeDec.Replace(":types", "").Trim();
-                    if (removedType != "")
+                    if (typeDec != "")
                     {
-                        var left = removedType.Substring(0, removedType.IndexOf(ASTTokens.TypeToken));
-                        var right = removedType.Substring(removedType.IndexOf(ASTTokens.TypeToken) + 3);
-                        types.Add(new TypeDecl(node, right, left.Split(' ').ToList()));
+                        var left = typeDec.Substring(0, typeDec.IndexOf(ASTTokens.TypeToken));
+                        var right = typeDec.Substring(typeDec.IndexOf(ASTTokens.TypeToken) + 3);
+                        List<string> subTypes = new List<string>();
+                        foreach (var subType in left.Split(' '))
+                            if (subType != "")
+                                subTypes.Add(subType);
+                        types.Add(new TypeDecl(node, right, subTypes));
                     }
                 }
                 return new TypesDecl(node, types);
             }
             else if (node.Content.StartsWith(":constants"))
             {
-                List<NameExp> constants = new List<NameExp>();
-                foreach (var typeDec in node.Content.Split(ASTTokens.BreakToken))
-                {
-                    var removedType = typeDec.Replace(":constants", "").Trim();
-                    constants.Add(ExpVisitor.Visit(new ASTNode(node.Character, node.Line, removedType), listener) as NameExp);
-                }
+                var constants = LooseParseString(node, ":constants", node.Content.Replace(":constants", "").Trim(), listener);
                 return new ConstantsDecl(node, constants);
             }
             else if (node.Content.StartsWith(":predicates"))
             {
-                List<PredicateExp> predicates = new List<PredicateExp>();
-                foreach (var predicate in node.Children)
-                {
-                    var exp = ExpVisitor.Visit(predicate, listener);
-                    if (exp is PredicateExp pred)
-                        predicates.Add(pred);
-                    if (exp is NameExp cpred)
-                        predicates.Add(new PredicateExp(new ASTNode(cpred.Character, cpred.Line, ""), cpred.Name, new List<NameExp>()));
-                }
+                List<PredicateExp> predicates = ParseAsPredicateList(node, listener);
                 return new PredicatesDecl(node, predicates);
             }
             else if (node.Content.StartsWith(":timeless"))
             {
-                List<NameExp> items = new List<NameExp>();
-                foreach (var child in node.Children)
-                    items.Add(ExpVisitor.Visit(child, listener) as NameExp);
-                
+                List<PredicateExp> items = ParseAsPredicateList(node, listener);
                 return new TimelessDecl(node, items);
             }
             else if (node.Content.StartsWith(":action"))
             {
                 var actionName = node.Content.Replace(":action", "").Trim().Split(' ')[0].Trim();
 
-                if (!node.Content.Contains(":parameters"))
-                    listener.AddError(new ParseError(
-                        $"Action is malformed! missing ':parameters'",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
-                if (!node.Content.Contains(":precondition"))
-                    listener.AddError(new ParseError(
-                        $"Action is malformed! missing ':precondition'",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
-                if (!node.Content.Contains(":effect"))
-                    listener.AddError(new ParseError(
-                        $"Action is malformed! missing ':effect'",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
-                if (node.Children.Count != 3)
-                    listener.AddError(new ParseError(
-                        $"Action has an unexpected number of children! Expected 3, got {node.Children.Count}",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
+                CheckIfContentIncludes(node, ":action", ":parameters", listener);
+                CheckIfContentIncludes(node, ":action", ":precondition", listener);
+                CheckIfContentIncludes(node, ":action", ":effect", listener);
+                DoesNodeHaveSpecificChildCount(node, ":action", 3, listener);
 
                 // Parameters
                 var parameters = LooseParseString(node, ":action", node.Children[0].Content.Replace(actionName, "").Trim(), listener);
@@ -137,31 +97,10 @@ namespace PDDLParser.Visitors
             }
             else if (node.Content.StartsWith(":axiom"))
             {
-
-                if (!node.Content.Contains(":vars"))
-                    listener.AddError(new ParseError(
-                        $"Axiom is malformed! missing ':vars'",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
-                if (!node.Content.Contains(":context"))
-                    listener.AddError(new ParseError(
-                        $"Axiom is malformed! missing ':context'",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
-                if (!node.Content.Contains(":implies"))
-                    listener.AddError(new ParseError(
-                        $"Axiom is malformed! missing ':implies'",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
-                if (node.Children.Count != 3)
-                    listener.AddError(new ParseError(
-                        $"Axiom has an unexpected number of children! Expected 3, got {node.Children.Count}",
-                        ParseErrorType.Error,
-                        node.Line,
-                        node.Character));
+                CheckIfContentIncludes(node, ":axiom", ":vars", listener);
+                CheckIfContentIncludes(node, ":axiom", ":context", listener);
+                CheckIfContentIncludes(node, ":axiom", ":implies", listener);
+                DoesNodeHaveSpecificChildCount(node, ":action", 3, listener);
 
                 // Vars
                 var vars = LooseParseString(node, ":axiom", node.Children[0].Content.Trim(), listener);
@@ -223,7 +162,5 @@ namespace PDDLParser.Visitors
                 }
             }
         }
-
-        private static string PurgeEscapeChars(string str) => str.Replace("\r", "").Replace("\n", "").Replace("\t", "");
     }
 }

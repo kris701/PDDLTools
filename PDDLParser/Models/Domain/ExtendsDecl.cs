@@ -9,9 +9,9 @@ namespace PDDLParser.Models.Domain
 {
     public class ExtendsDecl : BaseNode, IDecl
     {
-        public List<string> Extends { get; set; }
+        public List<NameExp> Extends { get; set; }
 
-        public ExtendsDecl(ASTNode node, List<string> extends) : base(node)
+        public ExtendsDecl(ASTNode node, List<NameExp> extends) : base(node)
         {
             Extends = extends;
         }

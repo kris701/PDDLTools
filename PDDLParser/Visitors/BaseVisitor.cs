@@ -79,5 +79,51 @@ namespace PDDLParser.Visitors
             }
             return objs;
         }
+
+        internal static List<PredicateExp> ParseAsPredicateList(ASTNode node, IErrorListener listener)
+        {
+            List<PredicateExp> predicates = new List<PredicateExp>();
+            foreach (var predicate in node.Children)
+            {
+                var newNode = ExpVisitor.Visit(predicate, listener) as PredicateExp;
+                if (newNode == null)
+                    listener.AddError(new ParseError(
+                        $"Could not parse predicate!",
+                        ParseErrorType.Error,
+                        predicate.Line,
+                        predicate.Character));
+                predicates.Add(newNode);
+            }
+            return predicates;
+        }
+
+        internal static List<NameExp> ParseAsNameList(ASTNode node, IErrorListener listener)
+        {
+            List<NameExp> name = new List<NameExp>();
+            foreach (var child in node.Children)
+            {
+                var newNode = ExpVisitor.Visit(child, listener) as NameExp;
+                if (newNode == null)
+                    listener.AddError(new ParseError(
+                        $"Could not parse name!",
+                        ParseErrorType.Error,
+                        child.Line,
+                        child.Character));
+                name.Add(newNode);
+            }
+            return name;
+        }
+
+        internal static void CheckIfContentIncludes(ASTNode node, string nodeName, string targetName, IErrorListener listener)
+        {
+            if (!node.Content.Contains(targetName))
+                listener.AddError(new ParseError(
+                    $"'{nodeName}' is malformed! missing '{targetName}'",
+                    ParseErrorType.Error,
+                    node.Line,
+                    node.Character));
+        }
+
+        internal static string PurgeEscapeChars(string str) => str.Replace("\r", "").Replace("\n", "").Replace("\t", "");
     }
 }

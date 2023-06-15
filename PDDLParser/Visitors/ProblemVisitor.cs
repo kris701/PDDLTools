@@ -35,13 +35,12 @@ namespace PDDLParser.Visitors
             }
             else if (node.Content.StartsWith(":init"))
             {
-                List<PredicateExp> inits = new List<PredicateExp>();
-                foreach(var child in node.Children)
-                    inits.Add(ExpVisitor.Visit(new ASTNode(child.Character, child.Line, child.Content), listener) as PredicateExp);
+                var inits = ParseAsPredicateList(node, listener);
                 return new InitDecl(node, inits);
             }
             else if (node.Content.StartsWith(":goal"))
             {
+                DoesNodeHaveSpecificChildCount(node, ":goal", 1, listener);
                 return new GoalDecl(node, ExpVisitor.Visit(node.Children[0], listener));
             }
 
@@ -50,7 +49,5 @@ namespace PDDLParser.Visitors
                 ParseErrorType.Error));
             return default;
         }
-
-        private static string PurgeEscapeChars(string str) => str.Replace("\r", "").Replace("\n", "").Replace("\t", "");
     }
 }

@@ -9,9 +9,9 @@ namespace PDDLParser.Models.Domain
 {
     public class RequirementsDecl : BaseNode, IDecl
     {
-        public List<string> Requirements {  get; set; }
+        public List<NameExp> Requirements {  get; set; }
 
-        public RequirementsDecl(ASTNode node, List<string> requirements) : base(node)
+        public RequirementsDecl(ASTNode node, List<NameExp> requirements) : base(node)
         {
             Requirements = requirements;
         }
