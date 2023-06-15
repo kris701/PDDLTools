@@ -26,8 +26,6 @@ namespace PDDLTools.EditorMargins
     {
         public const string MarginName = "PDDL Editor Margin";
 
-        private bool _isLoaded = false;
-        private string _latestDocs = "";
         private bool isDisposed;
 
         List<object> events = new List<object>();
@@ -45,21 +43,17 @@ namespace PDDLTools.EditorMargins
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            if (!_isLoaded)
-                SetupMargin(await DTE2Helper.GetSourceFilePathAsync());
-            _isLoaded = true;
+            await SetupMarginAsync();
         }
 
         public async void CheckDocument(EnvDTE.Document document)
         {
-            var file = await DTE2Helper.GetSourceFilePathAsync();
-            if (File.ReadAllText(file) != _latestDocs)
-                SetupMargin(file);
+            await SetupMarginAsync();
         }
 
-        private void SetupMargin(string file)
+        private async Task SetupMarginAsync()
         {
-            _latestDocs = File.ReadAllText(file);
+            var file = await DTE2Helper.GetSourceFilePathAsync();
 
             PredicateCountLabel.Content = "?";
             ActionCountLabel.Content = "?";
