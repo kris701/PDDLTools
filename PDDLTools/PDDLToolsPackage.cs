@@ -47,7 +47,7 @@ namespace PDDLTools
 
             if (OptionsAccessor.IsFirstStart)
 #pragma warning disable VSTHRD103 // Call async methods when in an async method
-                WelcomeWindowCommand.Instance.Execute(null, null);
+                await WelcomeWindowCommand.Instance.ExecuteAsync(null, null);
 #pragma warning restore VSTHRD103 // Call async methods when in an async method
 
             await RunPDDLFileCommand.InitializeAsync(this);
