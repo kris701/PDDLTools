@@ -49,7 +49,7 @@ namespace PDDLTools.Commands
             await Task.Delay(0);
         }
 
-        private async void CheckQueryStatus(object sender, EventArgs e)
+        public virtual async void CheckQueryStatus(object sender, EventArgs e)
         {
             var button = (MenuCommand)sender;
             button.Enabled = await DTE2Helper.IsValidFileOpenAsync();

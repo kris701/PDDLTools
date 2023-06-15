@@ -25,6 +25,7 @@ using PDDLParser;
 using FastDownwardRunner;
 using FastDownwardRunner.Helpers;
 using FastDownwardRunner.Models;
+using System.IO;
 
 namespace PDDLTools.Commands
 {
@@ -42,6 +43,12 @@ namespace PDDLTools.Commands
         public static async Task InitializeAsync(AsyncPackage package)
         {
             Instance = new RunPDDLFileCommand(package, await InitializeCommandServiceAsync(package));
+        }
+
+        public override void CheckQueryStatus(object sender, EventArgs e)
+        {
+            var button = (MenuCommand)sender;
+            button.Enabled = Directory.Exists(OptionsAccessor.FDPPath) && Directory.Exists(Path.Combine(OptionsAccessor.FDPPath, "fast-downward.py"));
         }
 
         public override async Task ExecuteAsync(object sender, EventArgs e)

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PDDLTools.Options
 {
@@ -19,8 +21,13 @@ namespace PDDLTools.Options
             }
             set
             {
-                Instance.FDPath = value;
-                Instance.SaveSettingsToStorage();
+                if (Directory.Exists(value) && Directory.Exists(Path.Combine(value, "fast-downward.py")))
+                {
+                    Instance.FDPath = value;
+                    Instance.SaveSettingsToStorage();
+                }
+                else
+                    MessageBox.Show("Error, path to fast downward!");
             }
         }
 
@@ -44,9 +51,14 @@ namespace PDDLTools.Options
                 return Instance.FDFileExecutionTimeout;
             }
             set 
-            { 
-                Instance.FDFileExecutionTimeout = value;
-                Instance.SaveSettingsToStorage();
+            {
+                if (value > 0)
+                {
+                    Instance.FDFileExecutionTimeout = value;
+                    Instance.SaveSettingsToStorage();
+                }
+                else
+                    MessageBox.Show("Timeout must be larger than 0!");
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using PDDLTools.Options;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Windows;
@@ -30,6 +31,8 @@ namespace PDDLTools.Windows.WelcomeWindow
                 BrowserView.NavigateToString(htmlText);
                 BrowserView.Visibility = Visibility.Visible;
             }
+
+            OptionsAccessor.IsFirstStart = false;
         }
     }
 }
