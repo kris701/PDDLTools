@@ -73,7 +73,7 @@ namespace PDDLTools.Options
                     _FDPath = value;
                 }
                 else
-                    MessageBox.Show("Error, path to fast downward!");
+                    MessageBox.Show("Error, invalid path to fast downward!");
             }
         }
 

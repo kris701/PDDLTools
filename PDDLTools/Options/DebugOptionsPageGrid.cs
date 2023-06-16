@@ -15,6 +15,10 @@ namespace PDDLTools.Options
         [Category("PDDL Tools")]
         [DisplayName("Is First Start")]
         [Description("")]
-        public bool IsFirstStart => OptionsManager.Instance.IsFirstStart;
+#if DEBUG
+        public bool IsFirstStart { get => OptionsManager.Instance.IsFirstStart; set => OptionsManager.Instance.IsFirstStart = value; }
+#else
+        public bool IsFirstStart { get => OptionsManager.Instance.IsFirstStart; }
+#endif
     }
 }
