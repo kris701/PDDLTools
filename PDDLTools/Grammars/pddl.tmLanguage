@@ -135,7 +135,7 @@
             <key>name</key>
             <string>keyword.control.pddl.action</string>
             <key>match</key>
-            <string>:(parameters|precondition|effect)\b</string>
+            <string>:(parameters|precondition|effect|implies|vars|context)\b</string>
           </dict>
           <dict>
             <key>name</key>

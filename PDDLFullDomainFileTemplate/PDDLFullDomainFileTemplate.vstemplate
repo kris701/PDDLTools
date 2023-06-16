@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>Advanced PDDL Domain Template</Name>
+		<Description>A PDDL domain template with all the parseable items in it.</Description>
+		<Icon>PDDLFullDomainFileTemplate.ico</Icon>
+		<TemplateID>d5a3b464-0678-4dbb-8ad8-da653cd4655d</TemplateID>
+		<ProjectType>General</ProjectType>
+		<TemplateGroupID>PDDL</TemplateGroupID>
+		<DefaultName>domain.pddl</DefaultName>
+		<EnableEditOfLocationField>true</EnableEditOfLocationField>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<LocationField>Enabled</LocationField>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" TargetFileName="$safeitemname$.pddl" OpenInEditor="true">domain.pddl</ProjectItem>
+	</TemplateContent>
+</VSTemplate>

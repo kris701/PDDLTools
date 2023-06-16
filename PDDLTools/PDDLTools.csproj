@@ -228,6 +228,27 @@
       <Project>{d774b8f9-ec43-402c-9001-8cd43d52edcd}</Project>
       <Name>LocationSpreader</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PDDLDomainFileTemplate\PDDLSimpleDomainFileTemplate.csproj">
+      <Project>{81EEBDEF-AC40-4E7A-8D8D-C0F609DE8721}</Project>
+      <Name>PDDLSimpleDomainFileTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\PDDLEmptyDomainFileTemplate\PDDLEmptyDomainFileTemplate.csproj">
+      <Project>{61363573-4B8D-4545-ABD2-C5553EB0E359}</Project>
+      <Name>PDDLEmptyDomainFileTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\PDDLFullDomainFileTemplate\PDDLFullDomainFileTemplate.csproj">
+      <Project>{EB383EB1-F3EE-4123-9BB6-DEB650AD72FF}</Project>
+      <Name>PDDLFullDomainFileTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>

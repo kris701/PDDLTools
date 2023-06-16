@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>Empty PDDL Domain Template</Name>
+		<Description>An empty PDDL domain file with just the domain name in it.</Description>
+		<Icon>PDDLEmptyDomainFileTemplate.ico</Icon>
+		<TemplateID>b322f8b8-065f-4b4d-abc2-3aa2fb5abcf7</TemplateID>
+		<ProjectType>General</ProjectType>
+		<TemplateGroupID>PDDL</TemplateGroupID>
+		<DefaultName>domain.pddl</DefaultName>
+		<EnableEditOfLocationField>true</EnableEditOfLocationField>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<LocationField>Enabled</LocationField>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" TargetFileName="$safeitemname$.pddl" OpenInEditor="true">domain.pddl</ProjectItem>
+	</TemplateContent>
+</VSTemplate>
