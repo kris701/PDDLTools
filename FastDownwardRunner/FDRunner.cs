@@ -33,7 +33,7 @@ namespace FastDownwardRunner
             process.ErrorDataRecieved += RecieveErrorData;
             process.OutputDataRecieved += RecieveOutputData;
             process.StopOnError = true;
-            await process.StartProcessAsync($"& {PythonPrefix} '{Path.Combine(FastDownwardFolder, "fast-downward.py")}' --plan-file '{Path.Combine(FastDownwardFolder, "sas_plan")}' '{domainPath}' '{problemPath}' --search '{searchArg}'");
+            await process.StartProcessAsync($"& {PythonPrefix} '{Path.Combine(FastDownwardFolder, "fast-downward.py")}' --plan-file '{Path.Combine(FastDownwardFolder, "sas_plan")}' --sas-file '{Path.Combine(FastDownwardFolder, "output.sas")}' '{domainPath}' '{problemPath}' --search '{searchArg}'");
 
             var timeoutSpan = TimeSpan.FromSeconds(Timeout);
             var res = await process.WaitForExitAsync(timeoutSpan);
