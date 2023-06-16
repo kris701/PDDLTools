@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Item" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+	<TemplateData>
+		<Name>Simple PDDL Problem Template</Name>
+		<Description>A simple PDDL problem template with basic items</Description>
+		<Icon>PDDLSimpleProblemFileTemplate.ico</Icon>
+		<TemplateID>c0279627-2755-4d67-bfd3-49d2d022d4f0</TemplateID>
+		<ProjectType>General</ProjectType>
+		<TemplateGroupID>PDDL</TemplateGroupID>
+		<DefaultName>problem.pddl</DefaultName>
+		<EnableEditOfLocationField>true</EnableEditOfLocationField>
+		<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
+		<ProvideDefaultName>true</ProvideDefaultName>
+		<LocationField>Enabled</LocationField>
+	</TemplateData>
+	<TemplateContent>
+		<ProjectItem ReplaceParameters="true" TargetFileName="$safeitemname$.pddl" OpenInEditor="true">problem.pddl</ProjectItem>
+	</TemplateContent>
+</VSTemplate>

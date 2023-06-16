@@ -242,6 +242,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\PDDLEmptyProblemFileTemplate\PDDLEmptyProblemFileTemplate.csproj">
+      <Project>{970840FF-7A37-496A-9361-86AD125CFE5A}</Project>
+      <Name>PDDLEmptyProblemFileTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PDDLFullDomainFileTemplate\PDDLFullDomainFileTemplate.csproj">
       <Project>{EB383EB1-F3EE-4123-9BB6-DEB650AD72FF}</Project>
       <Name>PDDLFullDomainFileTemplate</Name>
@@ -249,9 +256,23 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\PDDLFullProblemFileTemplate\PDDLFullProblemFileTemplate.csproj">
+      <Project>{AA488EBA-93DB-4F77-B9BF-C7DCB2E126F3}</Project>
+      <Name>PDDLFullProblemFileTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PDDLSimpleProblemFileTemplate\PDDLSimpleProblemFileTemplate.csproj">
+      <Project>{28449582-C3EB-4034-881B-E9349796789D}</Project>
+      <Name>PDDLSimpleProblemFileTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
     <ProjectReference Include="..\SASSimulator\SASSimulator.csproj">
       <Project>{87d73118-449a-4054-9b54-60d0a440d87a}</Project>
