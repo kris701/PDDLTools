@@ -11,107 +11,48 @@ namespace PDDLTools.Options
 {
     public static class OptionsAccessor
     {
-        public static OptionPageGrid Instance = null;
+        public static OptionsPageCustom Instance = null;
 
         public static string FDPPath
         {
-            get
-            {
-                return Instance.FDPath;
-            }
-            set
-            {
-                if (Directory.Exists(value) && Directory.Exists(Path.Combine(value, "fast-downward.py")))
-                {
-                    Instance.FDPath = value;
-                    Instance.SaveSettingsToStorage();
-                }
-                else
-                    MessageBox.Show("Error, path to fast downward!");
-            }
+            get { return Instance.FDPath; }
+            set { Instance.FDPath = value; }
         }
 
         public static string PythonPrefix
         {
-            get
-            {
-                return Instance.PythonPrefix;
-            }
-            set
-            {
-                Instance.PythonPrefix = value;
-                Instance.SaveSettingsToStorage();
-            }
+            get { return Instance.PythonPrefix; }
+            set { Instance.PythonPrefix = value; }
         }
 
         public static int FDFileExecutionTimeout
         {
-            get
-            {
-                return Instance.FDFileExecutionTimeout;
-            }
-            set 
-            {
-                if (value > 0)
-                {
-                    Instance.FDFileExecutionTimeout = value;
-                    Instance.SaveSettingsToStorage();
-                }
-                else
-                    MessageBox.Show("Timeout must be larger than 0!");
-            }
+            get { return Instance.FDFileExecutionTimeout; }
+            set { Instance.FDFileExecutionTimeout = value; }
         }
 
         public static bool IsFirstStart
         {
-            get
-            {
-                return Instance.IsFirstStart;
-            }
-            set
-            {
-                Instance.IsFirstStart = value;
-                Instance.SaveSettingsToStorage();
-            }
+            get { return Instance.IsFirstStart; }
+            set { Instance.IsFirstStart = value; }
         }
 
         public static string SearchOptions
         {
-            get
-            {
-                return Instance.SearchOptions;
-            }
-            set
-            {
-                Instance.SearchOptions = value;
-                Instance.SaveSettingsToStorage();
-            }
+            get { return Instance.SearchOptions; }
+            set { Instance.SearchOptions = value; }
         }
 
         public static bool OpenResultReport
         {
-            get
-            {
-                return Instance.OpenResultReport;
-            }
-            set
-            {
-                Instance.OpenResultReport = value;
-                Instance.SaveSettingsToStorage();
-            }
+            get { return Instance.OpenResultReport; }
+            set { Instance.OpenResultReport = value; }
         }
 
         public static bool OpenSASSolutionVisualiser
         {
-            get
-            {
-                return Instance.OpenSASSolutionVisualiser;
-            }
-            set
-            {
-                Instance.OpenSASSolutionVisualiser = value;
-                Instance.SaveSettingsToStorage();
-            }
+            get { return Instance.OpenSASSolutionVisualiser; }
+            set { Instance.OpenSASSolutionVisualiser = value; }
         }
     }
 }

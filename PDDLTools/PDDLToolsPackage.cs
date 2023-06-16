@@ -31,7 +31,7 @@ namespace PDDLTools
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(Constants.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideOptionPage(typeof(OptionPageGrid), "PDDL Tools", "Options", 0, 0, true)]
+    [ProvideOptionPage(typeof(OptionsPageCustom), "PDDL Tools", "Options", 0, 0, true)]
     [ProvideToolWindow(typeof(FDResultsWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(SASSolutionWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(WelcomeWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
@@ -41,7 +41,7 @@ namespace PDDLTools
         {
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-            OptionPageGrid page = (OptionPageGrid)GetDialogPage(typeof(OptionPageGrid));
+            OptionsPageCustom page = (OptionsPageCustom)GetDialogPage(typeof(OptionsPageCustom));
             OptionsAccessor.Instance = page;
 
             await WelcomeWindowCommand.InitializeAsync(this);
