@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
-using HaskellTools.Helpers;
 using PDDLParser;
 using PDDLParser.Exceptions;
 using Microsoft.Build.Framework.XamlTypes;
@@ -25,6 +24,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using System.Windows.Shapes;
 using PDDLParser.Listener;
 using static System.Windows.Forms.LinkLabel;
+using PDDLParser.Helpers;
 
 namespace PDDLTools.ErrorList
 {
@@ -63,70 +63,57 @@ namespace PDDLTools.ErrorList
         public async void CheckDocument(EnvDTE.Document document)
         {
             _errorProvider.Tasks.Clear();
+            var file = await DTE2Helper.GetSourceFilePathAsync();
+            while (file == null)
+            {
+                await Task.Delay(1000);
+                file = await DTE2Helper.GetSourceFilePathAsync();
+            }
 
+            var parser = new PDDLParser.PDDLParser();
             try
             {
+                if (PDDLHelper.IsFileDomain(file))
+                    parser.ParseDomainFile(file);
+                else if (PDDLHelper.IsFileProblem(file))
+                    parser.ParseProblemFile(file);
+            }
+            catch (ParseException)
+            {
 
-                var file = await DTE2Helper.GetSourceFilePathAsync();
-                var parser = new PDDLParser.PDDLParser();
-                try
-                {
-                    if (PDDLHelper.IsFileDomain(file))
-                    {
-                        var fullDomain = parser.ParseDomainFile(file);
-                    }
-                    else if (PDDLHelper.IsFileProblem(file))
-                    {
-                        var fullProblem = parser.ParseProblemFile(file);
-                    }
-                }
-                catch (ParseException)
-                {
-
-                }
-                catch (Exception e)
-                {
-                    ErrorTask newError = new ErrorTask();
-                    newError.Text = $"PDDL Parser failed: {e.Message}";
-                    newError.Line = 0;
-                    newError.Column = 0;
-                    newError.Document = "";
-                    newError.Navigate += JumpToError;
-                    _errorProvider.Tasks.Add(newError);
-                }
-
-                if (parser.Listener.Errors.Count > 0)
-                {
-                    var sourceDocumentLines = File.ReadAllLines(file);
-                    foreach (var error in parser.Listener.Errors)
-                    {
-                        ErrorTask newError = new ErrorTask();
-
-                        switch (error.Type)
-                        {
-                            case ParseErrorType.Error: newError.ErrorCategory = TaskErrorCategory.Error; break;
-                            case ParseErrorType.Warning: newError.ErrorCategory = TaskErrorCategory.Warning; break;
-                            case ParseErrorType.Message: newError.ErrorCategory = TaskErrorCategory.Message; break;
-                        }
-
-                        newError.Text = error.Message;
-                        newError.Line = error.Line - 1;
-                        newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
-                        newError.Document = "";
-                        newError.Navigate += JumpToError;
-                        _errorProvider.Tasks.Add(newError);
-                    }
-                }
             }
             catch (Exception e)
             {
                 ErrorTask newError = new ErrorTask();
-                newError.Text = $"PDDL error listener initialization failed: {e.Message}";
+                newError.Text = $"PDDL Parser failed: {e.Message}";
                 newError.Line = 0;
                 newError.Column = 0;
                 newError.Document = "";
                 newError.Navigate += JumpToError;
                 _errorProvider.Tasks.Add(newError);
+            }
+
+            if (parser.Listener.Errors.Count > 0)
+            {
+                var sourceDocumentLines = File.ReadAllLines(file);
+                foreach (var error in parser.Listener.Errors)
+                {
+                    ErrorTask newError = new ErrorTask();
+
+                    switch (error.Type)
+                    {
+                        case ParseErrorType.Error: newError.ErrorCategory = TaskErrorCategory.Error; break;
+                        case ParseErrorType.Warning: newError.ErrorCategory = TaskErrorCategory.Warning; break;
+                        case ParseErrorType.Message: newError.ErrorCategory = TaskErrorCategory.Message; break;
+                    }
+
+                    newError.Text = error.Message;
+                    newError.Line = error.Line - 1;
+                    newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
+                    newError.Document = "";
+                    newError.Navigate += JumpToError;
+                    _errorProvider.Tasks.Add(newError);
+                }
             }
 
             if (_errorProvider.Tasks.Count > 0)

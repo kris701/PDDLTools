@@ -80,7 +80,6 @@
     <Compile Include="EditorMargins\PDDLEditorMarginFactory.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManager.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManagerConnectionListener.cs" />
-    <Compile Include="Helpers\PDDLHelper.cs" />
     <Compile Include="Options\OptionsAccessor.cs" />
     <Compile Include="Options\OptionsPageCustom.cs">
       <SubType>Component</SubType>
@@ -120,7 +119,6 @@
     <Compile Include="Helpers\DirHelper.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSource.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceProvider.cs" />
-    <Compile Include="Helpers\ControlsHelper.cs" />
     <Compile Include="Helpers\ComUtils.cs" />
     <Compile Include="Helpers\DTE2Helper.cs" />
     <Compile Include="Helpers\OutputPanelController.cs" />

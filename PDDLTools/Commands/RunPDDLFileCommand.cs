@@ -17,7 +17,6 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
-using HaskellTools.Helpers;
 using System.Collections.Generic;
 using PDDLTools.Windows.FDResultsWindow;
 using PDDLTools.Windows.SASSolutionWindow;
@@ -26,6 +25,7 @@ using FastDownwardRunner;
 using FastDownwardRunner.Helpers;
 using FastDownwardRunner.Models;
 using System.IO;
+using PDDLParser.Helpers;
 
 namespace PDDLTools.Commands
 {

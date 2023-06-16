@@ -50,6 +50,8 @@ namespace PDDLTools.Helpers
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
             EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            if (_applicationObject.ActiveDocument == null)
+                return null;
             var uih = _applicationObject.ActiveDocument;
             return uih.FullName;
         }

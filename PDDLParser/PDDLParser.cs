@@ -13,6 +13,7 @@ using PDDLParser.Models.Domain;
 using PDDLParser.Models.Problem;
 using PDDLParser.Analysers;
 using System.Xml.Linq;
+using PDDLParser.Helpers;
 
 namespace PDDLParser
 {
@@ -35,6 +36,11 @@ namespace PDDLParser
 
         public DomainDecl ParseDomainFile(string parseFile)
         {
+            if (!PDDLHelper.IsFileDomain(parseFile))
+                Listener.AddError(new ParseError(
+                    $"Attempted file to parse was not a domain file!",
+                    ParseErrorType.Error));
+
             var absAST = ParseAsASTTree(parseFile, Listener);
 
             if (!absAST.Content.StartsWith("define"))
@@ -94,6 +100,11 @@ namespace PDDLParser
 
         public ProblemDecl ParseProblemFile(string parseFile)
         {
+            if (!PDDLHelper.IsFileProblem(parseFile))
+                Listener.AddError(new ParseError(
+                    $"Attempted file to parse was not a problem file!",
+                    ParseErrorType.Error));
+
             var absAST = ParseAsASTTree(parseFile, Listener);
 
             if (!absAST.Content.StartsWith("define"))

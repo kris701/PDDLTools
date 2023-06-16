@@ -23,7 +23,7 @@
 
         <Label Content="Resulting Plan" Foreground="White" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <ScrollViewer Grid.Row="1" >
-            <TextBox x:Name="TextPlan" IsEnabled="False" Margin="5" Foreground="White" IsReadOnly="True" Background="#1F1F1F"/>
+            <TextBox x:Name="TextPlan" Margin="5" Foreground="White" IsReadOnly="True" Background="#1F1F1F"/>
         </ScrollViewer>
         <Canvas x:Name="VisualPlan" Grid.Column="1" Grid.RowSpan="2" Margin="5" Background="#1F1F1F"/>
         <Label x:Name="PlanTooLargeLable" Grid.Column="1" Grid.RowSpan="2" Content="Cannot display plans larger then 50 steps!" Margin="5" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
@@ -45,7 +45,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Content="Plan Length: " Foreground="White"/>
-            <Label x:Name="PlanLengthLabel" Grid.Column="1" Content="x"/>
+            <Label x:Name="PlanLengthLabel" Grid.Column="1" Content="x" Foreground="White"/>
         </Grid>
     </Grid>
 </UserControl>

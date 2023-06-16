@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HaskellTools.Helpers
+namespace PDDLParser.Helpers
 {
     public static class PDDLHelper
     {

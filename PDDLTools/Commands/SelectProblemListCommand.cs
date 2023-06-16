@@ -21,7 +21,7 @@ using System.Windows.Controls;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.IO;
-using HaskellTools.Helpers;
+using PDDLParser.Helpers;
 
 namespace PDDLTools.Commands
 {

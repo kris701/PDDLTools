@@ -1,8 +1,8 @@
-﻿using HaskellTools.Helpers;
-using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using PDDLParser;
 using PDDLParser.Exceptions;
+using PDDLParser.Helpers;
 using PDDLTools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -54,6 +54,11 @@ namespace PDDLTools.EditorMargins
         private async Task SetupMarginAsync()
         {
             var file = await DTE2Helper.GetSourceFilePathAsync();
+            while (file == null)
+            {
+                await Task.Delay(1000);
+                file = await DTE2Helper.GetSourceFilePathAsync();
+            }
 
             PredicateCountLabel.Content = "?";
             ActionCountLabel.Content = "?";
