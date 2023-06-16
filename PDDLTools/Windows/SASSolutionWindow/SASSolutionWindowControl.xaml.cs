@@ -70,6 +70,10 @@ namespace PDDLTools.Windows.SASSolutionWindow
                     else
                     {
                         PlanTooLargeLable.Visibility = Visibility.Hidden;
+
+                        SimulationStepSlider.Maximum = plan.Count;
+                        SimulationStepSlider.Value = SimulationStepSlider.Maximum;
+
                         ISASSimulator simulator = new SASSimulator.SASSimulator(
                             _pddlData,
                             plan);
@@ -104,6 +108,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
                 var newLine = new Line();
                 newLine.Stroke = Brushes.Black;
                 newLine.StrokeThickness = 3;
+                newLine.Tag = i + 1;
                 lines.Add(newLine);
                 VisualPlan.Children.Add(newLine);
             }
@@ -176,6 +181,35 @@ namespace PDDLTools.Windows.SASSolutionWindow
                 }
             }
             return 0;
+        }
+
+        private void SimulationStepSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            int newIndex = (int)SimulationStepSlider.Value;
+            SimulationStepLabel.Content = $"{newIndex}";
+            foreach(var child in VisualPlan.Children)
+            {
+                if (child is Line line)
+                {
+                    if (line.Tag is int id)
+                    {
+                        if (id > newIndex)
+                            line.Visibility = Visibility.Hidden;
+                        else
+                            line.Visibility = Visibility.Visible;
+                    }
+                }
+                else if (child is PlanNode node)
+                {
+                    if (node.Tag is int id)
+                    {
+                        if (id > newIndex)
+                            node.Visibility = Visibility.Hidden;
+                        else
+                            node.Visibility = Visibility.Visible;
+                    }
+                }
+            }
         }
     }
 }

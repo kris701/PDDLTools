@@ -21,6 +21,7 @@ namespace PDDLTools.Windows.SASSolutionWindow.UserControls
         {
             InitializeComponent();
 
+            Tag = id;
             NodeID.Content = id;
             var toolTip = new ToolTip();
             toolTip.Content  = text;
