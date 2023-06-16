@@ -29,9 +29,12 @@ Note, you can also add the `PDDL Toolbar` if you want more direct access to the 
 ## PDDL Syntax Highlighting and Quick Info
 This extension contains a simple PDDL syntax highlighter for basic PDDL domain/problem constructs, such as `:objects` or `:action`.
 Also included is a simple Quick info provider, that shows some basic information on the highlighted constructs.
+
 ![image](https://github.com/kris701/PDDLTools/assets/22596587/3d00388c-af64-4441-9066-c0c7ccf84dbf)
 ![image](https://github.com/kris701/PDDLTools/assets/22596587/7b014c17-18e8-468d-b823-9532719d0d00)
+
 A basic parser is also in this extension, that gives you information on syntax errors in the given problem or domain file you are editing. This updated every time you save the document.
+
 ![image](https://github.com/kris701/PDDLTools/assets/22596587/b13132b8-bed4-4d7a-86a9-f6fee863e5d7)
 
 ## Options
@@ -42,7 +45,9 @@ You can also add more Fast Downward search options under the tools options, just
 ## Execute a PDDL Problem and Domain
 To run a PDDL problem and domain, you must have both files open in Visual Studio. The extension will then automatically recognise what is problem and what is domain files.
 You can then select what problem and domain you want to run with under the comboboxes in the extension:
+
 ![image](https://github.com/kris701/PDDLTools/assets/22596587/e1346a45-04ad-4f25-8eda-6a7059f777b7)
+
 You can now select what `Search` option you want to run Fast Downward with in the final checkbox.
 Finally, you can click the `Run` button and start fast downward. When the run is finished the results will be shown in the Output Window and two windows will open, regarding further details on the results and plan.
 
@@ -51,8 +56,11 @@ There are two result windows that is displayedm the `Fast Downward Result` windo
 The first window shows general results from Fast Downward regarding the Translator and Search parameters.
 The SAS Solution window shows if a solution was found.
 This window visually shows the plan, as well as giving you the option to scroll through the plan process, using the slider in the bottom, and its states:
+
 ![image](https://github.com/kris701/PDDLTools/assets/22596587/a2e73cba-c61f-4929-9fb9-3063c140ad30)
+
 You can hover over a given node in the plan, to show the state at that point, as well as what action it took:
+
 ![image](https://github.com/kris701/PDDLTools/assets/22596587/3de28ae5-dd21-4c64-8192-488bc8b02a74)
 
 
