@@ -34,13 +34,13 @@ namespace PDDLTools.Commands
         public static async Task InitializeAsync(AsyncPackage package)
         {
             Instance = new FDReportCommand(package, await InitializeCommandServiceAsync(package));
-            Instance.SetToggleState(OptionsAccessor.OpenResultReport);
+            Instance.SetToggleState(OptionsManager.Instance.OpenResultReport);
         }
 
         public override void Execute(object sender, EventArgs e)
         {
-            OptionsAccessor.OpenResultReport = !OptionsAccessor.OpenResultReport;
-            SetToggleState(OptionsAccessor.OpenResultReport);
+            OptionsManager.Instance.OpenResultReport = !OptionsManager.Instance.OpenResultReport;
+            SetToggleState(OptionsManager.Instance.OpenResultReport);
         }
     }
 }

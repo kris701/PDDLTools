@@ -32,7 +32,7 @@ namespace PDDLTools.Windows.WelcomeWindow
                 BrowserView.Visibility = Visibility.Visible;
             }
 
-            OptionsAccessor.IsFirstStart = false;
+            OptionsManager.Instance.IsFirstStart = false;
         }
     }
 }

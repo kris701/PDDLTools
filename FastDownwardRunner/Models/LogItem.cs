@@ -19,5 +19,17 @@ namespace FastDownwardRunner.Models
             Time = DateTime.Now;
             Type = type;
         }
+
+        public override string ToString()
+        {
+            if (Type == ItemType.Error)
+                return $"[{Time}] (ERR) {Content}";
+            else if (Type == ItemType.Log)
+                return $"[{Time}]       {Content}";
+            else if (Type == ItemType.None)
+                return $"[{Time}] (???) {Content}";
+
+            return base.ToString();
+        }
     }
 }

@@ -18,7 +18,6 @@ namespace PDDLTools.Windows.WelcomeWindow
 
         public int OnClose(ref uint pgrfSaveOptions)
         {
-            OptionsAccessor.IsFirstStart = false;
             return Microsoft.VisualStudio.VSConstants.S_OK;
         }
     }

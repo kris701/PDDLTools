@@ -28,76 +28,80 @@ namespace PDDLTools.Windows.SASSolutionWindow
 {
     public partial class SASSolutionWindowControl : UserControl
     {
-        private FDResults _data;
         private PDDLDecl _pddlData;
-        private bool _redraw = false;
+        private bool _isLoaded = false;
 
         public SASSolutionWindowControl()
         {
             InitializeComponent();
         }
 
-        public void SetupResultData(FDResults data, PDDLDecl pddlData)
+        public async Task SetupResultDataAsync(PDDLDecl pddlData)
         {
-            _data = data;
             _pddlData = pddlData;
-            _redraw = true;
+            await CheckForReDrawAsync();
         }
 
-        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            while (_data == null)
+            _isLoaded = true;
+        }
+
+        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            _isLoaded = false;
+        }
+
+        private async Task CheckForReDrawAsync()
+        {
+            while (!_isLoaded)
                 await Task.Delay(100);
 
-            if (_redraw)
+            var path = System.IO.Path.Combine(OptionsManager.Instance.FDPath, "sas_plan");
+            if (!File.Exists(path))
             {
-                var path = System.IO.Path.Combine(OptionsAccessor.FDPPath, "sas_plan");
-                if (!File.Exists(path))
+                TextPlan.Text = "'sas_plan' not found!";
+            }
+            else
+            {
+                SetTextPlanData(File.ReadAllLines(path));
+                VisualPlan.Children.Clear();
+
+                IPlanParser planParser = new PlanParser();
+                var plan = planParser.ParsePlanFile(path);
+
+                if (plan.Count > 50)
                 {
-                    TextPlan.Text = "'sas_plan' not found!";
+                    PlanTooLargeLable.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    SetTextPlanData(File.ReadAllLines(path));
-                    VisualPlan.Children.Clear();
+                    PlanTooLargeLable.Visibility = Visibility.Hidden;
 
-                    IPlanParser planParser = new PlanParser();
-                    var plan = planParser.ParsePlanFile(path);
+                    SimulationStepSlider.Maximum = plan.Count;
+                    SimulationStepSlider.Value = SimulationStepSlider.Maximum;
 
-                    if (plan.Count > 50)
+                    ISASSimulator simulator = new SASSimulator.SASSimulator(
+                        _pddlData,
+                        plan);
+
+                    var lines = GenerateBaseLines(plan.Count);
+
+                    ILocationSpreader spreader = new RandomPathCorrectingSpreader();
+                    var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
+
+                    var prevNode = AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[0]);
+
+                    for (int i = 0; i < plan.Count; i++)
                     {
-                        PlanTooLargeLable.Visibility = Visibility.Visible;
-                    }
-                    else
-                    {
-                        PlanTooLargeLable.Visibility = Visibility.Hidden;
+                        simulator.Step();
+                        var newNode = AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[i + 1]);
 
-                        SimulationStepSlider.Maximum = plan.Count;
-                        SimulationStepSlider.Value = SimulationStepSlider.Maximum;
+                        MakeLineBetweenNodes(prevNode, newNode, lines[i]);
 
-                        ISASSimulator simulator = new SASSimulator.SASSimulator(
-                            _pddlData,
-                            plan);
-
-                        var lines = GenerateBaseLines(plan.Count);
-
-                        ILocationSpreader spreader = new RandomPathCorrectingSpreader();
-                        var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
-
-                        var prevNode = AddNewNode(0, "init", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[0]);
-
-                        for (int i = 0; i < plan.Count; i++)
-                        {
-                            simulator.Step();
-                            var newNode = AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[i + 1]);
-
-                            MakeLineBetweenNodes(prevNode, newNode, lines[i]);
-
-                            prevNode = newNode;
-                        }
+                        prevNode = newNode;
                     }
                 }
-                _redraw = false;
             }
         }
 
@@ -275,44 +279,6 @@ namespace PDDLTools.Windows.SASSolutionWindow
 
             foreach (var element in elements)
                 element.Visibility = Visibility.Hidden;
-        }
-
-        private async Task FadeInFastAsync(UIElement element)
-        {
-            if (element.Visibility == Visibility.Visible)
-                return;
-
-            while (element.Opacity != 0)
-                await Task.Delay(100);
-
-            element.Visibility = Visibility.Visible;
-
-            for (double i = 0; i < 1; i += 0.1)
-            {
-                element.Opacity = i;
-                await Task.Delay(10);
-            }
-            element.Opacity = 1;
-        }
-
-        private async Task FadeOutFastAsync(UIElement element)
-        {
-            if (element.Visibility == Visibility.Hidden)
-                return;
-
-            while (element.Opacity != 1)
-                await Task.Delay(100);
-
-            element.Visibility = Visibility.Visible;
-
-            for (double i = 1; i > 0; i -= 0.1)
-            {
-                element.Opacity = i;
-                await Task.Delay(10);
-            }
-            element.Opacity = 0;
-
-            element.Visibility = Visibility.Hidden;
         }
     }
 }

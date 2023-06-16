@@ -14,76 +14,23 @@ namespace PDDLTools.Options
     [Guid("1D32BA32-4249-4291-9539-1CB4C9FE9C88")]
     public class OptionsPageCustom : DialogPage
     {
-        private string _FDPath = "";
-        public string FDPath { 
-            get { return _FDPath; }
-            set {
-                if (Directory.Exists(value) && File.Exists(Path.Combine(value, "fast-downward.py")))
-                {
-                    _FDPath = value;
-                    SaveSettingsToStorage();
-                }
-                else
-                    MessageBox.Show("Error, path to fast downward!");
-            } 
-        }
+        public string FDPath => OptionsManager.Instance.FDPath;
 
-        private string _PythonPrefix = "python";
-        public string PythonPrefix
-        {
-            get { return _PythonPrefix; }
-            set { _PythonPrefix = value; SaveSettingsToStorage(); }
-        }
+        public string PythonPrefix => OptionsManager.Instance.PythonPrefix;
 
-        private int _FDFileExecutionTimeout = 10;
-        public int FDFileExecutionTimeout
-        {
-            get { return _FDFileExecutionTimeout; }
-            set {
-                if (value > 0)
-                {
-                    _FDFileExecutionTimeout = value;
-                    SaveSettingsToStorage();
-                }
-                else
-                    MessageBox.Show("Timeout must be larger than 0!");
-            }
-        }
+        public int FDFileExecutionTimeout => OptionsManager.Instance.FDFileExecutionTimeout;
 
-        private bool _IsFirstStart = true;
-        public bool IsFirstStart
-        {
-            get { return _IsFirstStart; }
-            set { _IsFirstStart = value; SaveSettingsToStorage(); }
-        }
+        public string SearchOptions => OptionsManager.Instance.SearchOptions;
 
-        private string _SearchOptions = "astar(lmcut());lazy_greedy([ff(), cea()], [ff(), cea()])";
-        public string SearchOptions
-        {
-            get { return _SearchOptions; }
-            set { _SearchOptions = value; SaveSettingsToStorage(); }
-        }
+        public bool OpenResultReport => OptionsManager.Instance.OpenResultReport;
 
-        private bool _OpenResultReport = true;
-        public bool OpenResultReport
-        {
-            get { return _OpenResultReport; }
-            set { _OpenResultReport = value; SaveSettingsToStorage(); }
-        }
-
-        private bool _OpenSASSolutionVisualiser = true;
-        public bool OpenSASSolutionVisualiser
-        {
-            get { return _OpenSASSolutionVisualiser; }
-            set { _OpenSASSolutionVisualiser = value; SaveSettingsToStorage(); }
-        }
+        public bool OpenSASSolutionVisualiser => OptionsManager.Instance.OpenSASSolutionVisualiser;
 
         protected override IWin32Window Window
         {
             get
             {
-                OptionsPageCustomControl page = new OptionsPageCustomControl();
-                return page;
+                return new OptionsPageCustomControl();
             }
         }
     }

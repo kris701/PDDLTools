@@ -31,7 +31,8 @@ namespace PDDLTools
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(Constants.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
-    [ProvideOptionPage(typeof(OptionsPageCustom), "PDDL Tools", "Options", 0, 0, true)]
+    [ProvideOptionPage(typeof(OptionsPageCustom), "PDDL Tools", "General", 0, 0, true)]
+    [ProvideOptionPage(typeof(DebugOptionsPageGrid), "PDDL Tools", "Debug", 0, 0, true)]
     [ProvideToolWindow(typeof(FDResultsWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(SASSolutionWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(WelcomeWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
@@ -41,13 +42,16 @@ namespace PDDLTools
         {
             await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-            OptionsPageCustom page = (OptionsPageCustom)GetDialogPage(typeof(OptionsPageCustom));
-            OptionsAccessor.Instance = page;
+            OptionsManager.Instance = new OptionsManager();
+            await OptionsManager.Instance.LoadSettingsAsync();
+
+            //OptionsPageCustom page = (OptionsPageCustom)GetDialogPage(typeof(OptionsPageCustom));
+            //DebugOptionsPageGrid debugPage = (DebugOptionsPageGrid)GetDialogPage(typeof(DebugOptionsPageGrid));
 
             await WelcomeWindowCommand.InitializeAsync(this);
             await GitHubCommand.InitializeAsync(this);
 
-            if (OptionsAccessor.IsFirstStart)
+            if (OptionsManager.Instance.IsFirstStart)
 #pragma warning disable VSTHRD103 // Call async methods when in an async method
                 WelcomeWindowCommand.Instance.Execute(null, null);
 #pragma warning restore VSTHRD103 // Call async methods when in an async method

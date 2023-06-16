@@ -53,52 +53,55 @@ namespace PDDLTools.EditorMargins
 
         private async Task SetupMarginAsync()
         {
-            var file = await DTE2Helper.GetSourceFilePathAsync();
-            while (file == null)
+            if (await DTE2Helper.IsValidFileOpenAsync())
             {
-                await Task.Delay(1000);
-                file = await DTE2Helper.GetSourceFilePathAsync();
-            }
-
-            PredicateCountLabel.Content = "?";
-            ActionCountLabel.Content = "?";
-            ObjectCountLabel.Content = "?";
-            InitCountLabel.Content = "?";
-            GoalCountLabel.Content = "?";
-
-            DomainPanel.Visibility = Visibility.Hidden;
-            ProblemPanel.Visibility = Visibility.Hidden;
-
-            try
-            {
-                if (PDDLHelper.IsFileDomain(file))
+                var file = await DTE2Helper.GetSourceFilePathAsync();
+                while (file == null)
                 {
-                    DomainPanel.Visibility = Visibility.Visible;
-
-                    IPDDLParser parser = new PDDLParser.PDDLParser();
-                    var domain = parser.ParseDomainFile(file);
-
-                    if (domain.Predicates != null)
-                        PredicateCountLabel.Content = $"{domain.Predicates.Predicates.Count}";
-                    if (domain.Actions != null)
-                        ActionCountLabel.Content = $"{domain.Actions.Count}";
+                    await Task.Delay(1000);
+                    file = await DTE2Helper.GetSourceFilePathAsync();
                 }
-                else if (PDDLHelper.IsFileProblem(file))
+
+                PredicateCountLabel.Content = "?";
+                ActionCountLabel.Content = "?";
+                ObjectCountLabel.Content = "?";
+                InitCountLabel.Content = "?";
+                GoalCountLabel.Content = "?";
+
+                DomainPanel.Visibility = Visibility.Hidden;
+                ProblemPanel.Visibility = Visibility.Hidden;
+
+                try
                 {
-                    ProblemPanel.Visibility = Visibility.Visible;
+                    if (PDDLHelper.IsFileDomain(file))
+                    {
+                        DomainPanel.Visibility = Visibility.Visible;
 
-                    IPDDLParser parser = new PDDLParser.PDDLParser();
-                    var problem = parser.ParseProblemFile(file);
+                        IPDDLParser parser = new PDDLParser.PDDLParser();
+                        var domain = parser.ParseDomainFile(file);
 
-                    if (problem.Objects != null)
-                        ObjectCountLabel.Content = $"{problem.Objects.Objs.Count}";
-                    if (problem.Init != null)
-                        InitCountLabel.Content = $"{problem.Init.Predicates.Count}";
-                    if (problem.Goal != null)
-                        GoalCountLabel.Content = $"{problem.Goal.GoalExpCount}";
+                        if (domain.Predicates != null)
+                            PredicateCountLabel.Content = $"{domain.Predicates.Predicates.Count}";
+                        if (domain.Actions != null)
+                            ActionCountLabel.Content = $"{domain.Actions.Count}";
+                    }
+                    else if (PDDLHelper.IsFileProblem(file))
+                    {
+                        ProblemPanel.Visibility = Visibility.Visible;
+
+                        IPDDLParser parser = new PDDLParser.PDDLParser();
+                        var problem = parser.ParseProblemFile(file);
+
+                        if (problem.Objects != null)
+                            ObjectCountLabel.Content = $"{problem.Objects.Objs.Count}";
+                        if (problem.Init != null)
+                            InitCountLabel.Content = $"{problem.Init.Predicates.Count}";
+                        if (problem.Goal != null)
+                            GoalCountLabel.Content = $"{problem.Goal.GoalExpCount}";
+                    }
                 }
+                catch (Exception) { }
             }
-            catch (Exception) { }
         }
 
         #region IWpfTextViewMargin

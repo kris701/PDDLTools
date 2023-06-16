@@ -21,12 +21,12 @@ namespace PDDLTools.Options
 
         private void OptionsPageCustomControl_Load(object sender, EventArgs e)
         {
-            FastDownwardPathTextbox.Text = OptionsAccessor.FDPPath;
-            PythonPrefixTextbox.Text = OptionsAccessor.PythonPrefix;
-            FastDownwardTimeoutNumericUpDown.Value = OptionsAccessor.FDFileExecutionTimeout;
-            FastDownwardSearchOptionsTextbox.Text = OptionsAccessor.SearchOptions;
-            OpenFDResultsOnSuccessCheckbox.Checked = OptionsAccessor.OpenResultReport;
-            OpenSASResultOnSuccess.Checked = OptionsAccessor.OpenSASSolutionVisualiser;
+            FastDownwardPathTextbox.Text = OptionsManager.Instance.FDPath;
+            PythonPrefixTextbox.Text = OptionsManager.Instance.PythonPrefix;
+            FastDownwardTimeoutNumericUpDown.Value = OptionsManager.Instance.FDFileExecutionTimeout;
+            FastDownwardSearchOptionsTextbox.Text = OptionsManager.Instance.SearchOptions;
+            OpenFDResultsOnSuccessCheckbox.Checked = OptionsManager.Instance.OpenResultReport;
+            OpenSASResultOnSuccess.Checked = OptionsManager.Instance.OpenSASSolutionVisualiser;
             _isLoaded = true;
         }
 
@@ -38,8 +38,8 @@ namespace PDDLTools.Options
             FolderDialog.ShowDialog();
             if (FolderDialog.SelectedPath != "")
             {
-                OptionsAccessor.FDPPath = FolderDialog.SelectedPath;
-                FastDownwardPathTextbox.Text = OptionsAccessor.FDPPath;
+                OptionsManager.Instance.FDPath = FolderDialog.SelectedPath;
+                FastDownwardPathTextbox.Text = OptionsManager.Instance.FDPath;
             }
         }
 
@@ -48,8 +48,8 @@ namespace PDDLTools.Options
             if (!_isLoaded)
                 return;
 
-            OptionsAccessor.PythonPrefix = PythonPrefixTextbox.Text;
-            PythonPrefixTextbox.Text = OptionsAccessor.PythonPrefix;
+            OptionsManager.Instance.PythonPrefix = PythonPrefixTextbox.Text;
+            PythonPrefixTextbox.Text = OptionsManager.Instance.PythonPrefix;
         }
 
         private void FastDownwardTimeoutNumericUpDown_ValueChanged(object sender, EventArgs e)
@@ -57,8 +57,8 @@ namespace PDDLTools.Options
             if (!_isLoaded)
                 return;
 
-            OptionsAccessor.FDFileExecutionTimeout = (int)FastDownwardTimeoutNumericUpDown.Value;
-            FastDownwardTimeoutNumericUpDown.Value = OptionsAccessor.FDFileExecutionTimeout;
+            OptionsManager.Instance.FDFileExecutionTimeout = (int)FastDownwardTimeoutNumericUpDown.Value;
+            FastDownwardTimeoutNumericUpDown.Value = OptionsManager.Instance.FDFileExecutionTimeout;
         }
 
         private void FastDownwardSearchOptionsTextbox_Leave(object sender, EventArgs e)
@@ -66,8 +66,8 @@ namespace PDDLTools.Options
             if (!_isLoaded)
                 return;
 
-            OptionsAccessor.SearchOptions = FastDownwardSearchOptionsTextbox.Text;
-            FastDownwardSearchOptionsTextbox.Text = OptionsAccessor.SearchOptions;
+            OptionsManager.Instance.SearchOptions = FastDownwardSearchOptionsTextbox.Text;
+            FastDownwardSearchOptionsTextbox.Text = OptionsManager.Instance.SearchOptions;
         }
 
         private void OpenSASResultOnSuccess_CheckedChanged(object sender, EventArgs e)
@@ -75,8 +75,8 @@ namespace PDDLTools.Options
             if (!_isLoaded)
                 return;
 
-            OptionsAccessor.OpenResultReport = OpenFDResultsOnSuccessCheckbox.Checked;
-            OpenFDResultsOnSuccessCheckbox.Checked = OptionsAccessor.OpenResultReport;
+            OptionsManager.Instance.OpenResultReport = OpenFDResultsOnSuccessCheckbox.Checked;
+            OpenFDResultsOnSuccessCheckbox.Checked = OptionsManager.Instance.OpenResultReport;
         }
 
         private void OpenFDResultsOnSuccessCheckbox_CheckedChanged(object sender, EventArgs e)
@@ -84,8 +84,8 @@ namespace PDDLTools.Options
             if (!_isLoaded)
                 return;
 
-            OptionsAccessor.OpenSASSolutionVisualiser = OpenSASResultOnSuccess.Checked;
-            OpenSASResultOnSuccess.Checked = OptionsAccessor.OpenSASSolutionVisualiser;
+            OptionsManager.Instance.OpenSASSolutionVisualiser = OpenSASResultOnSuccess.Checked;
+            OpenSASResultOnSuccess.Checked = OptionsManager.Instance.OpenSASSolutionVisualiser;
         }
     }
 }

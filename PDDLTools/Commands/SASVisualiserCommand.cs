@@ -34,13 +34,13 @@ namespace PDDLTools.Commands
         public static async Task InitializeAsync(AsyncPackage package)
         {
             Instance = new SASVisualiserCommand(package, await InitializeCommandServiceAsync(package));
-            Instance.SetToggleState(OptionsAccessor.OpenSASSolutionVisualiser);
+            Instance.SetToggleState(OptionsManager.Instance.OpenSASSolutionVisualiser);
         }
 
         public override void Execute(object sender, EventArgs e)
         {
-            OptionsAccessor.OpenSASSolutionVisualiser = !OptionsAccessor.OpenSASSolutionVisualiser;
-            SetToggleState(OptionsAccessor.OpenSASSolutionVisualiser);
+            OptionsManager.Instance.OpenSASSolutionVisualiser = !OptionsManager.Instance.OpenSASSolutionVisualiser;
+            SetToggleState(OptionsManager.Instance.OpenSASSolutionVisualiser);
         }
     }
 }

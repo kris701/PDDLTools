@@ -33,7 +33,7 @@ namespace PDDLTools.Commands
             {
                 if (this.package.DisposalToken.IsCancellationRequested)
                     return;
-                await Task.Delay(1000);
+                await Task.Delay(5000);
             }
             await Task.Delay(10000);
             ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(WelcomeWindow), 0, true, this.package.DisposalToken);

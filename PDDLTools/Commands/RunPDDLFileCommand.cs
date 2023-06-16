@@ -48,7 +48,7 @@ namespace PDDLTools.Commands
         public override void CheckQueryStatus(object sender, EventArgs e)
         {
             var button = (MenuCommand)sender;
-            button.Enabled = Directory.Exists(OptionsAccessor.FDPPath) && Directory.Exists(Path.Combine(OptionsAccessor.FDPPath, "fast-downward.py"));
+            button.Enabled = Directory.Exists(OptionsManager.Instance.FDPath) && Directory.Exists(Path.Combine(OptionsManager.Instance.FDPath, "fast-downward.py"));
         }
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
@@ -114,7 +114,7 @@ namespace PDDLTools.Commands
             await OutputPanel.ClearOutputAsync();
             await OutputPanel.WriteLineAsync("Executing PDDL File");
 
-            IRunner fdRunner = new FDRunner(OptionsAccessor.FDPPath, OptionsAccessor.PythonPrefix, OptionsAccessor.FDFileExecutionTimeout);
+            IRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
             var resultData = await fdRunner.RunAsync(domainFilePath, problemFilePath, SelectSearchCommand.SelectedSearch);
 
             await WriteToOutputWindowAsync(resultData);
@@ -137,7 +137,7 @@ namespace PDDLTools.Commands
             switch (resultData.ResultReason)
             {
                 case ProcessCompleteReson.ForceKilled:
-                    await OutputPanel.WriteLineAsync($"ERROR! FD ran for longer than {OptionsAccessor.FDFileExecutionTimeout}! Killing process...");
+                    await OutputPanel.WriteLineAsync($"ERROR! FD ran for longer than {OptionsManager.Instance.FDFileExecutionTimeout}! Killing process...");
                     break;
                 case ProcessCompleteReson.StoppedOnError:
                     await OutputPanel.WriteLineAsync($"Errors encountered!");
@@ -153,7 +153,7 @@ namespace PDDLTools.Commands
 
         private async Task SetupResultWindowsAsync(FDResults resultData, string domainFilePath, string problemFilePath)
         {
-            if (OptionsAccessor.OpenResultReport)
+            if (OptionsManager.Instance.OpenResultReport)
             {
                 ToolWindowPane resultsWindow = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
                 if ((null == resultsWindow) || (null == resultsWindow.Frame))
@@ -163,7 +163,7 @@ namespace PDDLTools.Commands
                 await ((resultsWindow as FDResultsWindow).Content as FDResultsWindowControl).SetupResultDataAsync(resultData);
             }
 
-            if (resultData.WasSolutionFound && OptionsAccessor.OpenSASSolutionVisualiser)
+            if (resultData.WasSolutionFound && OptionsManager.Instance.OpenSASSolutionVisualiser)
             {
                 IPDDLParser parser = new PDDLParser.PDDLParser();
                 var pddlDoc = parser.ParseDomainAndProblemFiles(domainFilePath, problemFilePath);
@@ -173,7 +173,7 @@ namespace PDDLTools.Commands
                 {
                     throw new NotSupportedException("Cannot create tool window");
                 }
-                ((sasWindow as SASSolutionWindow).Content as SASSolutionWindowControl).SetupResultData(resultData, pddlDoc);
+                await ((sasWindow as SASSolutionWindow).Content as SASSolutionWindowControl).SetupResultDataAsync(pddlDoc);
             }
         }
     }

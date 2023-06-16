@@ -43,7 +43,7 @@ namespace PDDLTools.Commands
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    var optionsStr = OptionsAccessor.SearchOptions;
+                    var optionsStr = OptionsManager.Instance.SearchOptions;
                     string[] options = optionsStr.Split(';');
                     Marshal.GetNativeVariantForObject(options, pOutValue);
                 }
