@@ -18,6 +18,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -88,7 +89,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
                         for (int i = 0; i < plan.Count; i++)
                         {
                             simulator.Step();
-                            var newNode = AddNewNode(i + 1, $"Step {i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[i + 1]);
+                            var newNode = AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[i + 1]);
 
                             MakeLineBetweenNodes(prevNode, newNode, lines[i]);
 
@@ -106,7 +107,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
             for (int i = 0; i < count; i++)
             {
                 var newLine = new Line();
-                newLine.Stroke = Brushes.Black;
+                newLine.Stroke = Brushes.WhiteSmoke;
                 newLine.StrokeThickness = 3;
                 newLine.Tag = i + 1;
                 lines.Add(newLine);
@@ -134,8 +135,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
                     var fromIndex = lines[i].IndexOf("=") + 1;
                     var toIndex = lines[i].IndexOf("(");
                     var planCost = lines[i].Substring(fromIndex, toIndex - fromIndex).Trim();
-                    TextPlan.Text += Environment.NewLine;
-                    TextPlan.Text += $"Plan Cost: {planCost}{Environment.NewLine}";
+                    PlanLengthLabel.Content = planCost;
                 }
                 else
                 {
@@ -149,7 +149,10 @@ namespace PDDLTools.Windows.SASSolutionWindow
             var goalCount = GetGoalCountInState(_pddlData.Problem.Goal.GoalExp, state);
             bool isGoal = goalCount == totalGoal;
             bool isPartialGoal = goalCount > 0;
-            var newNode = new PlanNode(id, text, isGoal, isPartialGoal);
+            List<PredicateExp> cloneState = new List<PredicateExp>();
+            foreach(var pred in state)
+                cloneState.Add(pred.Clone() as PredicateExp);
+            var newNode = new PlanNode(id, text, cloneState, isGoal, isPartialGoal);
             newNode.Margin = new Thickness(loc.X, loc.Y, 0, 0);
             VisualPlan.Children.Add(newNode);
             return newNode;
@@ -183,20 +186,34 @@ namespace PDDLTools.Windows.SASSolutionWindow
             return 0;
         }
 
-        private void SimulationStepSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private bool _isFading = false;
+        private async void SimulationStepSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            while (_isFading)
+                await Task.Delay(100);
+
             int newIndex = (int)SimulationStepSlider.Value;
             SimulationStepLabel.Content = $"{newIndex}";
-            foreach(var child in VisualPlan.Children)
+
+            List<UIElement> fadeInElements = new List<UIElement>();
+            List<UIElement> fadeOutElements = new List<UIElement>();
+
+            foreach (var child in VisualPlan.Children)
             {
                 if (child is Line line)
                 {
                     if (line.Tag is int id)
                     {
                         if (id > newIndex)
-                            line.Visibility = Visibility.Hidden;
+                        {
+                            if (line.Visibility == Visibility.Visible)
+                                fadeOutElements.Add(line);
+                        }
                         else
-                            line.Visibility = Visibility.Visible;
+                        {
+                            if (line.Visibility == Visibility.Hidden)
+                                fadeInElements.Add(line);
+                        }
                     }
                 }
                 else if (child is PlanNode node)
@@ -204,12 +221,98 @@ namespace PDDLTools.Windows.SASSolutionWindow
                     if (node.Tag is int id)
                     {
                         if (id > newIndex)
-                            node.Visibility = Visibility.Hidden;
+                        {
+                            if (node.Visibility == Visibility.Visible)
+                                fadeOutElements.Add(node);
+                        }
                         else
-                            node.Visibility = Visibility.Visible;
+                        {
+                            if (node.Visibility == Visibility.Hidden)
+                                fadeInElements.Add(node);
+                        }
                     }
                 }
             }
+
+            _isFading = true;
+            await FadeOutFastAsync(fadeOutElements);
+            await FadeInFastAsync(fadeInElements);
+            _isFading = false;
+        }
+
+        private async Task FadeInFastAsync(List<UIElement> elements)
+        {
+            foreach (var element in elements)
+                element.Opacity = 0;
+            foreach (var element in elements)
+                element.Visibility = Visibility.Visible;
+
+            for (double i = 0; i < 1; i += 0.1)
+            {
+                foreach (var element in elements)
+                    element.Opacity = i;
+                await Task.Delay(10);
+            }
+            foreach (var element in elements)
+                element.Opacity = 1;
+        }
+
+        private async Task FadeOutFastAsync(List<UIElement> elements)
+        {
+            foreach (var element in elements)
+                element.Opacity = 1;
+            foreach (var element in elements)
+                element.Visibility = Visibility.Visible;
+
+            for (double i = 1; i > 0; i -= 0.1)
+            {
+                foreach (var element in elements)
+                    element.Opacity = i;
+                await Task.Delay(10);
+            }
+            foreach (var element in elements)
+                element.Opacity = 0;
+
+            foreach (var element in elements)
+                element.Visibility = Visibility.Hidden;
+        }
+
+        private async Task FadeInFastAsync(UIElement element)
+        {
+            if (element.Visibility == Visibility.Visible)
+                return;
+
+            while (element.Opacity != 0)
+                await Task.Delay(100);
+
+            element.Visibility = Visibility.Visible;
+
+            for (double i = 0; i < 1; i += 0.1)
+            {
+                element.Opacity = i;
+                await Task.Delay(10);
+            }
+            element.Opacity = 1;
+        }
+
+        private async Task FadeOutFastAsync(UIElement element)
+        {
+            if (element.Visibility == Visibility.Hidden)
+                return;
+
+            while (element.Opacity != 1)
+                await Task.Delay(100);
+
+            element.Visibility = Visibility.Visible;
+
+            for (double i = 1; i > 0; i -= 0.1)
+            {
+                element.Opacity = i;
+                await Task.Delay(10);
+            }
+            element.Opacity = 0;
+
+            element.Visibility = Visibility.Hidden;
         }
     }
 }

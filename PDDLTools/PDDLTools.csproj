@@ -106,6 +106,9 @@
     <Compile Include="Windows\SASSolutionWindow\UserControls\PlanNode.xaml.cs">
       <DependentUpon>PlanNode.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\SASSolutionWindow\UserControls\StateTooltip.xaml.cs">
+      <DependentUpon>StateTooltip.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\WelcomeWindow\WelcomeWindow.cs" />
     <Compile Include="Commands\WelcomeWindowCommand.cs" />
     <Compile Include="Windows\WelcomeWindow\WelcomeWindowControl.xaml.cs">
@@ -195,6 +198,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\SASSolutionWindow\UserControls\PlanNode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\SASSolutionWindow\UserControls\StateTooltip.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

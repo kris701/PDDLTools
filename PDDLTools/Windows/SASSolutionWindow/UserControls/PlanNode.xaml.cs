@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PDDLParser.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,24 +13,29 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Windows.Forms.AxHost;
 
 namespace PDDLTools.Windows.SASSolutionWindow.UserControls
 {
     public partial class PlanNode : UserControl
     {
-        public PlanNode(int id, string text, bool isGoal, bool isPartialGoal)
+        public List<PredicateExp> State { get; }
+        public PlanNode(int id, string actionStep, List<PredicateExp> state, bool isGoal, bool isPartialGoal)
         {
             InitializeComponent();
 
+            State = state;
             Tag = id;
             NodeID.Content = id;
             var toolTip = new ToolTip();
-            toolTip.Content  = text;
+            toolTip.BorderThickness = new Thickness(0);
+            toolTip.Background = Brushes.Transparent;
+            toolTip.Content = new StateTooltip(actionStep, isPartialGoal, isGoal, state);
             this.ToolTip = toolTip;
             if (isGoal)
-                EllipseArea.Fill = Brushes.Green;
+                EllipseArea.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#227023");
             else if (isPartialGoal)
-                EllipseArea.Fill = Brushes.Orange;
+                EllipseArea.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#877b12");
         }
     }
 }

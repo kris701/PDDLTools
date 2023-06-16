@@ -32,7 +32,7 @@ namespace PDDLTools.Options
         public string PythonPrefix
         {
             get { return _PythonPrefix; }
-            set { _PythonPrefix = value; }
+            set { _PythonPrefix = value; SaveSettingsToStorage(); }
         }
 
         private int _FDFileExecutionTimeout = 10;
@@ -54,28 +54,28 @@ namespace PDDLTools.Options
         public bool IsFirstStart
         {
             get { return _IsFirstStart; }
-            set { _IsFirstStart = value; }
+            set { _IsFirstStart = value; SaveSettingsToStorage(); }
         }
 
         private string _SearchOptions = "astar(lmcut());lazy_greedy([ff(), cea()], [ff(), cea()])";
         public string SearchOptions
         {
             get { return _SearchOptions; }
-            set { _SearchOptions = value; }
+            set { _SearchOptions = value; SaveSettingsToStorage(); }
         }
 
         private bool _OpenResultReport = true;
         public bool OpenResultReport
         {
             get { return _OpenResultReport; }
-            set { _OpenResultReport = value; }
+            set { _OpenResultReport = value; SaveSettingsToStorage(); }
         }
 
         private bool _OpenSASSolutionVisualiser = true;
         public bool OpenSASSolutionVisualiser
         {
             get { return _OpenSASSolutionVisualiser; }
-            set { _OpenSASSolutionVisualiser = value; }
+            set { _OpenSASSolutionVisualiser = value; SaveSettingsToStorage(); }
         }
 
         protected override IWin32Window Window

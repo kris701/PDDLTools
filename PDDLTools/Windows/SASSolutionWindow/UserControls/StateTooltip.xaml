@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="PDDLTools.Windows.SASSolutionWindow.UserControls.StateTooltip"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PDDLTools.Windows.SASSolutionWindow.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200" Opacity="0.8" d:Opacity="1">
+    <Border BorderThickness="2" CornerRadius="2" BorderBrush="#3D3D3D" Background="#1F1F1F">
+        <StackPanel Margin="5">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Step: " Foreground="#D6D6D6" FontSize="10"/>
+                <TextBlock x:Name="SimulationStepLabel" Foreground="White" FontSize="10" VerticalAlignment="Center"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <CheckBox x:Name="IsPartialCheckbox" Content="Is Partial Goal" IsEnabled="False" Foreground="#FF7D7D7D"/>
+                <Separator Width="10" Background="Transparent"/>
+                <CheckBox x:Name="IsGoalCheckbox" Content="Is Goal" IsEnabled="False" Foreground="#FF7D7D7D"/>
+            </StackPanel>
+            <Separator Background="#3D3D3D"/>
+            <Label Content="State" HorizontalAlignment="Center" Foreground="#D6D6D6" FontSize="10"/>
+            <TextBlock x:Name="StateText" Foreground="White" Background="#252526" Padding="5"/>
+        </StackPanel>
+    </Border>
+</UserControl>
