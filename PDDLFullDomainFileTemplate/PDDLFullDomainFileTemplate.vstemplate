@@ -9,6 +9,7 @@
 		<TemplateGroupID>PDDL</TemplateGroupID>
 		<DefaultName>domain.pddl</DefaultName>
 		<EnableEditOfLocationField>true</EnableEditOfLocationField>
+		<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 	</TemplateData>
