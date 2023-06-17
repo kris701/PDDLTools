@@ -73,6 +73,10 @@
     <Compile Include="Commands\SelectSearchCommand.cs" />
     <Compile Include="Commands\SelectDomainListCommand.cs" />
     <Compile Include="Commands\SelectDomainCommand.cs" />
+    <Compile Include="Completers\PDDLCompletionHandlerProvider.cs" />
+    <Compile Include="Completers\PDDLCompletionCommandHandler.cs" />
+    <Compile Include="Completers\PDDLCompletionSource.cs" />
+    <Compile Include="Completers\PDDLCompletionSourceProvider.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="EditorMargins\PDDLEditorMargin.xaml.cs">
       <DependentUpon>PDDLEditorMargin.xaml</DependentUpon>
