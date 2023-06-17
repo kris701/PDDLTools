@@ -45,9 +45,6 @@ namespace PDDLTools
             OptionsManager.Instance = new OptionsManager();
             await OptionsManager.Instance.LoadSettingsAsync();
 
-            //OptionsPageCustom page = (OptionsPageCustom)GetDialogPage(typeof(OptionsPageCustom));
-            //DebugOptionsPageGrid debugPage = (DebugOptionsPageGrid)GetDialogPage(typeof(DebugOptionsPageGrid));
-
             await WelcomeWindowCommand.InitializeAsync(this);
             await GitHubCommand.InitializeAsync(this);
 

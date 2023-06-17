@@ -97,6 +97,10 @@
     <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
     <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceConnectionListener.cs" />
+    <Compile Include="Tagger\HighlightWordFormatDefinition.cs" />
+    <Compile Include="Tagger\HighlightWordTag.cs" />
+    <Compile Include="Tagger\HighlightWordTagger.cs" />
+    <Compile Include="Tagger\HighlightWordTaggerProvider.cs" />
     <Compile Include="Windows\FDResultsWindow\FDResultsWindow.cs" />
     <Compile Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml.cs">
       <DependentUpon>FDResultsWindowControl..xaml</DependentUpon>
