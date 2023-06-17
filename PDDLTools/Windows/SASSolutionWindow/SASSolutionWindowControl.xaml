@@ -25,8 +25,27 @@
         <ScrollViewer Grid.Row="1" >
             <TextBox x:Name="TextPlan" Margin="5" Foreground="White" IsReadOnly="True" Background="#1F1F1F"/>
         </ScrollViewer>
-        <Canvas x:Name="VisualPlan" Grid.Column="1" Grid.RowSpan="2" Margin="5" Background="#1F1F1F"/>
+
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="5">
+            <Button x:Name="RerollButton" Width="20" Height="20" Style="{StaticResource StandardButton}" Click="RerollButton_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="./Resources/reset.png" TileMode="None" Stretch="Uniform"/>
+                </Button.Background>
+                <Button.ToolTip>
+                    Regenerate the visual plan.
+                </Button.ToolTip>
+            </Button>
+            <Separator Width="10" Background="Transparent"/>
+            <ComboBox x:Name="SelectSpreaderCombobox" Width="200" Style="{StaticResource StandartComboboxStyle}" SelectionChanged="SelectSpreaderCombobox_SelectionChanged">
+                <ComboBox.ToolTip>
+                    What generator should be used to place the nodes in the visual plan.
+                </ComboBox.ToolTip>
+            </ComboBox>
+        </StackPanel>
+
+        <Canvas x:Name="VisualPlan" Grid.Column="1" Grid.Row="1" Margin="5" Background="#1F1F1F"/>
         <Label x:Name="PlanTooLargeLable" Grid.Column="1" Grid.RowSpan="2" Content="Cannot display plans larger then 50 steps!" Margin="5" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden"/>
+        
         <Grid Grid.Row="2" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>

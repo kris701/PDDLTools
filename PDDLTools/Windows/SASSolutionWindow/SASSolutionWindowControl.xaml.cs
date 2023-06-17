@@ -39,11 +39,15 @@ namespace PDDLTools.Windows.SASSolutionWindow
         public async Task SetupResultDataAsync(PDDLDecl pddlData)
         {
             _pddlData = pddlData;
-            await CheckForReDrawAsync();
+            await RedrawCanvasAsync();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            SelectSpreaderCombobox.Items.Clear();
+            foreach (var spreader in LocationSpreaderBuilder.Spreaders)
+                SelectSpreaderCombobox.Items.Add(spreader);
+            SelectSpreaderCombobox.SelectedIndex = 0;
             _isLoaded = true;
         }
 
@@ -52,7 +56,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
             _isLoaded = false;
         }
 
-        private async Task CheckForReDrawAsync()
+        private async Task RedrawCanvasAsync()
         {
             while (!_isLoaded)
                 await Task.Delay(100);
@@ -87,7 +91,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
 
                     var lines = GenerateBaseLines(plan.Count);
 
-                    ILocationSpreader spreader = new RandomPathCorrectingSpreader();
+                    ILocationSpreader spreader = LocationSpreaderBuilder.GetSpreader(SelectSpreaderCombobox.SelectedItem as string);
                     var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
 
                     var prevNode = AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[0]);
@@ -279,6 +283,19 @@ namespace PDDLTools.Windows.SASSolutionWindow
 
             foreach (var element in elements)
                 element.Visibility = Visibility.Hidden;
+        }
+
+        private async void RerollButton_Click(object sender, RoutedEventArgs e)
+        {
+            await RedrawCanvasAsync();
+        }
+
+        private async void SelectSpreaderCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_isLoaded)
+            {
+                await RedrawCanvasAsync();
+            }
         }
     }
 }

@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="BaseSpreader.cs" />
     <Compile Include="ILocationSpreader.cs" />
+    <Compile Include="LocationSpreaderBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomPathCorrectingSpreader.cs" />
     <Compile Include="RandomSpreader.cs" />

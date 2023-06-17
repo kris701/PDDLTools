@@ -137,6 +137,7 @@
   <ItemGroup>
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
+    <Resource Include="Windows\SASSolutionWindow\Resources\reset.png" />
     <Resource Include="Windows\WelcomeWindow\Resources\WelcomeLogo.png" />
     <Content Include="Commands\Resources\RunFIle.png" />
     <Content Include="Grammars\pddl.tmLanguage">
@@ -217,7 +218,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\FDResultsWindow\Resources\" />
-    <Folder Include="Windows\SASSolutionWindow\Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FastDownwardRunner\FastDownwardRunner.csproj">
