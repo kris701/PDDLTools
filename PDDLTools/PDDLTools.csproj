@@ -63,6 +63,10 @@
     <NoWarn>VSTHRD100,VSTHRD010,VSTHRD110</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classifiers\PDDLClassifier.cs" />
+    <Compile Include="Classifiers\PDDLClassifierProvider.cs" />
+    <Compile Include="Classifiers\PDDLTypeDefinition.cs" />
+    <Compile Include="Classifiers\PDDLTypes.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\SASVisualiserCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />

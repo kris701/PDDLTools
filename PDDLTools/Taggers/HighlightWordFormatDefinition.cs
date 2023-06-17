@@ -12,14 +12,14 @@ namespace PDDLTools.Tagger
 {
     // https://learn.microsoft.com/en-us/visualstudio/extensibility/walkthrough-highlighting-text?view=vs-2022&tabs=csharp
     [Export(typeof(EditorFormatDefinition))]
-    [Name("MarkerFormatDefinition/HighlightWordFormatDefinition")]
+    [Name("PDDLClassifier.Highlight")]
     [UserVisible(true)]
     internal class HighlightWordFormatDefinition : MarkerFormatDefinition
     {
         public HighlightWordFormatDefinition()
         {
-            this.BackgroundColor = Colors.LightBlue;
-            this.ForegroundColor = Colors.DarkBlue;
+            this.BackgroundColor = Color.FromArgb(255, 17, 61, 111);
+            this.ForegroundColor = Colors.White;
             this.DisplayName = "Highlight Word";
             this.ZOrder = 5;
         }
