@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.Text.Adornments;
+﻿using Microsoft.VisualStudio.Language.StandardClassification;
+using Microsoft.VisualStudio.Text.Adornments;
+using Microsoft.VisualStudio.Text.Classification;
 using Newtonsoft.Json;
 using PDDLTools.PDDLInfo.PDDLDefinitionElements;
 using System;
@@ -29,10 +31,8 @@ namespace PDDLTools.QuickInfo
         {
             List<ClassifiedTextRun> textElements = new List<ClassifiedTextRun>();
             foreach (var block in element.Blocks)
-            {
-                textElements.Add(new ClassifiedTextRun(block.Type, block.Text + Environment.NewLine, ClassifiedTextRunStyle.Bold));
-            }
-
+                textElements.Add(new ClassifiedTextRun(block.Type, block.Text + Environment.NewLine, ClassifiedTextRunStyle.UseClassificationFont));
+            
             var textElement = new ClassifiedTextElement(
                             textElements.ToArray()
                         );
