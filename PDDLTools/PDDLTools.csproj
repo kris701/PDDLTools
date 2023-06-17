@@ -93,9 +93,10 @@
     <Compile Include="Options\OptionsPageCustomControl.Designer.cs">
       <DependentUpon>OptionsPageCustomControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\InfoElement.cs" />
-    <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
-    <Compile Include="QuickInfo\PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
+    <Compile Include="PDDLInfo\PDDLDefinitionElements\InfoElement.cs" />
+    <Compile Include="PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
+    <Compile Include="PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
+    <Compile Include="QuickInfo\PDDLQuickInfoData.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceConnectionListener.cs" />
     <Compile Include="Taggers\BraceMatchingTagger.cs" />
     <Compile Include="Taggers\BraceMatchingTaggerProvider.cs" />
@@ -123,7 +124,7 @@
       <DependentUpon>WelcomeWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Language\ContentTypeDefinition.cs" />
-    <Compile Include="QuickInfo\PDDLInfo\PDDLInfo.cs" />
+    <Compile Include="PDDLInfo\PDDLInfo.cs" />
     <Compile Include="Language\PDDLLanguageFactory.cs" />
     <Compile Include="Helpers\DirHelper.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSource.cs" />
@@ -152,7 +153,7 @@
     <EmbeddedResource Include="Options\OptionsPageCustomControl.resx">
       <DependentUpon>OptionsPageCustomControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="QuickInfo\PDDLInfo\PDDLDefinition.json" />
+    <EmbeddedResource Include="PDDLInfo\PDDLDefinition.json" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>

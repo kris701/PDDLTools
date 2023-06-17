@@ -1,5 +1,4 @@
 ﻿using PDDLTools.Options;
-using PDDLTools.QuickInfo.PDDLInfo;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -10,6 +9,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLTools.QuickInfo;
 
 namespace PDDLTools.ErrorList
 {
@@ -20,8 +20,8 @@ namespace PDDLTools.ErrorList
     {
         public void SubjectBuffersConnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
-            if (PDDLInfo.QuickInfoContent.Count == 0)
-                PDDLInfo.InitializeInfo();
+            if (PDDLQuickInfoData.QuickInfoContent.Count == 0)
+                PDDLQuickInfoData.InitializeInfo();
         }
 
         public void SubjectBuffersDisconnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)

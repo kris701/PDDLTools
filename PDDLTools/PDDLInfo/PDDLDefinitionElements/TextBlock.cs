@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.QuickInfo.PDDLInfo
+namespace PDDLTools.PDDLInfo.PDDLDefinitionElements
 {
     public class TextBlock
     {

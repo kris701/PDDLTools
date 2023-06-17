@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using EnvDTE;
 using PDDLTools.Options;
-using PDDLTools.QuickInfo.PDDLInfo;
 using Microsoft.VisualStudio.Core.Imaging;
 using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.Language.Intellisense;
@@ -19,6 +18,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using PDDLTools.PDDLInfo.PDDLDefinitionElements;
 
 namespace PDDLTools.QuickInfo
 {
@@ -53,17 +53,17 @@ namespace PDDLTools.QuickInfo
                     ITextSnapshotLine line = subjectTriggerPoint.Value.GetContainingLine();
                     ITrackingSpan lineSpan = _textBuffer.CurrentSnapshot.CreateTrackingSpan(line.Extent, SpanTrackingMode.EdgeInclusive);
 
-                    if (PDDLInfo.PDDLInfo.QuickInfoContent.Count == 0)
+                    if (PDDLQuickInfoData.QuickInfoContent.Count == 0)
                         return new QuickInfoItem(lineSpan, "Quickinfo is loading...");
                     else
                     {
                         string lineText = line.GetText();
                         string hoverText = GetWordUnderCursor(subjectTriggerPoint);
 
-                        foreach (string key in PDDLInfo.PDDLInfo.QuickInfoContent.Keys.OrderByDescending(x => x.Length))
+                        foreach (string key in PDDLQuickInfoData.QuickInfoContent.Keys.OrderByDescending(x => x.Length))
                             if (lineText.Contains(key))
                                 if (key.Contains(hoverText))
-                                    return new QuickInfoItem(lineSpan, PDDLInfo.PDDLInfo.QuickInfoContent[key]);
+                                    return new QuickInfoItem(lineSpan, PDDLQuickInfoData.QuickInfoContent[key]);
                         return new QuickInfoItem(null, "");
                     }
                 });
