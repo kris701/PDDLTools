@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace PDDLTools.Commands
 {
@@ -50,7 +51,7 @@ namespace PDDLTools.Commands
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    Marshal.GetNativeVariantForObject(SelectedProblemPath, pOutValue);
+                    Marshal.GetNativeVariantForObject(new FileInfo(SelectedProblemPath).Name, pOutValue);
                 }
             }
         }

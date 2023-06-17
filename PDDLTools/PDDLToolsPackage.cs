@@ -33,7 +33,7 @@ namespace PDDLTools
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [ProvideOptionPage(typeof(OptionsPageCustom), "PDDL Tools", "General", 0, 0, true)]
     [ProvideOptionPage(typeof(DebugOptionsPageGrid), "PDDL Tools", "Debug", 0, 0, true)]
-    [ProvideToolWindow(typeof(FDResultsWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
+    [ProvideToolWindow(typeof(FDResultsWindow), Transient = true, Style = VsDockStyle.Tabbed, Window = EnvDTE.Constants.vsWindowKindOutput, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(SASSolutionWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(WelcomeWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     public sealed class PDDLToolsPackage : AsyncPackage
