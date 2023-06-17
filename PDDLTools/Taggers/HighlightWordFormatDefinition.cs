@@ -10,6 +10,7 @@ using System.Windows.Media;
 
 namespace PDDLTools.Tagger
 {
+    // https://learn.microsoft.com/en-us/visualstudio/extensibility/walkthrough-highlighting-text?view=vs-2022&tabs=csharp
     [Export(typeof(EditorFormatDefinition))]
     [Name("MarkerFormatDefinition/HighlightWordFormatDefinition")]
     [UserVisible(true)]
