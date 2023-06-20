@@ -33,6 +33,7 @@
 			<Bitmap guid="RunPDDLFileImageGuid" href="Commands\Resources\RunFile.png" />
 			<Bitmap guid="GithubImageGuid" href="Commands\Resources\GitHub.png" />
 			<Bitmap guid="WelcomeWindowImageGuid" href="Commands\Resources\Welcome.png" />
+			<Bitmap guid="VALWindowImageGuid" href="Commands\Resources\ValidateIcon.png" />
     </Bitmaps>
 
 		<Combos>
@@ -99,7 +100,7 @@
 				</Strings>
 			</Button>
 			<Button guid="PDDLCommandSetGuid" id="PlanValidatorWindowCommandID" priority="0x0103" type="Button">
-				<Icon guid="GithubImageGuid" id="bmpPic1" />
+				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
 				<Strings>
 					<ButtonText>Plan Validator</ButtonText>
 					<ToolTipText>Opens the VAL plan validator window.</ToolTipText>
@@ -206,6 +207,10 @@
 		</GuidSymbol>
 
 		<GuidSymbol value="{00f2ca33-0f42-4576-a4f2-255ec77838d9}" name="WelcomeWindowImageGuid">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
+
+		<GuidSymbol value="{234CAC40-7859-45C6-B833-C647F2374AD6}" name="VALWindowImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
   </Symbols>

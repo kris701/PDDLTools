@@ -157,6 +157,7 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Commands\Resources\ValidateIcon.png" />
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
     <Resource Include="Windows\SASSolutionWindow\Resources\reset.png" />
