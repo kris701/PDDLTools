@@ -54,7 +54,8 @@ namespace PDDLTools.Completers
             //check for a commit character
             if (nCmdID == (uint)VSConstants.VSStd2KCmdID.RETURN
                 || nCmdID == (uint)VSConstants.VSStd2KCmdID.TAB
-                || (char.IsWhiteSpace(typedChar) || char.IsPunctuation(typedChar)))
+                || (char.IsWhiteSpace(typedChar) || char.IsPunctuation(typedChar)
+                || typedChar == '('))
             {
                 //check for a selection
                 if (m_session != null && !m_session.IsDismissed)

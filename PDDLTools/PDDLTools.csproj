@@ -89,6 +89,7 @@
     <Compile Include="EditorMargins\PDDLEditorMarginFactory.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManager.cs" />
     <Compile Include="ErrorList\FastDownwardErrorManagerConnectionListener.cs" />
+    <Compile Include="Helpers\TaggerHelper.cs" />
     <Compile Include="Options\DebugOptionsPageGrid.cs">
       <SubType>Component</SubType>
     </Compile>
