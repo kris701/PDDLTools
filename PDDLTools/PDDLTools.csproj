@@ -245,9 +245,9 @@
     <Folder Include="Windows\PlanValidatorWindow\Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FastDownwardRunner\FastDownwardRunner.csproj">
-      <Project>{463bc2c9-3237-4251-bcac-cc0003dfee81}</Project>
-      <Name>FastDownwardRunner</Name>
+    <ProjectReference Include="..\CMDRunners\CMDRunners.csproj">
+      <Project>{00a388be-b31e-4472-bffb-da51cb79a55b}</Project>
+      <Name>CMDRunners</Name>
     </ProjectReference>
     <ProjectReference Include="..\LocationSpreader\LocationSpreader.csproj">
       <Project>{d774b8f9-ec43-402c-9001-8cd43d52edcd}</Project>
@@ -302,10 +302,6 @@
     <ProjectReference Include="..\SASSimulator\SASSimulator.csproj">
       <Project>{87d73118-449a-4054-9b54-60d0a440d87a}</Project>
       <Name>SASSimulator</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Tools\Tools.csproj">
-      <Project>{4CB6D5FF-2B94-40FB-870C-787260CFF03F}</Project>
-      <Name>Tools</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -21,11 +21,12 @@ using System.Collections.Generic;
 using PDDLTools.Windows.FDResultsWindow;
 using PDDLTools.Windows.SASSolutionWindow;
 using PDDLParser;
-using FastDownwardRunner;
-using FastDownwardRunner.Models;
 using System.IO;
 using PDDLParser.Helpers;
-using FastDownwardRunner.Helpers;
+using CMDRunners.FastDownward;
+using CMDRunners;
+using CMDRunners.Helpers;
+using CMDRunners.Models;
 
 namespace PDDLTools.Commands
 {
@@ -114,7 +115,7 @@ namespace PDDLTools.Commands
             await OutputPanel.ClearOutputAsync();
             await OutputPanel.WriteLineAsync("Executing PDDL File");
 
-            IRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
+            FDRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
             var resultData = await fdRunner.RunAsync(domainFilePath, problemFilePath, SelectSearchCommand.SelectedSearch);
 
             await WriteToOutputWindowAsync(resultData);
