@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using PDDLParser;
 using PDDLParser.Exceptions;
 using PDDLParser.Helpers;
+using PDDLTools.ContextStorage;
 using PDDLTools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -77,8 +78,7 @@ namespace PDDLTools.EditorMargins
                     {
                         DomainPanel.Visibility = Visibility.Visible;
 
-                        IPDDLParser parser = new PDDLParser.PDDLParser();
-                        var domain = parser.ParseDomainFile(file);
+                        var domain = PDDLFileContexts.GetDomainContextForFile(file);
 
                         if (domain.Predicates != null)
                             PredicateCountLabel.Content = $"{domain.Predicates.Predicates.Count}";
@@ -89,8 +89,7 @@ namespace PDDLTools.EditorMargins
                     {
                         ProblemPanel.Visibility = Visibility.Visible;
 
-                        IPDDLParser parser = new PDDLParser.PDDLParser();
-                        var problem = parser.ParseProblemFile(file);
+                        var problem = PDDLFileContexts.GetProblemContextForFile(file);
 
                         if (problem.Objects != null)
                             ObjectCountLabel.Content = $"{problem.Objects.Objs.Count}";
