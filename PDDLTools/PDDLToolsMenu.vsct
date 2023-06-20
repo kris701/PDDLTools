@@ -182,7 +182,7 @@
 			<IDSymbol name="InstallFDWindowCommandID" value="261" />
 			<IDSymbol name="WelcomeWindowCommandID" value="262" />
 
-			<IDSymbol name="SelectListCommandID" value="263" />
+			<IDSymbol name="SelectEngineCommandID" value="263" />
 			<IDSymbol name="SelectEngineListCommandID" value="264" />
 
 			<IDSymbol name="SelectProblemFileCommandID" value="265" />

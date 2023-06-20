@@ -45,7 +45,7 @@ namespace PDDLTools.Options
             _FDPath = GetValueOrSetDefault("FDPath", "");
             _PythonPrefix = GetValueOrSetDefault("PythonPrefix", "python");
             _FDFileExecutionTimeout = GetValueOrSetDefault("FDFileExecutionTimeout", 10);
-            _SearchOptions = GetValueOrSetDefault("SearchOptions", "astar(lmcut());lazy_greedy([ff(), cea()], [ff(), cea()])");
+            _EngineOptions = GetValueOrSetDefault("EngineOptions", "--search \"astar(lmcut())\";--search \"lazy_greedy([ff(), cea()], [ff(), cea()])\"");
             _OpenResultReport = GetValueOrSetDefault("OpenResultReport", true);
             _OpenSASSolutionVisualiser = GetValueOrSetDefault("OpenSASSolutionVisualiser", true);
             _IsFirstStart = GetValueOrSetDefault("IsFirstStart", true);
@@ -133,18 +133,18 @@ namespace PDDLTools.Options
                     _FDFileExecutionTimeout = value;
                 }
                 else
-                    MessageBox.Show("Timeout must be larger than 0!");
+                    MessageBox.Show("Timeout must be larger than 0!");  
             }
         }
 
-        private string _SearchOptions = "astar(lmcut());lazy_greedy([ff(), cea()], [ff(), cea()])";
-        public string SearchOptions
+        private string _EngineOptions = "--search \"astar(lmcut())\";--search \"lazy_greedy([ff(), cea()], [ff(), cea()])\"";
+        public string EngineOptions
         {
-            get { return _SearchOptions; }
+            get { return _EngineOptions; }
             set
             {
-                _userSettingsStore.SetString(SettingsCategory, "SearchOptions", value);
-                _SearchOptions = value;
+                _userSettingsStore.SetString(SettingsCategory, "EngineOptions", value);
+                _EngineOptions = value;
             }
         }
 

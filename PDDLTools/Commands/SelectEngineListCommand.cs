@@ -19,6 +19,9 @@ using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
 using System.Windows.Controls;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Linq;
+using CMDRunners.FastDownward;
 
 namespace PDDLTools.Commands
 {
@@ -36,18 +39,42 @@ namespace PDDLTools.Commands
             Instance = new SelectEngineListCommand(package, await InitializeCommandServiceAsync(package));
         }
 
-        public override void Execute(object sender, EventArgs e)
+        public override async Task ExecuteAsync(object sender, EventArgs e)
         {
             if (e is OleMenuCmdEventArgs eventArgs)
             {
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    var optionsStr = OptionsManager.Instance.SearchOptions;
-                    string[] options = optionsStr.Split(';');
-                    Marshal.GetNativeVariantForObject(options, pOutValue);
+                    Marshal.GetNativeVariantForObject(new string[] { "Loading..." }, pOutValue);
+
+                    List<string> combined = new List<string>();
+                    combined.AddRange(GetEngines());
+                    combined.AddRange(await GetAliasesAsync());
+                    Marshal.GetNativeVariantForObject(combined.ToArray(), pOutValue);
                 }
             }
+        }
+
+        private List<string> _aliases = new List<string>();
+        private async Task<List<string>> GetAliasesAsync()
+        {
+            if (_aliases == null)
+                _aliases = new List<string>();
+            if (_aliases.Count != 0)
+                return _aliases;
+            FDRunner runner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
+            var shortAliases = await runner.GetAliasesAsync();
+            foreach (var shortAlias in shortAliases)
+                _aliases.Add($"--alias {shortAlias}");
+
+            return _aliases;
+        }
+
+        private List<string> GetEngines()
+        {
+            var optionsStr = OptionsManager.Instance.EngineOptions;
+            return optionsStr.Split(';').ToList();
         }
     }
 }

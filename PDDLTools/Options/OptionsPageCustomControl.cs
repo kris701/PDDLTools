@@ -24,7 +24,7 @@ namespace PDDLTools.Options
             FastDownwardPathTextbox.Text = OptionsManager.Instance.FDPath;
             PythonPrefixTextbox.Text = OptionsManager.Instance.PythonPrefix;
             FastDownwardTimeoutNumericUpDown.Value = OptionsManager.Instance.FDFileExecutionTimeout;
-            FastDownwardSearchOptionsTextbox.Text = OptionsManager.Instance.SearchOptions;
+            FastDownwardSearchOptionsTextbox.Text = OptionsManager.Instance.EngineOptions;
             OpenFDResultsOnSuccessCheckbox.Checked = OptionsManager.Instance.OpenResultReport;
             OpenSASResultOnSuccess.Checked = OptionsManager.Instance.OpenSASSolutionVisualiser;
             _isLoaded = true;
@@ -79,8 +79,8 @@ namespace PDDLTools.Options
             if (!_isLoaded)
                 return;
 
-            OptionsManager.Instance.SearchOptions = FastDownwardSearchOptionsTextbox.Text;
-            FastDownwardSearchOptionsTextbox.Text = OptionsManager.Instance.SearchOptions;
+            OptionsManager.Instance.EngineOptions = FastDownwardSearchOptionsTextbox.Text;
+            FastDownwardSearchOptionsTextbox.Text = OptionsManager.Instance.EngineOptions;
         }
 
         private void OpenSASResultOnSuccess_CheckedChanged(object sender, EventArgs e)

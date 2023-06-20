@@ -130,6 +130,7 @@ namespace PDDLTools.Commands
             await OutputPanel.ActivateOutputWindowAsync();
             foreach(var item in resultData.Log)
             {
+                if (item == null) continue;
                 if (item.Type == LogItem.ItemType.Error)
                     await OutputPanel.WriteLineAsync($"[{item.Time}] (ERR) {item.Content}");
                 if (item.Type == LogItem.ItemType.Log)
