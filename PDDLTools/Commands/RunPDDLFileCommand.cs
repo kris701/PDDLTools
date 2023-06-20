@@ -103,7 +103,7 @@ namespace PDDLTools.Commands
                 problemFilePath = SelectProblemCommand.SelectedProblemPath;
             }
 
-            if (SelectSearchCommand.SelectedSearch == "")
+            if (SelectEngineCommand.SelectedSearch == "")
             {
                 MessageBox.Show("Please select a search option.");
                 return;
@@ -116,7 +116,7 @@ namespace PDDLTools.Commands
             await OutputPanel.WriteLineAsync("Executing PDDL File");
 
             FDRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
-            var resultData = await fdRunner.RunAsync(domainFilePath, problemFilePath, SelectSearchCommand.SelectedSearch);
+            var resultData = await fdRunner.RunAsync(domainFilePath, problemFilePath, SelectEngineCommand.SelectedSearch);
 
             await WriteToOutputWindowAsync(resultData);
             if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)

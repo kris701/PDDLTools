@@ -22,18 +22,18 @@ using System.Runtime.InteropServices;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectSearchListCommand : BaseCommand
+    internal sealed class SelectEngineListCommand : BaseCommand
     {
         public override int CommandId { get; } = 264;
-        public static SelectSearchListCommand Instance { get; internal set; }
+        public static SelectEngineListCommand Instance { get; internal set; }
 
-        private SelectSearchListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
+        private SelectEngineListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 
         public static async Task InitializeAsync(AsyncPackage package)
         {
-            Instance = new SelectSearchListCommand(package, await InitializeCommandServiceAsync(package));
+            Instance = new SelectEngineListCommand(package, await InitializeCommandServiceAsync(package));
         }
 
         public override void Execute(object sender, EventArgs e)

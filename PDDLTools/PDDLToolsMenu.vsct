@@ -60,16 +60,16 @@
 					<CommandName>Selected Problem</CommandName>
 				</Strings>
 			</Combo>
-			<Combo guid="PDDLCommandSetGuid" id="SelectSearchCommandID" idCommandList="SelectSearchListCommandID" defaultWidth="150" priority="0x0102" type="DropDownCombo">
+			<Combo guid="PDDLCommandSetGuid" id="SelectEngineCommandID" idCommandList="SelectEngineListCommandID" defaultWidth="150" priority="0x0102" type="DropDownCombo">
 				<CommandFlag>StretchHorizontally</CommandFlag>
 				<CommandFlag>IconAndText</CommandFlag>
 				<Strings>
-					<MenuText>Selected Search: </MenuText>
-					<ButtonText>Search: </ButtonText>
-					<ToolTipText>Select what seach option to run Fast Downward with</ToolTipText>
-					<CanonicalName>Selected Search</CanonicalName>
-					<LocCanonicalName>Selected Search</LocCanonicalName>
-					<CommandName>Selected Search</CommandName>
+					<MenuText>Selected Engine: </MenuText>
+					<ButtonText>Engine: </ButtonText>
+					<ToolTipText>Select what options to run Fast Downward with</ToolTipText>
+					<CanonicalName>Selected Engine</CanonicalName>
+					<LocCanonicalName>Selected Engine</LocCanonicalName>
+					<CommandName>Selected Engine</CommandName>
 				</Strings>
 			</Combo>
 		</Combos>
@@ -139,7 +139,7 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" priority="0x104">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
-		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x105">
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectEngineCommandID" priority="0x105">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
 		<CommandPlacement guid="PDDLCommandSetGuid" id="PlanValidatorWindowCommandID" priority="0x106">
@@ -163,7 +163,7 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" priority="0x102">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
-		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x103">
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectEngineCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
 		
@@ -182,8 +182,8 @@
 			<IDSymbol name="InstallFDWindowCommandID" value="261" />
 			<IDSymbol name="WelcomeWindowCommandID" value="262" />
 
-			<IDSymbol name="SelectSearchCommandID" value="263" />
-			<IDSymbol name="SelectSearchListCommandID" value="264" />
+			<IDSymbol name="SelectListCommandID" value="263" />
+			<IDSymbol name="SelectEngineListCommandID" value="264" />
 
 			<IDSymbol name="SelectProblemFileCommandID" value="265" />
 			<IDSymbol name="SelectProblemFileListCommandID" value="266" />

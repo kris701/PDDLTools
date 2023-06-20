@@ -74,8 +74,8 @@
     <Compile Include="Commands\FDReportCommand.cs" />
     <Compile Include="Commands\SelectProblemListCommand.cs" />
     <Compile Include="Commands\SelectProblemCommand.cs" />
-    <Compile Include="Commands\SelectSearchListCommand.cs" />
-    <Compile Include="Commands\SelectSearchCommand.cs" />
+    <Compile Include="Commands\SelectEngineListCommand.cs" />
+    <Compile Include="Commands\SelectEngineCommand.cs" />
     <Compile Include="Commands\SelectDomainListCommand.cs" />
     <Compile Include="Commands\SelectDomainCommand.cs" />
     <Compile Include="Completers\PDDLCompletionHandlerProvider.cs" />

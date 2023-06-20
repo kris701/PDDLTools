@@ -64,8 +64,8 @@ namespace PDDLTools
             await SelectProblemCommand.InitializeAsync(this);
             await SelectProblemListCommand.InitializeAsync(this);
 
-            await SelectSearchCommand.InitializeAsync(this);
-            await SelectSearchListCommand.InitializeAsync(this);
+            await SelectEngineCommand.InitializeAsync(this);
+            await SelectEngineListCommand.InitializeAsync(this);
 
             await FDReportCommand.InitializeAsync(this);
             await SASVisualiserCommand.InitializeAsync(this);
