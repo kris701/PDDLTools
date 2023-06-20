@@ -34,6 +34,8 @@
 			<Bitmap guid="GithubImageGuid" href="Commands\Resources\GitHub.png" />
 			<Bitmap guid="WelcomeWindowImageGuid" href="Commands\Resources\Welcome.png" />
 			<Bitmap guid="VALWindowImageGuid" href="Commands\Resources\ValidateIcon.png" />
+			<Bitmap guid="DomainImageGuid" href="Commands\Resources\Domain.png" />
+			<Bitmap guid="ProblemImageGuid" href="Commands\Resources\Problem.png" />
     </Bitmaps>
 
 		<Combos>
@@ -201,16 +203,19 @@
 		<GuidSymbol value="{bb64ec71-4259-41eb-9775-43fbb84988af}" name="RunPDDLFileImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
-
 		<GuidSymbol value="{ff48a4e6-0aab-49a4-987a-0a3ed7ff4d23}" name="GithubImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
-
 		<GuidSymbol value="{00f2ca33-0f42-4576-a4f2-255ec77838d9}" name="WelcomeWindowImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
-
 		<GuidSymbol value="{234CAC40-7859-45C6-B833-C647F2374AD6}" name="VALWindowImageGuid">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
+		<GuidSymbol value="{9E299F51-40C6-457C-96BD-C5A8DC20A34C}" name="DomainImageGuid">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
+		<GuidSymbol value="{BAC5C4DE-934F-4C3F-89BE-F6B121F5E2DC}" name="ProblemImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
   </Symbols>

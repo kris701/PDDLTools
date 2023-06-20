@@ -157,6 +157,8 @@
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Commands\Resources\Domain.png" />
+    <Content Include="Commands\Resources\Problem.png" />
     <Content Include="Commands\Resources\ValidateIcon.png" />
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
