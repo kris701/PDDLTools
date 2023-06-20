@@ -138,5 +138,47 @@ namespace PDDLTools.Classifiers
             }
         }
         #endregion
+
+        #region Predicates
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name(PDDLTypes.Predicates)]
+        [BaseDefinition(PredefinedClassificationTypeNames.Punctuation)]
+        static ClassificationTypeDefinition PDDLClassifier_Predicates = null;
+
+        [Export(typeof(EditorFormatDefinition))]
+        [ClassificationType(ClassificationTypeNames = PDDLTypes.Predicates)]
+        [Name(PDDLTypes.Predicates)]
+        [Order(After = Priority.High)]
+        [UserVisible(true)]
+        sealed class PDDLClassifier_Predicates_Declaration : ClassificationFormatDefinition
+        {
+            public PDDLClassifier_Predicates_Declaration()
+            {
+                this.DisplayName = "PDDL Predicates";
+                this.ForegroundColor = Color.FromArgb(255, 194, 187, 236);
+            }
+        }
+        #endregion
+
+        #region Objects
+        [Export(typeof(ClassificationTypeDefinition))]
+        [Name(PDDLTypes.Objects)]
+        [BaseDefinition(PredefinedClassificationTypeNames.Punctuation)]
+        static ClassificationTypeDefinition PDDLClassifier_Objects = null;
+
+        [Export(typeof(EditorFormatDefinition))]
+        [ClassificationType(ClassificationTypeNames = PDDLTypes.Objects)]
+        [Name(PDDLTypes.Objects)]
+        [Order(After = Priority.High)]
+        [UserVisible(true)]
+        sealed class PDDLClassifier_Objects_Declaration : ClassificationFormatDefinition
+        {
+            public PDDLClassifier_Objects_Declaration()
+            {
+                this.DisplayName = "PDDL Objects";
+                this.ForegroundColor = Colors.White;
+            }
+        }
+        #endregion
     }
 }

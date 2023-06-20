@@ -15,5 +15,8 @@ namespace PDDLTools.Classifiers
         public const string Externals = "PDDLClassifier.Externals";
 
         public const string MinorToken = "PDDLClassifier.MinorToken";
+
+        public const string Predicates = "PDDLClassifier.Predicates";
+        public const string Objects = "PDDLClassifier.Objects";
     }
 }
