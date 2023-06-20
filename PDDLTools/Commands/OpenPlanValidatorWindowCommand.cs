@@ -29,6 +29,8 @@ namespace PDDLTools.Commands
             {
                 throw new NotSupportedException("Cannot create tool window");
             }
+            if (window.Content is PlanValidatorWindowControl control)
+                await control.ReloadCheckerAsync();
         }
     }
 }

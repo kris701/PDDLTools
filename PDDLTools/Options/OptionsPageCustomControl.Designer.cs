@@ -40,6 +40,9 @@
             this.FastDownwardSearchOptionsTextbox = new System.Windows.Forms.TextBox();
             this.OpenFDResultsOnSuccessCheckbox = new System.Windows.Forms.CheckBox();
             this.OpenSASResultOnSuccess = new System.Windows.Forms.CheckBox();
+            this.VALPathButton = new System.Windows.Forms.Button();
+            this.VALPathTextbox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -162,12 +165,44 @@
             this.OpenSASResultOnSuccess.UseVisualStyleBackColor = true;
             this.OpenSASResultOnSuccess.CheckedChanged += new System.EventHandler(this.OpenSASResultOnSuccess_CheckedChanged);
             // 
+            // VALPathButton
+            // 
+            this.VALPathButton.AccessibleName = "";
+            this.VALPathButton.Location = new System.Drawing.Point(335, 154);
+            this.VALPathButton.Name = "VALPathButton";
+            this.VALPathButton.Size = new System.Drawing.Size(59, 23);
+            this.VALPathButton.TabIndex = 13;
+            this.VALPathButton.Text = "Select";
+            this.VALPathButton.UseVisualStyleBackColor = true;
+            this.VALPathButton.Click += new System.EventHandler(this.VALPathButton_Click);
+            // 
+            // VALPathTextbox
+            // 
+            this.VALPathTextbox.AccessibleName = "";
+            this.VALPathTextbox.Enabled = false;
+            this.VALPathTextbox.Location = new System.Drawing.Point(140, 154);
+            this.VALPathTextbox.Name = "VALPathTextbox";
+            this.VALPathTextbox.Size = new System.Drawing.Size(189, 20);
+            this.VALPathTextbox.TabIndex = 12;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 157);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(52, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "VAL Path";
+            // 
             // OptionsPageCustomControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.VALPathButton);
+            this.Controls.Add(this.VALPathTextbox);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.OpenSASResultOnSuccess);
             this.Controls.Add(this.OpenFDResultsOnSuccessCheckbox);
             this.Controls.Add(this.FastDownwardSearchOptionsTextbox);
@@ -180,7 +215,7 @@
             this.Controls.Add(this.FastDownwardPathTextbox);
             this.Controls.Add(this.label1);
             this.Name = "OptionsPageCustomControl";
-            this.Size = new System.Drawing.Size(397, 156);
+            this.Size = new System.Drawing.Size(397, 180);
             this.Load += new System.EventHandler(this.OptionsPageCustomControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).EndInit();
             this.ResumeLayout(false);
@@ -202,5 +237,8 @@
         private System.Windows.Forms.TextBox FastDownwardSearchOptionsTextbox;
         private System.Windows.Forms.CheckBox OpenFDResultsOnSuccessCheckbox;
         private System.Windows.Forms.CheckBox OpenSASResultOnSuccess;
+        private System.Windows.Forms.Button VALPathButton;
+        private System.Windows.Forms.TextBox VALPathTextbox;
+        private System.Windows.Forms.Label label5;
     }
 }

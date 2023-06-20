@@ -161,7 +161,8 @@ namespace PDDLTools.Commands
                 {
                     throw new NotSupportedException("Cannot create tool window");
                 }
-                await ((resultsWindow as FDResultsWindow).Content as FDResultsWindowControl).SetupResultDataAsync(resultData);
+                if (resultsWindow.Content is FDResultsWindowControl control)
+                    await control.SetupResultDataAsync(resultData);
             }
 
             if (resultData.WasSolutionFound && OptionsManager.Instance.OpenSASSolutionVisualiser)
@@ -174,7 +175,8 @@ namespace PDDLTools.Commands
                 {
                     throw new NotSupportedException("Cannot create tool window");
                 }
-                await ((sasWindow as SASSolutionWindow).Content as SASSolutionWindowControl).SetupResultDataAsync(pddlDoc);
+                if (sasWindow.Content is SASSolutionWindowControl control)
+                    await control.SetupResultDataAsync(pddlDoc);
             }
         }
     }

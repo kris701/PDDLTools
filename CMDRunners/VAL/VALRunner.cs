@@ -24,7 +24,7 @@ namespace CMDRunners.VAL
                 return false;
 
             foreach(var item in Log)
-                if (item.Content == "Plan Valid" && item.Type != Models.LogItem.ItemType.Error)
+                if (item.Content.ToLower() == "plan valid" && item.Type != Models.LogItem.ItemType.Error)
                     return true;
             return false;
         }
