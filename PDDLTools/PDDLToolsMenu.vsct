@@ -98,6 +98,13 @@
 					<ToolTipText>Open the SAS visualiser after a FD run</ToolTipText>
 				</Strings>
 			</Button>
+			<Button guid="PDDLCommandSetGuid" id="PlanValidatorWindowCommandID" priority="0x0103" type="Button">
+				<Icon guid="GithubImageGuid" id="bmpPic1" />
+				<Strings>
+					<ButtonText>Plan Validator</ButtonText>
+					<ToolTipText>Opens the VAL plan validator window.</ToolTipText>
+				</Strings>
+			</Button>
 			<Button guid="PDDLCommandSetGuid" id="GithubCommandID" priority="0x0104" type="Button">
 				<Icon guid="GithubImageGuid" id="bmpPic1" />
 				<Strings>
@@ -116,6 +123,7 @@
 	</Commands>
 
 	<CommandPlacements>
+		<!-- Extension Menu -->
 		<CommandPlacement guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x100">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
@@ -134,13 +142,18 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectSearchCommandID" priority="0x105">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
-		<CommandPlacement guid="PDDLCommandSetGuid" id="GithubCommandID" priority="0x106">
+		<CommandPlacement guid="PDDLCommandSetGuid" id="PlanValidatorWindowCommandID" priority="0x106">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
-		<CommandPlacement guid="PDDLCommandSetGuid" id="WelcomeWindowCommandID" priority="0x107">
+		
+		<CommandPlacement guid="PDDLCommandSetGuid" id="GithubCommandID" priority="0x198">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="WelcomeWindowCommandID" priority="0x199">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
 
+		<!-- Toolbar -->
 		<CommandPlacement guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x100">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
@@ -177,7 +190,9 @@
 
 			<IDSymbol name="GenerateReportCommandID" value="267" />
 			<IDSymbol name="SASVisualiserCommandID" value="268" />
-			
+
+			<IDSymbol name="PlanValidatorWindowCommandID" value="269" />
+
 			<IDSymbol name="PDDLToolsMenu" value="0x1022" />
 			<IDSymbol name="PDDLToolsToolbar" value="0x1023" />
 		</GuidSymbol>
