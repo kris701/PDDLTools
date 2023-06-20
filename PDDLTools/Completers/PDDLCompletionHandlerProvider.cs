@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
+using PDDLTools.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -29,6 +30,9 @@ namespace PDDLTools.Completers
 
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
+            if (!OptionsManager.Instance.EnableAutoCompleteOfStatements)
+                return;
+
             ITextView textView = AdapterService.GetWpfTextView(textViewAdapter);
             if (textView == null)
                 return;

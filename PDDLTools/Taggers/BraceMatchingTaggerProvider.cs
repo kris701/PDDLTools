@@ -8,6 +8,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLTools.Options;
 
 namespace PDDLTools.Taggers
 {
@@ -19,6 +20,9 @@ namespace PDDLTools.Taggers
     {
         public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
         {
+            if (!OptionsManager.Instance.EnableBraceMatching)
+                return null;
+
             if (textView == null)
                 return null;
 

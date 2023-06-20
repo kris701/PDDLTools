@@ -20,6 +20,9 @@ namespace PDDLTools.ErrorList
     {
         public void SubjectBuffersConnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
+            if (!OptionsManager.Instance.EnableQuickInfo)
+                return;
+
             if (PDDLQuickInfoData.QuickInfoContent.Count == 0)
                 PDDLQuickInfoData.InitializeInfo();
         }

@@ -27,6 +27,12 @@ namespace PDDLTools.Options
             FastDownwardSearchOptionsTextbox.Text = OptionsManager.Instance.EngineOptions;
             OpenFDResultsOnSuccessCheckbox.Checked = OptionsManager.Instance.OpenResultReport;
             OpenSASResultOnSuccess.Checked = OptionsManager.Instance.OpenSASSolutionVisualiser;
+            EnableEditorMarginCheckbox.Checked = OptionsManager.Instance.EnableEditorMargin;
+            EnableSyntaxHighlightingCheckbox.Checked = OptionsManager.Instance.EnableSyntaxHighlighting;
+            EnableAutoCompletementofStatementsCheckbox.Checked = OptionsManager.Instance.EnableAutoCompleteOfStatements;
+            EnableErrorCheckingCheckbox.Checked = OptionsManager.Instance.EnableErrorCheckingOnSave;
+            EnableBraceMatchingCheckbox.Checked = OptionsManager.Instance.EnableBraceMatching;
+            EnableWordHighlightingCheckbox.Checked = OptionsManager.Instance.EnableHighlightingOfWords;
             _isLoaded = true;
         }
 
@@ -99,6 +105,60 @@ namespace PDDLTools.Options
 
             OptionsManager.Instance.OpenSASSolutionVisualiser = OpenSASResultOnSuccess.Checked;
             OpenSASResultOnSuccess.Checked = OptionsManager.Instance.OpenSASSolutionVisualiser;
+        }
+
+        private void EnableEditorMarginCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.EnableEditorMargin = EnableEditorMarginCheckbox.Checked;
+            EnableEditorMarginCheckbox.Checked = OptionsManager.Instance.EnableEditorMargin;
+        }
+
+        private void EnableSyntaxHighlightingCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.EnableSyntaxHighlighting = EnableSyntaxHighlightingCheckbox.Checked;
+            EnableSyntaxHighlightingCheckbox.Checked = OptionsManager.Instance.EnableSyntaxHighlighting;
+        }
+
+        private void EnableAutoCompletementofStatementsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.EnableAutoCompleteOfStatements = EnableAutoCompletementofStatementsCheckbox.Checked;
+            EnableAutoCompletementofStatementsCheckbox.Checked = OptionsManager.Instance.EnableAutoCompleteOfStatements;
+        }
+
+        private void EnableErrorCheckingCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.EnableErrorCheckingOnSave = EnableErrorCheckingCheckbox.Checked;
+            EnableErrorCheckingCheckbox.Checked = OptionsManager.Instance.EnableErrorCheckingOnSave;
+        }
+
+        private void EnableBraceMatchingCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.EnableBraceMatching = EnableBraceMatchingCheckbox.Checked;
+            EnableBraceMatchingCheckbox.Checked = OptionsManager.Instance.EnableBraceMatching;
+        }
+
+        private void EnableWordHighlightingCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.EnableHighlightingOfWords = EnableWordHighlightingCheckbox.Checked;
+            EnableWordHighlightingCheckbox.Checked = OptionsManager.Instance.EnableHighlightingOfWords;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
+using PDDLTools.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -17,6 +18,9 @@ namespace PDDLTools.EditorMargins
     {
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
         {
+            if (!OptionsManager.Instance.EnableEditorMargin)
+                return null;
+
             return new PDDLEditorMargin(wpfTextViewHost.TextView);
         }
     }

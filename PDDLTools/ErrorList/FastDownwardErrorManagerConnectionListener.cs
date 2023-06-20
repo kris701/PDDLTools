@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
+using PDDLTools.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -17,12 +18,18 @@ namespace PDDLTools.ErrorList
     {
         public void SubjectBuffersConnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
+            if (!OptionsManager.Instance.EnableErrorCheckingOnSave)
+                return;
+
             if (FastDownwardErrorManager.Instance != null)
                 FastDownwardErrorManager.Instance.Initialize(textView);
         }
 
         public void SubjectBuffersDisconnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
+            if (!OptionsManager.Instance.EnableErrorCheckingOnSave)
+                return;
+
             if (FastDownwardErrorManager.Instance != null)
                 FastDownwardErrorManager.Instance.Dispose();
         }

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Utilities;
+using PDDLTools.Options;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -22,6 +23,9 @@ namespace PDDLTools.Completers
 
         public ICompletionSource TryCreateCompletionSource(ITextBuffer textBuffer)
         {
+            if (!OptionsManager.Instance.EnableAutoCompleteOfStatements)
+                return null;
+
             return new PDDLCompletionSource(this, textBuffer);
         }
     }

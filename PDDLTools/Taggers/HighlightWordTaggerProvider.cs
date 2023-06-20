@@ -9,6 +9,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLTools.Options;
 
 namespace PDDLTools.Tagger
 {
@@ -26,6 +27,9 @@ namespace PDDLTools.Tagger
 
         public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
         {
+            if (!OptionsManager.Instance.EnableHighlightingOfWords)
+                return null;
+
             //provide highlighting only on the top buffer 
             if (textView.TextBuffer != buffer)
                 return null;

@@ -50,6 +50,12 @@ namespace PDDLTools.Options
             _OpenSASSolutionVisualiser = GetValueOrSetDefault("OpenSASSolutionVisualiser", true);
             _IsFirstStart = GetValueOrSetDefault("IsFirstStart", true);
             _VALPath = GetValueOrSetDefault("VALPath", "");
+            _EnableEditorMargin = GetValueOrSetDefault("EnableEditorMargin", true);
+            _EnableSyntaxHighlighting = GetValueOrSetDefault("EnableSyntaxHighlighting", true);
+            _EnableAutoCompleteOfStatements = GetValueOrSetDefault("EnableAutoCompleteOfStatements", true);
+            _EnableErrorCheckingOnSave = GetValueOrSetDefault("EnableErrorCheckingOnSave", true);
+            _EnableQuickInfo = GetValueOrSetDefault("EnableQuickInfo", true);
+            _EnableHighlightingOfWords = GetValueOrSetDefault("EnableHighlightingOfWords", true);
         }
 
         private string GetValueOrSetDefault(string id, string defValue)
@@ -194,6 +200,83 @@ namespace PDDLTools.Options
                 }
                 else
                     MessageBox.Show("Error, invalid path to VAL executables!");
+            }
+        }
+
+        private bool _EnableEditorMargin = true;
+        public bool EnableEditorMargin
+        {
+            get { return _EnableEditorMargin; }
+            set
+            {
+                _userSettingsStore.SetBoolean(SettingsCategory, "EnableEditorMargin", value);
+                _EnableEditorMargin = value;
+            }
+        }
+
+        private bool _EnableSyntaxHighlighting = true;
+        public bool EnableSyntaxHighlighting
+        {
+            get { return _EnableSyntaxHighlighting; }
+            set
+            {
+                _userSettingsStore.SetBoolean(SettingsCategory, "EnableSyntaxHighlighting", value);
+                _EnableSyntaxHighlighting = value;
+            }
+        }
+
+        private bool _EnableAutoCompleteOfStatements = true;
+        public bool EnableAutoCompleteOfStatements
+        {
+            get { return _EnableAutoCompleteOfStatements; }
+            set
+            {
+                _userSettingsStore.SetBoolean(SettingsCategory, "EnableAutoCompleteOfStatements", value);
+                _EnableAutoCompleteOfStatements = value;
+            }
+        }
+
+        private bool _EnableErrorCheckingOnSave = true;
+        public bool EnableErrorCheckingOnSave
+        {
+            get { return _EnableErrorCheckingOnSave; }
+            set
+            {
+                _userSettingsStore.SetBoolean(SettingsCategory, "EnableErrorCheckingOnSave", value);
+                _EnableErrorCheckingOnSave = value;
+            }
+        }
+
+        private bool _EnableQuickInfo = true;
+        public bool EnableQuickInfo
+        {
+            get { return _EnableQuickInfo; }
+            set
+            {
+                _userSettingsStore.SetBoolean(SettingsCategory, "EnableQuickInfo", value);
+                _EnableQuickInfo = value;
+            }
+        }
+
+        private bool _EnableHighlightingOfWords = true;
+        public bool EnableHighlightingOfWords
+        {
+            get { return _EnableHighlightingOfWords; }
+            set
+            {
+                _userSettingsStore.SetBoolean(SettingsCategory, "EnableHighlightingOfWords", value);
+                _EnableHighlightingOfWords = value;
+            }
+        }
+
+        private bool _EnableBraceMatching = true;
+        public bool EnableBraceMatching
+        {
+            get { return _EnableBraceMatching; }
+            set
+            {
+                _userSettingsStore.SetBoolean(SettingsCategory, "EnableBraceMatching", value);
+                _EnableBraceMatching = value;
             }
         }
     }

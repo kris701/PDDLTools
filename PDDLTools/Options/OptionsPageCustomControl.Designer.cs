@@ -43,6 +43,12 @@
             this.VALPathButton = new System.Windows.Forms.Button();
             this.VALPathTextbox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
+            this.EnableEditorMarginCheckbox = new System.Windows.Forms.CheckBox();
+            this.EnableSyntaxHighlightingCheckbox = new System.Windows.Forms.CheckBox();
+            this.EnableAutoCompletementofStatementsCheckbox = new System.Windows.Forms.CheckBox();
+            this.EnableErrorCheckingCheckbox = new System.Windows.Forms.CheckBox();
+            this.EnableBraceMatchingCheckbox = new System.Windows.Forms.CheckBox();
+            this.EnableWordHighlightingCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -194,12 +200,84 @@
             this.label5.TabIndex = 11;
             this.label5.Text = "VAL Path";
             // 
+            // EnableEditorMarginCheckbox
+            // 
+            this.EnableEditorMarginCheckbox.AutoSize = true;
+            this.EnableEditorMarginCheckbox.Location = new System.Drawing.Point(140, 180);
+            this.EnableEditorMarginCheckbox.Name = "EnableEditorMarginCheckbox";
+            this.EnableEditorMarginCheckbox.Size = new System.Drawing.Size(122, 17);
+            this.EnableEditorMarginCheckbox.TabIndex = 14;
+            this.EnableEditorMarginCheckbox.Text = "Enable editor margin";
+            this.EnableEditorMarginCheckbox.UseVisualStyleBackColor = true;
+            this.EnableEditorMarginCheckbox.CheckedChanged += new System.EventHandler(this.EnableEditorMarginCheckbox_CheckedChanged);
+            // 
+            // EnableSyntaxHighlightingCheckbox
+            // 
+            this.EnableSyntaxHighlightingCheckbox.AutoSize = true;
+            this.EnableSyntaxHighlightingCheckbox.Location = new System.Drawing.Point(140, 203);
+            this.EnableSyntaxHighlightingCheckbox.Name = "EnableSyntaxHighlightingCheckbox";
+            this.EnableSyntaxHighlightingCheckbox.Size = new System.Drawing.Size(148, 17);
+            this.EnableSyntaxHighlightingCheckbox.TabIndex = 15;
+            this.EnableSyntaxHighlightingCheckbox.Text = "Enable syntax highlighting";
+            this.EnableSyntaxHighlightingCheckbox.UseVisualStyleBackColor = true;
+            this.EnableSyntaxHighlightingCheckbox.CheckedChanged += new System.EventHandler(this.EnableSyntaxHighlightingCheckbox_CheckedChanged);
+            // 
+            // EnableAutoCompletementofStatementsCheckbox
+            // 
+            this.EnableAutoCompletementofStatementsCheckbox.AutoSize = true;
+            this.EnableAutoCompletementofStatementsCheckbox.Location = new System.Drawing.Point(140, 226);
+            this.EnableAutoCompletementofStatementsCheckbox.Name = "EnableAutoCompletementofStatementsCheckbox";
+            this.EnableAutoCompletementofStatementsCheckbox.Size = new System.Drawing.Size(218, 17);
+            this.EnableAutoCompletementofStatementsCheckbox.TabIndex = 16;
+            this.EnableAutoCompletementofStatementsCheckbox.Text = "Enable auto completement of statements";
+            this.EnableAutoCompletementofStatementsCheckbox.UseVisualStyleBackColor = true;
+            this.EnableAutoCompletementofStatementsCheckbox.CheckedChanged += new System.EventHandler(this.EnableAutoCompletementofStatementsCheckbox_CheckedChanged);
+            // 
+            // EnableErrorCheckingCheckbox
+            // 
+            this.EnableErrorCheckingCheckbox.AutoSize = true;
+            this.EnableErrorCheckingCheckbox.Location = new System.Drawing.Point(140, 249);
+            this.EnableErrorCheckingCheckbox.Name = "EnableErrorCheckingCheckbox";
+            this.EnableErrorCheckingCheckbox.Size = new System.Drawing.Size(236, 17);
+            this.EnableErrorCheckingCheckbox.TabIndex = 17;
+            this.EnableErrorCheckingCheckbox.Text = "Enable error checking on saving a PDDL file";
+            this.EnableErrorCheckingCheckbox.UseVisualStyleBackColor = true;
+            this.EnableErrorCheckingCheckbox.CheckedChanged += new System.EventHandler(this.EnableErrorCheckingCheckbox_CheckedChanged);
+            // 
+            // EnableBraceMatchingCheckbox
+            // 
+            this.EnableBraceMatchingCheckbox.AutoSize = true;
+            this.EnableBraceMatchingCheckbox.Location = new System.Drawing.Point(140, 295);
+            this.EnableBraceMatchingCheckbox.Name = "EnableBraceMatchingCheckbox";
+            this.EnableBraceMatchingCheckbox.Size = new System.Drawing.Size(137, 17);
+            this.EnableBraceMatchingCheckbox.TabIndex = 19;
+            this.EnableBraceMatchingCheckbox.Text = "Enable Brace Matching";
+            this.EnableBraceMatchingCheckbox.UseVisualStyleBackColor = true;
+            this.EnableBraceMatchingCheckbox.CheckedChanged += new System.EventHandler(this.EnableBraceMatchingCheckbox_CheckedChanged);
+            // 
+            // EnableWordHighlightingCheckbox
+            // 
+            this.EnableWordHighlightingCheckbox.AutoSize = true;
+            this.EnableWordHighlightingCheckbox.Location = new System.Drawing.Point(140, 272);
+            this.EnableWordHighlightingCheckbox.Name = "EnableWordHighlightingCheckbox";
+            this.EnableWordHighlightingCheckbox.Size = new System.Drawing.Size(163, 17);
+            this.EnableWordHighlightingCheckbox.TabIndex = 18;
+            this.EnableWordHighlightingCheckbox.Text = "Enable Highlighting of Words";
+            this.EnableWordHighlightingCheckbox.UseVisualStyleBackColor = true;
+            this.EnableWordHighlightingCheckbox.CheckedChanged += new System.EventHandler(this.EnableWordHighlightingCheckbox_CheckedChanged);
+            // 
             // OptionsPageCustomControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.EnableBraceMatchingCheckbox);
+            this.Controls.Add(this.EnableWordHighlightingCheckbox);
+            this.Controls.Add(this.EnableErrorCheckingCheckbox);
+            this.Controls.Add(this.EnableAutoCompletementofStatementsCheckbox);
+            this.Controls.Add(this.EnableSyntaxHighlightingCheckbox);
+            this.Controls.Add(this.EnableEditorMarginCheckbox);
             this.Controls.Add(this.VALPathButton);
             this.Controls.Add(this.VALPathTextbox);
             this.Controls.Add(this.label5);
@@ -215,7 +293,7 @@
             this.Controls.Add(this.FastDownwardPathTextbox);
             this.Controls.Add(this.label1);
             this.Name = "OptionsPageCustomControl";
-            this.Size = new System.Drawing.Size(397, 180);
+            this.Size = new System.Drawing.Size(397, 315);
             this.Load += new System.EventHandler(this.OptionsPageCustomControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).EndInit();
             this.ResumeLayout(false);
@@ -240,5 +318,11 @@
         private System.Windows.Forms.Button VALPathButton;
         private System.Windows.Forms.TextBox VALPathTextbox;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox EnableEditorMarginCheckbox;
+        private System.Windows.Forms.CheckBox EnableSyntaxHighlightingCheckbox;
+        private System.Windows.Forms.CheckBox EnableAutoCompletementofStatementsCheckbox;
+        private System.Windows.Forms.CheckBox EnableErrorCheckingCheckbox;
+        private System.Windows.Forms.CheckBox EnableBraceMatchingCheckbox;
+        private System.Windows.Forms.CheckBox EnableWordHighlightingCheckbox;
     }
 }
