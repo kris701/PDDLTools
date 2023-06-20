@@ -40,15 +40,10 @@ namespace PDDLTools.Tagger
         {
             // If a new snapshot wasn't generated, then skip this layout 
             if (e.NewSnapshot != e.OldSnapshot)
-            {
                 UpdateAtCaretPosition(View.Caret.Position);
-            }
         }
 
-        void CaretPositionChanged(object sender, CaretPositionChangedEventArgs e)
-        {
-            UpdateAtCaretPosition(e.NewPosition);
-        }
+        void CaretPositionChanged(object sender, CaretPositionChangedEventArgs e) => UpdateAtCaretPosition(e.NewPosition);
 
         void UpdateAtCaretPosition(CaretPosition caretPosition)
         {
@@ -75,13 +70,21 @@ namespace PDDLTools.Tagger
             SnapshotPoint currentRequest = RequestedPoint;
             List<SnapshotSpan> wordSpans = new List<SnapshotSpan>();
             //Find all words in the buffer like the one the caret is on
-            TextExtent word = TextStructureNavigator.GetExtentOfWord(currentRequest);
+
+            var word = GetExtendOfObjectWord(currentRequest);
+            if (word == null)
+            {
+                SynchronousUpdate(currentRequest, new NormalizedSnapshotSpanCollection(), null);
+                return;
+            }
+
+            //TextExtent word = TextStructureNavigator.GetExtentOfWord(currentRequest);
             bool foundWord = true;
             //If we've selected something not worth highlighting, we might have missed a "word" by a little bit
-            if (!WordExtentIsValid(currentRequest, word))
+            if (!WordExtentIsValid(currentRequest, word.Value))
             {
                 //Before we retry, make sure it is worthwhile 
-                if (word.Span.Start != currentRequest
+                if (word.Value.Span.Start != currentRequest
                      || currentRequest == currentRequest.GetContainingLine().Start
                      || char.IsWhiteSpace((currentRequest - 1).GetChar()))
                 {
@@ -91,10 +94,10 @@ namespace PDDLTools.Tagger
                 {
                     // Try again, one character previous.  
                     //If the caret is at the end of a word, pick up the word.
-                    word = TextStructureNavigator.GetExtentOfWord(currentRequest - 1);
+                    word = GetExtendOfObjectWord(currentRequest - 1);
 
                     //If the word still isn't valid, we're done 
-                    if (!WordExtentIsValid(currentRequest, word))
+                    if (!WordExtentIsValid(currentRequest, word.Value))
                         foundWord = false;
                 }
             }
@@ -106,14 +109,14 @@ namespace PDDLTools.Tagger
                 return;
             }
 
-            SnapshotSpan currentWord = word.Span;
+            SnapshotSpan currentWord = word.Value.Span;
             //If this is the current word, and the caret moved within a word, we're done. 
             if (CurrentWord.HasValue && currentWord == CurrentWord)
                 return;
 
             //Find the new spans
             FindData findData = new FindData(currentWord.GetText(), currentWord.Snapshot);
-            findData.FindOptions = FindOptions.WholeWord | FindOptions.MatchCase;
+            findData.FindOptions = FindOptions.MatchCase;
 
             wordSpans.AddRange(TextSearchService.FindAll(findData));
 
@@ -121,6 +124,69 @@ namespace PDDLTools.Tagger
             if (currentRequest == RequestedPoint)
                 SynchronousUpdate(currentRequest, new NormalizedSnapshotSpanCollection(wordSpans), currentWord);
         }
+
+        private TextExtent? GetExtendOfObjectWord(SnapshotPoint currentRequest)
+        {
+            int lineNumber = currentRequest.GetContainingLineNumber();
+            var line = currentRequest.Snapshot.GetLineFromLineNumber(lineNumber);
+
+            int startIndex = GetStartIndexOfMarking(line, currentRequest);
+            int endIndex = GetEndIndexOfMarking(line, currentRequest);
+
+            if (startIndex == -1 || endIndex == -1)
+                return null;
+
+            if (endIndex < startIndex)
+                return null;
+
+            var newSpan = new SnapshotSpan(line.Snapshot, line.Extent.Start + startIndex, endIndex - startIndex + 1);
+            TextExtent word = new TextExtent(newSpan, true);
+            return word;
+        }
+
+        private int GetStartIndexOfMarking(ITextSnapshotLine line, SnapshotPoint currentRequest)
+        {
+            int startIndex = currentRequest.Position - line.Extent.Start;
+
+            var chars = line.Snapshot.ToCharArray(line.Extent.Start, line.Extent.Length);
+            if (startIndex < 0)
+                return -1;
+            if (startIndex >= chars.Length)
+                return -1;
+            char currentChar = chars[startIndex];
+            while (char.IsLetter(currentChar) || char.IsNumber(currentChar) || currentChar == '-' || currentChar == ':')
+            {
+                startIndex--;
+                if (startIndex < 0)
+                    return 0;
+                currentChar = chars[startIndex];
+            }
+            startIndex++;
+            return startIndex;
+        }
+
+        private int GetEndIndexOfMarking(ITextSnapshotLine line, SnapshotPoint currentRequest)
+        {
+            int endIndex = currentRequest.Position - line.Extent.Start;
+
+            var chars = line.Snapshot.ToCharArray(line.Extent.Start, line.Extent.Length);
+            if (endIndex < 0)
+                return -1;
+            if (endIndex >= chars.Length)
+                return -1;
+
+            char currentChar = chars[endIndex];
+            while (char.IsLetter(currentChar) || char.IsNumber(currentChar) || currentChar == '-' || currentChar == ':')
+            {
+                endIndex++;
+                if (endIndex >= chars.Length)
+                    return chars.Length - 1;
+                currentChar = chars[endIndex];
+            }
+            endIndex--;
+            return endIndex;
+        }
+
         static bool WordExtentIsValid(SnapshotPoint currentRequest, TextExtent word)
         {
             return word.IsSignificant
