@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSimpleProblemFileTempla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLFullProblemFileTemplate", "PDDLFullProblemFileTemplate\PDDLFullProblemFileTemplate.csproj", "{AA488EBA-93DB-4F77-B9BF-C7DCB2E126F3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools", "Tools\Tools.csproj", "{4CB6D5FF-2B94-40FB-870C-787260CFF03F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -177,6 +179,18 @@ Global
 		{AA488EBA-93DB-4F77-B9BF-C7DCB2E126F3}.Release|arm64.Build.0 = Release|arm64
 		{AA488EBA-93DB-4F77-B9BF-C7DCB2E126F3}.Release|x86.ActiveCfg = Release|x86
 		{AA488EBA-93DB-4F77-B9BF-C7DCB2E126F3}.Release|x86.Build.0 = Release|x86
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Debug|arm64.Build.0 = Debug|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Debug|x86.Build.0 = Debug|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Release|arm64.ActiveCfg = Release|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Release|arm64.Build.0 = Release|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Release|x86.ActiveCfg = Release|Any CPU
+		{4CB6D5FF-2B94-40FB-870C-787260CFF03F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
