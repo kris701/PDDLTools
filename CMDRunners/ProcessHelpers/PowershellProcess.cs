@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace FastDownwardRunner.Helpers
+namespace CMDRunners.Helpers
 {
     public enum ProcessCompleteReson { None, ProcessNotRunning, RanToCompletion, StoppedOnError, ForceKilled }
     public class PowershellProcess

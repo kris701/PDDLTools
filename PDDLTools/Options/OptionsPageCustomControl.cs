@@ -43,6 +43,19 @@ namespace PDDLTools.Options
             }
         }
 
+        private void VALPathButton_Click(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            FolderDialog.ShowDialog();
+            if (FolderDialog.SelectedPath != "")
+            {
+                OptionsManager.Instance.VALPath = FolderDialog.SelectedPath;
+                VALPathTextbox.Text = OptionsManager.Instance.VALPath;
+            }
+        }
+
         private void PythonPrefixTextbox_Leave(object sender, EventArgs e)
         {
             if (!_isLoaded)

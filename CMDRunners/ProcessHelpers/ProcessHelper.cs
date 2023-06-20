@@ -6,7 +6,7 @@ using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FastDownwardRunner.Helpers
+namespace CMDRunners.Helpers
 {
     public static class ProcessHelper
     {

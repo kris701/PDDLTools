@@ -13,6 +13,7 @@ using System.ComponentModel;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft;
 using Microsoft.VisualStudio.Threading;
+using System.Diagnostics;
 
 namespace PDDLTools.Options
 {
@@ -38,27 +39,36 @@ namespace PDDLTools.Options
             SettingsManager settingsManager = await _settingsManager.GetValueAsync();
             _userSettingsStore = settingsManager.GetWritableSettingsStore(SettingsScope.UserSettings);
 
-            if (_userSettingsStore.CollectionExists(SettingsCategory))
-            {
-                _FDPath = _userSettingsStore.GetString(SettingsCategory, "FDPath");
-                _PythonPrefix = _userSettingsStore.GetString(SettingsCategory, "PythonPrefix");
-                _FDFileExecutionTimeout = _userSettingsStore.GetInt32(SettingsCategory, "FDFileExecutionTimeout");
-                _SearchOptions = _userSettingsStore.GetString(SettingsCategory, "SearchOptions");
-                _OpenResultReport = _userSettingsStore.GetBoolean(SettingsCategory, "OpenResultReport");
-                _OpenSASSolutionVisualiser = _userSettingsStore.GetBoolean(SettingsCategory, "OpenSASSolutionVisualiser");
-                _IsFirstStart = _userSettingsStore.GetBoolean(SettingsCategory, "IsFirstStart");
-            }
-            else
-            {
+            if (!_userSettingsStore.CollectionExists(SettingsCategory))
                 _userSettingsStore.CreateCollection(SettingsCategory);
-                FDPath = "";
-                PythonPrefix = "python";
-                FDFileExecutionTimeout = 10;
-                SearchOptions = "astar(lmcut());lazy_greedy([ff(), cea()], [ff(), cea()])";
-                OpenResultReport = true;
-                OpenSASSolutionVisualiser = true;
-                IsFirstStart = true;
-            }
+
+            _FDPath = GetValueOrSetDefault("FDPath", "");
+            _PythonPrefix = GetValueOrSetDefault("PythonPrefix", "python");
+            _FDFileExecutionTimeout = GetValueOrSetDefault("FDFileExecutionTimeout", 10);
+            _SearchOptions = GetValueOrSetDefault("SearchOptions", "astar(lmcut());lazy_greedy([ff(), cea()], [ff(), cea()])");
+            _OpenResultReport = GetValueOrSetDefault("OpenResultReport", true);
+            _OpenSASSolutionVisualiser = GetValueOrSetDefault("OpenSASSolutionVisualiser", true);
+            _IsFirstStart = GetValueOrSetDefault("IsFirstStart", true);
+            _VALPath = GetValueOrSetDefault("VALPath", "");
+        }
+
+        private string GetValueOrSetDefault(string id, string defValue)
+        {
+            if (!_userSettingsStore.PropertyExists(SettingsCategory, id))
+                _userSettingsStore.SetString(SettingsCategory, id, defValue);
+            return _userSettingsStore.GetString(SettingsCategory, id);
+        }
+        private int GetValueOrSetDefault(string id, int defValue)
+        {
+            if (!_userSettingsStore.PropertyExists(SettingsCategory, id))
+                _userSettingsStore.SetInt32(SettingsCategory, id, defValue);
+            return _userSettingsStore.GetInt32(SettingsCategory, id);
+        }
+        private bool GetValueOrSetDefault(string id, bool defValue)
+        {
+            if (!_userSettingsStore.PropertyExists(SettingsCategory, id))
+                _userSettingsStore.SetBoolean(SettingsCategory, id, defValue);
+            return _userSettingsStore.GetBoolean(SettingsCategory, id);
         }
 
         private string _FDPath = "";
@@ -83,9 +93,32 @@ namespace PDDLTools.Options
             get { return _PythonPrefix; }
             set
             {
-                _userSettingsStore.SetString(SettingsCategory, "PythonPrefix", value);
-                _PythonPrefix = value;
+                if (ExistsOnPath(value) || ExistsOnPath(value + ".exe"))
+                {
+                    _userSettingsStore.SetString(SettingsCategory, "PythonPrefix", value);
+                    _PythonPrefix = value;
+                }
+                else
+                    MessageBox.Show("Error, given python prefix is not an environment variable!");
             }
+        }
+        public static bool ExistsOnPath(string fileName)
+        {
+            return GetFullPath(fileName) != null;
+        }
+        public static string GetFullPath(string fileName)
+        {
+            if (File.Exists(fileName))
+                return Path.GetFullPath(fileName);
+
+            var values = Environment.GetEnvironmentVariable("PATH");
+            foreach (var path in values.Split(Path.PathSeparator))
+            {
+                var fullPath = Path.Combine(path, fileName);
+                if (File.Exists(fullPath))
+                    return fullPath;
+            }
+            return null;
         }
 
         private int _FDFileExecutionTimeout = 10;
@@ -145,6 +178,22 @@ namespace PDDLTools.Options
             {
                 _userSettingsStore.SetBoolean(SettingsCategory, "IsFirstStart", value);
                 _IsFirstStart = value;
+            }
+        }
+
+        private string _VALPath = "";
+        public string VALPath
+        {
+            get { return _VALPath; }
+            set
+            {
+                if (Directory.Exists(value) && File.Exists(Path.Combine(value, "Validate.exe")))
+                {
+                    _userSettingsStore.SetString(SettingsCategory, "VALPath", value);
+                    _VALPath = value;
+                }
+                else
+                    MessageBox.Show("Error, invalid path to VAL executables!");
             }
         }
     }

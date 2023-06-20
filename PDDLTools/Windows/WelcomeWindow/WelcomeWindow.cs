@@ -7,18 +7,13 @@ using System.Runtime.InteropServices;
 namespace PDDLTools.Windows.WelcomeWindow
 {
     [Guid("ad431514-27ad-42ad-a5c8-e7187a8ddebb")]
-    public class WelcomeWindow : ToolWindowPane, IVsWindowFrameNotify2
+    public class WelcomeWindow : ToolWindowPane
     {
         public WelcomeWindow() : base(null)
         {
             this.Caption = "PDDL Tools - Welcome";
 
             this.Content = new WelcomeWindowControl();
-        }
-
-        public int OnClose(ref uint pgrfSaveOptions)
-        {
-            return Microsoft.VisualStudio.VSConstants.S_OK;
         }
     }
 }

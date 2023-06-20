@@ -68,6 +68,7 @@
     <Compile Include="Classifiers\PDDLTypeDefinition.cs" />
     <Compile Include="Classifiers\PDDLTypes.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\OpenPlanValidatorWindowCommand.cs" />
     <Compile Include="Commands\SASVisualiserCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />
     <Compile Include="Commands\FDReportCommand.cs" />
@@ -115,6 +116,10 @@
     <Compile Include="Windows\FDResultsWindow\FDResultsWindow.cs" />
     <Compile Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml.cs">
       <DependentUpon>FDResultsWindowControl..xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\PlanValidatorWindow\PlanValidatorWindow.cs" />
+    <Compile Include="Windows\PlanValidatorWindow\PlanValidatorWindowControl.xaml.cs">
+      <DependentUpon>PlanValidatorWindowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\SASSolutionWindow\SASSolutionWindow.cs" />
     <Compile Include="Windows\SASSolutionWindow\SASSolutionWindowControl.xaml.cs">
@@ -210,6 +215,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\PlanValidatorWindow\PlanValidatorWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\SASSolutionWindow\SASSolutionWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -233,11 +242,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\FDResultsWindow\Resources\" />
+    <Folder Include="Windows\PlanValidatorWindow\Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FastDownwardRunner\FastDownwardRunner.csproj">
-      <Project>{463bc2c9-3237-4251-bcac-cc0003dfee81}</Project>
-      <Name>FastDownwardRunner</Name>
+    <ProjectReference Include="..\CMDRunners\CMDRunners.csproj">
+      <Project>{00a388be-b31e-4472-bffb-da51cb79a55b}</Project>
+      <Name>CMDRunners</Name>
     </ProjectReference>
     <ProjectReference Include="..\LocationSpreader\LocationSpreader.csproj">
       <Project>{d774b8f9-ec43-402c-9001-8cd43d52edcd}</Project>

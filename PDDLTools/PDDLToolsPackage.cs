@@ -16,6 +16,7 @@ using Task = System.Threading.Tasks.Task;
 using PDDLTools.Windows.FDResultsWindow;
 using PDDLTools.Windows.SASSolutionWindow;
 using PDDLTools.Windows.WelcomeWindow;
+using PDDLTools.Windows.PlanValidatorWindow;
 
 namespace PDDLTools
 {
@@ -34,6 +35,7 @@ namespace PDDLTools
     [ProvideOptionPage(typeof(OptionsPageCustom), "PDDL Tools", "General", 0, 0, true)]
     [ProvideOptionPage(typeof(DebugOptionsPageGrid), "PDDL Tools", "Debug", 0, 0, true)]
     [ProvideToolWindow(typeof(FDResultsWindow), Transient = true, Style = VsDockStyle.Tabbed, Window = EnvDTE.Constants.vsWindowKindOutput, Width = 1200, Height = 800)]
+    [ProvideToolWindow(typeof(PlanValidatorWindow), Transient = true, Style = VsDockStyle.Tabbed, Window = EnvDTE.Constants.vsWindowKindOutput, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(SASSolutionWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(WelcomeWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     public sealed class PDDLToolsPackage : AsyncPackage
@@ -47,6 +49,7 @@ namespace PDDLTools
 
             await WelcomeWindowCommand.InitializeAsync(this);
             await GitHubCommand.InitializeAsync(this);
+            await OpenPlanValidatorWindowCommand.InitializeAsync(this);
 
             if (OptionsManager.Instance.IsFirstStart)
 #pragma warning disable VSTHRD103 // Call async methods when in an async method
