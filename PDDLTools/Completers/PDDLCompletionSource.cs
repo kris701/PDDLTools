@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
+using PDDLParser.Helpers;
+using PDDLTools.ContextStorage;
 using PDDLTools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -35,7 +37,27 @@ namespace PDDLTools.Completers
             m_compList = new List<Completion>();
             foreach (string str in strList)
                 m_compList.Add(new Completion(str, str, str, null, null));
-            
+
+            try
+            {
+                var currentFile = DTE2Helper.GetSourceFilePathAsync().Result;
+                if (PDDLHelper.IsFileDomain(currentFile))
+                {
+                    var domainContext = PDDLFileContexts.GetDomainContextForFile(currentFile);
+                    if (domainContext.Predicates != null)
+                        foreach (var predicate in domainContext.Predicates.Predicates)
+                            m_compList.Add(new Completion(predicate.Name, predicate.Name, predicate.Name, null, null));
+                }
+                else if (PDDLHelper.IsFileProblem(currentFile))
+                {
+                    var problemContext = PDDLFileContexts.GetProblemContextForFile(currentFile);
+                    if (problemContext.Objects != null)
+                        foreach (var obj in problemContext.Objects.Objs)
+                            m_compList.Add(new Completion(obj.Name, obj.Name, obj.Name, null, null));
+                }
+            }
+            catch { }
+
             completionSets.Add(new CompletionSet(
                 "Tokens",    //the non-localized title of the tab
                 "Tokens",    //the display title of the tab

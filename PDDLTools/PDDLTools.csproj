@@ -83,6 +83,7 @@
     <Compile Include="Completers\PDDLCompletionSource.cs" />
     <Compile Include="Completers\PDDLCompletionSourceProvider.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="ContextStorage\PDDLFileContexts.cs" />
     <Compile Include="EditorMargins\PDDLEditorMargin.xaml.cs">
       <DependentUpon>PDDLEditorMargin.xaml</DependentUpon>
     </Compile>
