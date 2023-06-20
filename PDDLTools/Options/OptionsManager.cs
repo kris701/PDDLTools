@@ -13,6 +13,7 @@ using System.ComponentModel;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft;
 using Microsoft.VisualStudio.Threading;
+using System.Diagnostics;
 
 namespace PDDLTools.Options
 {
@@ -92,9 +93,32 @@ namespace PDDLTools.Options
             get { return _PythonPrefix; }
             set
             {
-                _userSettingsStore.SetString(SettingsCategory, "PythonPrefix", value);
-                _PythonPrefix = value;
+                if (ExistsOnPath(value) || ExistsOnPath(value + ".exe"))
+                {
+                    _userSettingsStore.SetString(SettingsCategory, "PythonPrefix", value);
+                    _PythonPrefix = value;
+                }
+                else
+                    MessageBox.Show("Error, given python prefix is not an environment variable!");
             }
+        }
+        public static bool ExistsOnPath(string fileName)
+        {
+            return GetFullPath(fileName) != null;
+        }
+        public static string GetFullPath(string fileName)
+        {
+            if (File.Exists(fileName))
+                return Path.GetFullPath(fileName);
+
+            var values = Environment.GetEnvironmentVariable("PATH");
+            foreach (var path in values.Split(Path.PathSeparator))
+            {
+                var fullPath = Path.Combine(path, fileName);
+                if (File.Exists(fullPath))
+                    return fullPath;
+            }
+            return null;
         }
 
         private int _FDFileExecutionTimeout = 10;
