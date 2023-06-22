@@ -197,7 +197,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
                 {
                     if (line.Tag is int id)
                     {
-                        if (id > newIndex)
+                        if (id + 1 > newIndex)
                         {
                             if (line.Visibility == Visibility.Visible)
                                 fadeOutElements.Add(line);

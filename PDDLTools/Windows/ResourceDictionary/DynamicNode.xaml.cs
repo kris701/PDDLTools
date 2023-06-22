@@ -52,6 +52,7 @@ namespace PDDLTools.Windows.ResourceDictionary
             NodeLine.Y1 = Margin.Top + Height / 2;
             NodeLine.X2 = Margin.Left + Width / 2;
             NodeLine.Y2 = Margin.Top + Height / 2;
+            NodeLine.Tag = NodeID;
             ParentCanvas.Children.Add(NodeLine);
         }
 
