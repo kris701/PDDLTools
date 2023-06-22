@@ -68,6 +68,7 @@
     <Compile Include="Classifiers\PDDLTypeDefinition.cs" />
     <Compile Include="Classifiers\PDDLTypes.cs" />
     <Compile Include="Commands\BaseCommand.cs" />
+    <Compile Include="Commands\OpenPDDLVisualiserWindowCommand.cs" />
     <Compile Include="Commands\OpenPlanValidatorWindowCommand.cs" />
     <Compile Include="Commands\SASVisualiserCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />
@@ -119,6 +120,10 @@
     <Compile Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml.cs">
       <DependentUpon>FDResultsWindowControl..xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\PDDLVisualiserWindow\PDDLVisualiserWindow.cs" />
+    <Compile Include="Windows\PDDLVisualiserWindow\PDDLVisualiserWindowControl.xaml.cs">
+      <DependentUpon>PDDLVisualiserWindowControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\PlanValidatorWindow\PlanValidatorWindow.cs" />
     <Compile Include="Windows\PlanValidatorWindow\PlanValidatorWindowControl.xaml.cs">
       <DependentUpon>PlanValidatorWindowControl.xaml</DependentUpon>
@@ -160,6 +165,7 @@
     <Content Include="Commands\Resources\Domain.png" />
     <Content Include="Commands\Resources\Problem.png" />
     <Content Include="Commands\Resources\ValidateIcon.png" />
+    <Content Include="Commands\Resources\VisualisorIcon.png" />
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
     <Resource Include="Windows\SASSolutionWindow\Resources\reset.png" />
@@ -220,6 +226,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Windows\PDDLVisualiserWindow\PDDLVisualiserWindowControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Windows\PlanValidatorWindow\PlanValidatorWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -247,6 +257,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\FDResultsWindow\Resources\" />
+    <Folder Include="Windows\PDDLVisualiserWindow\Resources\" />
     <Folder Include="Windows\PlanValidatorWindow\Resources\" />
   </ItemGroup>
   <ItemGroup>
