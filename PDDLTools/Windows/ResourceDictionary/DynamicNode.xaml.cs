@@ -21,19 +21,20 @@ namespace PDDLTools.Windows.ResourceDictionary
         public Line NodeLine { get; internal set; }
 
         public int NodeID { get; }
-        public int TargetNodeID { get; }
 
-        private DynamicNode _targetNode = null;
+        private DynamicNode _nextNode = null;
+        private DynamicNode _prevNode = null;
         private bool _isSetup = false;
+        private bool _isMouseDown = false;
+        private Point _startLocation = new Point();
 
-        public DynamicNode(int nodeID, string text, Canvas parent, int targetNodeID = -1, Point? location = null)
+        public DynamicNode(int nodeID, string text, Canvas parent, Point? location = null)
         {
             InitializeComponent();
 
             ParentCanvas = parent;
 
             NodeID = nodeID;
-            TargetNodeID = targetNodeID;
             NodeTextLabel.Content = text;
 
             if (location != null)
@@ -53,6 +54,7 @@ namespace PDDLTools.Windows.ResourceDictionary
             NodeLine.X2 = Margin.Left + Width / 2;
             NodeLine.Y2 = Margin.Top + Height / 2;
             NodeLine.Tag = NodeID;
+            Canvas.SetZIndex(NodeLine, -2000);
             ParentCanvas.Children.Add(NodeLine);
         }
 
@@ -65,11 +67,10 @@ namespace PDDLTools.Windows.ResourceDictionary
             {
                 if (child is DynamicNode otherNode)
                 {
-                    if (otherNode.NodeID == TargetNodeID)
-                    {
-                        _targetNode = otherNode;
-                        break;
-                    }
+                    if (otherNode.NodeID == NodeID + 1)
+                        _nextNode = otherNode;
+                    if (otherNode.NodeID == NodeID - 1)
+                        _prevNode = otherNode;
                 }
             }
             UpdateLine();
@@ -79,13 +80,45 @@ namespace PDDLTools.Windows.ResourceDictionary
 
         public void UpdateLine()
         {
-            if (_targetNode != null)
+            if (_nextNode != null)
             {
                 NodeLine.X1 = Margin.Left + Width / 2;
                 NodeLine.Y1 = Margin.Top + Height / 2;
 
-                NodeLine.X2 = _targetNode.Margin.Left + _targetNode.Width / 2;
-                NodeLine.Y2 = _targetNode.Margin.Top + _targetNode.Height / 2;
+                NodeLine.X2 = _nextNode.Margin.Left + _nextNode.Width / 2;
+                NodeLine.Y2 = _nextNode.Margin.Top + _nextNode.Height / 2;
+            }
+        }
+
+
+        private void UserControl_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                _isMouseDown = true;
+                _startLocation = e.GetPosition(ParentCanvas);
+            }
+        }
+
+        private void UserControl_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                _isMouseDown = false;
+        }
+
+        private void UserControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isMouseDown)
+            {
+                var location = e.GetPosition(ParentCanvas);
+                Margin = new Thickness(
+                        _startLocation.X - (_startLocation.X - location.X) - (Width / 2),
+                        _startLocation.Y - (_startLocation.Y - location.Y) - (Height / 2),
+                        0,
+                        0);
+                UpdateLine();
+                if (_prevNode != null)
+                    _prevNode.UpdateLine();
             }
         }
     }

@@ -135,7 +135,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
             List<PredicateExp> cloneState = new List<PredicateExp>();
             foreach(var pred in state)
                 cloneState.Add(pred.Clone() as PredicateExp);
-            var newNode = new DynamicNode(id, $"{id}", VisualPlan, id + 1, loc);
+            var newNode = new DynamicNode(id, $"{id}", VisualPlan, loc);
 
             var toolTip = new ToolTip();
             toolTip.BorderThickness = new Thickness(0);

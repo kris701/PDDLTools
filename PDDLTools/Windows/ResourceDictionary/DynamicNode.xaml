@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PDDLTools.Windows.ResourceDictionary"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="100" Width="50" Height="50">
+             d:DesignHeight="100" d:DesignWidth="100" Width="50" Height="50" MouseDown="UserControl_MouseDown" MouseUp="UserControl_MouseUp" MouseMove="UserControl_MouseMove">
     <Grid>
         <Ellipse x:Name="EllipseArea" StrokeThickness="2" Stroke="#3D3D3D" Fill="#FF36374A"/>
         <Label x:Name="NodeTextLabel" Content="0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
