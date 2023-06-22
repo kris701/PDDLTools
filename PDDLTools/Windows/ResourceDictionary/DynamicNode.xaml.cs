@@ -18,17 +18,16 @@ namespace PDDLTools.Windows.ResourceDictionary
     public partial class DynamicNode : UserControl
     {
         public Canvas ParentCanvas { get; }
-        public Line NodeLine { get; internal set; }
-
+        public List<int> TargetIDs { get; }
+        public List<Line> NodeLines { get; }
         public int NodeID { get; }
 
-        private DynamicNode _nextNode = null;
-        private DynamicNode _prevNode = null;
+        private List<DynamicNode> _targetNodes = new List<DynamicNode>();
         private bool _isSetup = false;
         private bool _isMouseDown = false;
         private Point _startLocation = new Point();
-
-        public DynamicNode(int nodeID, string text, Canvas parent, Point? location = null)
+        
+        public DynamicNode(int nodeID, string text, Canvas parent, List<int> targetIDs, Point? location = null)
         {
             InitializeComponent();
 
@@ -36,6 +35,7 @@ namespace PDDLTools.Windows.ResourceDictionary
 
             NodeID = nodeID;
             NodeTextLabel.Content = text;
+            TargetIDs = targetIDs;
 
             if (location != null)
             {
@@ -46,16 +46,21 @@ namespace PDDLTools.Windows.ResourceDictionary
                     0);
             }
 
-            NodeLine = new Line();
-            NodeLine.Stroke = Brushes.WhiteSmoke;
-            NodeLine.StrokeThickness = 3;
-            NodeLine.X1 = Margin.Left + Width / 2;
-            NodeLine.Y1 = Margin.Top + Height / 2;
-            NodeLine.X2 = Margin.Left + Width / 2;
-            NodeLine.Y2 = Margin.Top + Height / 2;
-            NodeLine.Tag = NodeID;
-            Canvas.SetZIndex(NodeLine, -2000);
-            ParentCanvas.Children.Add(NodeLine);
+            NodeLines = new List<Line>();
+            foreach(var target in targetIDs)
+            {
+                var newLine = new Line();
+                newLine.Stroke = Brushes.WhiteSmoke;
+                newLine.StrokeThickness = 3;
+                newLine.X1 = Margin.Left + Width / 2;
+                newLine.Y1 = Margin.Top + Height / 2;
+                newLine.X2 = Margin.Left + Width / 2;
+                newLine.Y2 = Margin.Top + Height / 2;
+                newLine.Tag = NodeID;
+                Canvas.SetZIndex(newLine, -2000);
+                NodeLines.Add(newLine);
+                ParentCanvas.Children.Add(newLine);
+            }
         }
 
         public void Setup()
@@ -67,26 +72,24 @@ namespace PDDLTools.Windows.ResourceDictionary
             {
                 if (child is DynamicNode otherNode)
                 {
-                    if (otherNode.NodeID == NodeID + 1)
-                        _nextNode = otherNode;
-                    if (otherNode.NodeID == NodeID - 1)
-                        _prevNode = otherNode;
+                    if (TargetIDs.Contains(otherNode.NodeID))
+                        _targetNodes.Add(otherNode);
                 }
             }
-            UpdateLine();
+            UpdateLines();
 
             _isSetup = true;
         }
 
-        public void UpdateLine()
+        public void UpdateLines()
         {
-            if (_nextNode != null)
+            for(int i = 0; i < _targetNodes.Count; i++)
             {
-                NodeLine.X1 = Margin.Left + Width / 2;
-                NodeLine.Y1 = Margin.Top + Height / 2;
+                NodeLines[i].X1 = Margin.Left + Width / 2;
+                NodeLines[i].Y1 = Margin.Top + Height / 2;
 
-                NodeLine.X2 = _nextNode.Margin.Left + _nextNode.Width / 2;
-                NodeLine.Y2 = _nextNode.Margin.Top + _nextNode.Height / 2;
+                NodeLines[i].X2 = _targetNodes[i].Margin.Left + _targetNodes[i].Width / 2;
+                NodeLines[i].Y2 = _targetNodes[i].Margin.Top + _targetNodes[i].Height / 2;
             }
         }
 
@@ -116,9 +119,13 @@ namespace PDDLTools.Windows.ResourceDictionary
                         _startLocation.Y - (_startLocation.Y - location.Y) - (Height / 2),
                         0,
                         0);
-                UpdateLine();
-                if (_prevNode != null)
-                    _prevNode.UpdateLine();
+
+                UpdateLines();
+
+                foreach (var child in ParentCanvas.Children)
+                    if (child is DynamicNode node)
+                        if (node.TargetIDs.Contains(NodeID))
+                            node.UpdateLines();
             }
         }
     }

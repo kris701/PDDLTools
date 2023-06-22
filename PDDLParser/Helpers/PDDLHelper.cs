@@ -13,6 +13,8 @@ namespace PDDLParser.Helpers
         {
             if (path == null)
                 return false;
+            if (!File.Exists(path))
+                return false;
             var info = new FileInfo(path);
             if (info.Exists && info.Extension.ToLower() == ".pddl")
             {
@@ -26,6 +28,8 @@ namespace PDDLParser.Helpers
         public static bool IsFileProblem(string path)
         {
             if (path == null)
+                return false;
+            if (!File.Exists(path))
                 return false;
             var info = new FileInfo(path);
             if (info.Exists && info.Extension.ToLower() == ".pddl")

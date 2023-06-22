@@ -11,6 +11,24 @@
     </UserControl.Resources>
     
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Domain File:" Foreground="White" VerticalAlignment="Center"/>
+            <Label x:Name="SelectedDomainFileLabel" Content="..." Foreground="White" VerticalAlignment="Center"/>
+            <Button x:Name="SelectDomainFileButton" Content="Select Domain" Margin="5" Background="Transparent" Foreground="White" Click="SelectDomainFile_Click"/>
+
+            <Label Content="Problem File:" Foreground="White" VerticalAlignment="Center"/>
+            <Label x:Name="SelectedProblemFileLabel" Content="..." Foreground="White" VerticalAlignment="Center"/>
+            <Button x:Name="SelectProblemFileButton" Content="Select Problem" Margin="5" Background="Transparent" Foreground="White" Click="SelectProblemFile_Click"/>
+        </StackPanel>
+
+        <Canvas x:Name="MainGrid" Grid.Row="1" Margin="5" Background="#1F1F1F"/>
+        
+        <Label x:Name="ErrorLabel" Grid.Row="1" Content="There are errors in the PDDL files! Cannot visualise..." Foreground="Red" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Hidden" d:Visibility="Visible"/>
+        <Label x:Name="FirstStartLabel" Grid.Row="1" Content="Select a problem and domain to visualise" Foreground="Yellow" VerticalAlignment="Center" HorizontalAlignment="Center"/>
     </Grid>
 </UserControl>

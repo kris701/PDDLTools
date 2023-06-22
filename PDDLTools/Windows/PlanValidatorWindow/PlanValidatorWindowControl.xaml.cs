@@ -1,4 +1,5 @@
 ﻿using CMDRunners.VAL;
+using PDDLParser.Helpers;
 using PDDLTools.Commands;
 using PDDLTools.Options;
 using System;
@@ -84,26 +85,38 @@ namespace PDDLTools.Windows.PlanValidatorWindow
         private async void SelectDomainFileButton_Click(object sender, RoutedEventArgs e)
         {
             var fileSelector = new System.Windows.Forms.OpenFileDialog();
+            fileSelector.Filter = "pddl files (*.pddl)|*.pddl";
             if (File.Exists(SelectedDomainFileLabel.Text as string))
                 fileSelector.InitialDirectory = new FileInfo(SelectedDomainFileLabel.Text as string).Directory.FullName;
             fileSelector.ShowDialog();
             if (fileSelector.FileName != "")
             {
-                SelectedDomainFileLabel.Text = fileSelector.FileName;
-                await DoCheckVALAsync();
+                if (PDDLHelper.IsFileDomain(fileSelector.FileName))
+                {
+                    SelectedDomainFileLabel.Text = fileSelector.FileName;
+                    await DoCheckVALAsync();
+                }
+                else
+                    MessageBox.Show("Selected file is not a domain file!");
             }
         }
 
         private async void SelectProblemFileButton_Click(object sender, RoutedEventArgs e)
         {
             var fileSelector = new System.Windows.Forms.OpenFileDialog();
+            fileSelector.Filter = "pddl files (*.pddl)|*.pddl";
             if (File.Exists(SelectedProblemFileLabel.Text as string))
                 fileSelector.InitialDirectory = new FileInfo(SelectedProblemFileLabel.Text as string).Directory.FullName;
             fileSelector.ShowDialog();
             if (fileSelector.FileName != "")
             {
-                SelectedProblemFileLabel.Text = fileSelector.FileName;
-                await DoCheckVALAsync();
+                if (PDDLHelper.IsFileProblem(fileSelector.FileName))
+                {
+                    SelectedProblemFileLabel.Text = fileSelector.FileName;
+                    await DoCheckVALAsync();
+                }
+                else
+                    MessageBox.Show("Selected file is not a problem file!");
             }
         }
 
