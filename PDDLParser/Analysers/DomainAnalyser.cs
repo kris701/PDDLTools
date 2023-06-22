@@ -31,7 +31,7 @@ namespace PDDLParser.Analysers
             CheckForUnusedPredicates(decl, listener);
         }
 
-        public void PreAnalyse(string file, IErrorListener listener)
+        public void PreAnalyse(string text, IErrorListener listener)
         {
             throw new NotImplementedException();
         }

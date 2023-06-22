@@ -10,7 +10,7 @@ namespace PDDLParser.Analysers
 {
     public interface IAnalyser<T>
     {
-        void PreAnalyse(string file, IErrorListener listener);
+        void PreAnalyse(string text, IErrorListener listener);
         void PostAnalyse(T decl, IErrorListener listener);
     }
 }

@@ -17,9 +17,8 @@ namespace PDDLParser.Analysers
             throw new NotImplementedException();
         }
 
-        public void PreAnalyse(string file, IErrorListener listener)
+        public void PreAnalyse(string text, IErrorListener listener)
         {
-            var text = File.ReadAllText(file);
             CheckParenthesesMissmatch(text, listener);
             CheckForCasing(text, listener);
             CheckForUnsupportedRequirements(text, listener);

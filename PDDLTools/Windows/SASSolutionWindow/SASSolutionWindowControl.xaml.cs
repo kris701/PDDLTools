@@ -3,6 +3,7 @@ using PDDLParser.Models;
 using PDDLParser.Models.Problem;
 using PDDLTools.Helpers;
 using PDDLTools.Options;
+using PDDLTools.Windows.ResourceDictionary;
 using PDDLTools.Windows.SASSolutionWindow.UserControls;
 using SASSimulator;
 using System;
@@ -88,48 +89,23 @@ namespace PDDLTools.Windows.SASSolutionWindow
                         _pddlData,
                         plan);
 
-                    var lines = GenerateBaseLines(plan.Count);
 
                     ILocationSpreader spreader = LocationSpreaderBuilder.GetSpreader(SelectSpreaderCombobox.SelectedItem as string);
                     var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
 
-                    var prevNode = AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[0]);
+                    AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[0]);
 
                     for (int i = 0; i < plan.Count; i++)
                     {
                         simulator.Step();
-                        var newNode = AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[i + 1]);
-
-                        MakeLineBetweenNodes(prevNode, newNode, lines[i]);
-
-                        prevNode = newNode;
+                        AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[i + 1]);
                     }
+
+                    foreach (var child in VisualPlan.Children)
+                        if (child is DynamicNode node)
+                            node.Setup();
                 }
             }
-        }
-
-        private List<Line> GenerateBaseLines(int count)
-        {
-            var lines = new List<Line>();
-            for (int i = 0; i < count; i++)
-            {
-                var newLine = new Line();
-                newLine.Stroke = Brushes.WhiteSmoke;
-                newLine.StrokeThickness = 3;
-                newLine.Tag = i + 1;
-                lines.Add(newLine);
-                VisualPlan.Children.Add(newLine);
-            }
-            return lines;
-        }
-
-        private void MakeLineBetweenNodes(PlanNode a, PlanNode b, Line newLine)
-        {
-            newLine.X1 = a.Margin.Left + a.Width / 2;
-            newLine.Y1 = a.Margin.Top + a.Height / 2;
-
-            newLine.X2 = b.Margin.Left + b.Width / 2;
-            newLine.Y2 = b.Margin.Top + b.Height / 2;
         }
 
         private void SetTextPlanData(string[] lines)
@@ -151,7 +127,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
             }
         }
 
-        private PlanNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point loc)
+        private DynamicNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point loc)
         {
             var goalCount = GetGoalCountInState(_pddlData.Problem.Goal.GoalExp, state);
             bool isGoal = goalCount == totalGoal;
@@ -159,8 +135,18 @@ namespace PDDLTools.Windows.SASSolutionWindow
             List<PredicateExp> cloneState = new List<PredicateExp>();
             foreach(var pred in state)
                 cloneState.Add(pred.Clone() as PredicateExp);
-            var newNode = new PlanNode(id, text, cloneState, isGoal, isPartialGoal);
-            newNode.Margin = new Thickness(loc.X, loc.Y, 0, 0);
+            var newNode = new DynamicNode(id, $"{id}", VisualPlan, id + 1, loc);
+
+            var toolTip = new ToolTip();
+            toolTip.BorderThickness = new Thickness(0);
+            toolTip.Background = Brushes.Transparent;
+            toolTip.Content = new StateTooltip(text, isPartialGoal, isGoal, state);
+            newNode.ToolTip = toolTip;
+            if (isGoal)
+                newNode.EllipseArea.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#227023");
+            else if (isPartialGoal)
+                newNode.EllipseArea.Fill = (SolidColorBrush)new BrushConverter().ConvertFrom("#877b12");
+
             VisualPlan.Children.Add(newNode);
             return newNode;
         }
@@ -223,20 +209,17 @@ namespace PDDLTools.Windows.SASSolutionWindow
                         }
                     }
                 }
-                else if (child is PlanNode node)
+                else if (child is DynamicNode node)
                 {
-                    if (node.Tag is int id)
+                    if (node.NodeID > newIndex)
                     {
-                        if (id > newIndex)
-                        {
-                            if (node.Visibility == Visibility.Visible)
-                                fadeOutElements.Add(node);
-                        }
-                        else
-                        {
-                            if (node.Visibility == Visibility.Hidden)
-                                fadeInElements.Add(node);
-                        }
+                        if (node.Visibility == Visibility.Visible)
+                            fadeOutElements.Add(node);
+                    }
+                    else
+                    {
+                        if (node.Visibility == Visibility.Hidden)
+                            fadeInElements.Add(node);
                     }
                 }
             }

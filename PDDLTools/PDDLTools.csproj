@@ -128,12 +128,12 @@
     <Compile Include="Windows\PlanValidatorWindow\PlanValidatorWindowControl.xaml.cs">
       <DependentUpon>PlanValidatorWindowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ResourceDictionary\DynamicNode.xaml.cs">
+      <DependentUpon>DynamicNode.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\SASSolutionWindow\SASSolutionWindow.cs" />
     <Compile Include="Windows\SASSolutionWindow\SASSolutionWindowControl.xaml.cs">
       <DependentUpon>SASSolutionWindowControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Windows\SASSolutionWindow\UserControls\PlanNode.xaml.cs">
-      <DependentUpon>PlanNode.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\SASSolutionWindow\UserControls\StateTooltip.xaml.cs">
       <DependentUpon>StateTooltip.xaml</DependentUpon>
@@ -234,11 +234,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\SASSolutionWindow\SASSolutionWindowControl.xaml">
+    <Page Include="Windows\ResourceDictionary\DynamicNode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\SASSolutionWindow\UserControls\PlanNode.xaml">
+    <Page Include="Windows\SASSolutionWindow\SASSolutionWindowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
