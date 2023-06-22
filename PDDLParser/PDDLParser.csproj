@@ -41,8 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysers\PostParsingAnalyser.cs" />
-    <Compile Include="Analysers\PreParsingAnalyser.cs" />
+    <Compile Include="Analysers\DomainAnalyser.cs" />
+    <Compile Include="Analysers\IAnalyser.cs" />
+    <Compile Include="Analysers\GeneralPreAnalyser.cs" />
+    <Compile Include="Analysers\ProblemAnalyser.cs" />
     <Compile Include="AST\ASTNode.cs" />
     <Compile Include="AST\ASTParser.cs" />
     <Compile Include="AST\ASTTokens.cs" />

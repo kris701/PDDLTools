@@ -1,22 +1,31 @@
 ﻿using PDDLParser.Listener;
+using PDDLParser.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PDDLParser.Analysers
 {
-    public static class PreParsingAnalyser
+    public class GeneralPreAnalyser : IAnalyser<string>
     {
-        public static void AnalyseText(string text, IErrorListener listener)
+        public void PostAnalyse(string decl, IErrorListener listener)
         {
+            throw new NotImplementedException();
+        }
+
+        public void PreAnalyse(string file, IErrorListener listener)
+        {
+            var text = File.ReadAllText(file);
             CheckParenthesesMissmatch(text, listener);
             CheckForCasing(text, listener);
             CheckForUnsupportedRequirements(text, listener);
         }
 
-        private static void CheckParenthesesMissmatch(string text, IErrorListener listener)
+        private void CheckParenthesesMissmatch(string text, IErrorListener listener)
         {
             var leftCount = text.Count(x => x == '(');
             var rightCount = text.Count(x => x == ')');
@@ -28,7 +37,7 @@ namespace PDDLParser.Analysers
             }
         }
 
-        private static void CheckForCasing(string text, IErrorListener listener)
+        private void CheckForCasing(string text, IErrorListener listener)
         {
             if (text.Any(char.IsUpper))
             {
@@ -56,7 +65,7 @@ namespace PDDLParser.Analysers
             ":true-negation",
             ":ucpop"
         };
-        private static void CheckForUnsupportedRequirements(string text, IErrorListener listener)
+        private void CheckForUnsupportedRequirements(string text, IErrorListener listener)
         {
             foreach(var unsuportedPackage in _unsupportedPackages)
             {

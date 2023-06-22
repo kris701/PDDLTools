@@ -93,7 +93,8 @@ namespace PDDLParser
                         node.Character));
             }
 
-            PostParsingAnalyser.AnalyseDomain(returnDomain, Listener);
+            IAnalyser<DomainDecl> analyser = new DomainAnalyser();
+            analyser.PostAnalyse(returnDomain, Listener);
 
             return returnDomain;
         }
@@ -142,7 +143,8 @@ namespace PDDLParser
                         node.Character));
             }
 
-            PostParsingAnalyser.AnalyseProblem(returnProblem, Listener);
+            IAnalyser<ProblemDecl> analyser = new ProblemAnalyser();
+            analyser.PostAnalyse(returnProblem, Listener);
 
             return returnProblem;
         }
@@ -164,7 +166,8 @@ namespace PDDLParser
         private ASTNode ParseAsASTTree(string path, IErrorListener listener)
         {
             var text = ReadDataAsString(path, listener);
-            PreParsingAnalyser.AnalyseText(text, listener);
+            var analyser = new GeneralPreAnalyser();
+            analyser.PreAnalyse(text, listener);
 
             var astParser = new ASTParser(listener);
             var absAST = astParser.Parse(text);
