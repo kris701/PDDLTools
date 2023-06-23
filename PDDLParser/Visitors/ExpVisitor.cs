@@ -63,6 +63,7 @@ namespace PDDLParser.Visitors
                     listener.AddError(new ParseError(
                         $"Context indicated the use of a type, but an object name was not given!",
                         ParseErrorType.Error,
+                        ParseErrorLevel.Parsing,
                         node.Line,
                         node.Character));
                 }
@@ -71,6 +72,7 @@ namespace PDDLParser.Visitors
                     listener.AddError(new ParseError(
                         $"Context indicated the use of a type, but a type was not given!",
                         ParseErrorType.Error,
+                        ParseErrorLevel.Parsing,
                         node.Line,
                         node.Character));
                 }

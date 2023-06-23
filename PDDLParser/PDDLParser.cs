@@ -14,32 +14,66 @@ using PDDLParser.Models.Problem;
 using PDDLParser.Analysers;
 using System.Xml.Linq;
 using PDDLParser.Helpers;
+using PDDLParser.Contextualisers;
 
 namespace PDDLParser
 {
     public class PDDLParser : IPDDLParser
     {
         public IErrorListener Listener { get; }
+        public bool Contextualise { get; set; }
 
-        public PDDLParser()
+        public PDDLParser(bool contextualise = true)
         {
             Listener = new ErrorListener();
             Listener.ThrowIfTypeAbove = ParseErrorType.Warning;
+            Contextualise = contextualise;
         }
 
-        public PDDLDecl ParseDomainAndProblemFiles(string domainFile, string problemFile)
+        public PDDLDecl Parse(string domainFile = null, string problemFile = null)
         {
-            return new PDDLDecl(
-                ParseDomainFile(domainFile),
-                ParseProblemFile(problemFile));
+            var decl = new PDDLDecl(
+                ParseDomain(domainFile),
+                ParseProblem(problemFile));
+
+            if (Contextualise)
+            {
+                if (domainFile != null && problemFile != null)
+                {
+                    IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser();
+                    contextualiser.Contexturalise(decl, Listener);
+
+                    IAnalyser<PDDLDecl> pddlAnalyser = new PDDLDeclAnalyser();
+                    pddlAnalyser.PostAnalyse(decl, Listener);
+                }
+                else if (domainFile != null)
+                {
+                    IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser();
+                    contextualiser.Contexturalise(decl.Domain, Listener);
+
+                    IAnalyser<DomainDecl> domainAnalyser = new DomainAnalyser();
+                    domainAnalyser.PostAnalyse(decl.Domain, Listener);
+                }
+                else if (problemFile != null)
+                {
+                    IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser();
+                    contextualiser.Contexturalise(decl.Problem, Listener);
+
+                    IAnalyser<ProblemDecl> problemAnalyser = new ProblemAnalyser();
+                    problemAnalyser.PostAnalyse(decl.Problem, Listener);
+                }
+            }
+
+            return decl;
         }
 
-        public DomainDecl ParseDomainFile(string parseFile)
+        private DomainDecl ParseDomain(string parseFile)
         {
             if (!PDDLHelper.IsFileDomain(parseFile))
                 Listener.AddError(new ParseError(
                     $"Attempted file to parse was not a domain file!",
-                    ParseErrorType.Error));
+                    ParseErrorType.Error,
+                    ParseErrorLevel.PreParsing));
 
             var absAST = ParseAsASTTree(parseFile, Listener);
 
@@ -47,6 +81,7 @@ namespace PDDLParser
                 Listener.AddError(new ParseError(
                     $"Root 'define' node not found?",
                     ParseErrorType.Error,
+                    ParseErrorLevel.Parsing,
                     absAST.Line,
                     absAST.Character));
 
@@ -89,22 +124,21 @@ namespace PDDLParser
                     Listener.AddError(new ParseError(
                         $"Could not parse content of AST node: {node.Content}",
                         ParseErrorType.Error,
+                        ParseErrorLevel.Parsing,
                         node.Line,
                         node.Character));
             }
 
-            IAnalyser<DomainDecl> analyser = new DomainAnalyser();
-            analyser.PostAnalyse(returnDomain, Listener);
-
             return returnDomain;
         }
 
-        public ProblemDecl ParseProblemFile(string parseFile)
+        private ProblemDecl ParseProblem(string parseFile)
         {
             if (!PDDLHelper.IsFileProblem(parseFile))
                 Listener.AddError(new ParseError(
                     $"Attempted file to parse was not a problem file!",
-                    ParseErrorType.Error));
+                    ParseErrorType.Error,
+                    ParseErrorLevel.PreParsing));
 
             var absAST = ParseAsASTTree(parseFile, Listener);
 
@@ -112,6 +146,7 @@ namespace PDDLParser
                 Listener.AddError(new ParseError(
                     $"Root 'define' node not found?",
                     ParseErrorType.Error,
+                    ParseErrorLevel.Parsing,
                     absAST.Line,
                     absAST.Character));
 
@@ -139,12 +174,10 @@ namespace PDDLParser
                     Listener.AddError(new ParseError(
                         $"Could not parse content of AST node: {node.Content}",
                         ParseErrorType.Error,
+                        ParseErrorLevel.Parsing,
                         node.Line,
                         node.Character));
             }
-
-            IAnalyser<ProblemDecl> analyser = new ProblemAnalyser();
-            analyser.PostAnalyse(returnProblem, Listener);
 
             return returnProblem;
         }
@@ -156,6 +189,7 @@ namespace PDDLParser
                 Listener.AddError(new ParseError(
                     $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.Content.Replace(targetName, "").Trim()}",
                     ParseErrorType.Error,
+                    ParseErrorLevel.Parsing,
                     node.Line,
                     node.Character));
                 return false;
@@ -180,7 +214,8 @@ namespace PDDLParser
             {
                 listener.AddError(new ParseError(
                     $"Could not find the file to parse: '{path}'",
-                    ParseErrorType.Error));
+                    ParseErrorType.Error,
+                    ParseErrorLevel.PreParsing));
             }
             string text = ReplaceCommentsWithWhiteSpace(File.ReadAllLines(path).ToList());
             text = text.ToLower();

@@ -44,10 +44,16 @@
     <Compile Include="Analysers\DomainAnalyser.cs" />
     <Compile Include="Analysers\IAnalyser.cs" />
     <Compile Include="Analysers\GeneralPreAnalyser.cs" />
+    <Compile Include="Analysers\PDDLDeclAnalyser.cs" />
     <Compile Include="Analysers\ProblemAnalyser.cs" />
     <Compile Include="AST\ASTNode.cs" />
     <Compile Include="AST\ASTParser.cs" />
     <Compile Include="AST\ASTTokens.cs" />
+    <Compile Include="Contextualisers\BaseContextualiser.cs" />
+    <Compile Include="Contextualisers\PDDLDeclContextualiser.cs" />
+    <Compile Include="Contextualisers\IContextualiser.cs" />
+    <Compile Include="Contextualisers\PDDLDomainDeclContextualiser.cs" />
+    <Compile Include="Contextualisers\PDDLProblemDeclContextualiser.cs" />
     <Compile Include="Helpers\PDDLHelper.cs" />
     <Compile Include="IPDDLParser.cs" />
     <Compile Include="Models\BaseNode.cs" />

@@ -13,21 +13,25 @@ namespace PDDLParser.Analysers
     {
         public void PostAnalyse(DomainDecl decl, IErrorListener listener)
         {
-            Dictionary<string, List<string>> typeTable = new Dictionary<string, List<string>>();
-            if (decl.Types != null)
-            {
-                foreach (var typeDecl in decl.Types.Types)
-                    typeTable.Add(typeDecl.TypeName, typeDecl.SubTypes);
-            }
-
+            // Basics
             CheckForBasicDomain(decl, listener);
 
-            CheckDeclaredVsUsedTypes(decl, listener);
+            // Declare Checking
+
+            // Types
+            CheckForUniqueTypeNames(decl, listener);
+            BuildTypeTables(decl, listener);
+            CheckForValidTypesInPredicates(decl, listener);
+            CheckForValidTypesInConstants(decl, listener);
+            CheckTypeMatchForActions(decl, listener);
+            CheckTypeMatchForAxioms(decl, listener);
+
+            // Unique Name Checking
             CheckForUniquePredicateNames(decl, listener);
             CheckForUniqueActionParameterNames(decl, listener);
             CheckForUniqueAxiomParameterNames(decl, listener);
-            CheckActionUsesValidPredicates(decl, listener, typeTable);
-            CheckAxiomUsesValidPredicates(decl, listener, typeTable);
+            CheckActionUsesValidPredicates(decl, listener, decl.TypesTable);
+            CheckAxiomUsesValidPredicates(decl, listener, decl.TypesTable);
             CheckForUnusedPredicates(decl, listener);
         }
 
@@ -36,121 +40,242 @@ namespace PDDLParser.Analysers
             throw new NotImplementedException();
         }
 
-        private static void CheckForBasicDomain(DomainDecl domain, IErrorListener listener)
+        private void CheckForBasicDomain(DomainDecl domain, IErrorListener listener)
         {
             if (domain.Predicates == null)
                 listener.AddError(new ParseError(
                     $"Missing predicates declaration.",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
             if (domain.Predicates != null && domain.Predicates.Predicates.Count == 0)
                 listener.AddError(new ParseError(
                     $"No predicates defined.",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
             if (domain.Actions == null)
                 listener.AddError(new ParseError(
                     $"Missing actions.",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
             if (domain.Actions != null && domain.Actions.Count == 0)
                 listener.AddError(new ParseError(
                     $"Missing actions.",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
         }
 
-        private static void CheckDeclaredVsUsedTypes(DomainDecl domain, IErrorListener listener)
+        private void CheckForUniqueTypeNames(DomainDecl domain, IErrorListener listener)
         {
             if (domain.Types != null)
             {
-                List<string> declaredTypes = new List<string>();
-                // Default in PDDL
-                declaredTypes.Add("object");
-                declaredTypes.Add("");
-
+                List<string> declaredSubTypes = new List<string>();
+                List<string> declaredSuperTypes = new List<string>();
                 foreach (var typeDecl in domain.Types.Types)
-                    foreach (var type in typeDecl.SubTypes)
-                        declaredTypes.Add(type);
-
-                // Check predicates
-                if (domain.Predicates != null)
                 {
-                    foreach (var predicate in domain.Predicates.Predicates)
+                    if (declaredSuperTypes.Contains(typeDecl.TypeName))
                     {
-                        foreach (var arg in predicate.Arguments)
-                        {
-                            if (!declaredTypes.Contains(arg.Type))
-                            {
-                                listener.AddError(new ParseError(
-                                    $"Use of undeclared type '{arg.Type}'",
-                                    ParseErrorType.Error,
-                                    arg.Line,
-                                    arg.Character));
-                            }
-                        }
+                        listener.AddError(new ParseError(
+                            $"Multiple declarations of super types with the same name '{typeDecl.TypeName}'",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
+                            typeDecl.Line,
+                            typeDecl.Character));
                     }
-                }
+                    declaredSuperTypes.Add(typeDecl.TypeName);
 
-                // Check constants
-                if (domain.Constants != null)
-                {
-                    foreach (var constant in domain.Constants.Constants)
+                    foreach (var typeName in typeDecl.SubTypes)
                     {
-                        if (!declaredTypes.Contains(constant.Type))
+                        if (declaredSubTypes.Contains(typeName))
                         {
                             listener.AddError(new ParseError(
-                                $"Use of undeclared type '{constant.Type}'",
+                                $"Multiple declarations of sub types with the same name '{typeName}'",
                                 ParseErrorType.Error,
-                                constant.Line,
-                                constant.Character));
+                                ParseErrorLevel.Analyser,
+                                typeDecl.Line,
+                                typeDecl.Character));
                         }
+                        declaredSubTypes.Add(typeName);
                     }
                 }
-
-                // Check actions
-                if (domain.Actions != null)
+            }
+        }
+        private void BuildTypeTables(DomainDecl domain, IErrorListener listener)
+        {
+            domain.TypesTable = new Dictionary<string, List<string>>();
+            if (domain.Types != null)
+            {
+                foreach (var typeDecl in domain.Types.Types)
                 {
-                    foreach (var action in domain.Actions)
+                    if (domain.TypesTable.ContainsKey(typeDecl.TypeName))
                     {
-                        foreach (var param in action.Parameters)
-                        {
-                            if (!declaredTypes.Contains(param.Type))
-                            {
-                                listener.AddError(new ParseError(
-                                    $"Use of undeclared type '{param.Type}'",
-                                    ParseErrorType.Error,
-                                    param.Line,
-                                    param.Character));
-                            }
-                        }
+                        listener.AddError(new ParseError(
+                            $"Multiply defined types!",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Contexturaliser,
+                            typeDecl.Line,
+                            typeDecl.Character));
                     }
+                    else
+                        domain.TypesTable.Add(typeDecl.TypeName, typeDecl.SubTypes);
                 }
+            }
+            if (!domain.TypesTable.ContainsKey(""))
+                domain.TypesTable.Add("", new List<string>());
+            if (!domain.TypesTable.ContainsKey("object"))
+                domain.TypesTable.Add("object", new List<string>());
 
-                // Check axioms
-                if (domain.Axioms != null)
+            if (domain.Predicates != null)
+            {
+                domain.PredicateTypeTable = new Dictionary<string, List<string>>();
+                foreach (var pred in domain.Predicates.Predicates)
                 {
-                    foreach (var axiom in domain.Axioms)
+                    var argTypeList = new List<string>();
+                    foreach (var arg in pred.Arguments)
+                        argTypeList.Add(arg.Type);
+                    if (domain.PredicateTypeTable.ContainsKey(pred.Name))
                     {
-                        foreach (var variable in axiom.Vars)
+                        listener.AddError(new ParseError(
+                            $"Multiply defined predicates!",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Contexturaliser,
+                            pred.Line,
+                            pred.Character));
+                    }
+                    domain.PredicateTypeTable.Add(pred.Name, argTypeList);
+                }
+            }
+        }
+        private void CheckForValidTypesInPredicates(DomainDecl domain, IErrorListener listener)
+        {
+            if (domain.Predicates != null)
+            {
+                foreach(var predicate in domain.Predicates.Predicates)
+                {
+                    foreach(var arg in predicate.Arguments)
+                    {
+                        if (!domain.ContainsType(arg.Type))
                         {
-                            if (!declaredTypes.Contains(variable.Type))
-                            {
-                                listener.AddError(new ParseError(
-                                    $"Use of undeclared type '{variable.Type}'",
-                                    ParseErrorType.Error,
-                                    variable.Line,
-                                    variable.Character));
-                            }
+                            listener.AddError(new ParseError(
+                                $"Predicate arguments contains unknown type!",
+                                ParseErrorType.Error,
+                                ParseErrorLevel.Analyser,
+                                arg.Line,
+                                arg.Character));
                         }
                     }
                 }
             }
         }
+        private void CheckTypeMatchForActions(DomainDecl domain, IErrorListener listener)
+        {
+            if (domain.Actions != null)
+            {
+                foreach(var act in domain.Actions)
+                {
+                    foreach(var param in act.Parameters)
+                    {
+                        if (!domain.ContainsType(param.Type))
+                        {
+                            listener.AddError(new ParseError(
+                                $"Parameter contains unknow type!",
+                                ParseErrorType.Error,
+                                ParseErrorLevel.Analyser,
+                                param.Line,
+                                param.Character));
+                        }
+                    }
+
+                    CheckForValidTypesInExp(act.Preconditions, domain.PredicateTypeTable, domain.TypesTable, listener);
+                    CheckForValidTypesInExp(act.Effects, domain.PredicateTypeTable, domain.TypesTable, listener);
+                }
+            }
+        }
+        private void CheckTypeMatchForAxioms(DomainDecl domain, IErrorListener listener)
+        {
+            if (domain.Axioms != null)
+            {
+                foreach (var axi in domain.Axioms)
+                {
+                    foreach (var param in axi.Vars)
+                    {
+                        if (!domain.ContainsType(param.Type))
+                        {
+                            listener.AddError(new ParseError(
+                                $"Parameter contains unknow type!",
+                                ParseErrorType.Error,
+                                ParseErrorLevel.Analyser,
+                                param.Line,
+                                param.Character));
+                        }
+                    }
+
+                    CheckForValidTypesInExp(axi.Context, domain.PredicateTypeTable, domain.TypesTable, listener);
+                    CheckForValidTypesInExp(axi.Implies, domain.PredicateTypeTable, domain.TypesTable, listener);
+                }
+            }
+        }
+        private void CheckForValidTypesInExp(IExp node, Dictionary<string, List<string>> predicateTypeTable, Dictionary<string, List<string>> typesTable, IErrorListener listener)
+        {
+            if (node is AndExp and)
+            {
+                foreach (var child in and.Children)
+                    CheckForValidTypesInExp(child, predicateTypeTable, typesTable, listener);
+            }
+            else if (node is OrExp or)
+            {
+                CheckForValidTypesInExp(or.Option1, predicateTypeTable, typesTable, listener);
+                CheckForValidTypesInExp(or.Option2, predicateTypeTable, typesTable, listener);
+            }
+            else if (node is NotExp not)
+            {
+                CheckForValidTypesInExp(not.Child, predicateTypeTable, typesTable, listener);
+            }
+            else if (node is PredicateExp pred)
+            {
+                int index = 0;
+                foreach(var arg in pred.Arguments)
+                {
+                    if (!IsTypeOrSubType(arg.Type, predicateTypeTable[pred.Name][index], typesTable))
+                    {
+                        listener.AddError(new ParseError(
+                            $"Predicate has an invalid argument type! Expected a '{predicateTypeTable[pred.Name][index]}' but got a '{arg.Type}'",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
+                            arg.Line,
+                            arg.Character));
+                    }
+                    index++;
+                }
+            }
+        }
+        private void CheckForValidTypesInConstants(DomainDecl domain, IErrorListener listener)
+        {
+            if (domain.Constants != null)
+            {
+                foreach(var cons in domain.Constants.Constants)
+                {
+                    if (!domain.ContainsType(cons.Type))
+                    {
+                        listener.AddError(new ParseError(
+                            $"Constant contains unknown type!",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
+                            cons.Line,
+                            cons.Character));
+                    }
+                }
+            }
+        }
+
+
         private static void CheckForUniquePredicateNames(DomainDecl domain, IErrorListener listener)
         {
             if (domain.Predicates != null)
@@ -163,6 +288,7 @@ namespace PDDLParser.Analysers
                         listener.AddError(new ParseError(
                                 $"Multiple declarations of predicates with the same name '{predicate.Name}'",
                                 ParseErrorType.Error,
+                                ParseErrorLevel.Analyser,
                                 predicate.Line,
                                 predicate.Character));
                     }
@@ -184,6 +310,7 @@ namespace PDDLParser.Analysers
                             listener.AddError(new ParseError(
                                     $"Multiple declarations of arguments with the same name '{param.Name}' in the action '{action.Name}'",
                                     ParseErrorType.Error,
+                                    ParseErrorLevel.Analyser,
                                     param.Line,
                                     param.Character));
                         }
@@ -206,6 +333,7 @@ namespace PDDLParser.Analysers
                             listener.AddError(new ParseError(
                                     $"Multiple declarations of arguments with the same name '{param.Name}' in axiom",
                                     ParseErrorType.Error,
+                                    ParseErrorLevel.Analyser,
                                     param.Line,
                                     param.Character));
                         }
@@ -288,12 +416,14 @@ namespace PDDLParser.Analysers
                         listener.AddError(new ParseError(
                             $"Used predicate '{pred.Name}' did not match the type definitions from the parameters!",
                             ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
                             pred.Line,
                             pred.Character));
                     else
                         listener.AddError(new ParseError(
                             $"Undefined predicate used '{pred.Name}'",
                             ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
                             pred.Line,
                             pred.Character));
                 }
@@ -382,6 +512,7 @@ namespace PDDLParser.Analysers
                     listener.AddError(new ParseError(
                         $"Unused predicate detected '{predicate}'",
                         ParseErrorType.Message,
+                        ParseErrorLevel.Analyser,
                         predicate.Line,
                         predicate.Character));
                 }

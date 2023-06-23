@@ -9,17 +9,17 @@ namespace PDDLParser.Models.Problem
 {
     public class GoalDecl : BaseNode, IDecl
     {
-        private IExp _goalExp;
-        public IExp GoalExp { 
-            get 
-            { 
-                return _goalExp; 
-            } set {
-                _goalExp = value;
-                GoalExpCount = GoalStateCount(value);
-            } 
-        }
+        public IExp GoalExp { get; set; }
+
+        // Context
         public int GoalExpCount { get; internal set; }
+        public List<PredicateExp> TruePredicates { get; internal set; }
+        public List<PredicateExp> FalsePredicates { get; internal set; }
+        public bool DoesContainOr { get; internal set; }
+        public bool DoesContainAnd { get; internal set; }
+        public bool DoesContainNot { get; internal set; }
+        public bool DoesContainPredicates { get; internal set; }
+        public bool DoesContainNames { get; internal set; }
 
         public GoalDecl(ASTNode node, IExp goalExp) : base(node)
         {
@@ -29,31 +29,6 @@ namespace PDDLParser.Models.Problem
         public override string ToString()
         {
             return $"(:goal {GoalExp})";
-        }
-
-        private int GoalStateCount(IExp exp)
-        {
-            if (exp is AndExp and)
-            {
-                int count = 0;
-                foreach (var child in and.Children)
-                    count += GoalStateCount(child);
-                return count;
-            }
-            else if (exp is NotExp not)
-            {
-                return GoalStateCount(not.Child);
-            }
-            else if (exp is OrExp or)
-            {
-                return GoalStateCount(or.Option1) + GoalStateCount(or.Option2);
-            }
-            else
-            {
-                if (exp is PredicateExp)
-                    return 1;
-            }
-            return 0;
         }
     }
 }

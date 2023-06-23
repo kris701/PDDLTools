@@ -33,36 +33,42 @@ namespace PDDLParser.Analysers
                 listener.AddError(new ParseError(
                     $"Missing domain name reference",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
             if (domain.Objects == null)
                 listener.AddError(new ParseError(
                     $"Missing objects declaration",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
             if (domain.Objects != null && domain.Objects.Objs.Count == 0)
                 listener.AddError(new ParseError(
                     $"Missing objects",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
             if (domain.Init == null)
                 listener.AddError(new ParseError(
                     $"Missing Init declaration",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
             if (domain.Init != null && domain.Init.Predicates.Count == 0)
                 listener.AddError(new ParseError(
                     $"No init predicates declared",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
             if (domain.Goal == null)
                 listener.AddError(new ParseError(
                     $"Missing Goal declaration",
                     ParseErrorType.Message,
+                    ParseErrorLevel.Analyser,
                     domain.Line,
                     domain.Character));
         }
@@ -85,6 +91,7 @@ namespace PDDLParser.Analysers
                                 listener.AddError(new ParseError(
                                     $"Undeclared object detected!",
                                     ParseErrorType.Error,
+                                    ParseErrorLevel.Analyser,
                                     arg.Line,
                                     arg.Character));
                             }
@@ -121,6 +128,7 @@ namespace PDDLParser.Analysers
                         listener.AddError(new ParseError(
                             $"Undeclared object detected!",
                             ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
                             arg.Line,
                             arg.Character));
                     }
@@ -139,6 +147,7 @@ namespace PDDLParser.Analysers
                         listener.AddError(new ParseError(
                                 $"Multiple declarations of object with the same name '{obj.Name}'",
                                 ParseErrorType.Error,
+                                ParseErrorLevel.Analyser,
                                 obj.Line,
                                 obj.Character));
                     }
@@ -171,6 +180,7 @@ namespace PDDLParser.Analysers
                         listener.AddError(new ParseError(
                             $"Unused object detected '{obj.Name}'",
                             ParseErrorType.Message,
+                            ParseErrorLevel.Analyser,
                             obj.Line,
                             obj.Character));
                 }
@@ -185,6 +195,7 @@ namespace PDDLParser.Analysers
                     listener.AddError(new ParseError(
                         $"No actual goal predicates in the goal declaration!",
                         ParseErrorType.Warning,
+                        ParseErrorLevel.Analyser,
                         problem.Goal.GoalExp.Line,
                         problem.Goal.GoalExp.Character));
                 }

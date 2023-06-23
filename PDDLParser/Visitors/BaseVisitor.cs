@@ -18,6 +18,7 @@ namespace PDDLParser.Visitors
                 listener.AddError(new ParseError(
                     $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.Content.Replace(targetName, "").Trim()}",
                     ParseErrorType.Error,
+                    ParseErrorLevel.Parsing,
                     node.Line,
                     node.Character));
         }
@@ -30,6 +31,7 @@ namespace PDDLParser.Visitors
                     listener.AddError(new ParseError(
                         $"'{nodeName}' must not contain any children!",
                         ParseErrorType.Error,
+                        ParseErrorLevel.Parsing,
                         node.Line,
                         node.Character));
             }
@@ -39,6 +41,7 @@ namespace PDDLParser.Visitors
                     listener.AddError(new ParseError(
                         $"'{nodeName}' must have exactly {targetChildren} children, but it has '{node.Children.Count}'!",
                         ParseErrorType.Error,
+                        ParseErrorLevel.Parsing,
                         node.Line,
                         node.Character));
             }
@@ -50,6 +53,7 @@ namespace PDDLParser.Visitors
                 listener.AddError(new ParseError(
                     $"'{nodeName}' must have more than {targetChildren} children, but it has '{node.Children.Count}'!",
                     ParseErrorType.Error,
+                    ParseErrorLevel.Parsing,
                     node.Line,
                     node.Character));
         }
@@ -72,6 +76,7 @@ namespace PDDLParser.Visitors
                         listener.AddError(new ParseError(
                             $"Unexpected node type while parsing '{nodeType}'!",
                             ParseErrorType.Error,
+                            ParseErrorLevel.Parsing,
                             parsed.Line,
                             parsed.Character));
                     }
@@ -90,6 +95,7 @@ namespace PDDLParser.Visitors
                     listener.AddError(new ParseError(
                         $"Could not parse predicate!",
                         ParseErrorType.Error,
+                        ParseErrorLevel.Parsing,
                         predicate.Line,
                         predicate.Character));
                 predicates.Add(newNode);
@@ -107,6 +113,7 @@ namespace PDDLParser.Visitors
                     listener.AddError(new ParseError(
                         $"Could not parse name!",
                         ParseErrorType.Error,
+                        ParseErrorLevel.Parsing,
                         child.Line,
                         child.Character));
                 name.Add(newNode);
@@ -120,6 +127,7 @@ namespace PDDLParser.Visitors
                 listener.AddError(new ParseError(
                     $"'{nodeName}' is malformed! missing '{targetName}'",
                     ParseErrorType.Error,
+                    ParseErrorLevel.Parsing,
                     node.Line,
                     node.Character));
         }

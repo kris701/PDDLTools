@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,9 @@ namespace PDDLParser.Models.Problem
     public class DomainNameRefDecl : BaseNode, IDecl
     {
         public string Name { get; set; }
+
+        // Context
+        public DomainDecl DomainReference { get; internal set; }
 
         public DomainNameRefDecl(ASTNode node, string name) : base(node)
         {

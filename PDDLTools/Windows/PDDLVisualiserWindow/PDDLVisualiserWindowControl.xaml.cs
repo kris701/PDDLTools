@@ -92,7 +92,7 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                 try
                 {
                     IPDDLParser parser = new PDDLParser.PDDLParser();
-                    var decl = parser.ParseDomainAndProblemFiles(SelectedDomainFile, SelectedProblemFile);
+                    var decl = parser.Parse(SelectedDomainFile, SelectedProblemFile);
                     int locCounter = 0;
 
                     var predDict = new Dictionary<string, int>();
@@ -170,12 +170,6 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                     return true;
             }
             return false;
-        }
-
-        private void AddNewNode(int id, string text, Point loc, List<int> targetIds)
-        {
-            var newNode = new DynamicNode(id, text, MainGrid, targetIds, loc);
-            MainGrid.Children.Add(newNode);
         }
     }
 }

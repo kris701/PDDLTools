@@ -82,11 +82,9 @@ namespace PDDLParser.Visitors
 
                 // Preconditions
                 IExp precondition = ExpVisitor.Visit(node.Children[1], listener);
-                DecorateExpressions(precondition, parameters, listener);
 
                 // Effects
                 IExp effects = ExpVisitor.Visit(node.Children[2], listener);
-                DecorateExpressions(effects, parameters, listener);
 
                 return new ActionDecl(
                     node,
@@ -107,11 +105,9 @@ namespace PDDLParser.Visitors
 
                 // Context
                 IExp context = ExpVisitor.Visit(node.Children[1], listener);
-                DecorateExpressions(context, vars, listener);
 
                 // Implies
                 IExp implies = ExpVisitor.Visit(node.Children[2], listener);
-                DecorateExpressions(implies, vars, listener);
 
                 return new AxiomDecl(
                     node,
@@ -122,45 +118,9 @@ namespace PDDLParser.Visitors
 
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.Content}",
-                ParseErrorType.Error));
+                ParseErrorType.Error,
+                ParseErrorLevel.Parsing));
             return default;
-        }
-
-        private static void DecorateExpressions(IExp node, List<NameExp> parameters, IErrorListener listener)
-        {
-            if (node is AndExp and)
-            {
-                foreach (var child in and.Children)
-                    DecorateExpressions(child, parameters, listener);
-            }
-            else if (node is OrExp or)
-            {
-                DecorateExpressions(or.Option1, parameters, listener);
-                DecorateExpressions(or.Option2, parameters, listener);
-            }
-            else if (node is NotExp not)
-            {
-                DecorateExpressions(not.Child, parameters, listener);
-            }
-            else if (node is PredicateExp pred)
-            {
-                foreach(var arg in pred.Arguments)
-                {
-                    if (!parameters.Any(x => x.Name == arg.Name))
-                    {
-                        listener.AddError(new ParseError(
-                            $"Could not match name of parameters and precondition!",
-                            ParseErrorType.Error,
-                            arg.Line,
-                            arg.Character));
-                    }
-                    else
-                    {
-                        var item = parameters.Single(x => x.Name == arg.Name);
-                        arg.Type = item.Type;
-                    }
-                }
-            }
         }
     }
 }

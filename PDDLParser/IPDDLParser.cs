@@ -13,9 +13,8 @@ namespace PDDLParser
     public interface IPDDLParser
     {
         IErrorListener Listener { get; }
+        bool Contextualise { get; set; }
 
-        DomainDecl ParseDomainFile(string parseFile);
-        ProblemDecl ParseProblemFile(string parseFile);
-        PDDLDecl ParseDomainAndProblemFiles(string domainFile, string problemFile);
+        PDDLDecl Parse(string domainFile = null, string problemFile = null);
     }
 }

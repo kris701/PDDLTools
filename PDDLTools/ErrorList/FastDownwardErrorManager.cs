@@ -76,9 +76,9 @@ namespace PDDLTools.ErrorList
                 try
                 {
                     if (PDDLHelper.IsFileDomain(file))
-                        parser.ParseDomainFile(file);
+                        parser.Parse(file);
                     else if (PDDLHelper.IsFileProblem(file))
-                        parser.ParseProblemFile(file);
+                        parser.Parse(null, file);
                 }
                 catch (ParseException)
                 {
