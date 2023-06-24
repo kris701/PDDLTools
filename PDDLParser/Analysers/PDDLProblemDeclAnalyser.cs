@@ -9,16 +9,21 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Analysers
 {
-    public class ProblemAnalyser : IAnalyser<ProblemDecl>
+    public class PDDLProblemDeclAnalyser : IAnalyser<ProblemDecl>
     {
         public void PostAnalyse(ProblemDecl decl, IErrorListener listener)
-        {
+        {   
+            // Basics
             CheckForBasicProblem(decl, listener);
 
-            CheckForUniqueObjectNames(decl, listener);
-            CheckDeclaredVsUsedObjects(decl, listener);
+            // Declare Checking
             CheckForUndeclaredObjects(decl, listener);
+            CheckDeclaredVsUsedObjects(decl, listener);
 
+            // Unique Name Checking
+            CheckForUniqueObjectNames(decl, listener);
+
+            // Validity Checking
             CheckForValidGoal(decl, listener);
         }
 
@@ -27,7 +32,7 @@ namespace PDDLParser.Analysers
             throw new NotImplementedException();
         }
 
-        private static void CheckForBasicProblem(ProblemDecl domain, IErrorListener listener)
+        private void CheckForBasicProblem(ProblemDecl domain, IErrorListener listener)
         {
             if (domain.DomainName == null)
                 listener.AddError(new ParseError(
@@ -72,7 +77,8 @@ namespace PDDLParser.Analysers
                     domain.Line,
                     domain.Character));
         }
-        private static void CheckForUndeclaredObjects(ProblemDecl problem, IErrorListener listener)
+
+        private void CheckForUndeclaredObjects(ProblemDecl problem, IErrorListener listener)
         {
             if (problem.Objects != null)
             {
@@ -103,7 +109,7 @@ namespace PDDLParser.Analysers
                     CheckForUndeclaredExpObjects(problem.Goal.GoalExp, objects, listener);
             }
         }
-        private static void CheckForUndeclaredExpObjects(IExp exp, List<NameExp> objects, IErrorListener listener)
+        private void CheckForUndeclaredExpObjects(IExp exp, List<NameExp> objects, IErrorListener listener)
         {
             if (exp is AndExp and)
             {
@@ -135,7 +141,68 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private static void CheckForUniqueObjectNames(ProblemDecl problem, IErrorListener listener)
+        private void CheckDeclaredVsUsedObjects(ProblemDecl problem, IErrorListener listener)
+        {
+            if (problem.Objects != null && problem.Init != null && problem.Goal != null)
+            {
+                foreach (var obj in problem.Objects.Objs)
+                {
+                    bool isFound = false;
+                    foreach (var init in problem.Init.Predicates)
+                    {
+                        foreach (var arg in init.Arguments)
+                        {
+                            if (arg.Name == obj.Name)
+                            {
+                                isFound = true;
+                                break;
+                            }
+                        }
+                        if (isFound)
+                            break;
+                    }
+                    if (!isFound)
+                    {
+                        HashSet<string> found = new HashSet<string>();
+                        SeekParameters(problem.Goal.GoalExp, found);
+                        if (found.Contains(obj.Name))
+                            isFound = true;
+                    }
+
+                    if (!isFound)
+                        listener.AddError(new ParseError(
+                            $"Unused object detected '{obj.Name}'",
+                            ParseErrorType.Message,
+                            ParseErrorLevel.Analyser,
+                            obj.Line,
+                            obj.Character));
+                }
+            }
+        }
+        private void SeekParameters(IExp exp, HashSet<string> found)
+        {
+            if (exp is AndExp and)
+            {
+                foreach (var child in and.Children)
+                    SeekParameters(child, found);
+            }
+            else if (exp is OrExp or)
+            {
+                SeekParameters(or.Option1, found);
+                SeekParameters(or.Option2, found);
+            }
+            else if (exp is NotExp not)
+            {
+                SeekParameters(not.Child, found);
+            }
+            else if (exp is PredicateExp pred)
+            {
+                foreach (var param in pred.Arguments)
+                    found.Add(param.Name);
+            }
+        }
+
+        private void CheckForUniqueObjectNames(ProblemDecl problem, IErrorListener listener)
         {
             if (problem.Objects != null)
             {
@@ -155,38 +222,8 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private static void CheckDeclaredVsUsedObjects(ProblemDecl problem, IErrorListener listener)
-        {
-            if (problem.Objects != null && problem.Init != null)
-            {
-                foreach (var obj in problem.Objects.Objs)
-                {
-                    bool isFound = false;
-                    foreach (var init in problem.Init.Predicates)
-                    {
-                        foreach (var arg in init.Arguments)
-                        {
-                            if (arg.Name == obj.Name)
-                            {
-                                isFound = true;
-                                break;
-                            }
-                        }
-                        if (isFound)
-                            break;
-                    }
-
-                    if (!isFound)
-                        listener.AddError(new ParseError(
-                            $"Unused object detected '{obj.Name}'",
-                            ParseErrorType.Message,
-                            ParseErrorLevel.Analyser,
-                            obj.Line,
-                            obj.Character));
-                }
-            }
-        }
-        private static void CheckForValidGoal(ProblemDecl problem, IErrorListener listener)
+        
+        private void CheckForValidGoal(ProblemDecl problem, IErrorListener listener)
         {
             if (problem.Goal != null)
             {
@@ -201,7 +238,7 @@ namespace PDDLParser.Analysers
                 }
             }
         }
-        private static bool DoesAnyPredicatesExist(IExp exp)
+        private bool DoesAnyPredicatesExist(IExp exp)
         {
             if (exp is AndExp and)
             {

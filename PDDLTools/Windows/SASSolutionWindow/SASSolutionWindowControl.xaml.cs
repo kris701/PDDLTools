@@ -93,12 +93,12 @@ namespace PDDLTools.Windows.SASSolutionWindow
                     ILocationSpreader spreader = LocationSpreaderBuilder.GetSpreader(SelectSpreaderCombobox.SelectedItem as string);
                     var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
 
-                    AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[0]);
+                    AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, locs[0]);
 
                     for (int i = 0; i < plan.Count; i++)
                     {
                         simulator.Step();
-                        AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.GoalExpCount, locs[i + 1]);
+                        AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, locs[i + 1]);
                     }
 
                     foreach (var child in VisualPlan.Children)

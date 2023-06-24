@@ -31,7 +31,7 @@ namespace PDDLTools.ContextStorage
                 var lastWriteDate = new FileInfo(file).LastWriteTime;
                 if (lastWriteDate > _domainTimes[file])
                 {
-                    IPDDLParser parser = new PDDLParser.PDDLParser();
+                    IPDDLParser parser = new PDDLParser.PDDLParser(true, false);
                     var result = parser.Parse(file);
                     _domains[file] = result.Domain;
                     _domainTimes[file] = lastWriteDate;
@@ -39,7 +39,7 @@ namespace PDDLTools.ContextStorage
             }
             else
             {
-                IPDDLParser parser = new PDDLParser.PDDLParser();
+                IPDDLParser parser = new PDDLParser.PDDLParser(true, false);
                 var result = parser.Parse(file);
                 _domains.Add(file, result.Domain);
                 _domainTimes.Add(file, new FileInfo(file).LastWriteTime);
@@ -59,7 +59,7 @@ namespace PDDLTools.ContextStorage
                 var lastWriteDate = new FileInfo(file).LastWriteTime;
                 if (lastWriteDate > _problemTimes[file])
                 {
-                    IPDDLParser parser = new PDDLParser.PDDLParser();
+                    IPDDLParser parser = new PDDLParser.PDDLParser(true, false);
                     var result = parser.Parse(null, file);
                     _problems[file] = result.Problem;
                     _problemTimes[file] = lastWriteDate;
@@ -67,7 +67,7 @@ namespace PDDLTools.ContextStorage
             }
             else
             {
-                IPDDLParser parser = new PDDLParser.PDDLParser();
+                IPDDLParser parser = new PDDLParser.PDDLParser(true, false);
                 var result = parser.Parse(null, file);
                 _problems.Add(file, result.Problem);
                 _problemTimes.Add(file, new FileInfo(file).LastWriteTime);

@@ -96,7 +96,7 @@ namespace PDDLTools.EditorMargins
                         if (problem.Init != null)
                             InitCountLabel.Content = $"{problem.Init.Predicates.Count}";
                         if (problem.Goal != null)
-                            GoalCountLabel.Content = $"{problem.Goal.GoalExpCount}";
+                            GoalCountLabel.Content = $"{problem.Goal.PredicateCount}";
                     }
                 }
                 catch (Exception) { }

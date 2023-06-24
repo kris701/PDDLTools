@@ -12,7 +12,7 @@ namespace PDDLParser.Models.Problem
         public IExp GoalExp { get; set; }
 
         // Context
-        public int GoalExpCount { get; internal set; }
+        public int PredicateCount { get; internal set; }
         public List<PredicateExp> TruePredicates { get; internal set; }
         public List<PredicateExp> FalsePredicates { get; internal set; }
         public bool DoesContainOr { get; internal set; }

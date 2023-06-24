@@ -41,11 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysers\DomainAnalyser.cs" />
+    <Compile Include="Analysers\PDDLDomainDeclAnalyser.cs" />
     <Compile Include="Analysers\IAnalyser.cs" />
     <Compile Include="Analysers\GeneralPreAnalyser.cs" />
     <Compile Include="Analysers\PDDLDeclAnalyser.cs" />
-    <Compile Include="Analysers\ProblemAnalyser.cs" />
+    <Compile Include="Analysers\PDDLProblemDeclAnalyser.cs" />
     <Compile Include="AST\ASTNode.cs" />
     <Compile Include="AST\ASTParser.cs" />
     <Compile Include="AST\ASTTokens.cs" />

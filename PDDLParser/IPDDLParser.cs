@@ -14,6 +14,7 @@ namespace PDDLParser
     {
         IErrorListener Listener { get; }
         bool Contextualise { get; set; }
+        bool Analyse { get; set; }
 
         PDDLDecl Parse(string domainFile = null, string problemFile = null);
     }

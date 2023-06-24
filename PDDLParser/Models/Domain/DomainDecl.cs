@@ -36,6 +36,19 @@ namespace PDDLParser.Models.Domain
                     return true;
             return false;
         }
+        public bool IsTypeOrSubType(string typeName, string targetType)
+        {
+            if (typeName == targetType)
+                return true;
+
+            if (TypesTable.ContainsKey(targetType))
+            {
+                if (TypesTable[targetType].Contains(typeName))
+                    return true;
+            }
+
+            return false;
+        }
 
         public DomainDecl(ASTNode node) : base(node) {
             Actions = new List<ActionDecl>();

@@ -111,6 +111,8 @@ namespace PDDLTools.ErrorList
 
                         newError.Text = error.Message;
                         newError.Line = error.Line - 1;
+                        if (newError.Line < 0)
+                            newError.Line = 0;
                         newError.Column = GetColumnFromCharacter(sourceDocumentLines, error.Line, error.Character);
                         newError.Document = "";
                         newError.Navigate += JumpToError;

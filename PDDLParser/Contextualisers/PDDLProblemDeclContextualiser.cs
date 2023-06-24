@@ -22,7 +22,7 @@ namespace PDDLParser.Contextualisers
         {
             if (goal.GoalExp != null)
             {
-                goal.GoalExpCount = GetPredicateCountInExp(goal.GoalExp);
+                goal.PredicateCount = GetPredicateCountInExp(goal.GoalExp);
 
                 List<PredicateExp> truePredicates = new List<PredicateExp>();
                 List<PredicateExp> falsePredicates = new List<PredicateExp>();

@@ -91,7 +91,7 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                 MainGrid.Children.Clear();
                 try
                 {
-                    IPDDLParser parser = new PDDLParser.PDDLParser();
+                    IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
                     var decl = parser.Parse(SelectedDomainFile, SelectedProblemFile);
                     int locCounter = 0;
 

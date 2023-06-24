@@ -132,6 +132,6 @@ namespace PDDLParser.Visitors
                     node.Character));
         }
 
-        internal static string PurgeEscapeChars(string str) => str.Replace("\r", "").Replace("\n", "").Replace("\t", "");
+        internal static string PurgeEscapeChars(string str) => str.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");
     }
 }

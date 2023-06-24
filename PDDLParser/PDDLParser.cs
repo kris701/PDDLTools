@@ -22,12 +22,14 @@ namespace PDDLParser
     {
         public IErrorListener Listener { get; }
         public bool Contextualise { get; set; }
+        public bool Analyse { get; set; }
 
-        public PDDLParser(bool contextualise = true)
+        public PDDLParser(bool contextualise = true, bool analyse = true)
         {
             Listener = new ErrorListener();
             Listener.ThrowIfTypeAbove = ParseErrorType.Warning;
             Contextualise = contextualise;
+            Analyse = analyse;
         }
 
         public PDDLDecl Parse(string domainFile = null, string problemFile = null)
@@ -42,33 +44,47 @@ namespace PDDLParser
                 {
                     IContextualiser<PDDLDecl> contextualiser = new PDDLDeclContextualiser();
                     contextualiser.Contexturalise(decl, Listener);
-
-                    IAnalyser<PDDLDecl> pddlAnalyser = new PDDLDeclAnalyser();
-                    pddlAnalyser.PostAnalyse(decl, Listener);
                 }
                 else if (domainFile != null)
                 {
                     IContextualiser<DomainDecl> contextualiser = new PDDLDomainDeclContextualiser();
                     contextualiser.Contexturalise(decl.Domain, Listener);
-
-                    IAnalyser<DomainDecl> domainAnalyser = new DomainAnalyser();
-                    domainAnalyser.PostAnalyse(decl.Domain, Listener);
                 }
                 else if (problemFile != null)
                 {
                     IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser();
                     contextualiser.Contexturalise(decl.Problem, Listener);
+                }
+            }
 
-                    IAnalyser<ProblemDecl> problemAnalyser = new ProblemAnalyser();
+            if (Analyse)
+            {
+                if (domainFile != null && problemFile != null)
+                {
+                    IAnalyser<PDDLDecl> pddlAnalyser = new PDDLDeclAnalyser();
+                    pddlAnalyser.PostAnalyse(decl, Listener);
+                }
+                else if (domainFile != null)
+                {
+                    IAnalyser<DomainDecl> domainAnalyser = new PDDLDomainDeclAnalyser();
+                    domainAnalyser.PostAnalyse(decl.Domain, Listener);
+                }
+                else if (problemFile != null)
+                {
+                    IAnalyser<ProblemDecl> problemAnalyser = new PDDLProblemDeclAnalyser();
                     problemAnalyser.PostAnalyse(decl.Problem, Listener);
                 }
             }
+
 
             return decl;
         }
 
         private DomainDecl ParseDomain(string parseFile)
         {
+            if (parseFile == null)
+                return new DomainDecl(new ASTNode(""));
+
             if (!PDDLHelper.IsFileDomain(parseFile))
                 Listener.AddError(new ParseError(
                     $"Attempted file to parse was not a domain file!",
@@ -134,6 +150,9 @@ namespace PDDLParser
 
         private ProblemDecl ParseProblem(string parseFile)
         {
+            if (parseFile == null)
+                return new ProblemDecl(new ASTNode(""));
+
             if (!PDDLHelper.IsFileProblem(parseFile))
                 Listener.AddError(new ParseError(
                     $"Attempted file to parse was not a problem file!",

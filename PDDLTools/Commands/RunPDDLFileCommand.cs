@@ -168,7 +168,7 @@ namespace PDDLTools.Commands
 
             if (resultData.WasSolutionFound && OptionsManager.Instance.OpenSASSolutionVisualiser)
             {
-                IPDDLParser parser = new PDDLParser.PDDLParser();
+                IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
                 var pddlDoc = parser.Parse(domainFilePath, problemFilePath);
 
                 ToolWindowPane sasWindow = await this.package.ShowToolWindowAsync(typeof(SASSolutionWindow), 0, true, this.package.DisposalToken);
