@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PDDLTools.Windows.ResourceDictionary
 {
@@ -19,8 +20,9 @@ namespace PDDLTools.Windows.ResourceDictionary
     {
         public Canvas ParentCanvas { get; }
         public List<int> TargetIDs { get; }
-        public List<Line> NodeLines { get; }
+        public List<ArrowLine> NodeLines { get; }
         public int NodeID { get; }
+        public string Text { get; }
 
         private List<DynamicNode> _targetNodes = new List<DynamicNode>();
         private bool _isSetup = false;
@@ -29,13 +31,17 @@ namespace PDDLTools.Windows.ResourceDictionary
         
         public DynamicNode(int nodeID, string text, Canvas parent, List<int> targetIDs, Point? location = null)
         {
-            InitializeComponent();
-
             ParentCanvas = parent;
 
             NodeID = nodeID;
-            NodeTextLabel.Content = text;
+            Text = text;
             TargetIDs = targetIDs;
+
+            InitializeComponent();
+
+            var toolTip = new ToolTip();
+            toolTip.Content = text;
+            ToolTip = toolTip;
 
             if (location != null)
             {
@@ -46,20 +52,16 @@ namespace PDDLTools.Windows.ResourceDictionary
                     0);
             }
 
-            NodeLines = new List<Line>();
+            NodeLines = new List<ArrowLine>();
             foreach(var target in targetIDs)
             {
-                var newLine = new Line();
-                newLine.Stroke = Brushes.WhiteSmoke;
-                newLine.StrokeThickness = 3;
-                newLine.X1 = Margin.Left + Width / 2;
-                newLine.Y1 = Margin.Top + Height / 2;
-                newLine.X2 = Margin.Left + Width / 2;
-                newLine.Y2 = Margin.Top + Height / 2;
-                newLine.Tag = NodeID;
-                Canvas.SetZIndex(newLine, -2000);
+                var newLine = new ArrowLine(
+                    new Point(Margin.Left + Width / 2, Margin.Top + Height / 2),
+                    new Point(Margin.Left + Width / 2, Margin.Top + Height / 2)
+                    );
+                Canvas.SetZIndex(newLine.Path, -2000);
                 NodeLines.Add(newLine);
-                ParentCanvas.Children.Add(newLine);
+                ParentCanvas.Children.Add(newLine.Path);
             }
         }
 
@@ -85,11 +87,13 @@ namespace PDDLTools.Windows.ResourceDictionary
         {
             for(int i = 0; i < _targetNodes.Count; i++)
             {
-                NodeLines[i].X1 = Margin.Left + Width / 2;
-                NodeLines[i].Y1 = Margin.Top + Height / 2;
-
-                NodeLines[i].X2 = _targetNodes[i].Margin.Left + _targetNodes[i].Width / 2;
-                NodeLines[i].Y2 = _targetNodes[i].Margin.Top + _targetNodes[i].Height / 2;
+                NodeLines[i].UpdateLine(
+                    new Point(
+                        Margin.Left + Width / 2, 
+                        Margin.Top + Height / 2),
+                    new Point(
+                        _targetNodes[i].Margin.Left + _targetNodes[i].Width / 2,
+                        _targetNodes[i].Margin.Top + _targetNodes[i].Height / 2));
             }
         }
 
@@ -100,13 +104,17 @@ namespace PDDLTools.Windows.ResourceDictionary
             {
                 _isMouseDown = true;
                 _startLocation = e.GetPosition(ParentCanvas);
+                Mouse.Capture(this);
             }
         }
 
         private void UserControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
+            {
                 _isMouseDown = false;
+                Mouse.Capture(null);
+            }
         }
 
         private void UserControl_MouseMove(object sender, MouseEventArgs e)

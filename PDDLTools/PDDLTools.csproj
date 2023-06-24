@@ -128,6 +128,7 @@
     <Compile Include="Windows\PlanValidatorWindow\PlanValidatorWindowControl.xaml.cs">
       <DependentUpon>PlanValidatorWindowControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ResourceDictionary\ArrowLine.cs" />
     <Compile Include="Windows\ResourceDictionary\DynamicNode.xaml.cs">
       <DependentUpon>DynamicNode.xaml</DependentUpon>
     </Compile>
@@ -168,6 +169,7 @@
     <Content Include="Commands\Resources\VisualisorIcon.png" />
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
+    <Resource Include="Windows\PDDLVisualiserWindow\Resources\reset.png" />
     <Resource Include="Windows\SASSolutionWindow\Resources\reset.png" />
     <Resource Include="Windows\WelcomeWindow\Resources\WelcomeLogo.png" />
     <Content Include="Commands\Resources\RunFIle.png" />
@@ -257,7 +259,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\FDResultsWindow\Resources\" />
-    <Folder Include="Windows\PDDLVisualiserWindow\Resources\" />
     <Folder Include="Windows\PlanValidatorWindow\Resources\" />
   </ItemGroup>
   <ItemGroup>

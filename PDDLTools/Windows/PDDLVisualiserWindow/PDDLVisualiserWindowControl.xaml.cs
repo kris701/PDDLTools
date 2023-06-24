@@ -117,8 +117,7 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                                 targetId.Add(actDict[act.Name]);
 
                         var newNode = new DynamicNode(predDict[pred.Name], $"P: {pred.Name}", MainGrid, targetId, locs[index++]);
-                        foreach (var line in newNode.NodeLines)
-                            line.Stroke = Brushes.Green;
+                        newNode.EllipseArea.Fill = Brushes.Red;
                         MainGrid.Children.Add(newNode);
                     }
                     foreach (var act in decl.Domain.Actions)
@@ -129,14 +128,39 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                                 targetId.Add(predDict[pred.Name]);
 
                         var newNode = new DynamicNode(actDict[act.Name], $"A: {act.Name}", MainGrid, targetId, locs[index++]);
-                        foreach (var line in newNode.NodeLines)
-                            line.Stroke = Brushes.Red;
+                        newNode.EllipseArea.Fill = Brushes.Green; 
                         MainGrid.Children.Add(newNode);
                     }
 
                     foreach (var child in MainGrid.Children)
                         if (child is DynamicNode node)
                             node.Setup();
+
+                    foreach (var child in MainGrid.Children)
+                    {
+                        if (child is DynamicNode node)
+                        {
+                            bool doesAnyTargetThis = false;
+                            foreach (var otherChild in MainGrid.Children)
+                            {
+                                if (otherChild is DynamicNode node2)
+                                {
+                                    if (node.NodeID != node2.NodeID)
+                                    {
+                                        if (node2.TargetIDs.Contains(node.NodeID))
+                                        {
+                                            doesAnyTargetThis = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            if (!doesAnyTargetThis)
+                            {
+                                node.EllipseArea.Fill = Brushes.Gray;
+                            }
+                        }
+                    }
                 }
                 catch
                 {
@@ -170,6 +194,11 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                     return true;
             }
             return false;
+        }
+
+        private void RerollButton_Click(object sender, RoutedEventArgs e)
+        {
+            ConstructVisualiser();
         }
     }
 }

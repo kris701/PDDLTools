@@ -1,4 +1,5 @@
 ﻿<UserControl x:Class="PDDLTools.Windows.ResourceDictionary.DynamicNode"
+             x:Name="Root"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,6 +9,8 @@
              d:DesignHeight="100" d:DesignWidth="100" Width="50" Height="50" MouseDown="UserControl_MouseDown" MouseUp="UserControl_MouseUp" MouseMove="UserControl_MouseMove">
     <Grid>
         <Ellipse x:Name="EllipseArea" StrokeThickness="2" Stroke="#3D3D3D" Fill="#FF36374A"/>
-        <Label x:Name="NodeTextLabel" Content="0" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+        <Viewbox StretchDirection="DownOnly" Stretch="Uniform" Margin="5">
+            <Label x:Name="NodeTextLabel" Content="{Binding ElementName=Root, Path=Text}" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+        </Viewbox>
     </Grid>
 </UserControl>
