@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 
 namespace PDDLTools.Windows.ResourceDictionary
 {
+    // Based on https://stackoverflow.com/a/5203530
     public class ArrowLine
     {
         public Path Path { get; internal set; }

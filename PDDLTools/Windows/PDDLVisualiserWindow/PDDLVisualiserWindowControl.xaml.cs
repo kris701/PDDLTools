@@ -35,16 +35,6 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
             } 
         }
 
-        private string _selectedProblemFile = "";
-        public string SelectedProblemFile { 
-            get => _selectedProblemFile; 
-            set {
-                SelectedProblemFileLabel.Content = value;
-                _selectedProblemFile = value;
-                ConstructVisualiser();
-            } 
-        }
-
         public PDDLVisualiserWindowControl()
         {
             InitializeComponent();
@@ -66,25 +56,9 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
             }
         }
 
-        private void SelectProblemFile_Click(object sender, RoutedEventArgs e)
-        {
-            var fileSelector = new System.Windows.Forms.OpenFileDialog();
-            fileSelector.Filter = "pddl files (*.pddl)|*.pddl";
-            if (File.Exists(SelectedProblemFile))
-                fileSelector.InitialDirectory = new FileInfo(SelectedProblemFile).Directory.FullName;
-            fileSelector.ShowDialog();
-            if (fileSelector.FileName != "")
-            {
-                if (PDDLHelper.IsFileProblem(fileSelector.FileName))
-                    SelectedProblemFile = fileSelector.FileName;
-                else
-                    MessageBox.Show("Selected file is not a problem file!");
-            }
-        }
-
         private void ConstructVisualiser()
         {
-            if (PDDLHelper.IsFileProblem(SelectedProblemFile) && PDDLHelper.IsFileDomain(SelectedDomainFile))
+            if (PDDLHelper.IsFileDomain(SelectedDomainFile))
             {
                 FirstStartLabel.Visibility = Visibility.Hidden;
                 ErrorLabel.Visibility = Visibility.Hidden;
@@ -92,7 +66,7 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                 try
                 {
                     IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
-                    var decl = parser.Parse(SelectedDomainFile, SelectedProblemFile);
+                    var decl = parser.Parse(SelectedDomainFile);
                     int locCounter = 0;
 
                     var predDict = new Dictionary<string, int>();
@@ -105,31 +79,61 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                         foreach (var act in decl.Domain.Actions)
                             actDict.Add(act.Name, locCounter++);
 
+                    var axiDict = new Dictionary<int, int>();
+                    int axiIndex = 0;
+                    if (decl.Domain.Axioms != null)
+                        foreach (var axi in decl.Domain.Axioms)
+                            axiDict.Add(axiIndex++, locCounter++);
+
                     ILocationSpreader spreader = new RandomSpreader();
                     var locs = spreader.GenerateSuitableLocations((int)MainGrid.ActualWidth, (int)MainGrid.ActualHeight, locCounter, 50);
 
                     int index = 0;
-                    foreach(var pred in decl.Domain.Predicates.Predicates)
+                    if (decl.Domain.Predicates != null)
                     {
-                        List<int> targetId = new List<int>();
-                        foreach (var act in decl.Domain.Actions)
-                            if (IsPredicateUsed(act.Preconditions, pred.Name))
-                                targetId.Add(actDict[act.Name]);
-
-                        var newNode = new DynamicNode(predDict[pred.Name], $"P: {pred.Name}", MainGrid, targetId, locs[index++]);
-                        newNode.EllipseArea.Fill = Brushes.Red;
-                        MainGrid.Children.Add(newNode);
-                    }
-                    foreach (var act in decl.Domain.Actions)
-                    {
-                        List<int> targetId = new List<int>();
                         foreach (var pred in decl.Domain.Predicates.Predicates)
-                            if (IsPredicateUsed(act.Effects, pred.Name))
-                                targetId.Add(predDict[pred.Name]);
+                        {
+                            List<int> targetId = new List<int>();
+                            foreach (var act in decl.Domain.Actions)
+                                if (IsPredicateUsed(act.Preconditions, pred.Name))
+                                    targetId.Add(actDict[act.Name]);
 
-                        var newNode = new DynamicNode(actDict[act.Name], $"A: {act.Name}", MainGrid, targetId, locs[index++]);
-                        newNode.EllipseArea.Fill = Brushes.Green; 
-                        MainGrid.Children.Add(newNode);
+                            var newNode = new DynamicNode(predDict[pred.Name], $"Predicate{Environment.NewLine} {pred.Name}", MainGrid, targetId, locs[index++]);
+                            newNode.EllipseArea.Fill = Brushes.Red;
+                            MainGrid.Children.Add(newNode);
+                        }
+                    }
+
+                    if (decl.Domain.Actions != null)
+                    {
+                        foreach (var act in decl.Domain.Actions)
+                        {
+                            List<int> targetId = new List<int>();
+                            foreach (var pred in decl.Domain.Predicates.Predicates)
+                                if (IsPredicateUsed(act.Effects, pred.Name))
+                                    targetId.Add(predDict[pred.Name]);
+
+                            var newNode = new DynamicNode(actDict[act.Name], $"Action{Environment.NewLine} {act.Name}", MainGrid, targetId, locs[index++]);
+                            newNode.EllipseArea.Fill = Brushes.Green;
+                            MainGrid.Children.Add(newNode);
+                        }
+                    }
+
+                    if (decl.Domain.Axioms != null)
+                    {
+                        int currentAxiIndex = 0;
+                        foreach (var axi in decl.Domain.Axioms)
+                        {
+                            List<int> targetId = new List<int>();
+                            foreach (var pred in decl.Domain.Predicates.Predicates)
+                                if (IsPredicateUsed(axi.Implies, pred.Name))
+                                    targetId.Add(predDict[pred.Name]);
+
+                            var newNode = new DynamicNode(axiDict[currentAxiIndex], $"Axiom{Environment.NewLine} ID: {currentAxiIndex}", MainGrid, targetId, locs[index++]);
+                            currentAxiIndex++;
+                            newNode.EllipseArea.Fill = Brushes.Blue;
+                            MainGrid.Children.Add(newNode);
+                        }
                     }
 
                     foreach (var child in MainGrid.Children)
@@ -158,6 +162,12 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                             if (!doesAnyTargetThis)
                             {
                                 node.EllipseArea.Fill = Brushes.Gray;
+                                foreach (var line in node.NodeLines)
+                                {
+                                    line.Path.Stroke = Brushes.DarkGray;
+                                    line.Path.Fill = Brushes.DarkGray;
+                                    line.Path.StrokeDashArray = new DoubleCollection() { 2 };
+                                }
                             }
                         }
                     }
