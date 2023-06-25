@@ -263,10 +263,10 @@
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
-    <None Include="Projects\Rules\PDDLFile.browseobject.xaml">
+    <XamlPropertyRule Include="Projects\Rules\PDDLFile.browseobject.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-    </None>
+    </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\Rules\PDDLFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
@@ -283,9 +283,10 @@
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
-    <None Include="Projects\Rules\SASFile.browseobject.xaml">
+    <XamlPropertyRule Include="Projects\Rules\SASFile.browseobject.xaml">
       <SubType>Designer</SubType>
-    </None>
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+    </XamlPropertyRule>
     <Page Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

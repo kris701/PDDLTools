@@ -21,17 +21,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PropertyPageSchema Include="
-                        $(MSBuildThisFileDirectory)Rules\GeneralConfiguration.xaml;
-                        ">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\GeneralConfiguration.xaml;">
         <Context>Project</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="
-                        $(MSBuildThisFileDirectory)Rules\ProjectItemsSchema.xaml;
-                        "/>
-    <PropertyPageSchema Include="
-                        $(MSBuildThisFileDirectory)Rules\DebuggerGeneral.xaml;
-                        ">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\ProjectItemsSchema.xaml;"/>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\DebuggerGeneral.xaml;">
       <Context>Project</Context>
     </PropertyPageSchema>
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\GeneralFile.xaml">
