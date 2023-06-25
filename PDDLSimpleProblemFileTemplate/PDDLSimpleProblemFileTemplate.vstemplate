@@ -5,11 +5,12 @@
 		<Description>A simple PDDL problem template with basic items</Description>
 		<Icon>PDDLSimpleProblemFileTemplate.ico</Icon>
 		<TemplateID>c0279627-2755-4d67-bfd3-49d2d022d4f0</TemplateID>
-		<ProjectType>General</ProjectType>
-		<TemplateGroupID>PDDL</TemplateGroupID>
+		
+		<ProjectType>PDDL</ProjectType>
+		<LanguageTag>PDDL</LanguageTag>
+		
 		<DefaultName>problem.pddl</DefaultName>
 		<EnableEditOfLocationField>true</EnableEditOfLocationField>
-		<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 	</TemplateData>

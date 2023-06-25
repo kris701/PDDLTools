@@ -1,5 +1,5 @@
 ﻿(define 
-    (domain $safeitemname$)
+    (domain domainName)
     (:requirements :strips)
     (:predicates )
     

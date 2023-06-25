@@ -5,11 +5,12 @@
     <Description>A simple PDDL domain template with basic items</Description>
     <Icon>PDDLSimpleDomainFileTemplate.ico</Icon>
     <TemplateID>f7a2111d-2e85-40aa-bb0d-e64a8a5ac5e4</TemplateID>
-    <ProjectType>General</ProjectType>
-	<TemplateGroupID>PDDL</TemplateGroupID>
+	  
+	  <ProjectType>PDDL</ProjectType>
+	  <LanguageTag>PDDL</LanguageTag>
+	  
     <DefaultName>domain.pddl</DefaultName>
 	<EnableEditOfLocationField>true</EnableEditOfLocationField>
-	<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
 	<ProvideDefaultName>true</ProvideDefaultName>
 	<LocationField>Enabled</LocationField>
   </TemplateData>

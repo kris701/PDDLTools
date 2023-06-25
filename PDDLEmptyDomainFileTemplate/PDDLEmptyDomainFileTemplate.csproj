@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="PDDLEmptyDomainFileTemplate.vstemplate">
-      <OutputSubPath>PDDL</OutputSubPath>
       <VSIXSubPath>ItemTemplates\PDDL</VSIXSubPath>
     </VSTemplate>
   </ItemGroup>

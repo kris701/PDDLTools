@@ -1,6 +1,6 @@
 ﻿(define 
-    (problem $safeitemname$)
-    (:domain )
+    (problem problemName)
+    (:domain domainName)
     (:objects )
     (:init )
     (:goal )

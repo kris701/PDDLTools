@@ -5,11 +5,12 @@
 		<Description>An empty PDDL problem file with just the problem name in it.</Description>
 		<Icon>PDDLEmptyProblemFileTemplate.ico</Icon>
 		<TemplateID>a94c53db-90da-450d-9443-4ed2016dc3cf</TemplateID>
-		<ProjectType>General</ProjectType>
-		<TemplateGroupID>PDDL</TemplateGroupID>
+
+		<ProjectType>PDDL</ProjectType>
+		<LanguageTag>PDDL</LanguageTag>
+
 		<DefaultName>problem.pddl</DefaultName>
 		<EnableEditOfLocationField>true</EnableEditOfLocationField>
-		<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 	</TemplateData>

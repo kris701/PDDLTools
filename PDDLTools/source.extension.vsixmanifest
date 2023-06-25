@@ -8,7 +8,7 @@
         <Icon>Icon.png</Icon>
         <PreviewImage>Icon.png</PreviewImage>
     </Metadata>
-    <Installation>
+    <Installation AllUsers="true">
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
             <ProductArchitecture>amd64</ProductArchitecture>
         </InstallationTarget>
@@ -30,5 +30,6 @@
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="PDDLEmptyProblemFileTemplate" d:TargetPath="|PDDLEmptyProblemFileTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="PDDLFullProblemFileTemplate" d:TargetPath="|PDDLFullProblemFileTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
         <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="PDDLSimpleProblemFileTemplate" d:TargetPath="|PDDLSimpleProblemFileTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="PDDLProjectTemplate" d:TargetPath="|PDDLProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
     </Assets>
 </PackageManifest>

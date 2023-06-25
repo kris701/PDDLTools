@@ -108,6 +108,9 @@
     <Compile Include="PDDLInfo\PDDLDefinitionElements\InfoElement.cs" />
     <Compile Include="PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
     <Compile Include="PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
+    <Compile Include="Projects\PDDLConfiguredProject.cs" />
+    <Compile Include="Projects\PDDLUnconfiguredProject.cs" />
+    <Compile Include="Projects\ProjectProperties.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoData.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceConnectionListener.cs" />
     <Compile Include="Taggers\BraceMatchingTagger.cs" />
@@ -180,6 +183,8 @@
       <DependentUpon>OptionsPageCustomControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PDDLInfo\PDDLDefinition.json" />
+    <None Include="Projects\DeployedBuildSystem\PDDL.props" />
+    <None Include="Projects\DeployedBuildSystem\PDDL.targets" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -201,12 +206,18 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem">
+      <Version>15.8.243</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.32112.339" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.3.2093">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="System.Composition">
+      <Version>7.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +235,40 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <XamlPropertyRule Include="Projects\Rules\folder.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\general.browseobject.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\general.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\general_file.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\none.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <None Include="Projects\Rules\ProjectItemsSchema.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <XamlPropertyRule Include="Projects\Rules\scc.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <None Include="Projects\Rules\script.browseobject.xaml">
+      <SubType>Designer</SubType>
+    </None>
+    <XamlPropertyRule Include="Projects\Rules\script.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
     <Page Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -309,6 +354,13 @@
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PDDLProjectTemplate\PDDLProjectTemplate.csproj">
+      <Project>{651EBED8-058E-4104-A3B5-2E06330822F2}</Project>
+      <Name>PDDLProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PDDLSimpleProblemFileTemplate\PDDLSimpleProblemFileTemplate.csproj">
       <Project>{28449582-C3EB-4034-881B-E9349796789D}</Project>
       <Name>PDDLSimpleProblemFileTemplate</Name>
@@ -328,11 +380,26 @@
   </PropertyGroup>
   <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' == ''" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+	<ItemGroup>
+		<VSIXSourceItem Include="Projects\DeployedBuildSystem\**">
+			<InProject>false</InProject>
+			<InstallRoot>MSBuild</InstallRoot>
+			<VSIXSubPath>Projects\CustomProjectSystems\PDDL</VSIXSubPath>
+		</VSIXSourceItem>
+		<VSIXSourceItem Include="Projects\Rules\**">
+			<InProject>false</InProject>
+			<InstallRoot>MSBuild</InstallRoot>
+			<VSIXSubPath>Projects\CustomProjectSystems\PDDL\Rules</VSIXSubPath>
+		</VSIXSourceItem>
+	</ItemGroup>
+
+	<Target Name="AfterBuild">
+		<ItemGroup>
+			<BuildSystemToCopy Include="Projects\DeployedBuildSystem\**" />
+			<RulesToCopy Include="Projects\Rules\**" />
+		</ItemGroup>
+		<Copy SourceFiles="@(BuildSystemToCopy)" DestinationFiles="@(BuildSystemToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(RulesToCopy)" DestinationFiles="@(RulesToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\Rules\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
+	</Target>
 </Project>
