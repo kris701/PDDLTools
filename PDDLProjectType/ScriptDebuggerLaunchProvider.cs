@@ -42,31 +42,31 @@ namespace PDDL
         {
             var settings = new DebugLaunchSettings(launchOptions);
 
-            //// The properties that are available via DebuggerProperties are determined by the property XAML files in your project.
-            //var debuggerProperties = await this.ProjectProperties.GetScriptDebuggerPropertiesAsync();
-            //settings.CurrentDirectory = await debuggerProperties.RunWorkingDirectory.GetEvaluatedValueAtEndAsync();
+            // The properties that are available via DebuggerProperties are determined by the property XAML files in your project.
+            var debuggerProperties = await this.ProjectProperties.GetScriptDebuggerPropertiesAsync();
+            settings.CurrentDirectory = await debuggerProperties.RunWorkingDirectory.GetEvaluatedValueAtEndAsync();
 
-            //string scriptCommand = await debuggerProperties.RunCommand.GetEvaluatedValueAtEndAsync();
-            //string scriptArguments = await debuggerProperties.RunCommandArguments.GetEvaluatedValueAtEndAsync();
+            string scriptCommand = await debuggerProperties.RunCommand.GetEvaluatedValueAtEndAsync();
+            string scriptArguments = await debuggerProperties.RunCommandArguments.GetEvaluatedValueAtEndAsync();
 
-            //var generalProperties = await this.ProjectProperties.GetConfigurationGeneralPropertiesAsync();
-            //string startupItem = await generalProperties.StartItem.GetEvaluatedValueAtEndAsync();
+            var generalProperties = await this.ProjectProperties.GetConfigurationGeneralPropertiesAsync();
+            string startupItem = await generalProperties.StartItem.GetEvaluatedValueAtEndAsync();
 
-            //if ((launchOptions & DebugLaunchOptions.NoDebug) == DebugLaunchOptions.NoDebug)
-            //{
-            //    // No debug - launch cscript using cmd.exe to introduce a pause at the end
-            //    settings.Executable = Path.Combine(Environment.SystemDirectory, "cmd.exe");
-            //    settings.Arguments = string.Format("/c {0} \"{1}\" {2} & pause", scriptCommand, startupItem, scriptArguments);
-            //}
-            //else
-            //{
-            //    // Debug - launch cscript using the debugger switch //X
-            //    settings.Executable = scriptCommand;
-            //    settings.Arguments = string.Format("\"{0}\" //X {1}", startupItem, scriptArguments);
-            //}
+            if ((launchOptions & DebugLaunchOptions.NoDebug) == DebugLaunchOptions.NoDebug)
+            {
+                // No debug - launch cscript using cmd.exe to introduce a pause at the end
+                settings.Executable = Path.Combine(Environment.SystemDirectory, "cmd.exe");
+                settings.Arguments = string.Format("/c {0} \"{1}\" {2} & pause", scriptCommand, startupItem, scriptArguments);
+            }
+            else
+            {
+                // Debug - launch cscript using the debugger switch //X
+                settings.Executable = scriptCommand;
+                settings.Arguments = string.Format("\"{0}\" //X {1}", startupItem, scriptArguments);
+            }
 
-            //settings.LaunchOperation = DebugLaunchOperation.CreateProcess;
-            //settings.LaunchDebugEngineGuid = DebuggerEngines.ScriptEngine;
+            settings.LaunchOperation = DebugLaunchOperation.CreateProcess;
+            settings.LaunchDebugEngineGuid = DebuggerEngines.ScriptEngine;
 
             return new IDebugLaunchSettings[] { settings };
         }

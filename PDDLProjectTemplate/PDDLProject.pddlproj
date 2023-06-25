@@ -5,7 +5,7 @@
          for your production template. It's here just to make testing/debugging changes to the project system as easy as
          building the project and running the experimental instance. -->
     <!--<CustomProjectExtensionsPath Condition="Exists('$(LocalAppData)\CustomProjectSystems\PDDL.props')">$(LocalAppData)\CustomProjectSystems\PDDL\</CustomProjectExtensionsPath>-->
-    <!--<CustomProjectExtensionsPath Condition="'$(CustomProjectExtensionsPath)' == ''">$(MSBuildExtensionsPath)\CustomProjectSystems\PDDL\</CustomProjectExtensionsPath>-->
+    <CustomProjectExtensionsPath Condition="'$(CustomProjectExtensionsPath)' == ''">$(MSBuildExtensionsPath)\CustomProjectSystems\PDDL\</CustomProjectExtensionsPath>
   </PropertyGroup>
 
   <Import Project="$(CustomProjectExtensionsPath)PDDL.props" />
