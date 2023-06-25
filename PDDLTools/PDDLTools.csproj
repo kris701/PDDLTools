@@ -111,6 +111,7 @@
     <Compile Include="Projects\PDDLConfiguredProject.cs" />
     <Compile Include="Projects\PDDLUnconfiguredProject.cs" />
     <Compile Include="Projects\ProjectProperties.cs" />
+    <Compile Include="Projects\ScriptDebuggerLaunchProvider.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoData.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceConnectionListener.cs" />
     <Compile Include="Taggers\BraceMatchingTagger.cs" />
@@ -269,6 +270,12 @@
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\debugger_general.xaml">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\PDDLExecuterDebugger.xaml">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
     <Page Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -380,26 +387,24 @@
   </PropertyGroup>
   <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' == ''" />
-
-	<ItemGroup>
-		<VSIXSourceItem Include="Projects\DeployedBuildSystem\**">
-			<InProject>false</InProject>
-			<InstallRoot>MSBuild</InstallRoot>
-			<VSIXSubPath>Projects\CustomProjectSystems\PDDL</VSIXSubPath>
-		</VSIXSourceItem>
-		<VSIXSourceItem Include="Projects\Rules\**">
-			<InProject>false</InProject>
-			<InstallRoot>MSBuild</InstallRoot>
-			<VSIXSubPath>Projects\CustomProjectSystems\PDDL\Rules</VSIXSubPath>
-		</VSIXSourceItem>
-	</ItemGroup>
-
-	<Target Name="AfterBuild">
-		<ItemGroup>
-			<BuildSystemToCopy Include="Projects\DeployedBuildSystem\**" />
-			<RulesToCopy Include="Projects\Rules\**" />
-		</ItemGroup>
-		<Copy SourceFiles="@(BuildSystemToCopy)" DestinationFiles="@(BuildSystemToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
-		<Copy SourceFiles="@(RulesToCopy)" DestinationFiles="@(RulesToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\Rules\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
-	</Target>
+  <ItemGroup>
+    <VSIXSourceItem Include="Projects\DeployedBuildSystem\**">
+      <InProject>false</InProject>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>Projects\CustomProjectSystems\PDDL</VSIXSubPath>
+    </VSIXSourceItem>
+    <VSIXSourceItem Include="Projects\Rules\**">
+      <InProject>false</InProject>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>Projects\CustomProjectSystems\PDDL\Rules</VSIXSubPath>
+    </VSIXSourceItem>
+  </ItemGroup>
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <BuildSystemToCopy Include="Projects\DeployedBuildSystem\**" />
+      <RulesToCopy Include="Projects\Rules\**" />
+    </ItemGroup>
+    <Copy SourceFiles="@(BuildSystemToCopy)" DestinationFiles="@(BuildSystemToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(RulesToCopy)" DestinationFiles="@(RulesToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\Rules\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

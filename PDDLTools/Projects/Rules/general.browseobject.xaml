@@ -10,7 +10,7 @@
 		<Category Name="General" DisplayName="General" Description="General" />
 	</Rule.Categories>
     <Rule.DataSource>
-        <DataSource Persistence="ProjectFile" Label="Configuration" HasConfigurationCondition="false" />
+        <DataSource Persistence="ProjectFile" Label="Configuration" HasConfigurationCondition="false"/>
     </Rule.DataSource>
 
     <StringProperty Name="FileName" DisplayName="Project File" ReadOnly="True">

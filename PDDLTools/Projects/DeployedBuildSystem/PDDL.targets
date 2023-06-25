@@ -61,15 +61,17 @@
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectFullPath).user" Condition="Exists('$(MSBuildProjectFullPath).user')" />
-  
-  <Target Name="Run">
-    <Message Text="$(RunCommandArguments)" />
-    <Exec Command='$(RunCommand) "$(MSBuildProjectDirectory)\$(StartItem)" $(RunCommandArguments)' WorkingDirectory="$(RunWorkingDirectory)" />
-  </Target>
 
-  <Target Name="Build" >
+	<!--<Target Name="Run">
+		<Message Text="$(RunCommandArguments)" />
+		<Exec Command='$(RunCommand) "$(MSBuildProjectDirectory)\$(StartItem)" $(RunCommandArguments)' WorkingDirectory="$(RunWorkingDirectory)" />
+	</Target>-->
+
+	<Target Name="Build" >
+	  <Message Text="Nothing to build in PDDL projects"></Message>
   </Target>
 
   <Target Name="Rebuild">
+	  <Message Text="Nothing to build in PDDL projects"></Message>
   </Target>  
 </Project>
