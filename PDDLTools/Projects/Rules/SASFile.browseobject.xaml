@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--Copyright, Microsoft Corporation, All rights reserved.-->
 <Rule
-	Name="Script"
-	DisplayName="Script"
+	Name="SASFile"
+	DisplayName="SAS File"
 	PageTemplate="tool"
-	Description="Script source file"
+	Description="SAS file"
 	xmlns="http://schemas.microsoft.com/build/2009/properties">
     <Rule.DataSource>
-        <DataSource Persistence="ProjectFile" Label="Configuration" ItemType="Script" HasConfigurationCondition="false" />
+        <DataSource Persistence="ProjectFile" Label="Configuration" ItemType="SASFile" HasConfigurationCondition="false" />
     </Rule.DataSource>
 
     <StringProperty Name="Identity" DisplayName="File Name" ReadOnly="true" Category="Misc">
         <StringProperty.DataSource>
-            <DataSource Persistence="Intrinsic" ItemType="Script" PersistedName="Identity" />
+            <DataSource Persistence="Intrinsic" ItemType="SASFile" PersistedName="Identity" />
         </StringProperty.DataSource>
     </StringProperty>
 
     <StringProperty Name="FullPath" DisplayName="Full Path" ReadOnly="true" Category="Misc">
         <StringProperty.DataSource>
-            <DataSource Persistence="Intrinsic" ItemType="Script" PersistedName="FullPath" />
+            <DataSource Persistence="Intrinsic" ItemType="SASFile" PersistedName="FullPath" />
         </StringProperty.DataSource>
     </StringProperty>
 

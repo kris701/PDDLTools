@@ -6,7 +6,7 @@
 	</PropertyGroup>
 	<Import Project="$(CustomProjectExtensionsPath)PDDL.props" />
 	<ItemGroup>
-		<Script Include="**\*.pddl"/>
+		<PDDLFile Include="**\*.pddl"/>
 	</ItemGroup>
 	<Import Project="$(CustomProjectExtensionsPath)PDDL.targets" />
 </Project>

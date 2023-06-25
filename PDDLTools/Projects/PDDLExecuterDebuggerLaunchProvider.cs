@@ -13,10 +13,10 @@ namespace PDDLTools.Projects
 {
     [ExportDebugger("PDDLExecuter")]
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
-    public class ScriptDebuggerLaunchProvider : DebugLaunchProviderBase
+    public class PDDLExecuterDebuggerLaunchProvider : DebugLaunchProviderBase
     {
         [ImportingConstructor]
-        public ScriptDebuggerLaunchProvider(ConfiguredProject configuredProject)
+        public PDDLExecuterDebuggerLaunchProvider(ConfiguredProject configuredProject)
             : base(configuredProject)
         {
         }

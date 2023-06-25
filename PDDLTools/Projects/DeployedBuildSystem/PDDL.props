@@ -3,12 +3,13 @@
   <PropertyGroup>
     <ProjectSystemBase>$(MSBuildThisFileDirectory)</ProjectSystemBase>
 
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Configuration>Debug</Configuration>
+    <Platform>AnyCPU</Platform>
 
-    <DebuggerFlavor>ScriptDebugger</DebuggerFlavor>
-    <RunCommand>$(WinDir)\System32\cscript.exe</RunCommand>
+    <DebuggerFlavor>PDDLExecuter</DebuggerFlavor>
+    <!--<RunCommand>$(WinDir)\System32\cscript.exe</RunCommand>
     <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
-    <StartItem>domain.pddl</StartItem>
+	  <DomainFile>domain.pddl</DomainFile>
+	  <ProblemFile>problem.pddl</ProblemFile>-->
   </PropertyGroup>
 </Project>

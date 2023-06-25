@@ -111,7 +111,7 @@
     <Compile Include="Projects\PDDLConfiguredProject.cs" />
     <Compile Include="Projects\PDDLUnconfiguredProject.cs" />
     <Compile Include="Projects\ProjectProperties.cs" />
-    <Compile Include="Projects\ScriptDebuggerLaunchProvider.cs" />
+    <Compile Include="Projects\PDDLExecuterDebuggerLaunchProvider.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoData.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceConnectionListener.cs" />
     <Compile Include="Taggers\BraceMatchingTagger.cs" />
@@ -236,46 +236,56 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <XamlPropertyRule Include="Projects\Rules\folder.xaml">
+    <XamlPropertyRule Include="Projects\Rules\Folder.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\general.browseobject.xaml">
+    <XamlPropertyRule Include="Projects\Rules\GeneralFile.browseobject.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\general.xaml">
+    <XamlPropertyRule Include="Projects\Rules\GeneralConfiguration.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\general_file.xaml">
+    <XamlPropertyRule Include="Projects\Rules\GeneralFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\none.xaml">
+    <XamlPropertyRule Include="Projects\Rules\NoneFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
     <None Include="Projects\Rules\ProjectItemsSchema.xaml">
       <SubType>Designer</SubType>
     </None>
-    <XamlPropertyRule Include="Projects\Rules\scc.xaml">
+    <XamlPropertyRule Include="Projects\Rules\Scc.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
-    <None Include="Projects\Rules\script.browseobject.xaml">
+    <None Include="Projects\Rules\PDDLFile.browseobject.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
     </None>
-    <XamlPropertyRule Include="Projects\Rules\script.xaml">
+    <XamlPropertyRule Include="Projects\Rules\PDDLFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
       <SubType>Designer</SubType>
     </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\debugger_general.xaml">
+    <XamlPropertyRule Include="Projects\Rules\DebuggerGeneral.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\Rules\PDDLExecuterDebugger.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
     </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\SASFile.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <None Include="Projects\Rules\SASFile.browseobject.xaml">
+      <SubType>Designer</SubType>
+    </None>
     <Page Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

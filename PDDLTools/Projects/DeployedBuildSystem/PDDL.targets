@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <PropertyPageSchema Include="
-                        $(MSBuildThisFileDirectory)Rules\general.xaml;
+                        $(MSBuildThisFileDirectory)Rules\GeneralConfiguration.xaml;
                         ">
         <Context>Project</Context>
     </PropertyPageSchema>
@@ -30,42 +30,47 @@
                         $(MSBuildThisFileDirectory)Rules\ProjectItemsSchema.xaml;
                         "/>
     <PropertyPageSchema Include="
-                        $(MSBuildThisFileDirectory)Rules\debugger_general.xaml;
+                        $(MSBuildThisFileDirectory)Rules\DebuggerGeneral.xaml;
                         ">
       <Context>Project</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\general_file.xaml">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\GeneralFile.xaml">
       <Context>File</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\scc.xaml">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\Scc.xaml">
       <Context>Invisible</Context>
     </PropertyPageSchema>
 
     <PropertyPageSchema Include="
-                        $(MSBuildThisFileDirectory)Rules\folder.xaml;
-                        $(MSBuildThisFileDirectory)Rules\none.xaml;
+                        $(MSBuildThisFileDirectory)Rules\Folder.xaml;
+                        $(MSBuildThisFileDirectory)Rules\NoneFile.xaml;
                         ">
       <Context>File;BrowseObject</Context>
     </PropertyPageSchema>
 
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\general.browseobject.xaml">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\GeneralFile.browseobject.xaml">
       <Context>BrowseObject</Context>
     </PropertyPageSchema>
 
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\script.xaml;">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\PDDLFile.xaml;">
       <Context>File</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\script.browseobject.xaml;">
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\PDDLFile.browseobject.xaml;">
       <Context>BrowseObject</Context>
     </PropertyPageSchema>
+	  <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\SASFile.xaml;">
+		  <Context>File</Context>
+	  </PropertyPageSchema>
+	  <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\SASFile.browseobject.xaml;">
+		  <Context>BrowseObject</Context>
+	  </PropertyPageSchema>
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectFullPath).user" Condition="Exists('$(MSBuildProjectFullPath).user')" />
 
-	<!--<Target Name="Run">
-		<Message Text="$(RunCommandArguments)" />
-		<Exec Command='$(RunCommand) "$(MSBuildProjectDirectory)\$(StartItem)" $(RunCommandArguments)' WorkingDirectory="$(RunWorkingDirectory)" />
-	</Target>-->
+	<Target Name="Run">
+		<Message Text="Run Test" />
+	</Target>
 
 	<Target Name="Build" >
 	  <Message Text="Nothing to build in PDDL projects"></Message>
