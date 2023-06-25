@@ -35,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLFullProblemFileTemplate
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMDRunners", "CMDRunners\CMDRunners.csproj", "{00A388BE-B31E-4472-BFFB-DA51CB79A55B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCMD", "TestCMD\TestCMD.csproj", "{C6BF38D2-A792-4E6D-935D-C2D58C4999B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCMD", "TestCMD\TestCMD.csproj", "{C6BF38D2-A792-4E6D-935D-C2D58C4999B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

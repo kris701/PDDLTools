@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PDDLTools.956B19CF-953A-4E2A-9813-9EC5626CC12E" Version="1.05.07" Language="en-US" Publisher="Kristian Skov Johansen" />
+        <Identity Id="PDDLTools.956B19CF-953A-4E2A-9813-9EC5626CC12E" Version="1.05.15" Language="en-US" Publisher="Kristian Skov Johansen" />
         <DisplayName>PDDL Tools</DisplayName>
         <Description xml:space="preserve">This is an extension to make developing with PDDL files and planning in general easier. This extension can be used with Fast Downward to execute and analyse plans from running PDDL files.</Description>
         <MoreInfo>https://github.com/kris701/PDDLTools</MoreInfo>

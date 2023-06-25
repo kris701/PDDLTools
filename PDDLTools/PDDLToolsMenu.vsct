@@ -37,7 +37,7 @@
 			<Bitmap guid="DomainImageGuid" href="Commands\Resources\Domain.png" />
 			<Bitmap guid="ProblemImageGuid" href="Commands\Resources\Problem.png" />
 			<Bitmap guid="VisualiserImageGuid" href="Commands\Resources\VisualisorIcon.png" />
-    </Bitmaps>
+		</Bitmaps>
 
 		<Combos>
 			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileListCommandID" defaultWidth="150" priority="0x0100" type="DropDownCombo">
@@ -129,7 +129,7 @@
 					<ButtonText>Help</ButtonText>
 					<ToolTipText>Opens the welcome page with info on how to use this extension.</ToolTipText>
 				</Strings>
-			</Button>
+			</Button>			
 		</Buttons>		
 	</Commands>
 
@@ -180,9 +180,8 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectEngineCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
-		
 	</CommandPlacements>
-
+	
 	<Symbols>
 		<GuidSymbol value="{956B19CF-953A-4E2A-9813-9EC5626CC12E}" name="PDDLPackageGuid" />
 
@@ -206,9 +205,9 @@
 			<IDSymbol name="SASVisualiserCommandID" value="268" />
 
 			<IDSymbol name="PlanValidatorWindowCommandID" value="269" />
-			
-			<IDSymbol name="PDDLVisualiserWindowCommandID" value="270" />
 
+			<IDSymbol name="PDDLVisualiserWindowCommandID" value="270" />
+			
 			<IDSymbol name="PDDLToolsMenu" value="0x1022" />
 			<IDSymbol name="PDDLToolsToolbar" value="0x1023" />
 		</GuidSymbol>
