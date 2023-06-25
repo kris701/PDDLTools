@@ -18,9 +18,7 @@
     internal class MyUnconfiguredProject
     {
         internal const string ProjectExtension = "pddlproj";
-
         internal const string UniqueCapability = "PDDLSample";
-
         internal const string Language = "PDDL";
 
         [ImportingConstructor]

@@ -19,5 +19,6 @@
     <ItemType Name="None" DisplayName="Does not participate in build"/>
 
     <FileExtension Name=".pddl" ContentType="Script"/>
+    <FileExtension Name=".txt" ContentType="Text"/>
 </ProjectSchemaDefinitions>
 

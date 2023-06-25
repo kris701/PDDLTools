@@ -9,16 +9,17 @@
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
     using PDDL;
+    using VSLangProj;
     using Task = System.Threading.Tasks.Task;
 
     [Export]
     [AppliesTo(MyUnconfiguredProject.UniqueCapability)]
     internal class MyConfiguredProject
     {
-        [Import, SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "MEF")]
+        [Import]
         internal ConfiguredProject ConfiguredProject { get; private set; }
 
-        [Import, SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "MEF")]
+        [Import]
         internal ProjectProperties Properties { get; private set; }
     }
 }
