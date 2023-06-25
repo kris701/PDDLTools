@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PDDLProject..61d255dd-a819-4936-9f07-e660d0572111" Version="1.12" Language="en-US" Publisher="Kristian Skov Johansen" />
+        <Identity Id="PDDLProject..61d255dd-a819-4936-9f07-e660d0572111" Version="1.16" Language="en-US" Publisher="Kristian Skov Johansen" />
         <DisplayName>PDDL Project</DisplayName>
         <Description xml:space="preserve">A template for creating a Windows Script project.</Description>
     </Metadata>

@@ -14,11 +14,12 @@
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>New Project</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>
+	<CreateInPlace>true</CreateInPlace>
   </TemplateData>
   <TemplateContent>
     <Project File="PDDLProject.pddlproj" TargetFileName="$safeitemname$.pddlproj" ReplaceParameters="true">
 		<ProjectItem OpenInEditor="true">domain.pddl</ProjectItem>
-		<ProjectItem TargetFileName="$safeitemname$/problem.pddl">problem.pddl</ProjectItem>
+		<ProjectItem>problem.pddl</ProjectItem>
     </Project>
   </TemplateContent>
 </VSTemplate>
