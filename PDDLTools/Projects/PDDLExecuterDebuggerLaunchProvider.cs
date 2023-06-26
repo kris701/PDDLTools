@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.VisualStudio.ProjectSystem;
-using Microsoft.VisualStudio.ProjectSystem.Debug;
-using Microsoft.VisualStudio.ProjectSystem.Properties;
-using Microsoft.VisualStudio.ProjectSystem.VS.Debug;
-using PDDLTools.Options;
-
-namespace PDDLTools.Projects
+﻿namespace PDDLTools.Projects
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.Composition;
+    using System.IO;
+    using System.Threading.Tasks;
+    using Microsoft.VisualStudio.ProjectSystem;
+    using Microsoft.VisualStudio.ProjectSystem.Debug;
+    using Microsoft.VisualStudio.ProjectSystem.Properties;
+    using Microsoft.VisualStudio.ProjectSystem.VS.Debug;
+    using PDDLTools.Options;
+
     [ExportDebugger("PDDLExecuter")]
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     public class PDDLExecuterDebuggerLaunchProvider : DebugLaunchProviderBase

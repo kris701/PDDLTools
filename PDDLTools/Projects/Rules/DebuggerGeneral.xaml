@@ -8,7 +8,7 @@
     <DataSource Persistence="UserFile" />
   </Rule.DataSource>
   
-  <StringProperty Name="SymbolsPath" DisplayName="Symbol Search Path"
+  <!--<StringProperty Name="SymbolsPath" DisplayName="Symbol Search Path"
                   Description="The search path used by the debugger to locate symbols.">
   </StringProperty>
 
@@ -24,5 +24,5 @@
     <EnumValue Name="Native" DisplayName="Native Image" Description="The executable image to debug is a fully native application." />
     <EnumValue Name="Mixed" DisplayName="Mixed Image" Description="The executable image to debug is a mixture of native and managed code." />
     <EnumValue Name="Managed" DisplayName="Managed Image" Description="The executable image to debug is a fully managed application." />
-  </EnumProperty>
+  </EnumProperty>-->
 </Rule>

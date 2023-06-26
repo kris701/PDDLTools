@@ -7,10 +7,11 @@
 	Description="PDDL Executer options"
 	xmlns="http://schemas.microsoft.com/build/2009/properties">
     <Rule.DataSource>
-        <DataSource Persistence="UserFileWithXamlDefaults" HasConfigurationCondition="True"/>
+		<!--<DataSource Persistence="UserFileWithXamlDefaults" HasConfigurationCondition="True"/>-->
+		<DataSource Persistence="UserFileWithXamlDefaults"/>
     </Rule.DataSource>
 
-    <StringProperty Name="RunCommand" DisplayName="Command"
+    <!--<StringProperty Name="RunCommand" DisplayName="Command"
                 Default="$(WinDir)\System32\cscript.exe"
                 Description="The debug command to execute.">
         <StringProperty.ValueEditors>
@@ -36,5 +37,5 @@
     <StringProperty Name="RunWorkingDirectory" DisplayName="Working Directory"
                 Default="$(MSBuildProjectDirectory)"  
                 Description="The application's working directory. By default, the directory containing the project file."
-                Subtype="folder"/>
+                Subtype="folder"/>-->
 </Rule>

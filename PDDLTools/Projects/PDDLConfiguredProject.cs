@@ -1,9 +1,9 @@
-﻿using System;
-using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.ProjectSystem;
-
-namespace PDDLTools.Projects
+﻿namespace PDDLTools.Projects
 {
+    using System;
+    using System.ComponentModel.Composition;
+    using Microsoft.VisualStudio.ProjectSystem;
+
     [Export]
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     internal class PDDLConfiguredProject
