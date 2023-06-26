@@ -4,19 +4,35 @@
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.IO;
+    using System.Linq;
+    using System.Runtime.InteropServices;
     using System.Text;
     using System.Threading.Tasks;
+    using CMDRunners;
+    using CMDRunners.FastDownward;
+    using CMDRunners.Helpers;
+    using CMDRunners.Models;
     using Microsoft.VisualStudio.ProjectSystem;
     using Microsoft.VisualStudio.ProjectSystem.Debug;
     using Microsoft.VisualStudio.ProjectSystem.Properties;
     using Microsoft.VisualStudio.ProjectSystem.VS.Debug;
+    using Microsoft.VisualStudio.Shell;
+    using Microsoft.VisualStudio.Shell.Interop;
+    using PDDLParser;
+    using PDDLParser.Helpers;
     using PDDLTools.Commands;
+    using PDDLTools.Helpers;
     using PDDLTools.Options;
+    using PDDLTools.Windows.FDResultsWindow;
+    using PDDLTools.Windows.SASSolutionWindow;
+    using static Microsoft.VisualStudio.VSConstants;
 
     [ExportDebugger("PDDLExecuter")]
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     public class PDDLExecuterDebuggerLaunchProvider : DebugLaunchProviderBase
     {
+        private static OutputPanelController OutputPanel = new OutputPanelController("Fast Downward Output");
+
         [ImportingConstructor]
         public PDDLExecuterDebuggerLaunchProvider(ConfiguredProject configuredProject)
             : base(configuredProject)
@@ -30,40 +46,101 @@
         [Import]
         private ProjectProperties ProjectProperties { get; set; }
 
-        public override async Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
+        private string _lastDomain = "";
+        private string _lastProblem = "";
+        private bool _lastCheckResult = false;
+
+        public override Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
         {
-            return true;
+            if (_lastDomain != SelectDomainCommand.SelectedDomainPath || _lastProblem != SelectProblemCommand.SelectedProblemPath)
+            {
+                _lastDomain = SelectDomainCommand.SelectedDomainPath;
+                _lastProblem = SelectProblemCommand.SelectedProblemPath;
+                _lastCheckResult = PDDLHelper.IsFileDomain(_lastDomain) && PDDLHelper.IsFileProblem(_lastProblem);
+            }
+            return Task.FromResult(_lastCheckResult);
         }
 
-        public override async Task<IReadOnlyList<IDebugLaunchSettings>> QueryDebugTargetsAsync(DebugLaunchOptions launchOptions)
+        public override Task<IReadOnlyList<IDebugLaunchSettings>> QueryDebugTargetsAsync(DebugLaunchOptions launchOptions)
         {
             var settings = new DebugLaunchSettings(launchOptions);
 
-            StringBuilder sb = new StringBuilder("-WindowStyle hidden {& ");
-            sb.Append($"{OptionsManager.Instance.PythonPrefix} ");
-            sb.Append($"'{Path.Combine(OptionsManager.Instance.FDPath, "fast-downward.py")}' ");
-            sb.Append($"--plan-file '{Path.Combine(OptionsManager.Instance.FDPath, "sas_plan")}' ");
-            sb.Append($"--sas-file '{Path.Combine(OptionsManager.Instance.FDPath, "output.sas")}' ");
+            return Task.FromResult(new IDebugLaunchSettings[] { settings } as IReadOnlyList<IDebugLaunchSettings>);
+        }
 
-            var engineArg = SelectEngineCommand.SelectedSearch.Replace("\"", "'");
-            if (engineArg.ToLower().Contains("--alias"))
-                sb.Append($"{engineArg} ");
+        public override async Task LaunchAsync(DebugLaunchOptions launchOptions)
+        {
+            await OutputPanel.InitializeAsync();
+            await OutputPanel.ClearOutputAsync();
+            await OutputPanel.WriteLineAsync("Executing PDDL File");
 
-            sb.Append($"'C:\\Users\\kris7\\source\\repos\\New Project5\\New Project5\\domain.pddl' ");
-            sb.Append($"'C:\\Users\\kris7\\source\\repos\\New Project5\\New Project5\\problem.pddl' ");
+            FDRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
+            var resultData = await fdRunner.RunAsync(_lastDomain, _lastProblem, SelectEngineCommand.SelectedSearch);
 
-            if (engineArg.ToLower().Contains("--search"))
-                sb.Append($"{engineArg}");
-            sb.Append("}");
+            await WriteToOutputWindowAsync(resultData);
+            if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
+                await SetupResultWindowsAsync(resultData, _lastDomain, _lastProblem);
+        }
 
-            settings.Executable = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
-            settings.Arguments = sb.ToString();
+        private async Task WriteToOutputWindowAsync(FDResults resultData)
+        {
+            await OutputPanel.ActivateOutputWindowAsync();
+            foreach (var item in resultData.Log)
+            {
+                if (item == null) continue;
+                if (item.Type == LogItem.ItemType.Error)
+                    await OutputPanel.WriteLineAsync($"[{item.Time}] (ERR) {item.Content}");
+                if (item.Type == LogItem.ItemType.Log)
+                    await OutputPanel.WriteLineAsync($"[{item.Time}]       {item.Content}");
+            }
+            switch (resultData.ResultReason)
+            {
+                case ProcessCompleteReson.ForceKilled:
+                    await OutputPanel.WriteLineAsync($"ERROR! FD ran for longer than {OptionsManager.Instance.FDFileExecutionTimeout}! Killing process...");
+                    break;
+                case ProcessCompleteReson.StoppedOnError:
+                    await OutputPanel.WriteLineAsync($"Errors encountered!");
+                    break;
+                case ProcessCompleteReson.RanToCompletion:
+                    await OutputPanel.WriteLineAsync("FD ran to completion!");
+                    break;
+                case ProcessCompleteReson.ProcessNotRunning:
+                    await OutputPanel.WriteLineAsync("Process is not running!");
+                    break;
+            }
+        }
 
-            settings.LaunchOperation = DebugLaunchOperation.CreateProcess;
-            settings.LaunchOptions = DebugLaunchOptions.IntegratedConsole;
-            settings.SendToOutputWindow = true;
+        private async Task SetupResultWindowsAsync(FDResults resultData, string domainFilePath, string problemFilePath)
+        {
+            var vsShell = (IVsShell)ServiceProvider.GetService(typeof(IVsShell));
+            if (vsShell.IsPackageLoaded(new Guid(PDDLTools.Constants.PackageGuidString), out var myPackage) == Microsoft.VisualStudio.VSConstants.S_OK)
+            {
+                var package = (PDDLToolsPackage)myPackage;
+                if (OptionsManager.Instance.OpenResultReport)
+                {
+                    ToolWindowPane resultsWindow = await package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, package.DisposalToken);
+                    if ((null == resultsWindow) || (null == resultsWindow.Frame))
+                    {
+                        throw new NotSupportedException("Cannot create tool window");
+                    }
+                    if (resultsWindow.Content is FDResultsWindowControl control)
+                        control.SetupResultData(resultData);
+                }
 
-            return new IDebugLaunchSettings[] { settings };
+                if (resultData.WasSolutionFound && OptionsManager.Instance.OpenSASSolutionVisualiser)
+                {
+                    IPDDLParser parser = new PDDLParser(false, false);
+                    var pddlDoc = parser.Parse(domainFilePath, problemFilePath);
+
+                    ToolWindowPane sasWindow = await package.ShowToolWindowAsync(typeof(SASSolutionWindow), 0, true, package.DisposalToken);
+                    if ((null == sasWindow) || (null == sasWindow.Frame))
+                    {
+                        throw new NotSupportedException("Cannot create tool window");
+                    }
+                    if (sasWindow.Content is SASSolutionWindowControl control)
+                        control.SetupResultData(pddlDoc);
+                }
+            }
         }
     }
 }

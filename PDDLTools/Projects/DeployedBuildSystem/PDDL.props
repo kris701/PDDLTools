@@ -7,9 +7,5 @@
     <Platform>AnyCPU</Platform>
 
     <DebuggerFlavor>PDDLExecuter</DebuggerFlavor>
-    <!--<RunCommand>$(WinDir)\System32\cscript.exe</RunCommand>
-    <RunWorkingDirectory>$(MSBuildProjectDirectory)</RunWorkingDirectory>
-	  <DomainFile>domain.pddl</DomainFile>
-	  <ProblemFile>problem.pddl</ProblemFile>-->
   </PropertyGroup>
 </Project>

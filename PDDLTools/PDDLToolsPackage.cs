@@ -18,6 +18,7 @@ using PDDLTools.Windows.SASSolutionWindow;
 using PDDLTools.Windows.WelcomeWindow;
 using PDDLTools.Windows.PlanValidatorWindow;
 using PDDLTools.Windows.PDDLVisualiserWindow;
+using PDDLTools.Projects;
 
 namespace PDDLTools
 {

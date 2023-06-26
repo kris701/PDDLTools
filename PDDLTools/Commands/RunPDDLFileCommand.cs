@@ -119,8 +119,8 @@ namespace PDDLTools.Commands
             var resultData = await fdRunner.RunAsync(domainFilePath, problemFilePath, SelectEngineCommand.SelectedSearch);
 
             await WriteToOutputWindowAsync(resultData);
-            if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
-                await SetupResultWindowsAsync(resultData, domainFilePath, problemFilePath);
+            //if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
+            //    await SetupResultWindowsAsync(resultData, domainFilePath, problemFilePath);
 
             _isRunning = false;
         }
@@ -153,32 +153,32 @@ namespace PDDLTools.Commands
             }
         }
 
-        private async Task SetupResultWindowsAsync(FDResults resultData, string domainFilePath, string problemFilePath)
-        {
-            if (OptionsManager.Instance.OpenResultReport)
-            {
-                ToolWindowPane resultsWindow = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
-                if ((null == resultsWindow) || (null == resultsWindow.Frame))
-                {
-                    throw new NotSupportedException("Cannot create tool window");
-                }
-                if (resultsWindow.Content is FDResultsWindowControl control)
-                    await control.SetupResultDataAsync(resultData);
-            }
+        //private async Task SetupResultWindowsAsync(FDResults resultData, string domainFilePath, string problemFilePath)
+        //{
+        //    if (OptionsManager.Instance.OpenResultReport)
+        //    {
+        //        ToolWindowPane resultsWindow = await this.package.ShowToolWindowAsync(typeof(FDResultsWindow), 0, true, this.package.DisposalToken);
+        //        if ((null == resultsWindow) || (null == resultsWindow.Frame))
+        //        {
+        //            throw new NotSupportedException("Cannot create tool window");
+        //        }
+        //        if (resultsWindow.Content is FDResultsWindowControl control)
+        //            await control.SetupResultDataAsync(resultData);
+        //    }
 
-            if (resultData.WasSolutionFound && OptionsManager.Instance.OpenSASSolutionVisualiser)
-            {
-                IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
-                var pddlDoc = parser.Parse(domainFilePath, problemFilePath);
+        //    if (resultData.WasSolutionFound && OptionsManager.Instance.OpenSASSolutionVisualiser)
+        //    {
+        //        IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
+        //        var pddlDoc = parser.Parse(domainFilePath, problemFilePath);
 
-                ToolWindowPane sasWindow = await this.package.ShowToolWindowAsync(typeof(SASSolutionWindow), 0, true, this.package.DisposalToken);
-                if ((null == sasWindow) || (null == sasWindow.Frame))
-                {
-                    throw new NotSupportedException("Cannot create tool window");
-                }
-                if (sasWindow.Content is SASSolutionWindowControl control)
-                    await control.SetupResultDataAsync(pddlDoc);
-            }
-        }
+        //        ToolWindowPane sasWindow = await this.package.ShowToolWindowAsync(typeof(SASSolutionWindow), 0, true, this.package.DisposalToken);
+        //        if ((null == sasWindow) || (null == sasWindow.Frame))
+        //        {
+        //            throw new NotSupportedException("Cannot create tool window");
+        //        }
+        //        if (sasWindow.Content is SASSolutionWindowControl control)
+        //            await control.SetupResultDataAsync(pddlDoc);
+        //    }
+        //}
     }
 }
