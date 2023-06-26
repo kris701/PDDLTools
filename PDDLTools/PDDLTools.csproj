@@ -114,11 +114,9 @@
     <Compile Include="Commands\SASVisualiserCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />
     <Compile Include="Commands\FDReportCommand.cs" />
-    <Compile Include="Commands\SelectProblemListCommand.cs" />
     <Compile Include="Commands\SelectProblemCommand.cs" />
     <Compile Include="Commands\SelectEngineListCommand.cs" />
     <Compile Include="Commands\SelectEngineCommand.cs" />
-    <Compile Include="Commands\SelectDomainListCommand.cs" />
     <Compile Include="Commands\SelectDomainCommand.cs" />
     <Compile Include="Completers\PDDLCompletionHandlerProvider.cs" />
     <Compile Include="Completers\PDDLCompletionCommandHandler.cs" />
@@ -200,7 +198,6 @@
     <Compile Include="Helpers\OutputPanelController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PDDLToolsPackage.cs" />
-    <Compile Include="Commands\RunPDDLFileCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="PDDLToolsMenu.vsct">
@@ -217,7 +214,6 @@
     <Resource Include="Windows\PDDLVisualiserWindow\Resources\reset.png" />
     <Resource Include="Windows\SASSolutionWindow\Resources\reset.png" />
     <Resource Include="Windows\WelcomeWindow\Resources\WelcomeLogo.png" />
-    <Content Include="Commands\Resources\RunFIle.png" />
     <Content Include="Grammars\pddl.tmLanguage">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

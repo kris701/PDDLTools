@@ -19,6 +19,7 @@ using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.IO;
+using PDDLParser.Helpers;
 
 namespace PDDLTools.Commands
 {
@@ -28,7 +29,7 @@ namespace PDDLTools.Commands
         public static SelectProblemCommand Instance { get; internal set; }
         public static string SelectedProblemPath { get; internal set; } = "";
 
-        private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
+        private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {
         }
 
@@ -37,23 +38,22 @@ namespace PDDLTools.Commands
             Instance = new SelectProblemCommand(package, await InitializeCommandServiceAsync(package));
         }
 
-        public override void Execute(object sender, EventArgs e)
+        public override async void CheckQueryStatus(object sender, EventArgs e)
         {
-            OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
-            if (eventArgs.InValue != null)
+            if (sender is MenuCommand button)
             {
-                var selectedStr = eventArgs.InValue as string;
-                if (selectedStr != SelectProblemListCommand.NoneFoundComboboxName)
-                    SelectedProblemPath = selectedStr;
+                var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
+                if (selected != null)
+                    button.Visible = await DTE2Helper.IsItemInPDDLProjectAsync(selected) && PDDLHelper.IsFileProblem(selected);
             }
-            if (eventArgs.OutValue != null && SelectedProblemPath != "")
-            {
-                IntPtr pOutValue = eventArgs.OutValue;
-                if (pOutValue != IntPtr.Zero)
-                {
-                    Marshal.GetNativeVariantForObject(new FileInfo(SelectedProblemPath).Name, pOutValue);
-                }
-            }
+        }
+
+        public override async Task ExecuteAsync(object sender, EventArgs e)
+        {
+            var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
+            if (selected != null)
+                if (PDDLHelper.IsFileProblem(selected))
+                    SelectedProblemPath = selected;
         }
     }
 }
