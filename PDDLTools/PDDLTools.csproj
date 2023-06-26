@@ -63,6 +63,47 @@
     <NoWarn>VSTHRD100,VSTHRD010,VSTHRD110</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <XamlPropertyRule Include="Projects\Rules\Folder.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\GeneralFile.browseobject.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\GeneralConfiguration.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\GeneralFile.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\NoneFile.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <None Include="Projects\Rules\ProjectItemsSchema.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </None>
+    <XamlPropertyRule Include="Projects\Rules\Scc.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\PDDLFile.browseobject.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\PDDLFile.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\DebuggerGeneral.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\PDDLExecuter.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\SASFile.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\SASFile.browseobject.xaml" Namespace="$(RootNamespace).Projects">
+      <SubType>Designer</SubType>
+    </XamlPropertyRule>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Classifiers\PDDLClassifier.cs" />
     <Compile Include="Classifiers\PDDLClassifierProvider.cs" />
     <Compile Include="Classifiers\PDDLTypeDefinition.cs" />
@@ -114,11 +155,6 @@
     <Compile Include="Projects\PDDLExecuterDebuggerLaunchProvider.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoData.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceConnectionListener.cs" />
-    <Compile Include="Resource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource.resx</DependentUpon>
-    </Compile>
     <Compile Include="Taggers\BraceMatchingTagger.cs" />
     <Compile Include="Taggers\BraceMatchingTaggerProvider.cs" />
     <Compile Include="Taggers\HighlightWordFormatDefinition.cs" />
@@ -178,10 +214,6 @@
     <Content Include="Commands\Resources\VisualisorIcon.png" />
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
-    <EmbeddedResource Include="Resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <Resource Include="Windows\PDDLVisualiserWindow\Resources\reset.png" />
     <Resource Include="Windows\SASSolutionWindow\Resources\reset.png" />
     <Resource Include="Windows\WelcomeWindow\Resources\WelcomeLogo.png" />
@@ -251,57 +283,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <XamlPropertyRule Include="Projects\Rules\Folder.xaml">
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\GeneralFile.browseobject.xaml">
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\GeneralConfiguration.xaml">
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\GeneralFile.xaml">
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\NoneFile.xaml">
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <None Include="Projects\Rules\ProjectItemsSchema.xaml">
-      <SubType>Designer</SubType>
-    </None>
-    <XamlPropertyRule Include="Projects\Rules\Scc.xaml">
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLFile.browseobject.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLFile.xaml">
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\DebuggerGeneral.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLExecuter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\SASFile.xaml">
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\SASFile.browseobject.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-    </XamlPropertyRule>
     <Page Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
