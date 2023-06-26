@@ -125,12 +125,13 @@ namespace PDDLTools.Helpers
             Array selectedItems = (Array)uih.SelectedItems;
             if (null != selectedItems)
             {
+                if (selectedItems.Length > 1)
+                    return null;
                 foreach (UIHierarchyItem selItem in selectedItems)
                 {
                     ProjectItem prjItem = selItem.Object as ProjectItem;
                     
                     string filePath = prjItem.Properties.Item("FullPath").Value.ToString();
-                    //System.Windows.Forms.MessageBox.Show(selItem.Name + filePath);
                     return filePath;
                 }
             }
@@ -159,7 +160,7 @@ namespace PDDLTools.Helpers
                     }
                 }
             }
-            return true;
+            return false;
         }
     }
 }

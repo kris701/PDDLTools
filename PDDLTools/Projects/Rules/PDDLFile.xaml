@@ -10,7 +10,7 @@
         <DataSource Persistence="ProjectFile" Label="Configuration" ItemType="PDDLFile" HasConfigurationCondition="false" />
     </Rule.DataSource>
 
-    <BoolProperty Name="Visible" Visible="false" />
+	<BoolProperty Name="Visible" Visible="false" />
     <StringProperty Name="DependentUpon" Visible="false" />
     <StringProperty Name="Link" Visible="false" />
     <EnumProperty Name="SubType" Visible="false">

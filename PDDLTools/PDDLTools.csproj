@@ -65,42 +65,55 @@
   <ItemGroup>
     <XamlPropertyRule Include="Projects\Rules\Folder.xaml" Namespace="$(RootNamespace).Projects">
       <SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\Rules\GeneralFile.browseobject.xaml" Namespace="$(RootNamespace).Projects">
       <SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\Rules\GeneralConfiguration.xaml" Namespace="$(RootNamespace).Projects">
       <SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\Rules\GeneralFile.xaml" Namespace="$(RootNamespace).Projects">
       <SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\Rules\NoneFile.xaml" Namespace="$(RootNamespace).Projects">
       <SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </XamlPropertyRule>
     <None Include="Projects\Rules\ProjectItemsSchema.xaml" Namespace="$(RootNamespace).Projects">
       <SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <XamlPropertyRule Include="Projects\Rules\Scc.xaml" Namespace="$(RootNamespace).Projects">
       <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLFile.browseobject.xaml" Namespace="$(RootNamespace).Projects">
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLFile.xaml" Namespace="$(RootNamespace).Projects">
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\DebuggerGeneral.xaml" Namespace="$(RootNamespace).Projects">
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLExecuter.xaml" Namespace="$(RootNamespace).Projects">
-      <SubType>Designer</SubType>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\SASFile.xaml" Namespace="$(RootNamespace).Projects">
-      <SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</XamlPropertyRule>
+	<XamlPropertyRule Include="Projects\Rules\PDDLFile.browseobject.xaml" Namespace="$(RootNamespace).Projects">
+		<SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</XamlPropertyRule>
+	<XamlPropertyRule Include="Projects\Rules\PDDLFile.xaml" Namespace="$(RootNamespace).Projects">
+		<SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</XamlPropertyRule>
+	<XamlPropertyRule Include="Projects\Rules\DebuggerGeneral.xaml" Namespace="$(RootNamespace).Projects">
+		<SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</XamlPropertyRule>
+	<XamlPropertyRule Include="Projects\Rules\PDDLExecuter.xaml" Namespace="$(RootNamespace).Projects">
+		<SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</XamlPropertyRule>
+	<XamlPropertyRule Include="Projects\Rules\SASFile.xaml" Namespace="$(RootNamespace).Projects">
+		<SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\Rules\SASFile.browseobject.xaml" Namespace="$(RootNamespace).Projects">
       <SubType>Designer</SubType>
+		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </XamlPropertyRule>
   </ItemGroup>
   <ItemGroup>

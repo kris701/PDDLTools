@@ -62,7 +62,6 @@
   <Import Project="$(MSBuildProjectFullPath).user" Condition="Exists('$(MSBuildProjectFullPath).user')" />
 
 	<Target Name="Run">
-		<Message Text="Run Test" />
 	</Target>
 
 	<Target Name="Build" >

@@ -13,6 +13,8 @@ namespace PDDLTools.Classifiers
 {
     public static class PDDLTypeDefinition
     {
+#pragma warning disable CS0414 // The field 'x' is assigned but its value is never used
+
         #region Declaration
         [Export(typeof(ClassificationTypeDefinition))]
         [Name(PDDLTypes.Declaration)]
@@ -180,5 +182,7 @@ namespace PDDLTools.Classifiers
             }
         }
         #endregion
+
+#pragma warning restore CS0414 // The field 'x' is assigned but its value is never used
     }
 }

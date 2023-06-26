@@ -31,24 +31,43 @@
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     public class PDDLExecuterDebuggerLaunchProvider : DebugLaunchProviderBase
     {
+        private ProjectProperties _projectProperties;
         private static OutputPanelController OutputPanel = new OutputPanelController("Fast Downward Output");
+        private string _lastDomain = "";
+        private string _lastProblem = "";
+        private bool _lastCheckResult = false;
 
         [ImportingConstructor]
-        public PDDLExecuterDebuggerLaunchProvider(ConfiguredProject configuredProject)
+        public PDDLExecuterDebuggerLaunchProvider(ConfiguredProject configuredProject, ProjectProperties projectProperties)
             : base(configuredProject)
         {
+            _projectProperties = projectProperties;
+            LoadFromSavedProjectPropertiesAsync().Wait();
         }
 
         [ExportPropertyXamlRuleDefinition("PDDL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9be6e469bc4921f1", "XamlRuleToCode:PDDLExecuterDebugger.xaml", "Project")]
         [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
         private object DebuggerXaml { get { throw new NotImplementedException(); } }
 
-        [Import]
-        private ProjectProperties ProjectProperties { get; set; }
+        private async Task LoadFromSavedProjectPropertiesAsync()
+        {
+            if (_projectProperties != null)
+            {
+                var generalProps = await _projectProperties.GetConfigurationGeneralPropertiesAsync();
+                var lastDomain = await generalProps.SelectedDomain.GetValueAsync();
+                var lastProblem = await generalProps.SelectedProblem.GetValueAsync();
+                var lastEngine = await generalProps.SelectedEngine.GetValueAsync();
 
-        private string _lastDomain = "";
-        private string _lastProblem = "";
-        private bool _lastCheckResult = false;
+                if (lastDomain != null && lastDomain is string domainFile)
+                    if (PDDLHelper.IsFileDomain(domainFile))
+                        SelectDomainCommand.SelectedDomainPath = domainFile;
+                if (lastProblem != null && lastProblem is string problemFile)
+                    if (PDDLHelper.IsFileProblem(problemFile))
+                        SelectProblemCommand.SelectedProblemPath = problemFile;
+                if (lastEngine != null && lastEngine is string engineStr)
+                    SelectEngineCommand.SelectedSearch = engineStr;
+            }
+        }
 
         public override Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
         {
@@ -64,7 +83,6 @@
         public override Task<IReadOnlyList<IDebugLaunchSettings>> QueryDebugTargetsAsync(DebugLaunchOptions launchOptions)
         {
             var settings = new DebugLaunchSettings(launchOptions);
-
             return Task.FromResult(new IDebugLaunchSettings[] { settings } as IReadOnlyList<IDebugLaunchSettings>);
         }
 
@@ -72,14 +90,30 @@
         {
             await OutputPanel.InitializeAsync();
             await OutputPanel.ClearOutputAsync();
-            await OutputPanel.WriteLineAsync("Executing PDDL File");
+            await OutputPanel.WriteLineAsync("Checking if files are valid...");
 
-            FDRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
-            var resultData = await fdRunner.RunAsync(_lastDomain, _lastProblem, SelectEngineCommand.SelectedSearch);
+            bool canLaunch = false;
+            try
+            {
+                IPDDLParser parser = new PDDLParser();
+                parser.Parse(_lastDomain, _lastProblem);
+                canLaunch = true;
+            }
+            catch 
+            {
+                await OutputPanel.WriteLineAsync("There are parse errors in the execution files!");
+            }
 
-            await WriteToOutputWindowAsync(resultData);
-            if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
-                await SetupResultWindowsAsync(resultData, _lastDomain, _lastProblem);
+            if (canLaunch)
+            {
+                await OutputPanel.WriteLineAsync("Executing PDDL File");
+                FDRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
+                var resultData = await fdRunner.RunAsync(_lastDomain, _lastProblem, SelectEngineCommand.SelectedSearch);
+
+                await WriteToOutputWindowAsync(resultData);
+                if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
+                    await SetupResultWindowsAsync(resultData, _lastDomain, _lastProblem);
+            }
         }
 
         private async Task WriteToOutputWindowAsync(FDResults resultData)
