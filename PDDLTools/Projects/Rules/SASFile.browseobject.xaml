@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <!--Copyright, Microsoft Corporation, All rights reserved.-->
 <Rule
-	Name="SASFile"
+	Name="SASFileBrowser"
 	DisplayName="SAS File"
 	PageTemplate="tool"
 	Description="SAS file"

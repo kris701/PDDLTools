@@ -7,8 +7,7 @@
 	Description="PDDL Executer options"
 	xmlns="http://schemas.microsoft.com/build/2009/properties">
     <Rule.DataSource>
-		<!--<DataSource Persistence="UserFileWithXamlDefaults" HasConfigurationCondition="True"/>-->
-		<DataSource Persistence="UserFileWithXamlDefaults"/>
+		<DataSource Persistence="UserFileWithXamlDefaults" HasConfigurationCondition="True"/>
     </Rule.DataSource>
 
     <!--<StringProperty Name="RunCommand" DisplayName="Command"

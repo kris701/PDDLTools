@@ -4,11 +4,13 @@
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.IO;
+    using System.Text;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.ProjectSystem;
     using Microsoft.VisualStudio.ProjectSystem.Debug;
     using Microsoft.VisualStudio.ProjectSystem.Properties;
     using Microsoft.VisualStudio.ProjectSystem.VS.Debug;
+    using PDDLTools.Commands;
     using PDDLTools.Options;
 
     [ExportDebugger("PDDLExecuter")]
@@ -37,33 +39,29 @@
         {
             var settings = new DebugLaunchSettings(launchOptions);
 
-            //// The properties that are available via DebuggerProperties are determined by the property XAML files in your project.
-            //var debuggerProperties = await this.ProjectProperties.GetScriptDebuggerPropertiesAsync();
-            //settings.CurrentDirectory = await debuggerProperties.RunWorkingDirectory.GetEvaluatedValueAtEndAsync();
+            StringBuilder sb = new StringBuilder("-WindowStyle hidden {& ");
+            sb.Append($"{OptionsManager.Instance.PythonPrefix} ");
+            sb.Append($"'{Path.Combine(OptionsManager.Instance.FDPath, "fast-downward.py")}' ");
+            sb.Append($"--plan-file '{Path.Combine(OptionsManager.Instance.FDPath, "sas_plan")}' ");
+            sb.Append($"--sas-file '{Path.Combine(OptionsManager.Instance.FDPath, "output.sas")}' ");
 
-            //string scriptCommand = await debuggerProperties.RunCommand.GetEvaluatedValueAtEndAsync();
-            //string scriptArguments = await debuggerProperties.RunCommandArguments.GetEvaluatedValueAtEndAsync();
+            var engineArg = SelectEngineCommand.SelectedSearch.Replace("\"", "'");
+            if (engineArg.ToLower().Contains("--alias"))
+                sb.Append($"{engineArg} ");
 
-            //var generalProperties = await this.ProjectProperties.GetConfigurationGeneralPropertiesAsync();
-            //string startupItem = await generalProperties.StartItem.GetEvaluatedValueAtEndAsync();
+            sb.Append($"'C:\\Users\\kris7\\source\\repos\\New Project5\\New Project5\\domain.pddl' ");
+            sb.Append($"'C:\\Users\\kris7\\source\\repos\\New Project5\\New Project5\\problem.pddl' ");
 
-            //if ((launchOptions & DebugLaunchOptions.NoDebug) == DebugLaunchOptions.NoDebug)
-            //{
-            //    // No debug - launch cscript using cmd.exe to introduce a pause at the end
-            //    settings.Executable = Path.Combine(Environment.SystemDirectory, "cmd.exe");
-            //    settings.Arguments = string.Format("/c {0} \"{1}\" {2} & pause", scriptCommand, startupItem, scriptArguments);
-            //}
-            //else
-            //{
-            //    // Debug - launch cscript using the debugger switch //X
-            //    settings.Executable = scriptCommand;
-            //    settings.Arguments = string.Format("\"{0}\" //X {1}", startupItem, scriptArguments);
-            //}
+            if (engineArg.ToLower().Contains("--search"))
+                sb.Append($"{engineArg}");
+            sb.Append("}");
 
-            //settings.LaunchOperation = DebugLaunchOperation.CreateProcess;
-            //settings.LaunchDebugEngineGuid = DebuggerEngines.ScriptEngine;
+            settings.Executable = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+            settings.Arguments = sb.ToString();
 
-            settings.Executable = OptionsManager.Instance.FDPath;
+            settings.LaunchOperation = DebugLaunchOperation.CreateProcess;
+            settings.LaunchOptions = DebugLaunchOptions.IntegratedConsole;
+            settings.SendToOutputWindow = true;
 
             return new IDebugLaunchSettings[] { settings };
         }

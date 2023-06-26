@@ -32,6 +32,9 @@
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\DebuggerGeneral.xaml;">
       <Context>Project</Context>
     </PropertyPageSchema>
+	<PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\PDDLExecuter.xaml;">
+		  <Context>Project</Context>
+	  </PropertyPageSchema>
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\GeneralFile.xaml">
       <Context>File</Context>
     </PropertyPageSchema>
