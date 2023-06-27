@@ -5,7 +5,7 @@ namespace PDDLTools.Projects
     using Microsoft.VisualStudio.ProjectSystem.Properties;
 
     [Export]
-    public partial class ProjectProperties : StronglyTypedPropertyAccess
+    internal partial class ProjectProperties : StronglyTypedPropertyAccess
     {
         [ImportingConstructor]
         public ProjectProperties(ConfiguredProject configuredProject)

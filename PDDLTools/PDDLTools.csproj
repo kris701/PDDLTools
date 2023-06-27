@@ -14,7 +14,7 @@
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
@@ -36,7 +36,7 @@
     <UseCodebase>true</UseCodebase>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
-    <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
     <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
     <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
     <StartAction>Program</StartAction>
@@ -62,81 +62,22 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>VSTHRD100,VSTHRD010,VSTHRD110</NoWarn>
   </PropertyGroup>
+	
   <ItemGroup>
-    <XamlPropertyRule Include="Projects\Rules\DebuggerGeneral.xaml">
+    <XamlPropertyRule Include="Projects\Rules\*.xaml">
       <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\Folder.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\GeneralConfiguration.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\GeneralFile.browseobject.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\GeneralFile.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\NoneFile.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLExecuter.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLFile.browseobject.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\PDDLFile.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\SASFile.browseobject.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\SASFile.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
-    </XamlPropertyRule>
-    <XamlPropertyRule Include="Projects\Rules\Scc.xaml">
-      <Namespace>PDDLTools.Projects</Namespace>
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <RuleInjection>None</RuleInjection>
+		<OutputPath>Projects\Rules</OutputPath>
+		<CreateFallbackRule>true</CreateFallbackRule>
+		<SubType>Component</SubType>
     </XamlPropertyRule>
   </ItemGroup>
-  <ItemGroup>
+	<ItemGroup>
+		<Compile Include="Projects\Rules\*.cs">
+			<DependentUpon>%(FileName).xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	
+	<ItemGroup>
     <Compile Include="Classifiers\PDDLClassifier.cs" />
     <Compile Include="Classifiers\PDDLClassifierProvider.cs" />
     <Compile Include="Classifiers\PDDLTypeDefinition.cs" />
@@ -280,6 +221,9 @@
     <PackageReference Include="Microsoft.VisualStudio.ProjectSystem.SDK">
       <Version>15.8.243</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.ProjectSystem.SDK.Tools">
+      <Version>15.8.243</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.6.36389" ExcludeAssets="runtime">
       <IncludeAssets>compile; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -416,26 +360,26 @@
       <Name>SASSimulator</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
   </PropertyGroup>
-  <Import Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' != ''" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.Sql.UnitTesting.targets" Condition="$(VisualStudioVersion) != '15.0' And '$(SQLDBExtensionsRefPath)' == ''" />
+	
   <ItemGroup>
     <VSIXSourceItem Include="Projects\DeployedBuildSystem\**">
       <InProject>false</InProject>
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>Projects\CustomProjectSystems\PDDL</VSIXSubPath>
     </VSIXSourceItem>
-    <VSIXSourceItem Include="Projects\Rules\**">
+    <VSIXSourceItem Include="Projects\Rules\*.xaml">
       <InProject>false</InProject>
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>Projects\CustomProjectSystems\PDDL\Rules</VSIXSubPath>
     </VSIXSourceItem>
   </ItemGroup>
-  <Target Name="PostBuild">
+	
+  <Target Name="AfterBuild">
     <ItemGroup>
       <BuildSystemToCopy Include="Projects\DeployedBuildSystem\**" />
       <RulesToCopy Include="Projects\Rules\**" />
@@ -443,4 +387,8 @@
     <Copy SourceFiles="@(BuildSystemToCopy)" DestinationFiles="@(BuildSystemToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(RulesToCopy)" DestinationFiles="@(RulesToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\Rules\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
+
+	<Target Name="GenerateRulePrep" >
+		<Message Text="Skip"/>
+	</Target>
 </Project>

@@ -31,18 +31,19 @@
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     public class PDDLExecuterDebuggerLaunchProvider : DebugLaunchProviderBase
     {
-        private ProjectProperties _projectProperties;
+        [Import]
+        private ProjectProperties ProjectProperties { get; set; }
+        private bool _isLoaded = false;
+
         private static OutputPanelController OutputPanel = new OutputPanelController("Fast Downward Output");
         private string _lastDomain = "";
         private string _lastProblem = "";
         private bool _lastCheckResult = false;
 
         [ImportingConstructor]
-        public PDDLExecuterDebuggerLaunchProvider(ConfiguredProject configuredProject, ProjectProperties projectProperties)
+        public PDDLExecuterDebuggerLaunchProvider(ConfiguredProject configuredProject)
             : base(configuredProject)
         {
-            _projectProperties = projectProperties;
-            LoadFromSavedProjectPropertiesAsync().Wait();
         }
 
         [ExportPropertyXamlRuleDefinition("PDDL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9be6e469bc4921f1", "XamlRuleToCode:PDDLExecuterDebugger.xaml", "Project")]
@@ -51,33 +52,33 @@
 
         private async Task LoadFromSavedProjectPropertiesAsync()
         {
-            if (_projectProperties != null)
-            {
-                var generalProps = await _projectProperties.GetConfigurationGeneralPropertiesAsync();
-                var lastDomain = await generalProps.SelectedDomain.GetValueAsync();
-                var lastProblem = await generalProps.SelectedProblem.GetValueAsync();
-                var lastEngine = await generalProps.SelectedEngine.GetValueAsync();
+            var generalProps = await ProjectProperties.GetConfigurationGeneralPropertiesAsync();
+            var lastDomain = await generalProps.SelectedDomain.GetValueAsync();
+            var lastProblem = await generalProps.SelectedProblem.GetValueAsync();
+            var lastEngine = await generalProps.SelectedEngine.GetValueAsync();
 
-                if (lastDomain != null && lastDomain is string domainFile)
-                    if (PDDLHelper.IsFileDomain(domainFile))
-                        SelectDomainCommand.SelectedDomainPath = domainFile;
-                if (lastProblem != null && lastProblem is string problemFile)
-                    if (PDDLHelper.IsFileProblem(problemFile))
-                        SelectProblemCommand.SelectedProblemPath = problemFile;
-                if (lastEngine != null && lastEngine is string engineStr)
-                    SelectEngineCommand.SelectedSearch = engineStr;
-            }
+            if (lastDomain != null && lastDomain is string domainFile)
+                if (PDDLHelper.IsFileDomain(domainFile))
+                    SelectDomainCommand.SelectedDomainPath = domainFile;
+            if (lastProblem != null && lastProblem is string problemFile)
+                if (PDDLHelper.IsFileProblem(problemFile))
+                    SelectProblemCommand.SelectedProblemPath = problemFile;
+            if (lastEngine != null && lastEngine is string engineStr)
+                SelectEngineCommand.SelectedSearch = engineStr;
+            _isLoaded = true;
         }
 
-        public override Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
+        public override async Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
         {
+            if (!_isLoaded)
+                await LoadFromSavedProjectPropertiesAsync();
             if (_lastDomain != SelectDomainCommand.SelectedDomainPath || _lastProblem != SelectProblemCommand.SelectedProblemPath)
             {
                 _lastDomain = SelectDomainCommand.SelectedDomainPath;
                 _lastProblem = SelectProblemCommand.SelectedProblemPath;
                 _lastCheckResult = PDDLHelper.IsFileDomain(_lastDomain) && PDDLHelper.IsFileProblem(_lastProblem);
             }
-            return Task.FromResult(_lastCheckResult);
+            return _lastCheckResult;
         }
 
         public override Task<IReadOnlyList<IDebugLaunchSettings>> QueryDebugTargetsAsync(DebugLaunchOptions launchOptions)
