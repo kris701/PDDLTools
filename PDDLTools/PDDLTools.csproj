@@ -418,6 +418,5 @@
     <Copy SourceFiles="@(BuildSystemToCopy)" DestinationFiles="@(BuildSystemToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(RulesToCopy)" DestinationFiles="@(RulesToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\Rules\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
-  <!--<Import Project="C:\Users\kris7\OneDrive\Programming\_GitHub_\PDDLTools\Git\PDDLTools\packages\Microsoft.VisualStudio.ProjectSystem.15.8.243\build\Microsoft.VisualStudio.ProjectSystem.targets" />-->
-  <Import Project="C:\Users\kris7\OneDrive\Programming\_GitHub_\PDDLTools\Git\PDDLTools\packages\Microsoft.VisualStudio.ProjectSystem.Sdk.Tools.15.8.243\build\Microsoft.VisualStudio.ProjectSystem.Sdk.Tools.targets" />
+  <Import Project="..\packages\Microsoft.VisualStudio.ProjectSystem.Sdk.Tools.15.8.243\build\Microsoft.VisualStudio.ProjectSystem.Sdk.Tools.targets" />
 </Project>
