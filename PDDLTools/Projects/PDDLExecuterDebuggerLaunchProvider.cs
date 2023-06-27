@@ -46,7 +46,7 @@
         {
         }
 
-        [ExportPropertyXamlRuleDefinition("PDDL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9be6e469bc4921f1", "XamlRuleToCode:PDDLExecuterDebugger.xaml", "Project")]
+        [ExportPropertyXamlRuleDefinition("PDDL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9be6e469bc4921f1", "XamlRuleToCode:PDDLExecuter.xaml", "Project")]
         [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
         private object DebuggerXaml { get { throw new NotImplementedException(); } }
 
@@ -77,6 +77,13 @@
                 _lastDomain = SelectDomainCommand.SelectedDomainPath;
                 _lastProblem = SelectProblemCommand.SelectedProblemPath;
                 _lastCheckResult = PDDLHelper.IsFileDomain(_lastDomain) && PDDLHelper.IsFileProblem(_lastProblem);
+                if (_lastCheckResult)
+                {
+                    var generalProps = await ProjectProperties.GetConfigurationGeneralPropertiesAsync();
+                    await generalProps.SelectedDomain.SetValueAsync(_lastDomain);
+                    await generalProps.SelectedProblem.SetValueAsync(_lastProblem);
+                    await generalProps.SelectedEngine.SetValueAsync(SelectEngineCommand.SelectedSearch);
+                }
             }
             return _lastCheckResult;
         }

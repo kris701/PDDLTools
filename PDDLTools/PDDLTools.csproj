@@ -1,12 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <SSDTUnitTestPath Condition="'$(SSDTUnitTestPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB</SSDTUnitTestPath>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SSDTPath Condition="'$(SSDTPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB\DAC</SSDTPath>
-  </PropertyGroup>
-  <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup>
@@ -62,22 +56,57 @@
     <WarningLevel>4</WarningLevel>
     <NoWarn>VSTHRD100,VSTHRD010,VSTHRD110</NoWarn>
   </PropertyGroup>
-	
   <ItemGroup>
-    <XamlPropertyRule Include="Projects\Rules\*.xaml">
+    <XamlPropertyRule Include="Projects\Rules\DebuggerGeneral.xaml">
       <Namespace>PDDLTools.Projects</Namespace>
-		<OutputPath>Projects\Rules</OutputPath>
-		<CreateFallbackRule>true</CreateFallbackRule>
-		<SubType>Component</SubType>
+      <SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\Folder.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\GeneralConfiguration.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\GeneralFile.browseobject.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\GeneralFile.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\NoneFile.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\PDDLExecuter.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+	</XamlPropertyRule>
+	<XamlPropertyRule Include="Projects\Rules\PDDLFile.browseobject.xaml">
+		<Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\PDDLFile.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\SASFile.browseobject.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\SASFile.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\scc.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+		<SubType>Design</SubType>
     </XamlPropertyRule>
   </ItemGroup>
-	<ItemGroup>
-		<Compile Include="Projects\Rules\*.cs">
-			<DependentUpon>%(FileName).xaml</DependentUpon>
-		</Compile>
-	</ItemGroup>
-	
-	<ItemGroup>
+  <ItemGroup>
     <Compile Include="Classifiers\PDDLClassifier.cs" />
     <Compile Include="Classifiers\PDDLClassifierProvider.cs" />
     <Compile Include="Classifiers\PDDLTypeDefinition.cs" />
@@ -253,9 +282,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Projects\ProjectSchemaItems\ProjectItemsSchema.xaml">
+    <None Include="Projects\Rules\ProjectItemsSchema.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
+    </None>
     <Page Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -360,12 +389,15 @@
       <Name>SASSimulator</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+	<Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <PropertyGroup>
     <SsdtUnitTestVersion>3.1</SsdtUnitTestVersion>
   </PropertyGroup>
-	
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <VSIXSourceItem Include="Projects\DeployedBuildSystem\**">
       <InProject>false</InProject>
@@ -378,17 +410,14 @@
       <VSIXSubPath>Projects\CustomProjectSystems\PDDL\Rules</VSIXSubPath>
     </VSIXSourceItem>
   </ItemGroup>
-	
   <Target Name="AfterBuild">
     <ItemGroup>
       <BuildSystemToCopy Include="Projects\DeployedBuildSystem\**" />
-      <RulesToCopy Include="Projects\Rules\**" />
+      <RulesToCopy Include="Projects\Rules\*.xaml" />
     </ItemGroup>
     <Copy SourceFiles="@(BuildSystemToCopy)" DestinationFiles="@(BuildSystemToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(RulesToCopy)" DestinationFiles="@(RulesToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\Rules\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
-
-	<Target Name="GenerateRulePrep" >
-		<Message Text="Skip"/>
-	</Target>
+  <!--<Import Project="C:\Users\kris7\OneDrive\Programming\_GitHub_\PDDLTools\Git\PDDLTools\packages\Microsoft.VisualStudio.ProjectSystem.15.8.243\build\Microsoft.VisualStudio.ProjectSystem.targets" />-->
+  <Import Project="C:\Users\kris7\OneDrive\Programming\_GitHub_\PDDLTools\Git\PDDLTools\packages\Microsoft.VisualStudio.ProjectSystem.Sdk.Tools.15.8.243\build\Microsoft.VisualStudio.ProjectSystem.Sdk.Tools.targets" />
 </Project>

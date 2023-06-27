@@ -13,21 +13,21 @@
         <DataSource Persistence="ProjectFile" Label="Configuration" />
     </Rule.DataSource>
 
-	<StringProperty Name="SelectedDomain" Visible="False">
+	<StringProperty Name="SelectedDomain" Visible="True">
 		<StringProperty.DataSource>
-			<DataSource Persistence="ProjectFile" Label="Globals" HasConfigurationCondition="False" />
+			<DataSource Persistence="UserFile" HasConfigurationCondition="False" />
 		</StringProperty.DataSource>
 	</StringProperty>
 
-	<StringProperty Name="SelectedProblem" Visible="False">
+	<StringProperty Name="SelectedProblem" Visible="True">
 		<StringProperty.DataSource>
-			<DataSource Persistence="ProjectFile" Label="Globals" HasConfigurationCondition="False" />
+			<DataSource Persistence="UserFile" HasConfigurationCondition="False" />
 		</StringProperty.DataSource>
 	</StringProperty>
 
-	<StringProperty Name="SelectedEngine" Visible="False">
+	<StringProperty Name="SelectedEngine" Visible="True">
 		<StringProperty.DataSource>
-			<DataSource Persistence="ProjectFile" Label="Globals" HasConfigurationCondition="False" />
+			<DataSource Persistence="UserFile" HasConfigurationCondition="False" />
 		</StringProperty.DataSource>
 	</StringProperty>
 

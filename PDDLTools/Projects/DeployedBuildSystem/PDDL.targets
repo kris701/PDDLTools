@@ -1,8 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-	  <ProjectConfiguration Include="Run|AnyCPU">
-		  <Configuration>Run</Configuration>
+	  <ProjectConfiguration Include="Debug|AnyCPU">
+		  <Configuration>Debug</Configuration>
+		  <Platform>AnyCPU</Platform>
+	  </ProjectConfiguration>
+	  <ProjectConfiguration Include="Release|AnyCPU">
+		  <Configuration>Release</Configuration>
 		  <Platform>AnyCPU</Platform>
 	  </ProjectConfiguration>
   </ItemGroup>
@@ -20,7 +24,7 @@
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\GeneralConfiguration.xaml;">
         <Context>Project</Context>
     </PropertyPageSchema>
-    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)ProjectSchemaItems\ProjectItemsSchema.xaml;"/>
+    <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\ProjectItemsSchema.xaml;"/>
     <PropertyPageSchema Include="$(MSBuildThisFileDirectory)Rules\DebuggerGeneral.xaml;">
       <Context>Project</Context>
     </PropertyPageSchema>
@@ -60,9 +64,6 @@
   </ItemGroup>
 
   <Import Project="$(MSBuildProjectFullPath).user" Condition="Exists('$(MSBuildProjectFullPath).user')" />
-
-	<Target Name="Run">
-	</Target>
 
 	<Target Name="Build" >
 	  <Message Text="Nothing to build in PDDL projects"></Message>

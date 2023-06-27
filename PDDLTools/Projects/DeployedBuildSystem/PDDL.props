@@ -3,7 +3,7 @@
   <PropertyGroup>
     <ProjectSystemBase>$(MSBuildThisFileDirectory)</ProjectSystemBase>
 
-    <Configuration>Run</Configuration>
+    <Configuration>Debug</Configuration>
     <Platform>AnyCPU</Platform>
 
     <DebuggerFlavor>PDDLExecuter</DebuggerFlavor>
