@@ -1,5 +1,4 @@
 # Visual Studio PDDL Tools Extension
-[![Build](https://github.com/kris701/PDDLTools/actions/workflows/dotnet.yml/badge.svg)](https://github.com/kris701/PDDLTools/actions/workflows/dotnet.yml)
 
 ![combined](https://github.com/kris701/PDDLTools/assets/22596587/8364b0da-efe3-491a-8e21-5b113054fd07)
 
