@@ -34,7 +34,7 @@ namespace PDDLTools.Options
             EnableBraceMatchingCheckbox.Checked = OptionsManager.Instance.EnableBraceMatching;
             EnableWordHighlightingCheckbox.Checked = OptionsManager.Instance.EnableHighlightingOfWords;
             IntermediateOutputPathTextbox.Text = OptionsManager.Instance.IntermediateOutputPath;
-            OutputPlanPath.Text = OptionsManager.Instance.OutputPlanPath;
+            OutputPlanPathTextbox.Text = OptionsManager.Instance.OutputPlanPath;
             _isLoaded = true;
         }
 

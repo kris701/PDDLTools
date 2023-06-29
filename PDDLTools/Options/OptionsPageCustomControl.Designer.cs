@@ -52,7 +52,7 @@
             this.IntermediateOutputPathTextbox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.OutputPlanPathTextbox = new System.Windows.Forms.TextBox();
-            this.OutputPlanPath = new System.Windows.Forms.Label();
+            this.OutputPlanPathLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -273,7 +273,6 @@
             // IntermediateOutputPathTextbox
             // 
             this.IntermediateOutputPathTextbox.AccessibleName = "";
-            this.IntermediateOutputPathTextbox.Enabled = false;
             this.IntermediateOutputPathTextbox.Location = new System.Drawing.Point(140, 318);
             this.IntermediateOutputPathTextbox.Name = "IntermediateOutputPathTextbox";
             this.IntermediateOutputPathTextbox.Size = new System.Drawing.Size(189, 20);
@@ -292,21 +291,20 @@
             // OutputPlanPathTextbox
             // 
             this.OutputPlanPathTextbox.AccessibleName = "";
-            this.OutputPlanPathTextbox.Enabled = false;
             this.OutputPlanPathTextbox.Location = new System.Drawing.Point(140, 344);
             this.OutputPlanPathTextbox.Name = "OutputPlanPathTextbox";
             this.OutputPlanPathTextbox.Size = new System.Drawing.Size(189, 20);
             this.OutputPlanPathTextbox.TabIndex = 23;
             this.OutputPlanPathTextbox.Leave += new System.EventHandler(this.OutputPlanPathTextbox_Leave);
             // 
-            // OutputPlanPath
+            // OutputPlanPathLabel
             // 
-            this.OutputPlanPath.AutoSize = true;
-            this.OutputPlanPath.Location = new System.Drawing.Point(12, 347);
-            this.OutputPlanPath.Name = "OutputPlanPath";
-            this.OutputPlanPath.Size = new System.Drawing.Size(88, 13);
-            this.OutputPlanPath.TabIndex = 22;
-            this.OutputPlanPath.Text = "Output Plan Path";
+            this.OutputPlanPathLabel.AutoSize = true;
+            this.OutputPlanPathLabel.Location = new System.Drawing.Point(12, 347);
+            this.OutputPlanPathLabel.Name = "OutputPlanPathLabel";
+            this.OutputPlanPathLabel.Size = new System.Drawing.Size(88, 13);
+            this.OutputPlanPathLabel.TabIndex = 22;
+            this.OutputPlanPathLabel.Text = "Output Plan Path";
             // 
             // OptionsPageCustomControl
             // 
@@ -315,7 +313,7 @@
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.Controls.Add(this.OutputPlanPathTextbox);
-            this.Controls.Add(this.OutputPlanPath);
+            this.Controls.Add(this.OutputPlanPathLabel);
             this.Controls.Add(this.IntermediateOutputPathTextbox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.EnableBraceMatchingCheckbox);
@@ -373,6 +371,6 @@
         private System.Windows.Forms.TextBox IntermediateOutputPathTextbox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox OutputPlanPathTextbox;
-        private System.Windows.Forms.Label OutputPlanPath;
+        private System.Windows.Forms.Label OutputPlanPathLabel;
     }
 }

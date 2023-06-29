@@ -32,11 +32,18 @@ namespace LocationSpreader
                         rnd.Next(radius, width - radius),
                         rnd.Next(radius, height - radius)
                         );
+                int current = 0;
+                int limit = 100;
                 while (GetClosestPointDistance(points, newPoint) < radius * 3)
+                {
                     newPoint = new Point(
                         rnd.Next(radius, width - radius),
                         rnd.Next(radius, height - radius)
                         );
+                    current++;
+                    if (current > limit)
+                        break;
+                }
 
                 points.Add(newPoint);
             }
