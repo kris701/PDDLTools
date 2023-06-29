@@ -11,6 +11,9 @@
 			<Group guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" priority="0x0600">
 				<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbar" />
 			</Group>
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
+			</Group>
 		</Groups>
 
 		<Menus>
@@ -30,7 +33,6 @@
 		</Menus>
 
 		<Bitmaps>
-			<Bitmap guid="RunPDDLFileImageGuid" href="Commands\Resources\RunFile.png" />
 			<Bitmap guid="GithubImageGuid" href="Commands\Resources\GitHub.png" />
 			<Bitmap guid="WelcomeWindowImageGuid" href="Commands\Resources\Welcome.png" />
 			<Bitmap guid="VALWindowImageGuid" href="Commands\Resources\ValidateIcon.png" />
@@ -79,15 +81,6 @@
 		</Combos>
 		
 		<Buttons>
-			<Button guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x0100" type="Button">
-				<Icon guid="RunPDDLFileImageGuid" id="bmpPic1" />
-				<CommandFlag>IconAndText</CommandFlag>
-				<Strings>
-					<ButtonText>Run </ButtonText>
-					<MenuText>Run PDDL File</MenuText>
-					<ToolTipText>Execute currently open PDDL file</ToolTipText>
-				</Strings>
-			</Button>
 			<Button guid="PDDLCommandSetGuid" id="GenerateReportCommandID" priority="0x0101" type="Button">
 				<Strings>
 					<ButtonText>Generate Report</ButtonText>
@@ -129,15 +122,33 @@
 					<ButtonText>Help</ButtonText>
 					<ToolTipText>Opens the welcome page with info on how to use this extension.</ToolTipText>
 				</Strings>
-			</Button>			
+			</Button>
+
+			<!--Context Menu-->
+			<Button guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" priority="0x0100" type="Button">
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Select problem to execute</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" priority="0x0100" type="Button">
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Select domain to execute</ButtonText>
+				</Strings>
+			</Button>
 		</Buttons>		
 	</Commands>
 
+	<VisibilityConstraints>
+		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" context="PDDLPackageGuid" />
+		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" context="PDDLPackageGuid" />
+	</VisibilityConstraints>
+
 	<CommandPlacements>
 		<!-- Extension Menu -->
-		<CommandPlacement guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x100">
-			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
-		</CommandPlacement>
 		<CommandPlacement guid="PDDLCommandSetGuid" id="GenerateReportCommandID" priority="0x101">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
@@ -168,9 +179,6 @@
 		</CommandPlacement>
 
 		<!-- Toolbar -->
-		<CommandPlacement guid="PDDLCommandSetGuid" id="RunPDDLFileCommandID" priority="0x100">
-			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
-		</CommandPlacement>
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x101">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
@@ -180,17 +188,29 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectEngineCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
+		
+		<!--Context Menu-->
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" priority="0x103">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" priority="0x104">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
+		</CommandPlacement>
 	</CommandPlacements>
 	
 	<Symbols>
 		<GuidSymbol value="{956B19CF-953A-4E2A-9813-9EC5626CC12E}" name="PDDLPackageGuid" />
+		<GuidSymbol value="{BA53FE3E-0884-4928-8F2D-6D71973A7DD0}" name="PDDLProjectTypeID" />
 
 		<GuidSymbol value="{c8d29eda-f85f-4c3f-8620-6b8c0c6ebd58}" name="PDDLCommandSetGuid">
 			<IDSymbol name="PDDLToolsMenuGroup" value="0x1020" />
 			<IDSymbol name="PDDLToolsToolbarGroup" value="0x1021" />
-			<IDSymbol name="RunPDDLFileCommandID" value="256" />
+			<IDSymbol name="PDDLToolsContextMenuGroup" value="0x1022" />
+
 			<IDSymbol name="SelectDomainFileCommandID" value="257" />
+			<IDSymbol name="SelectDomainFileCtxCommandID" value="272" />
 			<IDSymbol name="SelectDomainFileListCommandID" value="259" />
+			
 			<IDSymbol name="GithubCommandID" value="258" />
 			<IDSymbol name="InstallFDWindowCommandID" value="261" />
 			<IDSymbol name="WelcomeWindowCommandID" value="262" />
@@ -199,8 +219,9 @@
 			<IDSymbol name="SelectEngineListCommandID" value="264" />
 
 			<IDSymbol name="SelectProblemFileCommandID" value="265" />
+			<IDSymbol name="SelectProblemFileCtxCommandID" value="271" />
 			<IDSymbol name="SelectProblemFileListCommandID" value="266" />
-
+			
 			<IDSymbol name="GenerateReportCommandID" value="267" />
 			<IDSymbol name="SASVisualiserCommandID" value="268" />
 
@@ -208,13 +229,10 @@
 
 			<IDSymbol name="PDDLVisualiserWindowCommandID" value="270" />
 			
-			<IDSymbol name="PDDLToolsMenu" value="0x1022" />
-			<IDSymbol name="PDDLToolsToolbar" value="0x1023" />
+			<IDSymbol name="PDDLToolsMenu" value="0x1023" />
+			<IDSymbol name="PDDLToolsToolbar" value="0x1024" />
 		</GuidSymbol>
 
-		<GuidSymbol value="{bb64ec71-4259-41eb-9775-43fbb84988af}" name="RunPDDLFileImageGuid">
-			<IDSymbol name="bmpPic1" value="1" />
-		</GuidSymbol>
 		<GuidSymbol value="{ff48a4e6-0aab-49a4-987a-0a3ed7ff4d23}" name="GithubImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>

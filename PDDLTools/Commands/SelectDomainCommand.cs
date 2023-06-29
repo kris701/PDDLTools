@@ -19,6 +19,8 @@ using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.IO;
+using PDDLParser.Helpers;
+using System.Windows.Controls;
 
 namespace PDDLTools.Commands
 {
@@ -28,7 +30,7 @@ namespace PDDLTools.Commands
         public static SelectDomainCommand Instance { get; internal set; }
         public static string SelectedDomainPath { get; internal set; } = "";
 
-        private SelectDomainCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
+        private SelectDomainCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {
         }
 
@@ -37,14 +39,21 @@ namespace PDDLTools.Commands
             Instance = new SelectDomainCommand(package, await InitializeCommandServiceAsync(package));
         }
 
-        public override void Execute(object sender, EventArgs e)
+        public override async void CheckQueryStatus(object sender, EventArgs e)
+        {
+            if (sender is MenuCommand button)
+                button.Visible = await DTE2Helper.IsActiveProjectPDDLProjectAsync();
+        }
+
+        public override async Task ExecuteAsync(object sender, EventArgs e)
         {
             OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
             if (eventArgs.InValue != null)
             {
-                var selectedStr = eventArgs.InValue as string;
-                if (selectedStr != SelectDomainListCommand.NoneFoundComboboxName)
-                    SelectedDomainPath = selectedStr;
+                var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
+                if (selected != null)
+                    if (PDDLHelper.IsFileDomain(selected))
+                        SelectedDomainPath = selected;
             }
             if (eventArgs.OutValue != null && SelectedDomainPath != "")
             {

@@ -18,6 +18,7 @@ using PDDLTools.Windows.SASSolutionWindow;
 using PDDLTools.Windows.WelcomeWindow;
 using PDDLTools.Windows.PlanValidatorWindow;
 using PDDLTools.Windows.PDDLVisualiserWindow;
+using PDDLTools.Projects;
 
 namespace PDDLTools
 {
@@ -30,6 +31,11 @@ namespace PDDLTools
         )]
     [ProvideLanguageExtension(typeof(PDDLLanguageFactory), Constants.PDDLExt)]
 
+    [ProvideUIContextRule(Constants.PackageGuidString,
+        name: "Supported Files",
+        expression: "pddl",
+        termNames: new[] { "pddl" },
+        termValues: new[] { "HierSingleSelectionName:.pddl$" })]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(Constants.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
@@ -59,12 +65,11 @@ namespace PDDLTools
                 WelcomeWindowCommand.Instance.Execute(null, null);
 #pragma warning restore VSTHRD103 // Call async methods when in an async method
 
-            await RunPDDLFileCommand.InitializeAsync(this);
-
             await SelectDomainCommand.InitializeAsync(this);
+            await SelectDomainCtxCommand.InitializeAsync(this);
             await SelectDomainListCommand.InitializeAsync(this);
-
             await SelectProblemCommand.InitializeAsync(this);
+            await SelectProblemCtxCommand.InitializeAsync(this);
             await SelectProblemListCommand.InitializeAsync(this);
 
             await SelectEngineCommand.InitializeAsync(this);

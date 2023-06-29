@@ -2,8 +2,10 @@
 using PDDLParser.Helpers;
 using PDDLTools.Commands;
 using PDDLTools.Options;
+using PDDLTools.Projects;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,11 +21,9 @@ using System.Windows.Navigation;
 
 namespace PDDLTools.Windows.PlanValidatorWindow
 {
-    /// <summary>
-    /// Interaction logic for PlanValidatorWindowControl.xaml
-    /// </summary>
     public partial class PlanValidatorWindowControl : UserControl
     {
+
         public PlanValidatorWindowControl()
         {
             InitializeComponent();
@@ -44,7 +44,6 @@ namespace PDDLTools.Windows.PlanValidatorWindow
 
                 SelectedDomainFileLabel.Text = SelectDomainCommand.SelectedDomainPath;
                 SelectedProblemFileLabel.Text = SelectProblemCommand.SelectedProblemPath;
-                SelectedPlanFileLabel.Text = Path.Combine(OptionsManager.Instance.FDPath, "sas_plan");
 
                 await DoCheckVALAsync();
             }

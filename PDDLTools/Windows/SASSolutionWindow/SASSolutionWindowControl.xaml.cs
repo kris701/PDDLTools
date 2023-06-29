@@ -29,81 +29,87 @@ namespace PDDLTools.Windows.SASSolutionWindow
     public partial class SASSolutionWindowControl : UserControl
     {
         private PDDLDecl _pddlData;
+        private string _planFile;
+        private bool _reDraw = false;
         private bool _isLoaded = false;
 
         public SASSolutionWindowControl()
         {
             InitializeComponent();
-        }
 
-        public async Task SetupResultDataAsync(PDDLDecl pddlData)
-        {
-            _pddlData = pddlData;
-            await RedrawCanvasAsync();
-        }
-
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
-        {
             SelectSpreaderCombobox.Items.Clear();
             foreach (var spreader in LocationSpreaderBuilder.Spreaders)
                 SelectSpreaderCombobox.Items.Add(spreader);
             SelectSpreaderCombobox.SelectedIndex = 0;
-            _isLoaded = true;
         }
 
-        private void UserControl_Unloaded(object sender, RoutedEventArgs e)
+        public void SetupResultData(PDDLDecl pddlData, string planFile)
         {
-            _isLoaded = false;
+            _pddlData = pddlData;
+            _planFile = planFile;
+            _reDraw = true;
+            RedrawCanvas();
         }
 
-        private async Task RedrawCanvasAsync()
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            while (!_isLoaded)
+            while (_pddlData == null)
                 await Task.Delay(100);
 
-            var path = System.IO.Path.Combine(OptionsManager.Instance.FDPath, "sas_plan");
-            if (!File.Exists(path))
-            {
-                TextPlan.Text = "'sas_plan' not found!";
-            }
-            else
-            {
-                SetTextPlanData(File.ReadAllLines(path));
-                VisualPlan.Children.Clear();
+            _isLoaded = true;
 
-                IPlanParser planParser = new PlanParser();
-                var plan = planParser.ParsePlanFile(path);
+            RedrawCanvas();
+        }
 
-                if (plan.Count > 50)
+        private void RedrawCanvas()
+        {
+            if (_reDraw && _isLoaded)
+            {
+                if (!File.Exists(_planFile))
                 {
-                    PlanTooLargeLable.Visibility = Visibility.Visible;
+                    TextPlan.Text = $"The plan file '{_planFile}' not found!";
                 }
                 else
                 {
-                    PlanTooLargeLable.Visibility = Visibility.Hidden;
+                    SetTextPlanData(File.ReadAllLines(_planFile));
+                    VisualPlan.Children.Clear();
 
-                    SimulationStepSlider.Maximum = plan.Count;
-                    SimulationStepSlider.Value = SimulationStepSlider.Maximum;
+                    IPlanParser planParser = new PlanParser();
+                    var plan = planParser.ParsePlanFile(_planFile);
 
-                    ISASSimulator simulator = new SASSimulator.SASSimulator(
-                        _pddlData,
-                        plan);
-
-
-                    ILocationSpreader spreader = LocationSpreaderBuilder.GetSpreader(SelectSpreaderCombobox.SelectedItem as string);
-                    var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
-
-                    AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, locs[0]);
-
-                    for (int i = 0; i < plan.Count; i++)
+                    if (plan.Count > 50)
                     {
-                        simulator.Step();
-                        AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, locs[i + 1]);
+                        PlanTooLargeLable.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        PlanTooLargeLable.Visibility = Visibility.Hidden;
+
+                        SimulationStepSlider.Maximum = plan.Count;
+                        SimulationStepSlider.Value = SimulationStepSlider.Maximum;
+
+                        ISASSimulator simulator = new SASSimulator.SASSimulator(
+                            _pddlData,
+                            plan);
+
+
+                        ILocationSpreader spreader = LocationSpreaderBuilder.GetSpreader(SelectSpreaderCombobox.SelectedItem as string);
+                        var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
+
+                        AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, locs[0]);
+
+                        for (int i = 0; i < plan.Count; i++)
+                        {
+                            simulator.Step();
+                            AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, locs[i + 1]);
+                        }
+
+                        foreach (var child in VisualPlan.Children)
+                            if (child is DynamicNode node)
+                                node.Setup();
                     }
 
-                    foreach (var child in VisualPlan.Children)
-                        if (child is DynamicNode node)
-                            node.Setup();
+                    _reDraw = false;
                 }
             }
         }
@@ -267,16 +273,18 @@ namespace PDDLTools.Windows.SASSolutionWindow
                 element.Visibility = Visibility.Hidden;
         }
 
-        private async void RerollButton_Click(object sender, RoutedEventArgs e)
+        private void RerollButton_Click(object sender, RoutedEventArgs e)
         {
-            await RedrawCanvasAsync();
+            _reDraw = true;
+            RedrawCanvas();
         }
 
-        private async void SelectSpreaderCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SelectSpreaderCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_isLoaded)
             {
-                await RedrawCanvasAsync();
+                _reDraw = true;
+                RedrawCanvas();
             }
         }
     }

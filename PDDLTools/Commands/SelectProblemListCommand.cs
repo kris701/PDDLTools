@@ -29,7 +29,6 @@ namespace PDDLTools.Commands
     {
         public override int CommandId { get; } = 266;
         public static SelectProblemListCommand Instance { get; internal set; }
-        public static string ActiveDocumentComboboxName = "Active Document (If Valid)";
         public static string NoneFoundComboboxName = "No open valid PDDL problems found";
 
         private SelectProblemListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
@@ -49,11 +48,10 @@ namespace PDDLTools.Commands
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    var allDocuments = await DTE2Helper.GetAllOpenDocumentsAsync();
+                    var allDocuments = await DTE2Helper.GetAllFilesInPDDLProjectsAsync();
                     var possibleProblems = GetProblemsOnly(allDocuments);
                     if (possibleProblems.Count == 0)
                         possibleProblems.Add(NoneFoundComboboxName);
-                    possibleProblems.Insert(0, ActiveDocumentComboboxName);
                     Marshal.GetNativeVariantForObject(possibleProblems.ToArray(), pOutValue);
                 }
             }

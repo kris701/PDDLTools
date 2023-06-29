@@ -62,45 +62,45 @@ namespace PDDLParser.Contextualisers
             }
         }
 
-        internal bool DoesExpContainNodeType<T>(IExp exp)
+        internal bool DoesExpContainNodeType<U>(IExp exp)
         {
             if (exp is AndExp and)
             {
-                if (typeof(T) == typeof(AndExp))
+                if (typeof(U) == typeof(AndExp))
                     return true;
 
                 foreach (var child in and.Children)
-                    if (DoesExpContainNodeType<T>(child))
+                    if (DoesExpContainNodeType<U>(child))
                         return true;
             }
             else if (exp is NotExp not)
             {
-                if (typeof(T) == typeof(NotExp))
+                if (typeof(U) == typeof(NotExp))
                     return true;
 
-                return DoesExpContainNodeType<T>(not.Child);
+                return DoesExpContainNodeType<U>(not.Child);
             }
             else if (exp is OrExp or)
             {
-                if (typeof(T) == typeof(OrExp))
+                if (typeof(U) == typeof(OrExp))
                     return true;
 
-                if (DoesExpContainNodeType<T>(or.Option1))
+                if (DoesExpContainNodeType<U>(or.Option1))
                     return true;
-                return DoesExpContainNodeType<T>(or.Option2);
+                return DoesExpContainNodeType<U>(or.Option2);
             }
             else if (exp is PredicateExp pred)
             {
-                if (typeof(T) == typeof(PredicateExp))
+                if (typeof(U) == typeof(PredicateExp))
                     return true;
 
                 foreach (var arg in pred.Arguments)
-                    if (DoesExpContainNodeType<T>(arg))
+                    if (DoesExpContainNodeType<U>(arg))
                         return true;
             }
             else if (exp is NameExp name)
             {
-                if (typeof(T) == typeof(NameExp))
+                if (typeof(U) == typeof(NameExp))
                     return true;
             }
             return false;

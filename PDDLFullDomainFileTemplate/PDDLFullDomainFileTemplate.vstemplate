@@ -5,11 +5,12 @@
 		<Description>A PDDL domain template with all the parseable items in it.</Description>
 		<Icon>PDDLFullDomainFileTemplate.ico</Icon>
 		<TemplateID>d5a3b464-0678-4dbb-8ad8-da653cd4655d</TemplateID>
-		<ProjectType>General</ProjectType>
-		<TemplateGroupID>PDDL</TemplateGroupID>
+
+		<ProjectType>PDDL</ProjectType>
+		<LanguageTag>PDDL</LanguageTag>
+
 		<DefaultName>domain.pddl</DefaultName>
 		<EnableEditOfLocationField>true</EnableEditOfLocationField>
-		<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 	</TemplateData>

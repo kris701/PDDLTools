@@ -49,6 +49,10 @@
             this.EnableErrorCheckingCheckbox = new System.Windows.Forms.CheckBox();
             this.EnableBraceMatchingCheckbox = new System.Windows.Forms.CheckBox();
             this.EnableWordHighlightingCheckbox = new System.Windows.Forms.CheckBox();
+            this.IntermediateOutputPathTextbox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.OutputPlanPathTextbox = new System.Windows.Forms.TextBox();
+            this.OutputPlanPath = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -266,12 +270,54 @@
             this.EnableWordHighlightingCheckbox.UseVisualStyleBackColor = true;
             this.EnableWordHighlightingCheckbox.CheckedChanged += new System.EventHandler(this.EnableWordHighlightingCheckbox_CheckedChanged);
             // 
+            // IntermediateOutputPathTextbox
+            // 
+            this.IntermediateOutputPathTextbox.AccessibleName = "";
+            this.IntermediateOutputPathTextbox.Enabled = false;
+            this.IntermediateOutputPathTextbox.Location = new System.Drawing.Point(140, 318);
+            this.IntermediateOutputPathTextbox.Name = "IntermediateOutputPathTextbox";
+            this.IntermediateOutputPathTextbox.Size = new System.Drawing.Size(189, 20);
+            this.IntermediateOutputPathTextbox.TabIndex = 21;
+            this.IntermediateOutputPathTextbox.Leave += new System.EventHandler(this.IntermediateOutputPathTextbox_Leave);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 321);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(125, 13);
+            this.label6.TabIndex = 20;
+            this.label6.Text = "Intermediate Output Path";
+            // 
+            // OutputPlanPathTextbox
+            // 
+            this.OutputPlanPathTextbox.AccessibleName = "";
+            this.OutputPlanPathTextbox.Enabled = false;
+            this.OutputPlanPathTextbox.Location = new System.Drawing.Point(140, 344);
+            this.OutputPlanPathTextbox.Name = "OutputPlanPathTextbox";
+            this.OutputPlanPathTextbox.Size = new System.Drawing.Size(189, 20);
+            this.OutputPlanPathTextbox.TabIndex = 23;
+            this.OutputPlanPathTextbox.Leave += new System.EventHandler(this.OutputPlanPathTextbox_Leave);
+            // 
+            // OutputPlanPath
+            // 
+            this.OutputPlanPath.AutoSize = true;
+            this.OutputPlanPath.Location = new System.Drawing.Point(12, 347);
+            this.OutputPlanPath.Name = "OutputPlanPath";
+            this.OutputPlanPath.Size = new System.Drawing.Size(88, 13);
+            this.OutputPlanPath.TabIndex = 22;
+            this.OutputPlanPath.Text = "Output Plan Path";
+            // 
             // OptionsPageCustomControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.OutputPlanPathTextbox);
+            this.Controls.Add(this.OutputPlanPath);
+            this.Controls.Add(this.IntermediateOutputPathTextbox);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.EnableBraceMatchingCheckbox);
             this.Controls.Add(this.EnableWordHighlightingCheckbox);
             this.Controls.Add(this.EnableErrorCheckingCheckbox);
@@ -293,7 +339,7 @@
             this.Controls.Add(this.FastDownwardPathTextbox);
             this.Controls.Add(this.label1);
             this.Name = "OptionsPageCustomControl";
-            this.Size = new System.Drawing.Size(397, 315);
+            this.Size = new System.Drawing.Size(397, 367);
             this.Load += new System.EventHandler(this.OptionsPageCustomControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).EndInit();
             this.ResumeLayout(false);
@@ -324,5 +370,9 @@
         private System.Windows.Forms.CheckBox EnableErrorCheckingCheckbox;
         private System.Windows.Forms.CheckBox EnableBraceMatchingCheckbox;
         private System.Windows.Forms.CheckBox EnableWordHighlightingCheckbox;
+        private System.Windows.Forms.TextBox IntermediateOutputPathTextbox;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox OutputPlanPathTextbox;
+        private System.Windows.Forms.Label OutputPlanPath;
     }
 }

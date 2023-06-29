@@ -5,11 +5,12 @@
 		<Description>An empty PDDL domain file with just the domain name in it.</Description>
 		<Icon>PDDLEmptyDomainFileTemplate.ico</Icon>
 		<TemplateID>b322f8b8-065f-4b4d-abc2-3aa2fb5abcf7</TemplateID>
-		<ProjectType>General</ProjectType>
-		<TemplateGroupID>PDDL</TemplateGroupID>
+
+		<ProjectType>PDDL</ProjectType>
+		<LanguageTag>PDDL</LanguageTag>
+		
 		<DefaultName>domain.pddl</DefaultName>
 		<EnableEditOfLocationField>true</EnableEditOfLocationField>
-		<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 	</TemplateData>

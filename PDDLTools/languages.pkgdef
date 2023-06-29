@@ -6,3 +6,7 @@
 ; Find more icons at http://glyphlist.azurewebsites.net/knownmonikers/
 [$RootKey$\ShellFileAssociations\.pddl]
 "DefaultIconMoniker"="KnownMonikers.Path"
+[$RootKey$\ShellFileAssociations\.sas]
+"DefaultIconMoniker"="KnownMonikers.DecisionNode"
+[$RootKey$\ShellFileAssociations\.pddlplan]
+"DefaultIconMoniker"="KnownMonikers.PathListBox"

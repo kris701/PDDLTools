@@ -5,11 +5,12 @@
 		<Description>A PDDL problem template with all the parseable items in it.</Description>
 		<Icon>PDDLFullProblemFileTemplate.ico</Icon>
 		<TemplateID>0a990d8e-fde0-449b-addf-abb386138cdd</TemplateID>
-		<ProjectType>General</ProjectType>
-		<TemplateGroupID>PDDL</TemplateGroupID>
+		
+		<ProjectType>PDDL</ProjectType>
+		<LanguageTag>PDDL</LanguageTag>
+		
 		<DefaultName>problem.pddl</DefaultName>
 		<EnableEditOfLocationField>true</EnableEditOfLocationField>
-		<NumberOfParentCategoriesToRollUp>2</NumberOfParentCategoriesToRollUp>
 		<ProvideDefaultName>true</ProvideDefaultName>
 		<LocationField>Enabled</LocationField>
 	</TemplateData>

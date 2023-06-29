@@ -12,6 +12,8 @@ namespace PDDLTools
         public const string PDDLLanguageName = "PDDL";
         public const int PDDLLanguageID = 1636;
         public const string PDDLExt = ".pddl";
+        public const string PDDLProjectExt = "pddlproj";
+        public const string PDDLProjectTypeID = "BA53FE3E-0884-4928-8F2D-6D71973A7DD0";
         public const string PDDLBaselanguageName = "CSharp";
         public const string PDDLGuidEditorFactory = "93fa4dc3-61ec-47af-b0ba-50cad3caf045";
         public const string UIContextGuid = "8B40D5E2-5626-42AE-99EF-3DD1EFF45E7B";

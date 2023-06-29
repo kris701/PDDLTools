@@ -29,7 +29,6 @@ namespace PDDLTools.Commands
     {
         public override int CommandId { get; } = 259;
         public static SelectDomainListCommand Instance { get; internal set; }
-        public static string ActiveDocumentComboboxName = "Active Document (If Valid)";
         public static string NoneFoundComboboxName = "No open valid PDDL domains found";
 
         private SelectDomainListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
@@ -49,11 +48,10 @@ namespace PDDLTools.Commands
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    var allDocuments = await DTE2Helper.GetAllOpenDocumentsAsync();
+                    var allDocuments = await DTE2Helper.GetAllFilesInPDDLProjectsAsync();
                     var possibleDomains = GetDomainsOnly(allDocuments);
                     if (possibleDomains.Count == 0)
                         possibleDomains.Add(NoneFoundComboboxName);
-                    possibleDomains.Insert(0, ActiveDocumentComboboxName);
                     Marshal.GetNativeVariantForObject(possibleDomains.ToArray(), pOutValue);
                 }
             }

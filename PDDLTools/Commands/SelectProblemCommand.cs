@@ -19,6 +19,7 @@ using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.IO;
+using PDDLParser.Helpers;
 
 namespace PDDLTools.Commands
 {
@@ -37,14 +38,21 @@ namespace PDDLTools.Commands
             Instance = new SelectProblemCommand(package, await InitializeCommandServiceAsync(package));
         }
 
-        public override void Execute(object sender, EventArgs e)
+        public override async void CheckQueryStatus(object sender, EventArgs e)
+        {
+            if (sender is MenuCommand button)
+                button.Visible = await DTE2Helper.IsActiveProjectPDDLProjectAsync();
+        }
+
+        public override async Task ExecuteAsync(object sender, EventArgs e)
         {
             OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
             if (eventArgs.InValue != null)
             {
-                var selectedStr = eventArgs.InValue as string;
-                if (selectedStr != SelectProblemListCommand.NoneFoundComboboxName)
-                    SelectedProblemPath = selectedStr;
+                var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
+                if (selected != null)
+                    if (PDDLHelper.IsFileProblem(selected))
+                        SelectedProblemPath = selected;
             }
             if (eventArgs.OutValue != null && SelectedProblemPath != "")
             {

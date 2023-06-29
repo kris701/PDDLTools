@@ -1,4 +1,5 @@
 ﻿using EnvDTE;
+using Microsoft.VisualStudio.ProjectSystem.VS;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
@@ -114,6 +115,93 @@ namespace PDDLTools.Helpers
             var uih = _applicationObject.ActiveDocument;
             var value = ComUtils.Get(uih.Selection, "Text").ToString();
             return value;
+        }
+
+        public static async Task<string> GetSourceFilePathFromSolutionExploreAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            UIHierarchy uih = _applicationObject.ToolWindows.SolutionExplorer;
+            Array selectedItems = (Array)uih.SelectedItems;
+            if (null != selectedItems)
+            {
+                if (selectedItems.Length > 1)
+                    return null;
+                foreach (UIHierarchyItem selItem in selectedItems)
+                {
+                    ProjectItem prjItem = selItem.Object as ProjectItem;
+                    if (prjItem == null)
+                        return null;
+
+                    string filePath = prjItem.Properties.Item("FullPath").Value.ToString();
+                    return filePath;
+                }
+            }
+            return null;
+        }
+
+        public static async Task<bool> IsItemInPDDLProjectAsync(string item)
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            if (item == null)
+                return false;
+
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            EnvDTE.Projects projects = _applicationObject.Solution.Projects;
+            for (int i = 1; i < projects.Count + 1; i++)
+            {
+                var proj = projects.Item(i);
+                if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
+                {
+                    foreach (ProjectItem file in proj.ProjectItems)
+                    {
+                        string filePath = file.Properties.Item("FullPath").Value.ToString();
+                        if (filePath == item)
+                            return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public static async Task<bool> IsActiveProjectPDDLProjectAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            var projects = _applicationObject.ActiveSolutionProjects;
+            if (projects != null)
+                if (projects is Array arr && arr.Length > 0 && arr.GetValue(0) is EnvDTE.Project proj)
+                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
+                        return true;
+            return false;
+        }
+
+        public static async Task<List<string>> GetAllFilesInPDDLProjectsAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            List<string> retFiles = new List<string>();
+
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            var projects = _applicationObject.ActiveSolutionProjects;
+            if (projects != null)
+            {
+                if (projects is Array arr && arr.Length > 0 && arr.GetValue(0) is EnvDTE.Project proj)
+                {
+                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
+                    {
+                        foreach (ProjectItem file in proj.ProjectItems)
+                        {
+                            string filePath = file.Properties.Item("FullPath").Value.ToString();
+                            retFiles.Add(filePath);
+                        }
+                    }
+                }
+            }
+            return retFiles;
         }
     }
 }

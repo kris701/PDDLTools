@@ -56,6 +56,8 @@ namespace PDDLTools.Options
             _EnableErrorCheckingOnSave = GetValueOrSetDefault("EnableErrorCheckingOnSave", true);
             _EnableQuickInfo = GetValueOrSetDefault("EnableQuickInfo", true);
             _EnableHighlightingOfWords = GetValueOrSetDefault("EnableHighlightingOfWords", true);
+            _IntermediateOutputPath = GetValueOrSetDefault("IntermediateOutputPath", "obj/");
+            _OutputPlanPath = GetValueOrSetDefault("OutputPlanPath", "bin/");
         }
 
         private string GetValueOrSetDefault(string id, string defValue)
@@ -277,6 +279,28 @@ namespace PDDLTools.Options
             {
                 _userSettingsStore.SetBoolean(SettingsCategory, "EnableBraceMatching", value);
                 _EnableBraceMatching = value;
+            }
+        }
+
+        private string _IntermediateOutputPath = "";
+        public string IntermediateOutputPath
+        {
+            get { return _IntermediateOutputPath; }
+            set
+            {
+                _userSettingsStore.SetString(SettingsCategory, "IntermediateOutputPath", value);
+                _IntermediateOutputPath = value;
+            }
+        }
+
+        private string _OutputPlanPath = "";
+        public string OutputPlanPath
+        {
+            get { return _OutputPlanPath; }
+            set
+            {
+                _userSettingsStore.SetString(SettingsCategory, "OutputPlanPath", value);
+                _OutputPlanPath = value;
             }
         }
     }

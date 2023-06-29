@@ -19,14 +19,14 @@ namespace CMDRunners.FastDownward
             PythonPrefix = pythonPrefix;
         }
 
-        public async Task<FDResults> RunAsync(string domainPath, string problemPath, string engineArg)
+        public async Task<FDResults> RunAsync(string domainPath, string problemPath, string engineArg, string planFile, string intermediateFile)
         {
             SetupRunner();
             StringBuilder sb = new StringBuilder("& ");
             sb.Append($"{PythonPrefix} ");
             sb.Append($"'{Path.Combine(ExecutablePath, ExecutableName)}' ");
-            sb.Append($"--plan-file '{Path.Combine(ExecutablePath, "sas_plan")}' ");
-            sb.Append($"--sas-file '{Path.Combine(ExecutablePath, "output.sas")}' ");
+            sb.Append($"--plan-file '{planFile}' ");
+            sb.Append($"--sas-file '{intermediateFile}' ");
 
             engineArg = engineArg.Replace("\"", "'");
             if (engineArg.ToLower().Contains("--alias"))
