@@ -50,6 +50,7 @@ namespace PDDLTools.Windows.ResourceDictionary
                     new Point(Margin.Left + Width / 2, Margin.Top + Height / 2)
                     );
                 Canvas.SetZIndex(newLine.Path, -2000);
+                newLine.Path.Tag = nodeID;
                 NodeLines.Add(newLine);
                 ParentCanvas.Children.Add(newLine.Path);
             }

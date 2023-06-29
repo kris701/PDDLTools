@@ -199,19 +199,19 @@ namespace PDDLTools.Windows.SASSolutionWindow
 
             foreach (var child in VisualPlan.Children)
             {
-                if (child is Line line)
+                if (child is System.Windows.Shapes.Path path)
                 {
-                    if (line.Tag is int id)
+                    if (path.Tag is int id)
                     {
                         if (id + 1 > newIndex)
                         {
-                            if (line.Visibility == Visibility.Visible)
-                                fadeOutElements.Add(line);
+                            if (path.Visibility == Visibility.Visible)
+                                fadeOutElements.Add(path);
                         }
                         else
                         {
-                            if (line.Visibility == Visibility.Hidden)
-                                fadeInElements.Add(line);
+                            if (path.Visibility == Visibility.Hidden)
+                                fadeInElements.Add(path);
                         }
                     }
                 }

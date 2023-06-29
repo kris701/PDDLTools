@@ -50,8 +50,7 @@ namespace PDDLTools.Commands
             OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
             if (eventArgs.InValue != null)
             {
-                var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
-                if (selected != null)
+                if (eventArgs.InValue is string selected)
                     if (PDDLHelper.IsFileDomain(selected))
                         SelectedDomainPath = selected;
             }
