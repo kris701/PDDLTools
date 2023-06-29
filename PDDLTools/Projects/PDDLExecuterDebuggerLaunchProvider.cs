@@ -70,6 +70,8 @@
 
         public override async Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
         {
+            if (OptionsManager.Instance == null)
+                return false;
             if (!_isLoaded)
                 await LoadFromSavedProjectPropertiesAsync();
             if (_lastDomain != SelectDomainCommand.SelectedDomainPath || _lastProblem != SelectProblemCommand.SelectedProblemPath)
@@ -114,9 +116,25 @@
 
             if (canLaunch)
             {
+                var generalProps = await ProjectProperties.GetConfigurationGeneralPropertiesAsync();
+                var dir = new FileInfo(await generalProps.FullPath.GetValueAsync() as string).Directory.FullName;
+                var outPath = Path.Combine(dir, OptionsManager.Instance.OutputPlanPath);
+                var intPath = Path.Combine(dir, OptionsManager.Instance.IntermediateOutputPath);
+                if (!Directory.Exists(outPath))
+                    Directory.CreateDirectory(outPath);
+                if (!Directory.Exists(intPath))
+                    Directory.CreateDirectory(intPath);
+
+                var planName = $"{new FileInfo(_lastDomain).Name.Replace(".pddl","")}-{new FileInfo(_lastProblem).Name.Replace(".pddl", "")}";
+
                 await OutputPanel.WriteLineAsync("Executing PDDL File");
                 FDRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
-                var resultData = await fdRunner.RunAsync(_lastDomain, _lastProblem, SelectEngineCommand.SelectedSearch);
+                var resultData = await fdRunner.RunAsync(
+                    _lastDomain, 
+                    _lastProblem, 
+                    SelectEngineCommand.SelectedSearch,
+                    Path.Combine(outPath, $"{planName}.pddlplan"),
+                    Path.Combine(intPath, "intermediate.sas"));
 
                 await WriteToOutputWindowAsync(resultData);
                 if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)

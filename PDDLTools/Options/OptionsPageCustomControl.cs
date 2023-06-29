@@ -33,6 +33,8 @@ namespace PDDLTools.Options
             EnableErrorCheckingCheckbox.Checked = OptionsManager.Instance.EnableErrorCheckingOnSave;
             EnableBraceMatchingCheckbox.Checked = OptionsManager.Instance.EnableBraceMatching;
             EnableWordHighlightingCheckbox.Checked = OptionsManager.Instance.EnableHighlightingOfWords;
+            IntermediateOutputPathTextbox.Text = OptionsManager.Instance.IntermediateOutputPath;
+            OutputPlanPath.Text = OptionsManager.Instance.OutputPlanPath;
             _isLoaded = true;
         }
 
@@ -159,6 +161,24 @@ namespace PDDLTools.Options
 
             OptionsManager.Instance.EnableHighlightingOfWords = EnableWordHighlightingCheckbox.Checked;
             EnableWordHighlightingCheckbox.Checked = OptionsManager.Instance.EnableHighlightingOfWords;
+        }
+
+        private void IntermediateOutputPathTextbox_Leave(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.IntermediateOutputPath = IntermediateOutputPathTextbox.Text;
+            IntermediateOutputPathTextbox.Text = OptionsManager.Instance.IntermediateOutputPath;
+        }
+
+        private void OutputPlanPathTextbox_Leave(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.OutputPlanPath = OutputPlanPathTextbox.Text;
+            OutputPlanPathTextbox.Text = OptionsManager.Instance.OutputPlanPath;
         }
     }
 }

@@ -152,7 +152,7 @@ namespace PDDLTools.Helpers
                 var proj = projects.Item(i);
                 if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
                 {
-                    foreach(ProjectItem file in proj.ProjectItems)
+                    foreach (ProjectItem file in proj.ProjectItems)
                     {
                         string filePath = file.Properties.Item("FullPath").Value.ToString();
                         if (filePath == item)

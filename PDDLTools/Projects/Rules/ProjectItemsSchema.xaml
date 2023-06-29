@@ -9,17 +9,25 @@
         ItemType="PDDLFile">
     </ContentType>
 
-    <ContentType
+	<ContentType
         Name="SASFile"
         DisplayName="SAS file"
         ItemType="SASFile">
-    </ContentType>
+	</ContentType>
+
+	<ContentType
+        Name="PDDLPlanFile"
+        DisplayName="PDDL Plan file"
+        ItemType="PDDLPlanFile">
+	</ContentType>
 
 	<ItemType Name="PDDLFile" DisplayName="PDDL File"/>
 	<ItemType Name="SASFile" DisplayName="SAS File"/>
+	<ItemType Name="PDDLPlanFile" DisplayName="PDDL Plan File"/>
     <ItemType Name="None" DisplayName="Does not participate in build"/>
 
     <FileExtension Name=".pddl" ContentType="PDDLFile"/>
-    <FileExtension Name=".sas" ContentType="SASFile"/>
+	<FileExtension Name=".sas" ContentType="SASFile"/>
+	<FileExtension Name=".pddlplan" ContentType="PDDLPlanFile"/>
 </ProjectSchemaDefinitions>
 
