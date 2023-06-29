@@ -29,7 +29,7 @@ namespace PDDLTools.Commands
         public static SelectProblemCommand Instance { get; internal set; }
         public static string SelectedProblemPath { get; internal set; } = "";
 
-        private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
+        private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
         }
 
@@ -41,19 +41,27 @@ namespace PDDLTools.Commands
         public override async void CheckQueryStatus(object sender, EventArgs e)
         {
             if (sender is MenuCommand button)
-            {
-                var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
-                if (selected != null)
-                    button.Visible = await DTE2Helper.IsItemInPDDLProjectAsync(selected) && PDDLHelper.IsFileProblem(selected);
-            }
+                button.Visible = await DTE2Helper.IsActiveProjectPDDLProjectAsync();
         }
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
         {
-            var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
-            if (selected != null)
-                if (PDDLHelper.IsFileProblem(selected))
-                    SelectedProblemPath = selected;
+            OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
+            if (eventArgs.InValue != null)
+            {
+                var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
+                if (selected != null)
+                    if (PDDLHelper.IsFileProblem(selected))
+                        SelectedProblemPath = selected;
+            }
+            if (eventArgs.OutValue != null && SelectedProblemPath != "")
+            {
+                IntPtr pOutValue = eventArgs.OutValue;
+                if (pOutValue != IntPtr.Zero)
+                {
+                    Marshal.GetNativeVariantForObject(new FileInfo(SelectedProblemPath).Name, pOutValue);
+                }
+            }
         }
     }
 }

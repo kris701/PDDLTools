@@ -42,6 +42,30 @@
 		</Bitmaps>
 
 		<Combos>
+			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileListCommandID" defaultWidth="150" priority="0x0100" type="DropDownCombo">
+				<CommandFlag>StretchHorizontally</CommandFlag>
+				<CommandFlag>IconAndText</CommandFlag>
+				<Strings>
+					<MenuText>Selected Domain: </MenuText>
+					<ButtonText>Domain: </ButtonText>
+					<ToolTipText>Select what domain to run Fast Downward with</ToolTipText>
+					<CanonicalName>Selected Domain</CanonicalName>
+					<LocCanonicalName>Selected Domain</LocCanonicalName>
+					<CommandName>Selected Domain</CommandName>
+				</Strings>
+			</Combo>
+			<Combo guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" idCommandList="SelectProblemFileListCommandID" defaultWidth="150" priority="0x0101" type="DropDownCombo">
+				<CommandFlag>StretchHorizontally</CommandFlag>
+				<CommandFlag>IconAndText</CommandFlag>
+				<Strings>
+					<MenuText>Selected Problem: </MenuText>
+					<ButtonText>Problem: </ButtonText>
+					<ToolTipText>Select what Problem to run Fast Downward with</ToolTipText>
+					<CanonicalName>Selected Problem</CanonicalName>
+					<LocCanonicalName>Selected Problem</LocCanonicalName>
+					<CommandName>Selected Problem</CommandName>
+				</Strings>
+			</Combo>
 			<Combo guid="PDDLCommandSetGuid" id="SelectEngineCommandID" idCommandList="SelectEngineListCommandID" defaultWidth="150" priority="0x0102" type="DropDownCombo">
 				<CommandFlag>StretchHorizontally</CommandFlag>
 				<CommandFlag>IconAndText</CommandFlag>
@@ -101,14 +125,14 @@
 			</Button>
 
 			<!--Context Menu-->
-			<Button guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" priority="0x0100" type="Button">
+			<Button guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" priority="0x0100" type="Button">
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
 					<ButtonText>Select problem to execute</ButtonText>
 				</Strings>
 			</Button>
-			<Button guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x0100" type="Button">
+			<Button guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" priority="0x0100" type="Button">
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -119,8 +143,8 @@
 	</Commands>
 
 	<VisibilityConstraints>
-		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" context="PDDLPackageGuid" />
-		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" context="PDDLPackageGuid" />
+		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" context="PDDLPackageGuid" />
+		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" context="PDDLPackageGuid" />
 	</VisibilityConstraints>
 
 	<CommandPlacements>
@@ -129,6 +153,12 @@
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SASVisualiserCommandID" priority="0x102">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x103">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" priority="0x104">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectEngineCommandID" priority="0x105">
@@ -149,28 +179,38 @@
 		</CommandPlacement>
 
 		<!-- Toolbar -->
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x101">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" priority="0x102">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
+		</CommandPlacement>
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectEngineCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
 		
 		<!--Context Menu-->
-		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" priority="0x103">
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
 		</CommandPlacement>
-		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCommandID" priority="0x104">
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" priority="0x104">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
 		</CommandPlacement>
 	</CommandPlacements>
 	
 	<Symbols>
 		<GuidSymbol value="{956B19CF-953A-4E2A-9813-9EC5626CC12E}" name="PDDLPackageGuid" />
+		<GuidSymbol value="{BA53FE3E-0884-4928-8F2D-6D71973A7DD0}" name="PDDLProjectTypeID" />
 
 		<GuidSymbol value="{c8d29eda-f85f-4c3f-8620-6b8c0c6ebd58}" name="PDDLCommandSetGuid">
 			<IDSymbol name="PDDLToolsMenuGroup" value="0x1020" />
 			<IDSymbol name="PDDLToolsToolbarGroup" value="0x1021" />
 			<IDSymbol name="PDDLToolsContextMenuGroup" value="0x1022" />
-			
+
 			<IDSymbol name="SelectDomainFileCommandID" value="257" />
+			<IDSymbol name="SelectDomainFileCtxCommandID" value="272" />
+			<IDSymbol name="SelectDomainFileListCommandID" value="259" />
+			
 			<IDSymbol name="GithubCommandID" value="258" />
 			<IDSymbol name="InstallFDWindowCommandID" value="261" />
 			<IDSymbol name="WelcomeWindowCommandID" value="262" />
@@ -179,7 +219,9 @@
 			<IDSymbol name="SelectEngineListCommandID" value="264" />
 
 			<IDSymbol name="SelectProblemFileCommandID" value="265" />
-
+			<IDSymbol name="SelectProblemFileCtxCommandID" value="271" />
+			<IDSymbol name="SelectProblemFileListCommandID" value="266" />
+			
 			<IDSymbol name="GenerateReportCommandID" value="267" />
 			<IDSymbol name="SASVisualiserCommandID" value="268" />
 

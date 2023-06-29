@@ -1,4 +1,5 @@
 ﻿using EnvDTE;
+using Microsoft.VisualStudio.ProjectSystem.VS;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
@@ -130,7 +131,9 @@ namespace PDDLTools.Helpers
                 foreach (UIHierarchyItem selItem in selectedItems)
                 {
                     ProjectItem prjItem = selItem.Object as ProjectItem;
-                    
+                    if (prjItem == null)
+                        return null;
+
                     string filePath = prjItem.Properties.Item("FullPath").Value.ToString();
                     return filePath;
                 }
@@ -161,6 +164,44 @@ namespace PDDLTools.Helpers
                 }
             }
             return false;
+        }
+
+        public static async Task<bool> IsActiveProjectPDDLProjectAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            var projects = _applicationObject.ActiveSolutionProjects;
+            if (projects != null)
+                if (projects is Array arr && arr.Length > 0 && arr.GetValue(0) is EnvDTE.Project proj)
+                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
+                        return true;
+            return false;
+        }
+
+        public static async Task<List<string>> GetAllFilesInPDDLProjectsAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            List<string> retFiles = new List<string>();
+
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            var projects = _applicationObject.ActiveSolutionProjects;
+            if (projects != null)
+            {
+                if (projects is Array arr && arr.Length > 0 && arr.GetValue(0) is EnvDTE.Project proj)
+                {
+                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
+                    {
+                        foreach (ProjectItem file in proj.ProjectItems)
+                        {
+                            string filePath = file.Properties.Item("FullPath").Value.ToString();
+                            retFiles.Add(filePath);
+                        }
+                    }
+                }
+            }
+            return retFiles;
         }
     }
 }

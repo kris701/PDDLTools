@@ -20,6 +20,7 @@ using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.IO;
 using PDDLParser.Helpers;
+using System.Windows.Controls;
 
 namespace PDDLTools.Commands
 {
@@ -41,19 +42,27 @@ namespace PDDLTools.Commands
         public override async void CheckQueryStatus(object sender, EventArgs e)
         {
             if (sender is MenuCommand button)
-            {
-                var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
-                if (selected != null)
-                    button.Visible = await DTE2Helper.IsItemInPDDLProjectAsync(selected) && PDDLHelper.IsFileDomain(selected);
-            }
+                button.Visible = await DTE2Helper.IsActiveProjectPDDLProjectAsync();
         }
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
         {
-            var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
-            if (selected != null)
-                if (PDDLHelper.IsFileDomain(selected))
-                    SelectedDomainPath = selected;
+            OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
+            if (eventArgs.InValue != null)
+            {
+                var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
+                if (selected != null)
+                    if (PDDLHelper.IsFileDomain(selected))
+                        SelectedDomainPath = selected;
+            }
+            if (eventArgs.OutValue != null && SelectedDomainPath != "")
+            {
+                IntPtr pOutValue = eventArgs.OutValue;
+                if (pOutValue != IntPtr.Zero)
+                {
+                    Marshal.GetNativeVariantForObject(new FileInfo(SelectedDomainPath).Name, pOutValue);
+                }
+            }
         }
     }
 }

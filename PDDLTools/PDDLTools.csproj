@@ -105,14 +105,14 @@
       <Namespace>PDDLTools.Projects</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
-	  <XamlPropertyRule Include="Projects\Rules\PDDLPlanFile.xaml">
-		  <Namespace>PDDLTools.Projects</Namespace>
-		  <SubType>Design</SubType>
-	  </XamlPropertyRule>
-	  <XamlPropertyRule Include="Projects\Rules\PDDLPlanFile.browseobject.xaml">
-		  <Namespace>PDDLTools.Projects</Namespace>
-		  <SubType>Design</SubType>
-	  </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\PDDLPlanFile.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+      <SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\Rules\PDDLPlanFile.browseobject.xaml">
+      <Namespace>PDDLTools.Projects</Namespace>
+      <SubType>Design</SubType>
+    </XamlPropertyRule>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classifiers\PDDLClassifier.cs" />
@@ -125,10 +125,14 @@
     <Compile Include="Commands\SASVisualiserCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />
     <Compile Include="Commands\FDReportCommand.cs" />
+    <Compile Include="Commands\SelectDomainCtxCommand.cs" />
+    <Compile Include="Commands\SelectDomainListCommand.cs" />
+    <Compile Include="Commands\SelectProblemCtxCommand.cs" />
     <Compile Include="Commands\SelectProblemCommand.cs" />
     <Compile Include="Commands\SelectEngineListCommand.cs" />
     <Compile Include="Commands\SelectEngineCommand.cs" />
     <Compile Include="Commands\SelectDomainCommand.cs" />
+    <Compile Include="Commands\SelectProblemListCommand.cs" />
     <Compile Include="Completers\PDDLCompletionHandlerProvider.cs" />
     <Compile Include="Completers\PDDLCompletionCommandHandler.cs" />
     <Compile Include="Completers\PDDLCompletionSource.cs" />
