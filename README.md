@@ -1,6 +1,6 @@
 # Visual Studio PDDL Tools Extension
 
-![combined](https://github.com/kris701/PDDLTools/assets/22596587/8364b0da-efe3-491a-8e21-5b113054fd07)
+![combined](https://github.com/kris701/PDDLTools/assets/22596587/5ead8019-9c45-4d5d-94d4-e72d4f361914)
 
 This is an extension to make developing with PDDL files and planning in general easier.
 This extension can be used with [Fast Downward](https://www.fast-downward.org/) to execute and analyse plans from running PDDL files.
