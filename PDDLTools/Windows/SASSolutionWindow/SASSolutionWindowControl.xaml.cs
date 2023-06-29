@@ -29,6 +29,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
     public partial class SASSolutionWindowControl : UserControl
     {
         private PDDLDecl _pddlData;
+        private string _planFile;
         private bool _reDraw = false;
         private bool _isLoaded = false;
 
@@ -42,9 +43,10 @@ namespace PDDLTools.Windows.SASSolutionWindow
             SelectSpreaderCombobox.SelectedIndex = 0;
         }
 
-        public void SetupResultData(PDDLDecl pddlData)
+        public void SetupResultData(PDDLDecl pddlData, string planFile)
         {
             _pddlData = pddlData;
+            _planFile = planFile;
             _reDraw = true;
             RedrawCanvas();
         }
@@ -63,18 +65,17 @@ namespace PDDLTools.Windows.SASSolutionWindow
         {
             if (_reDraw && _isLoaded)
             {
-                var path = System.IO.Path.Combine(OptionsManager.Instance.FDPath, "sas_plan");
-                if (!File.Exists(path))
+                if (!File.Exists(_planFile))
                 {
-                    TextPlan.Text = "'sas_plan' not found!";
+                    TextPlan.Text = $"The plan file '{_planFile}' not found!";
                 }
                 else
                 {
-                    SetTextPlanData(File.ReadAllLines(path));
+                    SetTextPlanData(File.ReadAllLines(_planFile));
                     VisualPlan.Children.Clear();
 
                     IPlanParser planParser = new PlanParser();
-                    var plan = planParser.ParsePlanFile(path);
+                    var plan = planParser.ParsePlanFile(_planFile);
 
                     if (plan.Count > 50)
                     {

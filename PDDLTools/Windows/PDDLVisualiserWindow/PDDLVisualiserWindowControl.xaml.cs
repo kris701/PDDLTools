@@ -2,6 +2,7 @@
 using PDDLParser;
 using PDDLParser.Helpers;
 using PDDLParser.Models;
+using PDDLTools.Commands;
 using PDDLTools.Windows.ResourceDictionary;
 using PDDLTools.Windows.SASSolutionWindow.UserControls;
 using System;
@@ -209,6 +210,11 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
         private void RerollButton_Click(object sender, RoutedEventArgs e)
         {
             ConstructVisualiser();
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            SelectedDomainFile = SelectDomainCommand.SelectedDomainPath;
         }
     }
 }

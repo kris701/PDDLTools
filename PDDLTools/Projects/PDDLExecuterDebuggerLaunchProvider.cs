@@ -138,7 +138,7 @@
 
                 await WriteToOutputWindowAsync(resultData);
                 if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
-                    await SetupResultWindowsAsync(resultData, _lastDomain, _lastProblem);
+                    await SetupResultWindowsAsync(resultData, _lastDomain, _lastProblem, Path.Combine(outPath, $"{planName}.pddlplan"));
             }
         }
 
@@ -170,7 +170,7 @@
             }
         }
 
-        private async Task SetupResultWindowsAsync(FDResults resultData, string domainFilePath, string problemFilePath)
+        private async Task SetupResultWindowsAsync(FDResults resultData, string domainFilePath, string problemFilePath, string planFile)
         {
             var vsShell = (IVsShell)ServiceProvider.GetService(typeof(IVsShell));
             if (vsShell.IsPackageLoaded(new Guid(PDDLTools.Constants.PackageGuidString), out var myPackage) == Microsoft.VisualStudio.VSConstants.S_OK)
@@ -189,7 +189,7 @@
 
                 if (resultData.WasSolutionFound && OptionsManager.Instance.OpenSASSolutionVisualiser)
                 {
-                    IPDDLParser parser = new PDDLParser(false, false);
+                    IPDDLParser parser = new PDDLParser(true, false);
                     var pddlDoc = parser.Parse(domainFilePath, problemFilePath);
 
                     ToolWindowPane sasWindow = await package.ShowToolWindowAsync(typeof(SASSolutionWindow), 0, true, package.DisposalToken);
@@ -198,7 +198,7 @@
                         throw new NotSupportedException("Cannot create tool window");
                     }
                     if (sasWindow.Content is SASSolutionWindowControl control)
-                        control.SetupResultData(pddlDoc);
+                        control.SetupResultData(pddlDoc, planFile);
                 }
             }
         }
