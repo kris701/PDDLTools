@@ -227,6 +227,7 @@
     <Content Include="Commands\Resources\VisualisorIcon.png" />
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
+    <Resource Include="Windows\PlanValidatorWindow\Resources\reset.png" />
     <Resource Include="Windows\PDDLVisualiserWindow\Resources\reset.png" />
     <Resource Include="Windows\SASSolutionWindow\Resources\reset.png" />
     <Resource Include="Windows\WelcomeWindow\Resources\WelcomeLogo.png" />
@@ -333,7 +334,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Windows\FDResultsWindow\Resources\" />
-    <Folder Include="Windows\PlanValidatorWindow\Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CMDRunners\CMDRunners.csproj">

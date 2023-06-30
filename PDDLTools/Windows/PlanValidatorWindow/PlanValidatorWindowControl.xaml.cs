@@ -57,6 +57,9 @@ namespace PDDLTools.Windows.PlanValidatorWindow
 
         private async Task DoCheckVALAsync()
         {
+            IsValidLabel.Content = "Running VAL...";
+            IsValidLabel.Foreground = Brushes.Orange;
+
             string domainFile = SelectedDomainFileLabel.Text as string;
             string problemFile = SelectedProblemFileLabel.Text as string;
             string planFile = SelectedPlanFileLabel.Text as string;
@@ -136,6 +139,11 @@ namespace PDDLTools.Windows.PlanValidatorWindow
                 SelectedPlanFileLabel.Text = fileSelector.FileName;
                 await DoCheckVALAsync();
             }
+        }
+
+        private async void RecheckButton_Click(object sender, RoutedEventArgs e)
+        {
+            await DoCheckVALAsync();
         }
     }
 }

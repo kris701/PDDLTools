@@ -16,12 +16,22 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="30"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+
+            <Button x:Name="RecheckButton" Grid.Column="3" Width="20" Height="20" Style="{StaticResource StandardButton}" Click="RecheckButton_Click">
+                <Button.Background>
+                    <ImageBrush ImageSource="./Resources/reset.png" TileMode="None" Stretch="Uniform"/>
+                </Button.Background>
+                <Button.ToolTip>
+                    Regenerate the visual plan.
+                </Button.ToolTip>
+            </Button>
 
             <Button x:Name="SelectDomainFileButton" Content="Select Domain" Margin="5" Background="Transparent" Foreground="White" Click="SelectDomainFileButton_Click"/>
             <Button x:Name="SelectProblemFileButton" Grid.Column="1" Content="Select Problem" Margin="5" Background="Transparent" Foreground="White" Click="SelectProblemFileButton_Click"/>
