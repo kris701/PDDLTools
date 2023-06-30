@@ -133,6 +133,9 @@
     <Compile Include="Commands\SelectEngineCommand.cs" />
     <Compile Include="Commands\SelectDomainCommand.cs" />
     <Compile Include="Commands\SelectProblemListCommand.cs" />
+    <Compile Include="Commands\SendPlanToValidatorCtxCommand.cs" />
+    <Compile Include="Commands\SendProblemToValidatorCtxCommand.cs" />
+    <Compile Include="Commands\SendDomainToValidatorCtxCommand.cs" />
     <Compile Include="Commands\SendToVisualiserCtxCommand.cs" />
     <Compile Include="Completers\PDDLCompletionHandlerProvider.cs" />
     <Compile Include="Completers\PDDLCompletionCommandHandler.cs" />

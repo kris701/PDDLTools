@@ -147,6 +147,28 @@
 					<ButtonText>Visualise</ButtonText>
 				</Strings>
 			</Button>
+
+			<Button guid="PDDLCommandSetGuid" id="SendDomainToValidatorCtxCommandId" priority="0x0100" type="Button">
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Send to VAL</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="PDDLCommandSetGuid" id="SendProblemToValidatorCtxCommandId" priority="0x0100" type="Button">
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Send to VAL</ButtonText>
+				</Strings>
+			</Button>
+			<Button guid="PDDLCommandSetGuid" id="SendPlanToValidatorCtxCommandId" priority="0x0100" type="Button">
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Send to VAL</ButtonText>
+				</Strings>
+			</Button>
 		</Buttons>		
 	</Commands>
 
@@ -154,6 +176,10 @@
 		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" context="PDDLPackageGuid" />
 		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" context="PDDLPackageGuid" />
 		<VisibilityItem guid="PDDLCommandSetGuid" id="SendToVisualiserCtxCommandID" context="PDDLPackageGuid" />
+
+		<VisibilityItem guid="PDDLCommandSetGuid" id="SendDomainToValidatorCtxCommandId" context="PDDLPackageGuid" />
+		<VisibilityItem guid="PDDLCommandSetGuid" id="SendProblemToValidatorCtxCommandId" context="PDDLPackageGuid" />
+		<VisibilityItem guid="PDDLCommandSetGuid" id="SendPlanToValidatorCtxCommandId" context="PDDLPackageGuid" />
 	</VisibilityConstraints>
 
 	<CommandPlacements>
@@ -205,7 +231,18 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" priority="0x104">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
 		</CommandPlacement>
+		
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SendToVisualiserCtxCommandID" priority="0x105">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
+		</CommandPlacement>
+
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SendDomainToValidatorCtxCommandId" priority="0x106">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SendProblemToValidatorCtxCommandId" priority="0x107">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
+		</CommandPlacement>
+		<CommandPlacement guid="PDDLCommandSetGuid" id="SendPlanToValidatorCtxCommandId" priority="0x108">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
 		</CommandPlacement>
 	</CommandPlacements>
@@ -240,8 +277,12 @@
 			<IDSymbol name="PlanValidatorWindowCommandID" value="269" />
 
 			<IDSymbol name="PDDLVisualiserWindowCommandID" value="270" />
-			
+
 			<IDSymbol name="SendToVisualiserCtxCommandID" value="273" />
+
+			<IDSymbol name="SendDomainToValidatorCtxCommandId" value="274" />
+			<IDSymbol name="SendProblemToValidatorCtxCommandId" value="275" />
+			<IDSymbol name="SendPlanToValidatorCtxCommandId" value="276" />
 			
 			<IDSymbol name="PDDLToolsMenu" value="0x1023" />
 			<IDSymbol name="PDDLToolsToolbar" value="0x1024" />

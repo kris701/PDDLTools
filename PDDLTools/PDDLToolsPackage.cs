@@ -37,8 +37,8 @@ namespace PDDLTools
     [ProvideUIContextRule(Constants.PackageGuidString,
         name: "Supported Files",
         expression: "pddl",
-        termNames: new[] { "pddl" },
-        termValues: new[] { "HierSingleSelectionName:.pddl$" })]
+        termNames: new[] { "pddl", "pddlplan" },
+        termValues: new[] { "HierSingleSelectionName:.pddl$", "HierSingleSelectionName:.pddlplan$" })]
     [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [Guid(Constants.PackageGuidString)]
     [ProvideMenuResource("Menus.ctmenu", 1)]
@@ -79,6 +79,10 @@ namespace PDDLTools
             await SelectEngineListCommand.InitializeAsync(this);
 
             await SendToVisualiserCtxCommand.InitializeAsync(this);
+
+            await SendDomainToValidatorCtxCommand.InitializeAsync(this);
+            await SendProblemToValidatorCtxCommand.InitializeAsync(this);
+            await SendPlanToValidatorCtxCommand.InitializeAsync(this);
 
             await FDReportCommand.InitializeAsync(this);
             await SASVisualiserCommand.InitializeAsync(this);

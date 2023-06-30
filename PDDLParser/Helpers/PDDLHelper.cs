@@ -40,5 +40,17 @@ namespace PDDLParser.Helpers
             }
             return false;
         }
+
+        public static bool IsFilePlan(string path)
+        {
+            if (path == null)
+                return false;
+            if (!File.Exists(path))
+                return false;
+            var info = new FileInfo(path);
+            if (info.Exists && info.Extension.ToLower() == ".pddlplan")
+                return true;
+            return false;
+        }
     }
 }
