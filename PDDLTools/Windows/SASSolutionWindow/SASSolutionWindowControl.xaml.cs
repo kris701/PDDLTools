@@ -43,12 +43,12 @@ namespace PDDLTools.Windows.SASSolutionWindow
             SelectSpreaderCombobox.SelectedIndex = 0;
         }
 
-        public void SetupResultData(PDDLDecl pddlData, string planFile)
+        public async void SetupResultData(PDDLDecl pddlData, string planFile)
         {
             _pddlData = pddlData;
             _planFile = planFile;
             _reDraw = true;
-            RedrawCanvas();
+            await RedrawCanvasAsync();
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -58,10 +58,10 @@ namespace PDDLTools.Windows.SASSolutionWindow
 
             _isLoaded = true;
 
-            RedrawCanvas();
+            await RedrawCanvasAsync();
         }
 
-        private void RedrawCanvas()
+        private async Task RedrawCanvasAsync()
         {
             if (_reDraw && _isLoaded)
             {
@@ -92,21 +92,42 @@ namespace PDDLTools.Windows.SASSolutionWindow
                             _pddlData,
                             plan);
 
-
                         ILocationSpreader spreader = LocationSpreaderBuilder.GetSpreader(SelectSpreaderCombobox.SelectedItem as string);
                         var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
 
-                        AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, locs[0]);
+                        var centerPoint = new Point((int)VisualPlan.ActualWidth / 2, (int)VisualPlan.ActualHeight / 2);
+                        List<DynamicNode> nodes = new List<DynamicNode>();
+
+                        nodes.Add(AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, plan.Count));
 
                         for (int i = 0; i < plan.Count; i++)
                         {
                             simulator.Step();
-                            AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, locs[i + 1]);
+                            nodes.Add(AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, plan.Count));
                         }
 
-                        foreach (var child in VisualPlan.Children)
-                            if (child is DynamicNode node)
-                                node.Setup();
+                        foreach (var node in nodes)
+                            node.Setup();
+
+                        bool isAllThere = false;
+                        while (!isAllThere)
+                        {
+                            isAllThere = true;
+                            for (int i = 0; i < nodes.Count; i++)
+                            {
+                                if (Math.Abs(nodes[i].Margin.Left - locs[i].X) > 5 ||
+                                    Math.Abs(nodes[i].Margin.Top - locs[i].Y) > 5)
+                                {
+                                    nodes[i].Margin = new Thickness(
+                                        nodes[i].Margin.Left + (locs[i].X - nodes[i].Margin.Left) / 2,
+                                        nodes[i].Margin.Top + (locs[i].Y - nodes[i].Margin.Top) / 2, 
+                                        0,0);
+                                    isAllThere = false;
+                                }
+                                nodes[i].UpdateLines();
+                            }
+                            await Task.Delay(50);
+                        }
                     }
 
                     _reDraw = false;
@@ -133,7 +154,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
             }
         }
 
-        private DynamicNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point loc)
+        private DynamicNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point loc, int totalSteps)
         {
             var goalCount = GetGoalCountInState(_pddlData.Problem.Goal.GoalExp, state);
             bool isGoal = goalCount == totalGoal;
@@ -141,7 +162,10 @@ namespace PDDLTools.Windows.SASSolutionWindow
             List<PredicateExp> cloneState = new List<PredicateExp>();
             foreach(var pred in state)
                 cloneState.Add(pred.Clone() as PredicateExp);
-            var newNode = new DynamicNode(id, $"{id}", VisualPlan, new List<int>() { id + 1 }, loc);
+            List<int> targetIds = new List<int>();
+            if (id != totalSteps)
+                targetIds.Add(id + 1);
+            var newNode = new DynamicNode(id, $"{id}", VisualPlan, targetIds, loc);
 
             var toolTip = new ToolTip();
             toolTip.BorderThickness = new Thickness(0);
@@ -273,18 +297,18 @@ namespace PDDLTools.Windows.SASSolutionWindow
                 element.Visibility = Visibility.Hidden;
         }
 
-        private void RerollButton_Click(object sender, RoutedEventArgs e)
+        private async void RerollButton_Click(object sender, RoutedEventArgs e)
         {
             _reDraw = true;
-            RedrawCanvas();
+            await RedrawCanvasAsync();
         }
 
-        private void SelectSpreaderCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void SelectSpreaderCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_isLoaded)
             {
                 _reDraw = true;
-                RedrawCanvas();
+                await RedrawCanvasAsync();
             }
         }
     }

@@ -27,19 +27,23 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
 {
     public partial class PDDLVisualiserWindowControl : UserControl
     {
+        public delegate void UpdateVisualiserHandler();
+        public event UpdateVisualiserHandler UpdateVisualiser;
+
         private string _selectedDomainFile = "";
         public string SelectedDomainFile { 
             get => _selectedDomainFile; 
             set {
                 SelectedDomainFileLabel.Content = value;
                 _selectedDomainFile = value;
-                ConstructVisualiser();
+                UpdateVisualiser.Invoke();
             } 
         }
 
         public PDDLVisualiserWindowControl()
         {
             InitializeComponent();
+            UpdateVisualiser += ConstructVisualiser;
         }
 
         private void SelectDomainFile_Click(object sender, RoutedEventArgs e)
@@ -58,7 +62,7 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
             }
         }
 
-        private void ConstructVisualiser()
+        private async void ConstructVisualiser()
         {
             if (PDDLHelper.IsFileDomain(SelectedDomainFile))
             {
@@ -67,6 +71,9 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                 MainGrid.Children.Clear();
                 try
                 {
+                    var nodes = new List<DynamicNode>();
+                    var centerPoint = new Point((int)MainGrid.ActualWidth / 2, (int)MainGrid.ActualHeight / 2);
+
                     IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
                     var decl = parser.Parse(SelectedDomainFile);
                     int locCounter = 0;
@@ -100,8 +107,9 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                                 if (IsPredicateUsed(act.Preconditions, pred.Name))
                                     targetId.Add(actDict[act.Name]);
 
-                            var newNode = new DynamicNode(predDict[pred.Name], $"Predicate{Environment.NewLine} {pred.Name}", MainGrid, targetId, locs[index++]);
+                            var newNode = new DynamicNode(predDict[pred.Name], $"Predicate{Environment.NewLine} {pred.Name}", MainGrid, targetId, centerPoint);
                             newNode.EllipseArea.Fill = Brushes.Red;
+                            nodes.Add(newNode);
                             MainGrid.Children.Add(newNode);
                         }
                     }
@@ -115,8 +123,9 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                                 if (IsPredicateUsed(act.Effects, pred.Name))
                                     targetId.Add(predDict[pred.Name]);
 
-                            var newNode = new DynamicNode(actDict[act.Name], $"Action{Environment.NewLine} {act.Name}", MainGrid, targetId, locs[index++]);
+                            var newNode = new DynamicNode(actDict[act.Name], $"Action{Environment.NewLine} {act.Name}", MainGrid, targetId, centerPoint);
                             newNode.EllipseArea.Fill = Brushes.Green;
+                            nodes.Add(newNode);
                             MainGrid.Children.Add(newNode);
                         }
                     }
@@ -131,47 +140,64 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                                 if (IsPredicateUsed(axi.Implies, pred.Name))
                                     targetId.Add(predDict[pred.Name]);
 
-                            var newNode = new DynamicNode(axiDict[currentAxiIndex], $"Axiom{Environment.NewLine} ID: {currentAxiIndex}", MainGrid, targetId, locs[index++]);
+                            var newNode = new DynamicNode(axiDict[currentAxiIndex], $"Axiom{Environment.NewLine} ID: {currentAxiIndex}", MainGrid, targetId, centerPoint);
                             currentAxiIndex++;
                             newNode.EllipseArea.Fill = Brushes.Blue;
+                            nodes.Add(newNode);
                             MainGrid.Children.Add(newNode);
                         }
                     }
 
-                    foreach (var child in MainGrid.Children)
-                        if (child is DynamicNode node)
-                            node.Setup();
+                    foreach (var node in nodes)
+                        node.Setup();
 
-                    foreach (var child in MainGrid.Children)
+                    foreach (var node in nodes)
                     {
-                        if (child is DynamicNode node)
+                        bool doesAnyTargetThis = false;
+                        foreach (var otherChild in MainGrid.Children)
                         {
-                            bool doesAnyTargetThis = false;
-                            foreach (var otherChild in MainGrid.Children)
+                            if (otherChild is DynamicNode node2)
                             {
-                                if (otherChild is DynamicNode node2)
+                                if (node.NodeID != node2.NodeID)
                                 {
-                                    if (node.NodeID != node2.NodeID)
+                                    if (node2.TargetIDs.Contains(node.NodeID))
                                     {
-                                        if (node2.TargetIDs.Contains(node.NodeID))
-                                        {
-                                            doesAnyTargetThis = true;
-                                            break;
-                                        }
+                                        doesAnyTargetThis = true;
+                                        break;
                                     }
                                 }
                             }
-                            if (!doesAnyTargetThis)
+                        }
+                        if (!doesAnyTargetThis)
+                        {
+                            node.EllipseArea.Fill = Brushes.Gray;
+                            foreach (var line in node.NodeLines)
                             {
-                                node.EllipseArea.Fill = Brushes.Gray;
-                                foreach (var line in node.NodeLines)
-                                {
-                                    line.Path.Stroke = Brushes.DarkGray;
-                                    line.Path.Fill = Brushes.DarkGray;
-                                    line.Path.StrokeDashArray = new DoubleCollection() { 2 };
-                                }
+                                line.Path.Stroke = Brushes.DarkGray;
+                                line.Path.Fill = Brushes.DarkGray;
+                                line.Path.StrokeDashArray = new DoubleCollection() { 2 };
                             }
                         }
+                    }
+
+                    bool isAllThere = false;
+                    while (!isAllThere)
+                    {
+                        isAllThere = true;
+                        for (int i = 0; i < nodes.Count; i++)
+                        {
+                            if (Math.Abs(nodes[i].Margin.Left - locs[i].X) > 5 ||
+                                Math.Abs(nodes[i].Margin.Top - locs[i].Y) > 5)
+                            {
+                                nodes[i].Margin = new Thickness(
+                                    nodes[i].Margin.Left + (locs[i].X - nodes[i].Margin.Left) / 2,
+                                    nodes[i].Margin.Top + (locs[i].Y - nodes[i].Margin.Top) / 2,
+                                    0, 0);
+                                isAllThere = false;
+                            }
+                            nodes[i].UpdateLines();
+                        }
+                        await Task.Delay(50);
                     }
                 }
                 catch
@@ -210,7 +236,7 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
 
         private void RerollButton_Click(object sender, RoutedEventArgs e)
         {
-            ConstructVisualiser();
+            UpdateVisualiser.Invoke();
         }
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)

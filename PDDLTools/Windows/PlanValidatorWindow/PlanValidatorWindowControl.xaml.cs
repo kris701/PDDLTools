@@ -33,7 +33,7 @@ namespace PDDLTools.Windows.PlanValidatorWindow
                 if (!PDDLHelper.IsFileDomain(value))
                     return;
                 _selectedDomainFile = value;
-                SelectedDomainFileLabel.Text = valunew FileInfo(value).Namee;
+                SelectedDomainFileLabel.Text = new FileInfo(value).Name;
                 if (DoVALCheck != null) DoVALCheck.Invoke();
             } 
         }
