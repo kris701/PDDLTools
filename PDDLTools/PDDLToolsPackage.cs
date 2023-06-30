@@ -78,6 +78,8 @@ namespace PDDLTools
             await SelectEngineCommand.InitializeAsync(this);
             await SelectEngineListCommand.InitializeAsync(this);
 
+            await SendToVisualiserCtxCommand.InitializeAsync(this);
+
             await FDReportCommand.InitializeAsync(this);
             await SASVisualiserCommand.InitializeAsync(this);
 
