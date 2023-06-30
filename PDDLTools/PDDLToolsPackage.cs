@@ -19,6 +19,9 @@ using PDDLTools.Windows.WelcomeWindow;
 using PDDLTools.Windows.PlanValidatorWindow;
 using PDDLTools.Windows.PDDLVisualiserWindow;
 using PDDLTools.Projects;
+using PDDLTools.Helpers;
+using System.Collections.Generic;
+using System.Reflection.Metadata;
 
 namespace PDDLTools
 {
@@ -79,6 +82,27 @@ namespace PDDLTools
             await SASVisualiserCommand.InitializeAsync(this);
 
             new FastDownwardErrorManager(this);
+
+            var dte2 = DTE2Helper.GetDTE2();
+            var docEvent = dte2.Events.CommandEvents;
+            events.Add(docEvent);
+            docEvent.AfterExecute += LoadPropertiesIntoVS;
+        }
+
+        // This is a rather expensive method. But i couldnt find any other way of attaching an event to the "Set as Startup Project" command
+        List<object> events = new List<object>();
+        private async void LoadPropertiesIntoVS(string Guid, int ID, object CustomIn, object CustomOut)
+        {
+            if (ID == 246 && Guid == "{5EFC7975-14BC-11CF-9B2B-00AA00573819}")
+            {
+                var proj = await PDDLProjectManager.GetCurrentProjectAsync();
+                if (proj != null)
+                {
+                    SelectDomainCommand.Instance.Execute(null, new OleMenuCmdEventArgs(await proj.GetSelectedDomainAsync(), IntPtr.Zero));
+                    SelectProblemCommand.Instance.Execute(null, new OleMenuCmdEventArgs(await proj.GetSelectedProblemAsync(), IntPtr.Zero));
+                    SelectEngineCommand.Instance.Execute(null, new OleMenuCmdEventArgs(await proj.GetSelectedEngineAsync(), IntPtr.Zero));
+                }
+            }
         }
     }
 }
