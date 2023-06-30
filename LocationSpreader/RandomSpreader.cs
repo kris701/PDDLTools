@@ -27,8 +27,7 @@ namespace LocationSpreader
                         ));
             for (int i = 0; i < count - 1; i++)
             {
-                var newPoint = new Point();
-                newPoint = new Point(
+                var newPoint = new Point(
                         rnd.Next(radius, width - radius),
                         rnd.Next(radius, height - radius)
                         );

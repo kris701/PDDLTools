@@ -11,7 +11,7 @@
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     [ProjectTypeRegistration(PDDLTools.Constants.PDDLProjectTypeID, PDDLTools.Constants.PDDLLanguageName, "#2", PDDLTools.Constants.PDDLProjectExt, PDDLTools.Constants.PDDLLanguageName, resourcePackageGuid: PDDLTools.Constants.PackageGuidString, PossibleProjectExtensions = PDDLTools.Constants.PDDLProjectExt, ProjectTemplatesDir = @"..\..\Templates\Projects\MyCustomProject")]
     [ProvideProjectItem(PDDLTools.Constants.PDDLProjectTypeID, "My Items", @"..\..\Templates\ProjectItems\MyCustomProject", 500)]
-    internal class PDDLUnconfiguredProject
+    public class PDDLUnconfiguredProject
     {
         internal const string UniqueCapability = "PDDLSample";
 

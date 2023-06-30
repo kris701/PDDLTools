@@ -3,6 +3,7 @@ using PDDLParser;
 using PDDLParser.Helpers;
 using PDDLParser.Models;
 using PDDLTools.Commands;
+using PDDLTools.Projects;
 using PDDLTools.Windows.ResourceDictionary;
 using PDDLTools.Windows.SASSolutionWindow.UserControls;
 using System;
@@ -212,9 +213,12 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
             ConstructVisualiser();
         }
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            SelectedDomainFile = SelectDomainCommand.SelectedDomainPath;
+            var proj = await PDDLProjectManager.GetCurrentProjectAsync();
+            if (proj != null)
+                if (PDDLHelper.IsFileDomain(await proj.GetSelectedDomainAsync()))
+                    SelectedDomainFile = await proj.GetSelectedDomainAsync();
         }
     }
 }

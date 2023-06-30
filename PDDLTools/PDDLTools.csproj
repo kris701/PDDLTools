@@ -163,6 +163,7 @@
     <Compile Include="PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
     <Compile Include="PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
     <Compile Include="Projects\PDDLConfiguredProject.cs" />
+    <Compile Include="Projects\PDDLProjectManager.cs" />
     <Compile Include="Projects\PDDLUnconfiguredProject.cs" />
     <Compile Include="Projects\ProjectProperties.cs" />
     <Compile Include="Projects\PDDLExecuterDebuggerLaunchProvider.cs" />
@@ -414,12 +415,12 @@
     <VSIXSourceItem Include="Projects\DeployedBuildSystem\**">
       <InProject>false</InProject>
       <InstallRoot>MSBuild</InstallRoot>
-      <VSIXSubPath>Projects\CustomProjectSystems\PDDL</VSIXSubPath>
+      <VSIXSubPath>CustomProjectSystems\PDDL</VSIXSubPath>
     </VSIXSourceItem>
     <VSIXSourceItem Include="Projects\Rules\*.xaml">
       <InProject>false</InProject>
       <InstallRoot>MSBuild</InstallRoot>
-      <VSIXSubPath>Projects\CustomProjectSystems\PDDL\Rules</VSIXSubPath>
+      <VSIXSubPath>CustomProjectSystems\PDDL\Rules</VSIXSubPath>
     </VSIXSourceItem>
   </ItemGroup>
   <Target Name="AfterBuild">

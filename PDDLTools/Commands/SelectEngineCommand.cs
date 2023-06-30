@@ -18,6 +18,8 @@ using System.Windows.Media;
 using System.Windows.Threading;
 using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
+using PDDLParser.Helpers;
+using PDDLTools.Projects;
 
 namespace PDDLTools.Commands
 {
@@ -25,9 +27,8 @@ namespace PDDLTools.Commands
     {
         public override int CommandId { get; } = 263;
         public static SelectEngineCommand Instance { get; internal set; }
-        public static string SelectedSearch { get; internal set; } = "";
 
-        private SelectEngineCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
+        private SelectEngineCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {
         }
 
@@ -36,19 +37,35 @@ namespace PDDLTools.Commands
             Instance = new SelectEngineCommand(package, await InitializeCommandServiceAsync(package));
         }
 
-        public override void Execute(object sender, EventArgs e)
+        public override async void CheckQueryStatus(object sender, EventArgs e)
         {
-            OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
-            if (eventArgs.InValue != null)
+            if (sender is MenuCommand button)
+                button.Enabled = await DTE2Helper.IsActiveProjectPDDLProjectAsync();
+        }
+
+        private string _tempSelect = "";
+        public override async Task ExecuteAsync(object sender, EventArgs e)
+        {
+            var proj = await PDDLProjectManager.GetCurrentProjectAsync();
+            if (proj != null)
             {
-                SelectedSearch = eventArgs.InValue as string;
-            }
-            if (eventArgs.OutValue != null && SelectedSearch != "")
-            {
-                IntPtr pOutValue = eventArgs.OutValue;
-                if (pOutValue != IntPtr.Zero)
+                OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
+                if (eventArgs.InValue != null)
                 {
-                    Marshal.GetNativeVariantForObject(SelectedSearch, pOutValue);
+                    if (eventArgs.InValue is string selected)
+                    {
+                        if (selected != "")
+                        {
+                            await proj.SetSelectedEngineAsync(selected);
+                            _tempSelect = selected;
+                        }
+                    }
+                }
+                if (eventArgs.OutValue != null)
+                {
+                    IntPtr pOutValue = eventArgs.OutValue;
+                    if (pOutValue != IntPtr.Zero)
+                        Marshal.GetNativeVariantForObject(_tempSelect, pOutValue);
                 }
             }
         }

@@ -31,61 +31,44 @@
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     public class PDDLExecuterDebuggerLaunchProvider : DebugLaunchProviderBase
     {
-        [Import]
-        private ProjectProperties ProjectProperties { get; set; }
-        private bool _isLoaded = false;
+        //[Import]
+        internal PDDLConfiguredProject Project { get; set; }
 
         private static OutputPanelController OutputPanel = new OutputPanelController("Fast Downward Output");
+        private DateTime _lastRefresh = DateTime.Now;
         private string _lastDomain = "";
         private string _lastProblem = "";
+        private string _lastEngine = "";
         private bool _lastCheckResult = false;
 
         [ImportingConstructor]
-        public PDDLExecuterDebuggerLaunchProvider(ConfiguredProject configuredProject)
-            : base(configuredProject)
+        public PDDLExecuterDebuggerLaunchProvider(PDDLConfiguredProject configuredProject)
+            : base(configuredProject.ConfiguredProject)
         {
+            Project = configuredProject;
         }
 
         [ExportPropertyXamlRuleDefinition("PDDL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9be6e469bc4921f1", "XamlRuleToCode:PDDLExecuter.xaml", "Project")]
         [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
         private object DebuggerXaml { get { throw new NotImplementedException(); } }
 
-        private async Task LoadFromSavedProjectPropertiesAsync()
+        private async Task LoadFromSavedProjectPropertiesAsync(PDDLConfiguredProject proj)
         {
-            var generalProps = await ProjectProperties.GetConfigurationGeneralPropertiesAsync();
-            var lastDomain = await generalProps.SelectedDomain.GetValueAsync();
-            var lastProblem = await generalProps.SelectedProblem.GetValueAsync();
-            var lastEngine = await generalProps.SelectedEngine.GetValueAsync();
-
-            if (lastDomain != null && lastDomain is string domainFile)
-                if (PDDLHelper.IsFileDomain(domainFile))
-                    SelectDomainCommand.SelectedDomainPath = domainFile;
-            if (lastProblem != null && lastProblem is string problemFile)
-                if (PDDLHelper.IsFileProblem(problemFile))
-                    SelectProblemCommand.SelectedProblemPath = problemFile;
-            if (lastEngine != null && lastEngine is string engineStr)
-                SelectEngineCommand.SelectedSearch = engineStr;
-            _isLoaded = true;
+            _lastDomain = await proj.GetSelectedDomainAsync();
+            _lastProblem = await proj.GetSelectedProblemAsync();
+            _lastEngine = await proj.GetSelectedEngineAsync();
         }
 
         public override async Task<bool> CanLaunchAsync(DebugLaunchOptions launchOptions)
         {
             if (OptionsManager.Instance == null)
                 return false;
-            if (!_isLoaded)
-                await LoadFromSavedProjectPropertiesAsync();
-            if (_lastDomain != SelectDomainCommand.SelectedDomainPath || _lastProblem != SelectProblemCommand.SelectedProblemPath)
+            var proj = await PDDLProjectManager.GetCurrentProjectAsync();
+            if (proj != null && _lastRefresh < proj.LastRefresh)
             {
-                _lastDomain = SelectDomainCommand.SelectedDomainPath;
-                _lastProblem = SelectProblemCommand.SelectedProblemPath;
-                _lastCheckResult = PDDLHelper.IsFileDomain(_lastDomain) && PDDLHelper.IsFileProblem(_lastProblem);
-                if (_lastCheckResult)
-                {
-                    var generalProps = await ProjectProperties.GetConfigurationGeneralPropertiesAsync();
-                    await generalProps.SelectedDomain.SetValueAsync(_lastDomain);
-                    await generalProps.SelectedProblem.SetValueAsync(_lastProblem);
-                    await generalProps.SelectedEngine.SetValueAsync(SelectEngineCommand.SelectedSearch);
-                }
+                await LoadFromSavedProjectPropertiesAsync(Project);
+                _lastCheckResult = PDDLHelper.IsFileDomain(_lastDomain) && PDDLHelper.IsFileProblem(_lastProblem) && _lastEngine != "";
+                _lastRefresh = DateTime.Now;
             }
             return _lastCheckResult;
         }
@@ -116,8 +99,8 @@
 
             if (canLaunch)
             {
-                var generalProps = await ProjectProperties.GetConfigurationGeneralPropertiesAsync();
-                var dir = new FileInfo(await generalProps.FullPath.GetValueAsync() as string).Directory.FullName;
+                var proj = await PDDLProjectManager.GetCurrentProjectAsync();
+                var dir = await proj.GetProjectPathAsync();
                 var outPath = Path.Combine(dir, OptionsManager.Instance.OutputPlanPath);
                 var intPath = Path.Combine(dir, OptionsManager.Instance.IntermediateOutputPath);
                 if (!Directory.Exists(outPath))
@@ -132,7 +115,7 @@
                 var resultData = await fdRunner.RunAsync(
                     _lastDomain, 
                     _lastProblem, 
-                    SelectEngineCommand.SelectedSearch,
+                    _lastEngine,
                     Path.Combine(outPath, $"{planName}.pddlplan"),
                     Path.Combine(intPath, "intermediate.sas"));
 

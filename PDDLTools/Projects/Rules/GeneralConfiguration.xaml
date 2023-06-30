@@ -15,19 +15,19 @@
 
 	<StringProperty Name="SelectedDomain" Visible="True">
 		<StringProperty.DataSource>
-			<DataSource Persistence="UserFile" HasConfigurationCondition="False" />
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
 		</StringProperty.DataSource>
 	</StringProperty>
 
 	<StringProperty Name="SelectedProblem" Visible="True">
 		<StringProperty.DataSource>
-			<DataSource Persistence="UserFile" HasConfigurationCondition="False" />
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
 		</StringProperty.DataSource>
 	</StringProperty>
 
 	<StringProperty Name="SelectedEngine" Visible="True">
 		<StringProperty.DataSource>
-			<DataSource Persistence="UserFile" HasConfigurationCondition="False" />
+			<DataSource Persistence="ProjectFile" HasConfigurationCondition="False" />
 		</StringProperty.DataSource>
 	</StringProperty>
 

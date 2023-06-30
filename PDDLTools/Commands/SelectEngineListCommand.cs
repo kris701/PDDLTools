@@ -29,6 +29,7 @@ namespace PDDLTools.Commands
     {
         public override int CommandId { get; } = 264;
         public static SelectEngineListCommand Instance { get; internal set; }
+        private List<string> _engines;
 
         private SelectEngineListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
@@ -37,41 +38,33 @@ namespace PDDLTools.Commands
         public static async Task InitializeAsync(AsyncPackage package)
         {
             Instance = new SelectEngineListCommand(package, await InitializeCommandServiceAsync(package));
+            Instance._engines = new List<string>();
+            Instance._engines.AddRange(GetEngines());
+            Instance._engines.AddRange(await GetAliasesAsync());
         }
 
-        public override async Task ExecuteAsync(object sender, EventArgs e)
+        public override void Execute(object sender, EventArgs e)
         {
             if (e is OleMenuCmdEventArgs eventArgs)
             {
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
-                {
-                    Marshal.GetNativeVariantForObject(new string[] { "Loading..." }, pOutValue);
-
-                    List<string> combined = new List<string>();
-                    combined.AddRange(GetEngines());
-                    combined.AddRange(await GetAliasesAsync());
-                    Marshal.GetNativeVariantForObject(combined.ToArray(), pOutValue);
-                }
+                    Marshal.GetNativeVariantForObject(_engines.ToArray(), pOutValue);
             }
         }
 
-        private List<string> _aliases = new List<string>();
-        private async Task<List<string>> GetAliasesAsync()
+        private static async Task<List<string>> GetAliasesAsync()
         {
-            if (_aliases == null)
-                _aliases = new List<string>();
-            if (_aliases.Count != 0)
-                return _aliases;
+            var aliases = new List<string>();
             FDRunner runner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
             var shortAliases = await runner.GetAliasesAsync();
             foreach (var shortAlias in shortAliases)
-                _aliases.Add($"--alias {shortAlias}");
+                aliases.Add($"--alias {shortAlias}");
 
-            return _aliases;
+            return aliases;
         }
 
-        private List<string> GetEngines()
+        private static List<string> GetEngines()
         {
             var optionsStr = OptionsManager.Instance.EngineOptions;
             return optionsStr.Split(';').ToList();

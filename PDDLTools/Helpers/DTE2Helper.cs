@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.ProjectSystem.VS;
 using Microsoft.VisualStudio.Shell;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -149,20 +150,26 @@ namespace PDDLTools.Helpers
                 return false;
 
             EnvDTE80.DTE2 _applicationObject = GetDTE2();
-            EnvDTE.Projects projects = _applicationObject.Solution.Projects;
-            for (int i = 1; i < projects.Count + 1; i++)
+            var target = _applicationObject.Solution.SolutionBuild.StartupProjects;
+            var projects = _applicationObject.Solution.Projects;
+
+            if (target != null && target is Array arr && arr.Length != 0 && arr.GetValue(0) is string targetStr)
             {
-                var proj = projects.Item(i);
-                if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
+                for (int i = 0; i < projects.Count; i++)
                 {
-                    foreach (ProjectItem file in proj.ProjectItems)
+                    var proj = projects.Item(i + 1);
+                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID) && proj.UniqueName == targetStr)
                     {
-                        string filePath = file.Properties.Item("FullPath").Value.ToString();
-                        if (filePath == item)
-                            return true;
+                        foreach (ProjectItem file in proj.ProjectItems)
+                        {
+                            string filePath = file.Properties.Item("FullPath").Value.ToString();
+                            if (filePath == item)
+                                return true;
+                        }
                     }
                 }
             }
+
             return false;
         }
 
@@ -171,12 +178,22 @@ namespace PDDLTools.Helpers
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
             EnvDTE80.DTE2 _applicationObject = GetDTE2();
-            var projects = _applicationObject.ActiveSolutionProjects;
-            if (projects != null)
-                if (projects is Array arr && arr.Length > 0 && arr.GetValue(0) is EnvDTE.Project proj)
-                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
-                        return true;
+            var projects = _applicationObject.Solution.SolutionBuild.StartupProjects;
+            if (projects != null && projects is Array arr && arr.Length != 0 && arr.GetValue(0) is string proj)
+                if (proj.ToUpper().EndsWith(".PDDLPROJ"))
+                    return true;
             return false;
+        }
+
+        public static async Task<string> GetActiveProjectNameAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            var projects = _applicationObject.Solution.SolutionBuild.StartupProjects;
+            if (projects != null && projects is Array arr && arr.Length != 0 && arr.GetValue(0) is string proj)
+                return new FileInfo(proj).Name;
+            return "None";
         }
 
         public static async Task<List<string>> GetAllFilesInPDDLProjectsAsync()
@@ -186,12 +203,15 @@ namespace PDDLTools.Helpers
             List<string> retFiles = new List<string>();
 
             EnvDTE80.DTE2 _applicationObject = GetDTE2();
-            var projects = _applicationObject.ActiveSolutionProjects;
-            if (projects != null)
+            var target = _applicationObject.Solution.SolutionBuild.StartupProjects;
+            var projects = _applicationObject.Solution.Projects;
+
+            if (target != null && target is Array arr && arr.Length != 0 && arr.GetValue(0) is string targetStr)
             {
-                if (projects is Array arr && arr.Length > 0 && arr.GetValue(0) is EnvDTE.Project proj)
+                for (int i = 0; i < projects.Count; i++)
                 {
-                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID))
+                    var proj = projects.Item(i + 1);
+                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID) && proj.UniqueName == targetStr)
                     {
                         foreach (ProjectItem file in proj.ProjectItems)
                         {

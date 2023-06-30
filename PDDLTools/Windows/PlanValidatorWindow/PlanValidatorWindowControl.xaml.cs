@@ -42,8 +42,14 @@ namespace PDDLTools.Windows.PlanValidatorWindow
                 MainGrid.Opacity = 1;
                 IsVALFoundLabel.Visibility = Visibility.Hidden;
 
-                SelectedDomainFileLabel.Text = SelectDomainCommand.SelectedDomainPath;
-                SelectedProblemFileLabel.Text = SelectProblemCommand.SelectedProblemPath;
+                var proj = await PDDLProjectManager.GetCurrentProjectAsync();
+                if (proj != null)
+                {
+                    if (PDDLHelper.IsFileDomain(await proj.GetSelectedDomainAsync()))
+                        SelectedDomainFileLabel.Text = await proj.GetSelectedDomainAsync();
+                    if (PDDLHelper.IsFileProblem(await proj.GetSelectedProblemAsync()))
+                        SelectedProblemFileLabel.Text = await proj.GetSelectedProblemAsync();
+                }
 
                 await DoCheckVALAsync();
             }

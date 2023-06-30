@@ -20,6 +20,7 @@ using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.IO;
 using PDDLParser.Helpers;
+using PDDLTools.Projects;
 
 namespace PDDLTools.Commands
 {
@@ -27,9 +28,8 @@ namespace PDDLTools.Commands
     {
         public override int CommandId { get; } = 265;
         public static SelectProblemCommand Instance { get; internal set; }
-        public static string SelectedProblemPath { get; internal set; } = "";
 
-        private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
+        private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {
         }
 
@@ -41,24 +41,32 @@ namespace PDDLTools.Commands
         public override async void CheckQueryStatus(object sender, EventArgs e)
         {
             if (sender is MenuCommand button)
-                button.Visible = await DTE2Helper.IsActiveProjectPDDLProjectAsync();
+                button.Enabled = await DTE2Helper.IsActiveProjectPDDLProjectAsync();
         }
 
+        private string _tempSelect = "";
         public override async Task ExecuteAsync(object sender, EventArgs e)
         {
-            OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
-            if (eventArgs.InValue != null)
+            var proj = await PDDLProjectManager.GetCurrentProjectAsync();
+            if (proj != null)
             {
-                if (eventArgs.InValue is string selected)
-                    if (PDDLHelper.IsFileProblem(selected))
-                        SelectedProblemPath = selected;
-            }
-            if (eventArgs.OutValue != null && SelectedProblemPath != "")
-            {
-                IntPtr pOutValue = eventArgs.OutValue;
-                if (pOutValue != IntPtr.Zero)
+                OleMenuCmdEventArgs eventArgs = e as OleMenuCmdEventArgs;
+                if (eventArgs.InValue != null)
                 {
-                    Marshal.GetNativeVariantForObject(new FileInfo(SelectedProblemPath).Name, pOutValue);
+                    if (eventArgs.InValue is string selected)
+                    {
+                        if (PDDLHelper.IsFileProblem(selected))
+                        {
+                            await proj.SetSelectedProblemAsync(selected);
+                            _tempSelect = new FileInfo(selected).Name;
+                        }
+                    }
+                }
+                if (eventArgs.OutValue != null)
+                {
+                    IntPtr pOutValue = eventArgs.OutValue;
+                    if (pOutValue != IntPtr.Zero)
+                        Marshal.GetNativeVariantForObject(_tempSelect, pOutValue);
                 }
             }
         }
