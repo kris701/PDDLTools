@@ -14,6 +14,9 @@
 			<Group guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" priority="0x0600">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
 			</Group>
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsCodeContextMenuGroup" priority="0x0600">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
+			</Group>
 		</Groups>
 
 		<Menus>
@@ -124,7 +127,7 @@
 				</Strings>
 			</Button>
 
-			<!--Context Menu-->
+			<!--Solution Explore Context Menu-->
 			<Button guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" priority="0x0100" type="Button">
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
@@ -169,8 +172,24 @@
 					<ButtonText>Send to VAL</ButtonText>
 				</Strings>
 			</Button>
+			
+			<!--Code Context Menu-->
+			<Button guid="PDDLCommandSetGuid" id="RenameCodeCommandID" priority="0x0100" type="Button">
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<Strings>
+					<ButtonText>Rename</ButtonText>
+				</Strings>
+			</Button>
 		</Buttons>		
 	</Commands>
+
+	<KeyBindings>
+		<KeyBinding guid="PDDLCommandSetGuid"
+					id="RenameCodeCommandID"
+					editor="guidVSStd97"
+					key1="R" mod1="Control" key2="R" mod2="Control" />
+	</KeyBindings>
 
 	<VisibilityConstraints>
 		<VisibilityItem guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" context="PDDLPackageGuid" />
@@ -223,8 +242,8 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectEngineCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" />
 		</CommandPlacement>
-		
-		<!--Context Menu-->
+
+		<!--Solution Explore Context Menu-->
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" priority="0x103">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
 		</CommandPlacement>
@@ -245,6 +264,11 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SendPlanToValidatorCtxCommandId" priority="0x108">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
 		</CommandPlacement>
+
+		<!--Code Context Menu-->
+		<CommandPlacement guid="PDDLCommandSetGuid" id="RenameCodeCommandID" priority="0x001">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsCodeContextMenuGroup" />
+		</CommandPlacement>
 	</CommandPlacements>
 	
 	<Symbols>
@@ -255,6 +279,10 @@
 			<IDSymbol name="PDDLToolsMenuGroup" value="0x1020" />
 			<IDSymbol name="PDDLToolsToolbarGroup" value="0x1021" />
 			<IDSymbol name="PDDLToolsContextMenuGroup" value="0x1022" />
+			<IDSymbol name="PDDLToolsCodeContextMenuGroup" value="0x1023" />
+			
+			<IDSymbol name="PDDLToolsMenu" value="0x1024" />
+			<IDSymbol name="PDDLToolsToolbar" value="0x1025" />
 
 			<IDSymbol name="SelectDomainFileCommandID" value="257" />
 			<IDSymbol name="SelectDomainFileCtxCommandID" value="272" />
@@ -284,8 +312,8 @@
 			<IDSymbol name="SendProblemToValidatorCtxCommandId" value="275" />
 			<IDSymbol name="SendPlanToValidatorCtxCommandId" value="276" />
 			
-			<IDSymbol name="PDDLToolsMenu" value="0x1023" />
-			<IDSymbol name="PDDLToolsToolbar" value="0x1024" />
+			<IDSymbol name="RenameCodeCommandID" value="277" />
+		
 		</GuidSymbol>
 
 		<GuidSymbol value="{ff48a4e6-0aab-49a4-987a-0a3ed7ff4d23}" name="GithubImageGuid">

@@ -25,6 +25,7 @@ namespace PDDLParser.Models.Domain
         public Dictionary<string, List<string>> PredicateTypeTable { get; internal set; }
         public Dictionary<string, List<string>> TypesTable { get; internal set; }
 
+        public bool ContainsType(TypeNameDecl typeName) => ContainsType(typeName.Name);
         public bool ContainsType(string typeName)
         {
             if (TypesTable == null)
@@ -36,6 +37,7 @@ namespace PDDLParser.Models.Domain
                     return true;
             return false;
         }
+        public bool IsTypeOrSubType(TypeNameDecl typeName, TypeNameDecl targetType) => IsTypeOrSubType(typeName.Name, targetType.Name);
         public bool IsTypeOrSubType(string typeName, string targetType)
         {
             if (typeName == targetType)
@@ -48,6 +50,24 @@ namespace PDDLParser.Models.Domain
             }
 
             return false;
+        }
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+
+            res.AddRange(Name.FindName(name));
+            res.AddRange(Requirements.FindName(name));
+            res.AddRange(Extends.FindName(name));
+            res.AddRange(Timeless.FindName(name));
+            res.AddRange(Types.FindName(name));
+            res.AddRange(Constants.FindName(name));
+            res.AddRange(Predicates.FindName(name));
+            foreach(var act in Actions)
+                res.AddRange(act.FindName(name));
+            foreach(var axi in Axioms)
+                res.AddRange(axi.FindName(name));
+
+            return res;
         }
 
         public DomainDecl(ASTNode node) : base(node) {

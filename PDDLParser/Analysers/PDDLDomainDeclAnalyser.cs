@@ -253,7 +253,7 @@ namespace PDDLParser.Analysers
                 List<string> declaredSuperTypes = new List<string>();
                 foreach (var typeDecl in domain.Types.Types)
                 {
-                    if (declaredSuperTypes.Contains(typeDecl.TypeName))
+                    if (declaredSuperTypes.Contains(typeDecl.TypeName.Name))
                     {
                         listener.AddError(new ParseError(
                             $"Multiple declarations of super types with the same name '{typeDecl.TypeName}'",
@@ -262,11 +262,11 @@ namespace PDDLParser.Analysers
                             typeDecl.Line,
                             typeDecl.Character));
                     }
-                    declaredSuperTypes.Add(typeDecl.TypeName);
+                    declaredSuperTypes.Add(typeDecl.TypeName.Name);
 
                     foreach (var typeName in typeDecl.SubTypes)
                     {
-                        if (declaredSubTypes.Contains(typeName))
+                        if (declaredSubTypes.Contains(typeName.Name))
                         {
                             listener.AddError(new ParseError(
                                 $"Multiple declarations of sub types with the same name '{typeName}'",
@@ -275,7 +275,7 @@ namespace PDDLParser.Analysers
                                 typeDecl.Line,
                                 typeDecl.Character));
                         }
-                        declaredSubTypes.Add(typeName);
+                        declaredSubTypes.Add(typeName.Name);
                     }
                 }
             }
@@ -287,7 +287,7 @@ namespace PDDLParser.Analysers
             {
                 foreach (var typeDecl in domain.Types.Types)
                 {
-                    if (domain.TypesTable.ContainsKey(typeDecl.TypeName))
+                    if (domain.TypesTable.ContainsKey(typeDecl.TypeName.Name))
                     {
                         listener.AddError(new ParseError(
                             $"Multiply defined types!",
@@ -297,7 +297,12 @@ namespace PDDLParser.Analysers
                             typeDecl.Character));
                     }
                     else
-                        domain.TypesTable.Add(typeDecl.TypeName, typeDecl.SubTypes);
+                    {
+                        var directName = new List<string>();
+                        foreach (var typeName in typeDecl.SubTypes)
+                            directName.Add(typeName.Name);
+                        domain.TypesTable.Add(typeDecl.TypeName.Name, directName);
+                    }
                 }
             }
             if (!domain.TypesTable.ContainsKey(""))
@@ -312,7 +317,7 @@ namespace PDDLParser.Analysers
                 {
                     var argTypeList = new List<string>();
                     foreach (var arg in pred.Arguments)
-                        argTypeList.Add(arg.Type);
+                        argTypeList.Add(arg.Type.Name);
                     if (domain.PredicateTypeTable.ContainsKey(pred.Name))
                     {
                         listener.AddError(new ParseError(
@@ -334,7 +339,7 @@ namespace PDDLParser.Analysers
                 {
                     foreach(var arg in predicate.Arguments)
                     {
-                        if (!domain.ContainsType(arg.Type))
+                        if (!domain.ContainsType(arg.Type.Name))
                         {
                             listener.AddError(new ParseError(
                                 $"Predicate arguments contains unknown type!",
@@ -355,7 +360,7 @@ namespace PDDLParser.Analysers
                 {
                     foreach(var param in act.Parameters)
                     {
-                        if (!domain.ContainsType(param.Type))
+                        if (!domain.ContainsType(param.Type.Name))
                         {
                             listener.AddError(new ParseError(
                                 $"Parameter contains unknow type!",
@@ -379,7 +384,7 @@ namespace PDDLParser.Analysers
                 {
                     foreach (var param in axi.Vars)
                     {
-                        if (!domain.ContainsType(param.Type))
+                        if (!domain.ContainsType(param.Type.Name))
                         {
                             listener.AddError(new ParseError(
                                 $"Parameter contains unknow type!",
@@ -416,7 +421,7 @@ namespace PDDLParser.Analysers
                 int index = 0;
                 foreach(var arg in pred.Arguments)
                 {
-                    if (!IsTypeOrSubType(arg.Type, predicateTypeTable[pred.Name][index], typesTable))
+                    if (!IsTypeOrSubType(arg.Type.Name, predicateTypeTable[pred.Name][index], typesTable))
                     {
                         listener.AddError(new ParseError(
                             $"Predicate has an invalid argument type! Expected a '{predicateTypeTable[pred.Name][index]}' but got a '{arg.Type}'",
@@ -435,7 +440,7 @@ namespace PDDLParser.Analysers
             {
                 foreach(var cons in domain.Constants.Constants)
                 {
-                    if (!domain.ContainsType(cons.Type))
+                    if (!domain.ContainsType(cons.Type.Name))
                     {
                         listener.AddError(new ParseError(
                             $"Constant contains unknown type!",
@@ -607,7 +612,7 @@ namespace PDDLParser.Analysers
                         any = true;
                         for (int i = 0; i < predicate.Arguments.Count; i++)
                         {
-                            if (!IsTypeOrSubType(pred.Arguments[i].Type, predicate.Arguments[i].Type, typeTable))
+                            if (!IsTypeOrSubType(pred.Arguments[i].Type.Name, predicate.Arguments[i].Type.Name, typeTable))
                             {
                                 wasTypeMissmatch = true;
                                 any = false;

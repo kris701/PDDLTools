@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PDDLParser.Models
 {
@@ -21,6 +22,14 @@ namespace PDDLParser.Models
         public override string ToString()
         {
             return $"(or {Option1} {Option2})";
+        }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            res.AddRange(Option1.FindName(name));
+            res.AddRange(Option2.FindName(name));
+            return res;
         }
     }
 }

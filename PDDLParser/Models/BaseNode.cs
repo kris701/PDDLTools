@@ -22,5 +22,7 @@ namespace PDDLParser.Models
                 Character = node.Character;
             }
         }
+
+        public abstract List<INode> FindName(string name);
     }
 }

@@ -9,10 +9,10 @@ namespace PDDLParser.Models.Domain
 {
     public class TypeDecl : BaseNode, IDecl
     {
-        public string TypeName { get; set; }
-        public List<string> SubTypes { get; set; }
+        public TypeNameDecl TypeName { get; set; }
+        public List<TypeNameDecl> SubTypes { get; set; }
 
-        public TypeDecl(ASTNode node, string name, List<string> subTypes) : base(node)
+        public TypeDecl(ASTNode node, TypeNameDecl name, List<TypeNameDecl> subTypes) : base(node)
         {
             TypeName = name;
             SubTypes = subTypes;
@@ -24,6 +24,15 @@ namespace PDDLParser.Models.Domain
             foreach (var subType in SubTypes)
                 retStr += $"{subType} ";
             return $"{retStr} - {TypeName}";
+        }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            res.AddRange(TypeName.FindName(name));
+            foreach (var subtype in SubTypes)
+                res.AddRange(subtype.FindName(name));
+            return res;
         }
     }
 }

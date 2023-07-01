@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PDDLParser.Models.Domain
 {
@@ -22,6 +23,14 @@ namespace PDDLParser.Models.Domain
             foreach (var type in Extends)
                 retStr += $" {type}{Environment.NewLine}";
             return $"(:extends{retStr})";
+        }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            foreach (var extend in Extends)
+                res.AddRange(extend.FindName(name));
+            return res;
         }
     }
 }

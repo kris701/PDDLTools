@@ -44,11 +44,11 @@ namespace PDDLParser.Visitors
                     {
                         var left = typeDec.Substring(0, typeDec.IndexOf(ASTTokens.TypeToken));
                         var right = typeDec.Substring(typeDec.IndexOf(ASTTokens.TypeToken) + 3);
-                        List<string> subTypes = new List<string>();
+                        List<TypeNameDecl> subTypes = new List<TypeNameDecl>();
                         foreach (var subType in left.Split(' '))
                             if (subType != "")
-                                subTypes.Add(subType);
-                        types.Add(new TypeDecl(node, right, subTypes));
+                                subTypes.Add(new TypeNameDecl(node, subType));
+                        types.Add(new TypeDecl(node, new TypeNameDecl(node, right), subTypes));
                     }
                 }
                 return new TypesDecl(node, types);

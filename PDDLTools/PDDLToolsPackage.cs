@@ -22,6 +22,7 @@ using PDDLTools.Projects;
 using PDDLTools.Helpers;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
+using PDDLTools.Windows.RenameCodeWindow;
 
 namespace PDDLTools
 {
@@ -49,6 +50,7 @@ namespace PDDLTools
     [ProvideToolWindow(typeof(SASSolutionWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(PDDLVisualiserWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(WelcomeWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
+    [ProvideToolWindow(typeof(RenameCodeWindow), Transient = true, Style = VsDockStyle.Float, Width = 300, Height = 500)]
     public sealed class PDDLToolsPackage : AsyncPackage
     {
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
@@ -86,6 +88,8 @@ namespace PDDLTools
 
             await FDReportCommand.InitializeAsync(this);
             await SASVisualiserCommand.InitializeAsync(this);
+
+            await RenameCodeCommand.InitializeAsync(this);
 
             new FastDownwardErrorManager(this);
 

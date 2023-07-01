@@ -16,5 +16,18 @@ namespace PDDLParser.Models.Problem
         public GoalDecl Goal { get; set; }
 
         public ProblemDecl(ASTNode node) : base(node) { }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+
+            res.AddRange(Name.FindName(name));
+            res.AddRange(DomainName.FindName(name));
+            res.AddRange(Objects.FindName(name));
+            res.AddRange(Init.FindName(name));
+            res.AddRange(Goal.FindName(name));
+
+            return res;
+        }
     }
 }

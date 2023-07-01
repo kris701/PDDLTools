@@ -55,6 +55,7 @@
     <Compile Include="Contextualisers\PDDLDomainDeclContextualiser.cs" />
     <Compile Include="Contextualisers\PDDLProblemDeclContextualiser.cs" />
     <Compile Include="Helpers\PDDLHelper.cs" />
+    <Compile Include="Helpers\PDDLSearcher.cs" />
     <Compile Include="IPDDLParser.cs" />
     <Compile Include="Models\BaseNode.cs" />
     <Compile Include="Models\Domain\ActionDecl.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Models\Domain\DomainNameDecl.cs" />
     <Compile Include="Models\Domain\ExtendsDecl.cs" />
     <Compile Include="Models\Domain\TimelessDecl.cs" />
+    <Compile Include="Models\Domain\TypeNameDecl.cs" />
     <Compile Include="Models\IDecl.cs" />
     <Compile Include="Models\IExp.cs" />
     <Compile Include="Models\INode.cs" />

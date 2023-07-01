@@ -52,7 +52,7 @@ namespace PDDLTools.Tagger
 
             if (!point.HasValue)
                 return;
-
+            
             // If the new caret position is still within the current word (and on the same snapshot), we don't need to check it 
             if (CurrentWord.HasValue
                 && CurrentWord.Value.Snapshot == View.TextSnapshot

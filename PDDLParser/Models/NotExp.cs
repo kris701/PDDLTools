@@ -20,5 +20,10 @@ namespace PDDLParser.Models
         {
             return $"(not {Child})";
         }
+
+        public override List<INode> FindName(string name)
+        {
+            return Child.FindName(name);
+        }
     }
 }

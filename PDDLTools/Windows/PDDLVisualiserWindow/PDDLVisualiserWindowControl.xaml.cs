@@ -97,7 +97,6 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
                     ILocationSpreader spreader = new RandomSpreader();
                     var locs = spreader.GenerateSuitableLocations((int)MainGrid.ActualWidth, (int)MainGrid.ActualHeight, locCounter, 50);
 
-                    int index = 0;
                     if (decl.Domain.Predicates != null)
                     {
                         foreach (var pred in decl.Domain.Predicates.Predicates)

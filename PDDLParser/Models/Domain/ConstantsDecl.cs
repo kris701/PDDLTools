@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PDDLParser.Models.Domain
 {
@@ -22,6 +24,14 @@ namespace PDDLParser.Models.Domain
             foreach (var type in Constants)
                 retStr += $" {type}{Environment.NewLine}";
             return $"(:constants{retStr})";
+        }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            foreach (var cons in Constants)
+                res.AddRange(cons.FindName(name));
+            return res;
         }
     }
 }

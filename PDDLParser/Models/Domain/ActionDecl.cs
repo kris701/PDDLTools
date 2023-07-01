@@ -22,5 +22,17 @@ namespace PDDLParser.Models.Domain
             Preconditions = preconditions;
             Effects = effects;
         }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            if (Name == name)
+                res.Add(this);
+            foreach (var param in Parameters)
+                res.AddRange(param.FindName(name));
+            res.AddRange(Preconditions.FindName(name));
+            res.AddRange(Effects.FindName(name));
+            return res;
+        }
     }
 }

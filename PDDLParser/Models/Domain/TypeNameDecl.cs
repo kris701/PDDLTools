@@ -7,18 +7,33 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class DomainNameDecl : BaseNode, IDecl
+    public class TypeNameDecl : BaseNode, IExp
     {
         public string Name { get; set; }
 
-        public DomainNameDecl(ASTNode node, string name) : base(node)
+        public TypeNameDecl(ASTNode node, string name) : base(node)
         {
             Name = name;
         }
 
         public override string ToString()
         {
-            return $"(domain {Name})";
+            return Name;
+        }
+
+        public override int GetHashCode()
+        {
+            int hash = Name.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is TypeNameDecl exp)
+            {
+                return exp.GetHashCode() == GetHashCode();
+            }
+            return false;
         }
 
         public override List<INode> FindName(string name)

@@ -50,5 +50,15 @@ namespace PDDLParser.Models
                 copyNames.Add(new NameExp(new ASTNode(arg.Character, arg.Line, ""), arg.Name));
             return new PredicateExp(new ASTNode(Character, Line, ""), Name, copyNames);
         }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            if (Name == name)
+                res.Add(this);
+            foreach (var arg in Arguments)
+                res.AddRange(arg.FindName(name));
+            return res;
+        }
     }
 }

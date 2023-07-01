@@ -10,5 +10,7 @@ namespace PDDLParser.Models
     {
         int Character { get; set; }
         int Line { get; set; }
+
+        List<INode> FindName(string name);
     }
 }

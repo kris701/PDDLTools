@@ -20,5 +20,12 @@ namespace PDDLParser.Models.Problem
         {
             return $"(problem {Name})";
         }
+
+        public override List<INode> FindName(string name)
+        {
+            if (Name == name)
+                return new List<INode>() { this };
+            return new List<INode>();
+        }
     }
 }

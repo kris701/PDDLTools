@@ -23,5 +23,13 @@ namespace PDDLParser.Models.Domain
                 reqStr += $" {requirement}";
             return $"(:requirements{reqStr})";
         }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            foreach (var requirement in Requirements)
+                res.AddRange(requirement.FindName(name));
+            return res;
+        }
     }
 }

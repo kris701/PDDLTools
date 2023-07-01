@@ -23,5 +23,13 @@ namespace PDDLParser.Models
                 retStr += $" {type}{Environment.NewLine}";
             return $"(and{retStr})";
         }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            foreach (var child in Children)
+                res.AddRange(child.FindName(name));
+            return res;
+        }
     }
 }

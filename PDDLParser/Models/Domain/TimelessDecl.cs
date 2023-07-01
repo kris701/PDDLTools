@@ -23,5 +23,13 @@ namespace PDDLParser.Models.Domain
                 retStr += $" {type}{Environment.NewLine}";
             return $"(:timeless{retStr})";
         }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            foreach (var item in Items)
+                res.AddRange(item.FindName(name));
+            return res;
+        }
     }
 }

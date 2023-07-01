@@ -23,5 +23,13 @@ namespace PDDLParser.Models.Problem
                 retStr += $" {type}{Environment.NewLine}";
             return $"(:objects{retStr})";
         }
+
+        public override List<INode> FindName(string name)
+        {
+            List<INode> res = new List<INode>();
+            foreach (var obj in Objs)
+                res.AddRange(obj.FindName(name));
+            return res;
+        }
     }
 }

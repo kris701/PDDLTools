@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PDDLParser.Models.Domain;
 
 namespace PDDLParser.Visitors
 {
@@ -77,7 +78,7 @@ namespace PDDLParser.Visitors
                         node.Character));
                 }
 
-                return new NameExp(node, left.Replace("?", ""), right);
+                return new NameExp(node, left.Replace("?", ""), new TypeNameDecl(node, right));
             } 
             else
             {
