@@ -22,12 +22,12 @@ namespace PDDLParser.Models
         public NameExp(ASTNode node, string name) : base(node) 
         {
             Name = name;
-            Type = null;
+            Type = new TypeNameDecl(node, "");
         }
 
         public override string ToString()
         {
-            if (Type == null)
+            if (Type.Name == "")
                 return $"({Name})";
             else
                 return $"({Name} - {Type})";
@@ -53,11 +53,11 @@ namespace PDDLParser.Models
             return new NameExp(new ASTNode(Character, Line, ""), Name, Type);
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
             if (Name == name)
-                return new List<INode>() { this };
-            return new List<INode>();
+                return new HashSet<INode>() { this };
+            return new HashSet<INode>();
         }
     }
 }

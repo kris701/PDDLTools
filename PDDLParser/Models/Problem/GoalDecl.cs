@@ -32,9 +32,21 @@ namespace PDDLParser.Models.Problem
             return $"(:goal {GoalExp})";
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
             return GoalExp.FindName(name);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() + GoalExp.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is GoalDecl exp)
+                return exp.GetHashCode() == GetHashCode();
+            return false;
         }
     }
 }

@@ -23,24 +23,21 @@ namespace PDDLParser.Models.Domain
 
         public override int GetHashCode()
         {
-            int hash = Name.GetHashCode();
-            return hash;
+            return base.GetHashCode() + Name.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
             if (obj is TypeNameDecl exp)
-            {
                 return exp.GetHashCode() == GetHashCode();
-            }
             return false;
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
             if (Name == name)
-                return new List<INode>() { this };
-            return new List<INode>();
+                return new HashSet<INode>() { this };
+            return new HashSet<INode>();
         }
     }
 }

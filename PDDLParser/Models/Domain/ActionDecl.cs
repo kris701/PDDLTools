@@ -1,7 +1,9 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,9 +25,9 @@ namespace PDDLParser.Models.Domain
             Effects = effects;
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
             if (Name == name)
                 res.Add(this);
             foreach (var param in Parameters)
@@ -33,6 +35,24 @@ namespace PDDLParser.Models.Domain
             res.AddRange(Preconditions.FindName(name));
             res.AddRange(Effects.FindName(name));
             return res;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = base.GetHashCode();
+            hash *= Name.GetHashCode();
+            foreach (var param in Parameters)
+                hash *= param.GetHashCode();
+            hash *= Preconditions.GetHashCode();
+            hash *= Effects.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ActionDecl exp)
+                return exp.GetHashCode() == GetHashCode();
+            return false;
         }
     }
 }

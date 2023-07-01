@@ -9,16 +9,10 @@ namespace PDDLParser.Helpers
 {
     public static class PDDLSearcher
     {
-        public static INode GetNodeNearestPosition(PDDLDecl decl, int position)
+        public static void AddRange<T>(this HashSet<T> set, HashSet<T> other)
         {
-            INode lastValid = null;
-            if (decl.Domain != null)
-            {
-                lastValid = decl.Domain;
-                if (decl.Domain.Character < position)
-                    return decl.Domain;
-            }
-            return null;
+            foreach (var item in other)
+                set.Add(item);
         }
     }
 }

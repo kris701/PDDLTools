@@ -21,9 +21,23 @@ namespace PDDLParser.Models
             return $"(not {Child})";
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
             return Child.FindName(name);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() * Child.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is NotExp exp)
+            {
+                return exp.GetHashCode() == GetHashCode();
+            }
+            return false;
         }
     }
 }

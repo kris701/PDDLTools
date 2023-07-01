@@ -16,6 +16,7 @@ using System.Windows.Forms;
 using Microsoft.VisualStudio.Text.Operations;
 using PDDLTools.ContextStorage;
 using PDDLParser.Helpers;
+using PDDLParser.Models;
 
 namespace PDDLTools.Commands
 {
@@ -51,12 +52,20 @@ namespace PDDLTools.Commands
                     if (PDDLHelper.IsFileDomain(currentFile))
                     {
                         var domainContext = PDDLFileContexts.GetDomainContextForFile(currentFile);
-                        bool isSelectionValid = true;
-                        
+                        var node = GetValidNodeFromWord(domainContext, document, word.Value.GetText());
+                        if (node != null)
+                        {
 
-                    } else if (PDDLHelper.IsFileProblem(currentFile))
+                        }
+                    } 
+                    else if (PDDLHelper.IsFileProblem(currentFile))
                     {
                         var problemContext = PDDLFileContexts.GetProblemContextForFile(currentFile);
+                        var node = GetValidNodeFromWord(problemContext, document, word.Value.GetText());
+                        if (node != null)
+                        {
+
+                        }
                     }
                 }
             }
@@ -102,6 +111,32 @@ namespace PDDLTools.Commands
         {
             return word.IsSignificant
                 && currentRequest.Snapshot.GetText(word.Span).Any(c => char.IsLetter(c));
+        }
+
+        private INode GetValidNodeFromWord(INode source, IWpfTextView document, string word)
+        {
+            var possibleNodes = source.FindName(word);
+            if (possibleNodes.Count > 0)
+            {
+                int simpleCursorPosition = document.Caret.Position.BufferPosition.Position;
+                INode targetNode = possibleNodes.First();
+                int shortestDist = Math.Abs(targetNode.Character - simpleCursorPosition);
+                foreach (var node in possibleNodes.Skip(1))
+                {
+                    var dist = Math.Abs(node.Character - simpleCursorPosition);
+                    if (dist < shortestDist)
+                    {
+                        shortestDist = dist;
+                        targetNode = node;
+                    }
+                }
+
+                if (targetNode is PredicateExp || targetNode is NameExp)
+                {
+                    return targetNode;
+                }
+            }
+            return null;
         }
     }
 }

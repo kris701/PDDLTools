@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +23,31 @@ namespace PDDLParser.Models.Domain
             Implies = implies;
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
             foreach (var var in Vars)
                 res.AddRange(var.FindName(name));
             res.AddRange(Context.FindName(name));
             res.AddRange(Implies.FindName(name));
             return res;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = base.GetHashCode();
+            foreach (var var in Vars)
+                hash *= var.GetHashCode();
+            hash *= Context.GetHashCode();
+            hash *= Implies.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is AxiomDecl exp)
+                return exp.GetHashCode() == GetHashCode();
+            return false;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +18,47 @@ namespace PDDLParser.Models.Problem
 
         public ProblemDecl(ASTNode node) : base(node) { }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
 
-            res.AddRange(Name.FindName(name));
-            res.AddRange(DomainName.FindName(name));
-            res.AddRange(Objects.FindName(name));
-            res.AddRange(Init.FindName(name));
-            res.AddRange(Goal.FindName(name));
+            if (Name != null)
+                res.AddRange(Name.FindName(name));
+            if (DomainName != null)
+                res.AddRange(DomainName.FindName(name));
+            if (Objects != null)
+                res.AddRange(Objects.FindName(name));
+            if (Init != null)
+                res.AddRange(Init.FindName(name));
+            if (Goal != null)
+                res.AddRange(Goal.FindName(name));
 
             return res;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = base.GetHashCode();
+            if (Name != null)
+                hash *= Name.GetHashCode();
+            if (DomainName != null)
+                hash *= DomainName.GetHashCode();
+            if (Objects != null)
+                hash *= Objects.GetHashCode();
+            if (Init != null)
+                hash *= Init.GetHashCode();
+            if (Goal != null)
+                hash *= Goal.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ProblemDecl exp)
+            {
+                return exp.GetHashCode() == GetHashCode();
+            }
+            return false;
         }
     }
 }

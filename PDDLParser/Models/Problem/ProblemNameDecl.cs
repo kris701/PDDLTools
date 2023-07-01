@@ -21,11 +21,25 @@ namespace PDDLParser.Models.Problem
             return $"(problem {Name})";
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
             if (Name == name)
-                return new List<INode>() { this };
-            return new List<INode>();
+                return new HashSet<INode>() { this };
+            return new HashSet<INode>();
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() * Name.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ProblemNameDecl exp)
+            {
+                return exp.GetHashCode() == GetHashCode();
+            }
+            return false;
         }
     }
 }

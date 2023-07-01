@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,12 +26,27 @@ namespace PDDLParser.Models.Domain
             return $"(:extends{retStr})";
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
             foreach (var extend in Extends)
                 res.AddRange(extend.FindName(name));
             return res;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = base.GetHashCode();
+            foreach(var extend in Extends)
+                hash *= extend.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ExtendsDecl exp)
+                return exp.GetHashCode() == GetHashCode();
+            return false;
         }
     }
 }

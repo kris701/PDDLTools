@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,13 +27,28 @@ namespace PDDLParser.Models.Domain
             return $"{retStr} - {TypeName}";
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
             res.AddRange(TypeName.FindName(name));
             foreach (var subtype in SubTypes)
                 res.AddRange(subtype.FindName(name));
             return res;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = base.GetHashCode() + TypeName.GetHashCode();
+            foreach (var type in SubTypes)
+                hash *= type.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is TypeDecl exp)
+                return exp.GetHashCode() == GetHashCode();
+            return false;
         }
     }
 }

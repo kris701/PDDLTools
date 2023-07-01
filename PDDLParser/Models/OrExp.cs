@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +25,26 @@ namespace PDDLParser.Models
             return $"(or {Option1} {Option2})";
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
             res.AddRange(Option1.FindName(name));
             res.AddRange(Option2.FindName(name));
             return res;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode() * Option1.GetHashCode() * Option2.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is OrExp exp)
+            {
+                return exp.GetHashCode() == GetHashCode();
+            }
+            return false;
         }
     }
 }

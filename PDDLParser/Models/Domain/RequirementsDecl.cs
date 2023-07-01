@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +25,27 @@ namespace PDDLParser.Models.Domain
             return $"(:requirements{reqStr})";
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
             foreach (var requirement in Requirements)
                 res.AddRange(requirement.FindName(name));
             return res;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = base.GetHashCode();
+            foreach (var req in Requirements)
+                hash *= req.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is RequirementsDecl exp)
+                return exp.GetHashCode() == GetHashCode();
+            return false;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace PDDLParser.Models
 
         public override int GetHashCode()
         {
-            int hash = Name.GetHashCode();
+            int hash = Name.GetHashCode() + base.GetHashCode();
             foreach(var  arg in Arguments)
                 hash *= arg.Name.GetHashCode();
             return hash;
@@ -51,9 +52,9 @@ namespace PDDLParser.Models
             return new PredicateExp(new ASTNode(Character, Line, ""), Name, copyNames);
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
             if (Name == name)
                 res.Add(this);
             foreach (var arg in Arguments)

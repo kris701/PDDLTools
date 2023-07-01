@@ -1,5 +1,6 @@
 ﻿using PDDLParser.AST;
 using PDDLParser.Exceptions;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -51,21 +52,30 @@ namespace PDDLParser.Models.Domain
 
             return false;
         }
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
 
-            res.AddRange(Name.FindName(name));
-            res.AddRange(Requirements.FindName(name));
-            res.AddRange(Extends.FindName(name));
-            res.AddRange(Timeless.FindName(name));
-            res.AddRange(Types.FindName(name));
-            res.AddRange(Constants.FindName(name));
-            res.AddRange(Predicates.FindName(name));
-            foreach(var act in Actions)
-                res.AddRange(act.FindName(name));
-            foreach(var axi in Axioms)
-                res.AddRange(axi.FindName(name));
+            if (Name != null)
+                res.AddRange(Name.FindName(name));
+            if (Requirements != null)
+                res.AddRange(Requirements.FindName(name));
+            if (Extends != null)
+                res.AddRange(Extends.FindName(name));
+            if (Timeless != null)
+                res.AddRange(Timeless.FindName(name));
+            if (Types != null)
+                res.AddRange(Types.FindName(name));
+            if (Constants != null)
+                res.AddRange(Constants.FindName(name));
+            if (Predicates != null)
+                res.AddRange(Predicates.FindName(name));
+            if (Actions != null)
+                foreach(var act in Actions)
+                    res.AddRange(act.FindName(name));
+            if (Axioms != null)
+                foreach(var axi in Axioms)
+                    res.AddRange(axi.FindName(name));
 
             return res;
         }
@@ -73,6 +83,41 @@ namespace PDDLParser.Models.Domain
         public DomainDecl(ASTNode node) : base(node) {
             Actions = new List<ActionDecl>();
             Axioms = new List<AxiomDecl>();
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = base.GetHashCode();
+
+            if (Name != null)
+                hash *= Name.GetHashCode();
+            if (Requirements != null)
+                hash *= Requirements.GetHashCode();
+            if (Extends != null)
+                hash *= Extends.GetHashCode();
+            if (Timeless != null)
+                hash *= Timeless.GetHashCode();
+            if (Types != null)
+                hash *= Types.GetHashCode();
+            if (Constants != null)
+                hash *= Constants.GetHashCode();
+            if (Predicates != null)
+                hash *= Predicates.GetHashCode();
+            if (Actions != null)
+                foreach(var act in Actions)
+                    hash *= act.GetHashCode();
+            if (Axioms != null)
+                foreach(var axi in Axioms)
+                    hash *= axi.GetHashCode();
+
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is DomainDecl exp)
+                return exp.GetHashCode() == GetHashCode();
+            return false;
         }
     }
 }

@@ -23,6 +23,13 @@ namespace PDDLParser.Models
             }
         }
 
-        public abstract List<INode> FindName(string name);
+        public abstract HashSet<INode> FindName(string name);
+
+        public abstract bool Equals(object obj);
+
+        public override int GetHashCode()
+        {
+            return Character.GetHashCode() + Line.GetHashCode();
+        }
     }
 }

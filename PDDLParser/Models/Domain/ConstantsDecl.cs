@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +27,27 @@ namespace PDDLParser.Models.Domain
             return $"(:constants{retStr})";
         }
 
-        public override List<INode> FindName(string name)
+        public override HashSet<INode> FindName(string name)
         {
-            List<INode> res = new List<INode>();
+            HashSet<INode> res = new HashSet<INode>();
             foreach (var cons in Constants)
                 res.AddRange(cons.FindName(name));
             return res;
+        }
+
+        public override int GetHashCode()
+        {
+            var hash = base.GetHashCode();
+            foreach (var constant in Constants)
+                hash *= constant.GetHashCode();
+            return hash;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ConstantsDecl exp)
+                return exp.GetHashCode() == GetHashCode();
+            return false;
         }
     }
 }
