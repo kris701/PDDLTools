@@ -66,10 +66,14 @@ namespace PDDLTools.ErrorList
             {
                 _errorProvider.Tasks.Clear();
                 var file = await DTE2Helper.GetSourceFilePathAsync();
+                int timeout = 0;
                 while (file == null)
                 {
                     await Task.Delay(1000);
                     file = await DTE2Helper.GetSourceFilePathAsync();
+                    timeout++;
+                    if (timeout > 10)
+                        return;
                 }
 
                 var parser = new PDDLParser.PDDLParser();

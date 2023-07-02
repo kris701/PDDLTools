@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.Language.StandardClassification;
 using Microsoft.VisualStudio.Text.Adornments;
 using Newtonsoft.Json;
+using PDDLTools.Helpers;
 using PDDLTools.PDDLInfo.PDDLDefinitionElements;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,8 @@ namespace PDDLTools.PDDLInfo
 
         public static void InitializeInfo()
         {
+            var statusbar = new StatusBarHelper();
+            statusbar.ShowTextAsync("Loading PDDL definition...").Wait();
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "PDDLTools.PDDLInfo.PDDLDefinition.json";
 
@@ -29,7 +32,7 @@ namespace PDDLTools.PDDLInfo
                 string defText = reader.ReadToEnd();
                 PDDLDefinition = JsonConvert.DeserializeObject<PDDLDefinition>(defText);
             }
-
+            statusbar.ClearAsync().Wait();
         }
     }
 }
