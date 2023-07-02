@@ -50,7 +50,7 @@ namespace PDDLTools
     [ProvideToolWindow(typeof(SASSolutionWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(PDDLVisualiserWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
     [ProvideToolWindow(typeof(WelcomeWindow), Transient = true, Style = VsDockStyle.MDI, Width = 1200, Height = 800)]
-    [ProvideToolWindow(typeof(RenameCodeWindow), Transient = true, Style = VsDockStyle.Float, Width = 120, Height = 500)]
+    [ProvideToolWindow(typeof(RenameCodeWindow), Transient = true, Style = VsDockStyle.Float, Width = 500, Height = 120)]
     public sealed class PDDLToolsPackage : AsyncPackage
     {
         protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)

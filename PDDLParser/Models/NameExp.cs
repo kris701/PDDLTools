@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using PDDLParser.Models.Domain;
 using System;
 using System.Collections.Generic;
@@ -53,11 +54,13 @@ namespace PDDLParser.Models
             return new NameExp(new ASTNode(Start, Line, ""), Parent, Name, Type);
         }
 
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
+            var result = new HashSet<INode>();
             if (Name == name)
-                return new HashSet<INode>() { this };
-            return new HashSet<INode>();
+                result.Add(this);
+            result.AddRange(Type.FindNames(name));
+            return result;
         }
     }
 }

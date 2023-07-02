@@ -1,4 +1,5 @@
-﻿using PDDLParser.Models.Domain;
+﻿using PDDLParser.Helpers;
+using PDDLParser.Models.Domain;
 using PDDLParser.Models.Problem;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,16 @@ namespace PDDLParser.Models
         {
             Domain = domain;
             Problem = problem;
+        }
+
+        public HashSet<INode> FindNames(string name)
+        {
+            var matches = new HashSet<INode>();
+            if (Domain != null)
+                matches.AddRange(Domain.FindNames(name));
+            if (Problem != null)
+                matches.AddRange(Problem.FindNames(name));
+            return matches;
         }
     }
 }

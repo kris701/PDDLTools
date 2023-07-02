@@ -25,11 +25,11 @@ namespace PDDLParser.Models.Problem
             return $"(:objects{retStr})";
         }
 
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
             HashSet<INode> res = new HashSet<INode>();
             foreach (var obj in Objs)
-                res.AddRange(obj.FindName(name));
+                res.AddRange(obj.FindNames(name));
             return res;
         }
 

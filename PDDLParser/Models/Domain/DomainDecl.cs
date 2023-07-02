@@ -52,30 +52,30 @@ namespace PDDLParser.Models.Domain
 
             return false;
         }
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
             HashSet<INode> res = new HashSet<INode>();
 
             if (Name != null)
-                res.AddRange(Name.FindName(name));
+                res.AddRange(Name.FindNames(name));
             if (Requirements != null)
-                res.AddRange(Requirements.FindName(name));
+                res.AddRange(Requirements.FindNames(name));
             if (Extends != null)
-                res.AddRange(Extends.FindName(name));
+                res.AddRange(Extends.FindNames(name));
             if (Timeless != null)
-                res.AddRange(Timeless.FindName(name));
+                res.AddRange(Timeless.FindNames(name));
             if (Types != null)
-                res.AddRange(Types.FindName(name));
+                res.AddRange(Types.FindNames(name));
             if (Constants != null)
-                res.AddRange(Constants.FindName(name));
+                res.AddRange(Constants.FindNames(name));
             if (Predicates != null)
-                res.AddRange(Predicates.FindName(name));
+                res.AddRange(Predicates.FindNames(name));
             if (Actions != null)
                 foreach(var act in Actions)
-                    res.AddRange(act.FindName(name));
+                    res.AddRange(act.FindNames(name));
             if (Axioms != null)
                 foreach(var axi in Axioms)
-                    res.AddRange(axi.FindName(name));
+                    res.AddRange(axi.FindNames(name));
 
             return res;
         }

@@ -25,15 +25,15 @@ namespace PDDLParser.Models.Domain
             Effects = effects;
         }
 
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
             HashSet<INode> res = new HashSet<INode>();
             if (Name == name)
                 res.Add(this);
             foreach (var param in Parameters)
-                res.AddRange(param.FindName(name));
-            res.AddRange(Preconditions.FindName(name));
-            res.AddRange(Effects.FindName(name));
+                res.AddRange(param.FindNames(name));
+            res.AddRange(Preconditions.FindNames(name));
+            res.AddRange(Effects.FindNames(name));
             return res;
         }
 

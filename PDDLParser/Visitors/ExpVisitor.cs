@@ -49,12 +49,18 @@ namespace PDDLParser.Visitors
                 DoesNodeHaveSpecificChildCount(node, "predicate", 0, listener);
 
                 var predicateName = node.Content.Split(' ')[0];
-                var newPredicateExp = new PredicateExp(null, parent, predicateName, new List<NameExp>());
+                var newPredicateExp = new PredicateExp(node, parent, predicateName, new List<NameExp>());
 
                 var paramSplit = node.Content.Split(' ');
+                int offset = 0;
                 foreach (var param in paramSplit)
+                {
                     if (param != "" && param != predicateName)
-                        newPredicateExp.Arguments.Add(Visit(new ASTNode(node.Start, node.End, param), newPredicateExp, listener) as NameExp);
+                    {
+                        newPredicateExp.Arguments.Add(Visit(new ASTNode(node.Start + offset, node.End, param), newPredicateExp, listener) as NameExp);
+                    }
+                    offset += param.Length;
+                }
                 return newPredicateExp;
             } 
             else if (node.Content.Contains(ASTTokens.TypeToken))
@@ -84,7 +90,13 @@ namespace PDDLParser.Visitors
                 }
 
                 var newNameExp = new NameExp(node, parent, left.Replace("?",""));
-                newNameExp.Type = new TypeNameDecl(node, newNameExp, right);
+                newNameExp.Type = new TypeNameDecl(
+                    new ASTNode(
+                        node.Start + left.Length + 3, 
+                        node.Start + left.Length + 3 + right.Length, 
+                        right), 
+                    newNameExp, 
+                    right);
                 return newNameExp;
             } 
             else

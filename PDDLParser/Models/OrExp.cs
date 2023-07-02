@@ -25,11 +25,11 @@ namespace PDDLParser.Models
             return $"(or {Option1} {Option2})";
         }
 
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
             HashSet<INode> res = new HashSet<INode>();
-            res.AddRange(Option1.FindName(name));
-            res.AddRange(Option2.FindName(name));
+            res.AddRange(Option1.FindNames(name));
+            res.AddRange(Option2.FindNames(name));
             return res;
         }
 

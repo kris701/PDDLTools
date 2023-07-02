@@ -52,13 +52,13 @@ namespace PDDLParser.Models
             return newPredicateExp;
         }
 
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
             HashSet<INode> res = new HashSet<INode>();
             if (Name == name)
                 res.Add(this);
             foreach (var arg in Arguments)
-                res.AddRange(arg.FindName(name));
+                res.AddRange(arg.FindNames(name));
             return res;
         }
     }

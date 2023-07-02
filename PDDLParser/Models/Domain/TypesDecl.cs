@@ -25,11 +25,11 @@ namespace PDDLParser.Models.Domain
             return $"(:types{retStr})";
         }
 
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
             HashSet<INode> res = new HashSet<INode>();
             foreach (var type in Types)
-                res.AddRange(type.FindName(name));
+                res.AddRange(type.FindNames(name));
             return res;
         }
 

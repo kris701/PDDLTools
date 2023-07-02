@@ -21,7 +21,7 @@ namespace PDDLParser.Models.Problem
             return $"(problem {Name})";
         }
 
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
             if (Name == name)
                 return new HashSet<INode>() { this };

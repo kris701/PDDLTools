@@ -18,20 +18,20 @@ namespace PDDLParser.Models.Problem
 
         public ProblemDecl(ASTNode node) : base(node, null) { }
 
-        public override HashSet<INode> FindName(string name)
+        public override HashSet<INode> FindNames(string name)
         {
             HashSet<INode> res = new HashSet<INode>();
 
             if (Name != null)
-                res.AddRange(Name.FindName(name));
+                res.AddRange(Name.FindNames(name));
             if (DomainName != null)
-                res.AddRange(DomainName.FindName(name));
+                res.AddRange(DomainName.FindNames(name));
             if (Objects != null)
-                res.AddRange(Objects.FindName(name));
+                res.AddRange(Objects.FindNames(name));
             if (Init != null)
-                res.AddRange(Init.FindName(name));
+                res.AddRange(Init.FindNames(name));
             if (Goal != null)
-                res.AddRange(Goal.FindName(name));
+                res.AddRange(Goal.FindNames(name));
 
             return res;
         }

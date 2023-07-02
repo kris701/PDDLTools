@@ -61,13 +61,16 @@ namespace PDDLParser.Visitors
         internal static List<NameExp> LooseParseString(ASTNode node, INode parent, string nodeType, string content, IErrorListener listener)
         {
             List<NameExp> objs = new List<NameExp>();
+            int offset = node.Start;
+            if (node.Content.Contains(nodeType))
+                offset += nodeType.Length;
             foreach (var param in content.Split(' '))
             {
                 if (param != "" && param != nodeType)
                 {
                     var parsed = ExpVisitor.Visit(new ASTNode(
-                        node.Start,
-                        node.End,
+                        offset,
+                        offset + param.Length,
                         node.Line,
                         param), parent, listener);
                     if (parsed is NameExp nExp)
@@ -82,6 +85,7 @@ namespace PDDLParser.Visitors
                             parsed.Start));
                     }
                 }
+                offset += param.Length;
             }
             return objs;
         }

@@ -85,7 +85,7 @@ namespace PDDLParser.Visitors
                 var newActionDecl = new ActionDecl(node, parent, actionName, new List<NameExp>(), null, null);
 
                 // Parameters
-                newActionDecl.Parameters = LooseParseString(node, newActionDecl, ":action", node.Children[0].Content.Replace(actionName, "").Trim(), listener);
+                newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].Content.Replace(actionName, "").Trim(), listener);
 
                 // Preconditions
                 newActionDecl.Preconditions = ExpVisitor.Visit(node.Children[1], newActionDecl, listener);
@@ -105,7 +105,7 @@ namespace PDDLParser.Visitors
                 var newAxiomDecl = new AxiomDecl(node, parent, new List<NameExp>(), null, null);
 
                 // Vars
-                newAxiomDecl.Vars = LooseParseString(node, newAxiomDecl, ":axiom", node.Children[0].Content.Trim(), listener);
+                newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].Content.Trim(), listener);
 
                 // Context
                 newAxiomDecl.Context = ExpVisitor.Visit(node.Children[1], newAxiomDecl, listener);

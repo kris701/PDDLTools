@@ -19,6 +19,9 @@ using PDDLParser.Helpers;
 using PDDLParser.Models;
 using PDDLTools.Windows.RenameCodeWindow;
 using static PDDLTools.Windows.RenameCodeWindow.RenameCodeWindowControl;
+using PDDLParser.Models.Domain;
+using PDDLParser;
+using PDDLParser.Models.Problem;
 
 namespace PDDLTools.Commands
 {
@@ -53,36 +56,41 @@ namespace PDDLTools.Commands
                     var currentFile = await DTE2Helper.GetSourceFilePathAsync();
                     if (PDDLHelper.IsFileDomain(currentFile))
                     {
-                        var domainContext = PDDLFileContexts.GetDomainContextForFile(currentFile);
+                        IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
+                        var domainContext = parser.Parse(currentFile).Domain;
                         var node = GetValidNodeFromWord(domainContext, document, word.Value.GetText());
                         if (node != null)
                         {
-                            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(RenameCodeWindow), 0, true, this.package.DisposalToken);
-                            if ((null == window) || (null == window.Frame))
-                            {
-                                throw new NotSupportedException("Cannot create tool window");
-                            }
-                            if (window.Content is RenameCodeWindowControl control)
-                                await control.UpdateReplaceDataAsync(node, word.Value.GetText(), GetReplaceTypeFromNodeContext(node));
+                            var scope = GetReplaceTypeFromNodeContext(node);
+                            if (scope != ReplaceScopeTypes.None)
+                                await CreateWindowAsync(node, word.Value.GetText(), scope);
                         }
                     } 
                     else if (PDDLHelper.IsFileProblem(currentFile))
                     {
-                        var problemContext = PDDLFileContexts.GetProblemContextForFile(currentFile);
+                        IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
+                        var problemContext = parser.Parse(null, currentFile).Problem;
                         var node = GetValidNodeFromWord(problemContext, document, word.Value.GetText());
                         if (node != null)
                         {
-                            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(RenameCodeWindow), 0, true, this.package.DisposalToken);
-                            if ((null == window) || (null == window.Frame))
-                            {
-                                throw new NotSupportedException("Cannot create tool window");
-                            }
-                            if (window.Content is RenameCodeWindowControl control)
-                                await control.UpdateReplaceDataAsync(node, word.Value.GetText(), GetReplaceTypeFromNodeContext(node));
+                            var scope = GetReplaceTypeFromNodeContext(node);
+                            if (scope != ReplaceScopeTypes.None)
+                                await CreateWindowAsync(node, word.Value.GetText(), scope);
                         }
                     }
                 }
             }
+        }
+
+        private async Task CreateWindowAsync(INode node, string word, ReplaceScopeTypes scope)
+        {
+            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(RenameCodeWindow), 0, true, this.package.DisposalToken);
+            if ((null == window) || (null == window.Frame))
+            {
+                throw new NotSupportedException("Cannot create tool window");
+            }
+            if (window.Content is RenameCodeWindowControl control)
+                await control.UpdateReplaceDataAsync(this.package as PDDLToolsPackage, node, word, scope);
         }
 
         private SnapshotSpan? GetSelectedWord(CaretPosition caretPosition, ITextBuffer buffer)
@@ -129,7 +137,7 @@ namespace PDDLTools.Commands
 
         private INode GetValidNodeFromWord(INode source, IWpfTextView document, string word)
         {
-            var possibleNodes = source.FindName(word);
+            var possibleNodes = source.FindNames(word);
             if (possibleNodes.Count > 0)
             {
                 int simpleCursorPosition = document.Caret.Position.BufferPosition.Position;
@@ -146,23 +154,65 @@ namespace PDDLTools.Commands
                 }
 
                 if (targetNode is PredicateExp || targetNode is NameExp)
-                {
                     return targetNode;
+                if (targetNode is ActionDecl act)
+                {
+                    if (word == act.Name)
+                        return targetNode;
                 }
+                else if (targetNode is TypeNameDecl typeDecl)
+                    if (word == typeDecl.Name)
+                        return targetNode;
+
             }
             return null;
         }
 
-        private ReplaceTypes GetReplaceTypeFromNodeContext(INode node)
+        private ReplaceScopeTypes GetReplaceTypeFromNodeContext(INode node)
         {
             if (node is PredicateExp)
-                return ReplaceTypes.Predicate;
-            if (node is NameExp name)
+                return ReplaceScopeTypes.Predicate;
+            else if (node is ActionDecl)
+                return ReplaceScopeTypes.ActionName;
+            else if (node is TypeNameDecl)
+                return ReplaceScopeTypes.TypeName;
+            else if (node is NameExp name)
             {
-
+                if (IsActionScope(name))
+                    return ReplaceScopeTypes.ActionParameter;
+                else if (IsAxiomScope(name))
+                    return ReplaceScopeTypes.AxiomParameter;
+                else if (IsObjectScope(name))
+                    return ReplaceScopeTypes.ProblemObjects;
             }
+            return ReplaceScopeTypes.None;
+        }
 
-            return ReplaceTypes.None;
+        private bool IsActionScope(INode exp)
+        {
+            if (exp.Parent == null)
+                return false;
+            if (exp.Parent is ActionDecl)
+                return true;
+            return IsActionScope(exp.Parent);
+        }
+
+        private bool IsAxiomScope(INode exp)
+        {
+            if (exp.Parent == null)
+                return false;
+            if (exp.Parent is AxiomDecl)
+                return true;
+            return IsAxiomScope(exp.Parent);
+        }
+
+        private bool IsObjectScope(INode exp)
+        {
+            if (exp.Parent == null)
+                return false;
+            if (exp.Parent is ObjectsDecl)
+                return true;
+            return IsObjectScope(exp.Parent);
         }
     }
 }

@@ -29,8 +29,8 @@ namespace SASSimulator
                 var name = init.Name;
                 var args = new List<NameExp>();
                 foreach (var arg in init.Arguments)
-                    args.Add(new NameExp(null, arg.Name));
-                State.Add(new PredicateExp(null, name, args));
+                    args.Add(new NameExp(null, null, arg.Name));
+                State.Add(new PredicateExp(null, null, name, args));
             }
         }
 
@@ -97,8 +97,8 @@ namespace SASSimulator
         {
             var groundedArgs = new List<NameExp>();
             foreach (var arg in liftedPred.Arguments)
-                groundedArgs.Add(new NameExp(null, args[arg.Name]));
-            return new PredicateExp(null, liftedPred.Name, groundedArgs);
+                groundedArgs.Add(new NameExp(null, null, args[arg.Name]));
+            return new PredicateExp(null, null, liftedPred.Name, groundedArgs);
         }
     }
 }
