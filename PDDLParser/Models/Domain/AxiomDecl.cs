@@ -16,7 +16,7 @@ namespace PDDLParser.Models.Domain
         public IExp Context { get; set; }
         public IExp Implies { get; set; }
 
-        public AxiomDecl(ASTNode node, List<NameExp> vars, IExp context, IExp implies) : base(node)
+        public AxiomDecl(ASTNode node, INode parent, List<NameExp> vars, IExp context, IExp implies) : base(node, parent)
         {
             Vars = vars;
             Context = context;

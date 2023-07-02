@@ -12,7 +12,7 @@ namespace PDDLParser.Models.Problem
     {
         public List<PredicateExp> Predicates { get; set; }
 
-        public InitDecl(ASTNode node, List<PredicateExp> predicates) : base(node)
+        public InitDecl(ASTNode node, INode parent, List<PredicateExp> predicates) : base(node, parent)
         {
             Predicates = predicates;
         }

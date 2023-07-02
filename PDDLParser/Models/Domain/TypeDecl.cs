@@ -13,7 +13,7 @@ namespace PDDLParser.Models.Domain
         public TypeNameDecl TypeName { get; set; }
         public List<TypeNameDecl> SubTypes { get; set; }
 
-        public TypeDecl(ASTNode node, TypeNameDecl name, List<TypeNameDecl> subTypes) : base(node)
+        public TypeDecl(ASTNode node, INode parent, TypeNameDecl name, List<TypeNameDecl> subTypes) : base(node, parent)
         {
             TypeName = name;
             SubTypes = subTypes;

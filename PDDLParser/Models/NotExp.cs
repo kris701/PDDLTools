@@ -11,7 +11,7 @@ namespace PDDLParser.Models
     {
         public IExp Child { get; set; }
 
-        public NotExp(ASTNode node, IExp child) : base(node)
+        public NotExp(ASTNode node, INode parent, IExp child) : base(node, parent)
         {
             Child = child;
         }

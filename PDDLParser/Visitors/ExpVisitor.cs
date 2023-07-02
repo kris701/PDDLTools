@@ -12,45 +12,50 @@ namespace PDDLParser.Visitors
 {
     public class ExpVisitor : BaseVisitor
     {
-        public static IExp Visit(ASTNode node, IErrorListener listener)
+        public static IExp Visit(ASTNode node, INode parent, IErrorListener listener)
         {
             if (node.Content.StartsWith("and"))
             {
                 DoesNodeHaveMoreThanNChildren(node, "and", 0, listener);
                 DoesContentContainAnyStrayCharacters(node, "and", listener);
 
-                List<IExp> children = new List<IExp>();
+                var newAndExp = new AndExp(node, parent, new List<IExp>());
                 foreach(var child in node.Children)
-                    children.Add(Visit(child, listener));
+                    newAndExp.Children.Add(Visit(child, newAndExp, listener));
 
-                return new AndExp(node, children);
+                return newAndExp;
             } 
             else if (node.Content.StartsWith("or"))
             {
                 DoesNodeHaveSpecificChildCount(node, "or", 2, listener);
                 DoesContentContainAnyStrayCharacters(node, "or", listener);
 
-                return new OrExp(node, Visit(node.Children[0], listener), Visit(node.Children[1], listener));
+                var newOrExp = new OrExp(node, parent, null, null);
+                newOrExp.Option1 = Visit(node.Children[0], newOrExp, listener);
+                newOrExp.Option2 = Visit(node.Children[1], newOrExp, listener);
+                return newOrExp;
             }
             else if (node.Content.StartsWith("not"))
             {
                 DoesNodeHaveSpecificChildCount(node, "not", 1, listener);
                 DoesContentContainAnyStrayCharacters(node, "not", listener);
 
-                return new NotExp(node, Visit(node.Children[0], listener));
+                var newNotExp = new NotExp(node, parent, null);
+                newNotExp.Child = Visit(node.Children[0], newNotExp, listener);
+                return newNotExp;
             }
             else if (node.Content.Contains(" "))
             {
                 DoesNodeHaveSpecificChildCount(node, "predicate", 0, listener);
 
                 var predicateName = node.Content.Split(' ')[0];
-                List<NameExp> parameters = new List<NameExp>();
+                var newPredicateExp = new PredicateExp(null, parent, predicateName, new List<NameExp>());
 
                 var paramSplit = node.Content.Split(' ');
                 foreach (var param in paramSplit)
                     if (param != "" && param != predicateName)
-                        parameters.Add(Visit(new ASTNode(node.Character, node.Line, param), listener) as NameExp);
-                return new PredicateExp(node, predicateName, parameters);
+                        newPredicateExp.Arguments.Add(Visit(new ASTNode(node.Start, node.End, param), newPredicateExp, listener) as NameExp);
+                return newPredicateExp;
             } 
             else if (node.Content.Contains(ASTTokens.TypeToken))
             {
@@ -66,7 +71,7 @@ namespace PDDLParser.Visitors
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         node.Line,
-                        node.Character));
+                        node.Start));
                 }
                 if (right == "")
                 {
@@ -75,16 +80,19 @@ namespace PDDLParser.Visitors
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         node.Line,
-                        node.Character));
+                        node.Start));
                 }
 
-                return new NameExp(node, left.Replace("?", ""), new TypeNameDecl(node, right));
+                var newNameExp = new NameExp(node, parent, left.Replace("?",""));
+                newNameExp.Type = new TypeNameDecl(node, newNameExp, right);
+                return newNameExp;
             } 
             else
             {
                 DoesNodeHaveSpecificChildCount(node, "name", 0, listener);
 
-                return new NameExp(node, node.Content.Replace("?", "").Trim());
+                var newNameExp = new NameExp(node, parent, node.Content.Replace("?", ""));
+                return newNameExp;
             }
         }
     }

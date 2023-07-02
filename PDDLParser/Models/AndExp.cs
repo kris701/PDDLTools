@@ -12,7 +12,7 @@ namespace PDDLParser.Models
     {
         public List<IExp> Children { get; set; }
 
-        public AndExp(ASTNode node, List<IExp> children) : base(node)
+        public AndExp(ASTNode node, INode parent, List<IExp> children) : base(node, parent)
         {
             Children = children;
         }

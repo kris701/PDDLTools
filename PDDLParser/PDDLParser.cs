@@ -99,7 +99,7 @@ namespace PDDLParser
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     absAST.Line,
-                    absAST.Character));
+                    absAST.Start));
 
             IsChildrenOnly(absAST, "define");
 
@@ -108,33 +108,33 @@ namespace PDDLParser
             foreach (var node in absAST.Children)
             {
                 if (node.Content.StartsWith("domain"))
-                    returnDomain.Name = DomainVisitor.Visit(node, Listener) as DomainNameDecl;
+                    returnDomain.Name = DomainVisitor.Visit(node, returnDomain, Listener) as DomainNameDecl;
                 else if (node.Content.StartsWith(":requirements"))
-                    returnDomain.Requirements = DomainVisitor.Visit(node, Listener) as RequirementsDecl;
+                    returnDomain.Requirements = DomainVisitor.Visit(node, returnDomain, Listener) as RequirementsDecl;
                 else if (node.Content.StartsWith(":extends"))
-                    returnDomain.Extends = DomainVisitor.Visit(node, Listener) as ExtendsDecl;
+                    returnDomain.Extends = DomainVisitor.Visit(node, returnDomain, Listener) as ExtendsDecl;
                 else if (node.Content.StartsWith(":types"))
-                    returnDomain.Types = DomainVisitor.Visit(node, Listener) as TypesDecl;
+                    returnDomain.Types = DomainVisitor.Visit(node, returnDomain, Listener) as TypesDecl;
                 else if (node.Content.StartsWith(":constants"))
-                    returnDomain.Constants = DomainVisitor.Visit(node, Listener) as ConstantsDecl;
+                    returnDomain.Constants = DomainVisitor.Visit(node, returnDomain, Listener) as ConstantsDecl;
                 else if (node.Content.StartsWith(":timeless"))
-                    returnDomain.Timeless = DomainVisitor.Visit(node, Listener) as TimelessDecl;
+                    returnDomain.Timeless = DomainVisitor.Visit(node, returnDomain, Listener) as TimelessDecl;
                 else if (node.Content.StartsWith(":predicates"))
                 {
                     if (IsChildrenOnly(node, ":predicates"))
-                        returnDomain.Predicates = DomainVisitor.Visit(node, Listener) as PredicatesDecl;
+                        returnDomain.Predicates = DomainVisitor.Visit(node, returnDomain, Listener) as PredicatesDecl;
                 }
                 else if (node.Content.StartsWith(":action"))
                 {
                     if (returnDomain.Actions == null)
                         returnDomain.Actions = new List<ActionDecl>();
-                    returnDomain.Actions.Add(DomainVisitor.Visit(node, Listener) as ActionDecl);
+                    returnDomain.Actions.Add(DomainVisitor.Visit(node, returnDomain, Listener) as ActionDecl);
                 }
                 else if (node.Content.StartsWith(":axiom"))
                 {
                     if (returnDomain.Axioms == null)
                         returnDomain.Axioms = new List<AxiomDecl>();
-                    returnDomain.Axioms.Add(DomainVisitor.Visit(node, Listener) as AxiomDecl);
+                    returnDomain.Axioms.Add(DomainVisitor.Visit(node, returnDomain, Listener) as AxiomDecl);
                 }
                 else
                     Listener.AddError(new ParseError(
@@ -142,7 +142,7 @@ namespace PDDLParser
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         node.Line,
-                        node.Character));
+                        node.Start));
             }
 
             return returnDomain;
@@ -167,7 +167,7 @@ namespace PDDLParser
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     absAST.Line,
-                    absAST.Character));
+                    absAST.Start));
 
             IsChildrenOnly(absAST, "define");
 
@@ -176,18 +176,18 @@ namespace PDDLParser
             foreach (var node in absAST.Children)
             {
                 if (node.Content.StartsWith("problem"))
-                    returnProblem.Name = ProblemVisitor.Visit(node, Listener) as ProblemNameDecl;
+                    returnProblem.Name = ProblemVisitor.Visit(node, returnProblem, Listener) as ProblemNameDecl;
                 else if (node.Content.StartsWith(":domain"))
-                    returnProblem.DomainName = ProblemVisitor.Visit(node, Listener) as DomainNameRefDecl;
+                    returnProblem.DomainName = ProblemVisitor.Visit(node, returnProblem, Listener) as DomainNameRefDecl;
                 else if (node.Content.StartsWith(":objects"))
-                    returnProblem.Objects = ProblemVisitor.Visit(node, Listener) as ObjectsDecl;
+                    returnProblem.Objects = ProblemVisitor.Visit(node, returnProblem, Listener) as ObjectsDecl;
                 else if (node.Content.StartsWith(":init")) {
                     if (IsChildrenOnly(node, ":init"))
-                        returnProblem.Init = ProblemVisitor.Visit(node, Listener) as InitDecl;
+                        returnProblem.Init = ProblemVisitor.Visit(node, returnProblem, Listener) as InitDecl;
                 }
                 else if (node.Content.StartsWith(":goal")) {
                     if (IsChildrenOnly(node, ":goal"))
-                        returnProblem.Goal = ProblemVisitor.Visit(node, Listener) as GoalDecl;
+                        returnProblem.Goal = ProblemVisitor.Visit(node, returnProblem, Listener) as GoalDecl;
                 }
                 else
                     Listener.AddError(new ParseError(
@@ -195,7 +195,7 @@ namespace PDDLParser
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         node.Line,
-                        node.Character));
+                        node.Start));
             }
 
             return returnProblem;
@@ -210,7 +210,7 @@ namespace PDDLParser
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     node.Line,
-                    node.Character));
+                    node.Start));
                 return false;
             }
             return true;

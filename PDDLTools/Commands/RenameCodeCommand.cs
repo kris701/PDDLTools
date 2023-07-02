@@ -17,6 +17,8 @@ using Microsoft.VisualStudio.Text.Operations;
 using PDDLTools.ContextStorage;
 using PDDLParser.Helpers;
 using PDDLParser.Models;
+using PDDLTools.Windows.RenameCodeWindow;
+using static PDDLTools.Windows.RenameCodeWindow.RenameCodeWindowControl;
 
 namespace PDDLTools.Commands
 {
@@ -55,7 +57,13 @@ namespace PDDLTools.Commands
                         var node = GetValidNodeFromWord(domainContext, document, word.Value.GetText());
                         if (node != null)
                         {
-
+                            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(RenameCodeWindow), 0, true, this.package.DisposalToken);
+                            if ((null == window) || (null == window.Frame))
+                            {
+                                throw new NotSupportedException("Cannot create tool window");
+                            }
+                            if (window.Content is RenameCodeWindowControl control)
+                                await control.UpdateReplaceDataAsync(node, word.Value.GetText(), GetReplaceTypeFromNodeContext(node));
                         }
                     } 
                     else if (PDDLHelper.IsFileProblem(currentFile))
@@ -64,7 +72,13 @@ namespace PDDLTools.Commands
                         var node = GetValidNodeFromWord(problemContext, document, word.Value.GetText());
                         if (node != null)
                         {
-
+                            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(RenameCodeWindow), 0, true, this.package.DisposalToken);
+                            if ((null == window) || (null == window.Frame))
+                            {
+                                throw new NotSupportedException("Cannot create tool window");
+                            }
+                            if (window.Content is RenameCodeWindowControl control)
+                                await control.UpdateReplaceDataAsync(node, word.Value.GetText(), GetReplaceTypeFromNodeContext(node));
                         }
                     }
                 }
@@ -120,10 +134,10 @@ namespace PDDLTools.Commands
             {
                 int simpleCursorPosition = document.Caret.Position.BufferPosition.Position;
                 INode targetNode = possibleNodes.First();
-                int shortestDist = Math.Abs(targetNode.Character - simpleCursorPosition);
+                int shortestDist = Math.Abs(targetNode.Start - simpleCursorPosition);
                 foreach (var node in possibleNodes.Skip(1))
                 {
-                    var dist = Math.Abs(node.Character - simpleCursorPosition);
+                    var dist = Math.Abs(node.Start - simpleCursorPosition);
                     if (dist < shortestDist)
                     {
                         shortestDist = dist;
@@ -137,6 +151,18 @@ namespace PDDLTools.Commands
                 }
             }
             return null;
+        }
+
+        private ReplaceTypes GetReplaceTypeFromNodeContext(INode node)
+        {
+            if (node is PredicateExp)
+                return ReplaceTypes.Predicate;
+            if (node is NameExp name)
+            {
+
+            }
+
+            return ReplaceTypes.None;
         }
     }
 }

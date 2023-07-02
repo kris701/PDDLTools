@@ -14,7 +14,7 @@ namespace PDDLParser.Models
         public IExp Option1 { get; set; }
         public IExp Option2 { get; set; }
 
-        public OrExp(ASTNode node, IExp option1, IExp option2) : base(node)
+        public OrExp(ASTNode node, INode parent, IExp option1, IExp option2) : base(node, parent)
         {
             Option1 = option1;
             Option2 = option2;

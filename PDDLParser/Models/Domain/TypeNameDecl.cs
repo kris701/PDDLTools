@@ -11,7 +11,7 @@ namespace PDDLParser.Models.Domain
     {
         public string Name { get; set; }
 
-        public TypeNameDecl(ASTNode node, string name) : base(node)
+        public TypeNameDecl(ASTNode node, INode parent, string name) : base(node, parent)
         {
             Name = name;
         }

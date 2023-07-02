@@ -11,7 +11,7 @@ namespace PDDLParser.Models.Problem
     {
         public string Name { get; set; }
 
-        public ProblemNameDecl(ASTNode node, string name) : base(node)
+        public ProblemNameDecl(ASTNode node, INode parent, string name) : base(node, parent)
         {
             Name = name;
         }

@@ -16,7 +16,7 @@ namespace PDDLParser.Models.Problem
         public InitDecl Init { get; set; }
         public GoalDecl Goal { get; set; }
 
-        public ProblemDecl(ASTNode node) : base(node) { }
+        public ProblemDecl(ASTNode node) : base(node, null) { }
 
         public override HashSet<INode> FindName(string name)
         {

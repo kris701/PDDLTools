@@ -15,7 +15,7 @@ namespace PDDLParser.Models.Problem
         // Context
         public DomainDecl DomainReference { get; internal set; }
 
-        public DomainNameRefDecl(ASTNode node, string name) : base(node)
+        public DomainNameRefDecl(ASTNode node, INode parent, string name) : base(node, parent)
         {
             Name = name;
         }

@@ -13,7 +13,7 @@ namespace PDDLParser.Models.Domain
     {
         public List<NameExp> Extends { get; set; }
 
-        public ExtendsDecl(ASTNode node, List<NameExp> extends) : base(node)
+        public ExtendsDecl(ASTNode node, INode parent, List<NameExp> extends) : base(node, parent)
         {
             Extends = extends;
         }

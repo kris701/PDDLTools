@@ -1,5 +1,4 @@
-﻿
-using PDDLParser;
+﻿using PDDLParser;
 
 IPDDLParser parser = new PDDLParser.PDDLParser();
 //var res = parser.Parse("C:\\Users\\kris7\\Downloads\\domain.pddl", "C:\\Users\\kris7\\Downloads\\problem.pddl");

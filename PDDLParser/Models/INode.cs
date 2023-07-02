@@ -8,7 +8,8 @@ namespace PDDLParser.Models
 {
     public interface INode
     {
-        int Character { get; set; }
+        int Start { get; set; }
+        int End { get; set; }
         int Line { get; set; }
 
         HashSet<INode> FindName(string name);

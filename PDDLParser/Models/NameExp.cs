@@ -13,16 +13,16 @@ namespace PDDLParser.Models
         public string Name { get; set; }
         public TypeNameDecl Type { get; set; }
 
-        public NameExp(ASTNode node, string name, TypeNameDecl type) : base(node)
+        public NameExp(ASTNode node, INode parent, string name, TypeNameDecl type) : base(node, parent)
         {
             Name = name;
             Type = type;
         }
 
-        public NameExp(ASTNode node, string name) : base(node) 
+        public NameExp(ASTNode node, INode parent, string name) : base(node, parent) 
         {
             Name = name;
-            Type = new TypeNameDecl(node, "");
+            Type = new TypeNameDecl(node, this, "");
         }
 
         public override string ToString()
@@ -50,7 +50,7 @@ namespace PDDLParser.Models
 
         public object Clone()
         {
-            return new NameExp(new ASTNode(Character, Line, ""), Name, Type);
+            return new NameExp(new ASTNode(Start, Line, ""), Parent, Name, Type);
         }
 
         public override HashSet<INode> FindName(string name)

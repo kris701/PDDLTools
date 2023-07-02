@@ -17,7 +17,7 @@ namespace PDDLParser.Models.Domain
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 
-        public ActionDecl(ASTNode node, string name, List<NameExp> parameters, IExp preconditions, IExp effects) : base(node)
+        public ActionDecl(ASTNode node, INode parent, string name, List<NameExp> parameters, IExp preconditions, IExp effects) : base(node, parent)
         {
             Name = name;
             Parameters = parameters;

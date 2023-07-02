@@ -45,7 +45,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             init.Line,
-                            init.Character));
+                            init.Start));
             }
         }
         private void CheckForUndeclaredPreconditionsInGoal(DomainDecl domain, ProblemDecl problem, IErrorListener listener)
@@ -77,7 +77,7 @@ namespace PDDLParser.Analysers
                         ParseErrorType.Error,
                         ParseErrorLevel.Analyser,
                         pred.Line,
-                        pred.Character));
+                        pred.Start));
             }
         }
 
@@ -92,7 +92,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             obj.Line,
-                            obj.Character));
+                            obj.Start));
             }
         }
         private void CheckForInitDeclarationTypes(DomainDecl domain, ProblemDecl problem, IErrorListener listener)
@@ -110,7 +110,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 init.Line,
-                                init.Character));
+                                init.Start));
                     }
                 }
             }
@@ -164,14 +164,14 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             pred.Line,
-                            pred.Character));
+                            pred.Start));
                     else
                         listener.AddError(new ParseError(
                             $"Undefined predicate used '{pred.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             pred.Line,
-                            pred.Character));
+                            pred.Start));
                 }
             }
         }

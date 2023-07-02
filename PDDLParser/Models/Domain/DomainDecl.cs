@@ -80,7 +80,7 @@ namespace PDDLParser.Models.Domain
             return res;
         }
 
-        public DomainDecl(ASTNode node) : base(node) {
+        public DomainDecl(ASTNode node) : base(node, null) {
             Actions = new List<ActionDecl>();
             Axioms = new List<AxiomDecl>();
         }

@@ -54,28 +54,28 @@ namespace PDDLParser.Analysers
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
             if (domain.Predicates != null && domain.Predicates.Predicates.Count == 0)
                 listener.AddError(new ParseError(
                     $"No predicates defined.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
             if (domain.Actions == null)
                 listener.AddError(new ParseError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
             if (domain.Actions != null && domain.Actions.Count == 0)
                 listener.AddError(new ParseError(
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
         }
 
         private void CheckForUnusedPredicates(DomainDecl domain, IErrorListener listener)
@@ -150,7 +150,7 @@ namespace PDDLParser.Analysers
                         ParseErrorType.Message,
                         ParseErrorLevel.Analyser,
                         predicate.Line,
-                        predicate.Character));
+                        predicate.Start));
                 }
             }
         }
@@ -197,7 +197,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Message,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
-                                param.Character));
+                                param.Start));
                 }
             }
         }
@@ -218,7 +218,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Message,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
-                                param.Character));
+                                param.Start));
                 }
             }
         }
@@ -260,7 +260,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             typeDecl.Line,
-                            typeDecl.Character));
+                            typeDecl.Start));
                     }
                     declaredSuperTypes.Add(typeDecl.TypeName.Name);
 
@@ -273,7 +273,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 typeDecl.Line,
-                                typeDecl.Character));
+                                typeDecl.Start));
                         }
                         declaredSubTypes.Add(typeName.Name);
                     }
@@ -294,7 +294,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Contexturaliser,
                             typeDecl.Line,
-                            typeDecl.Character));
+                            typeDecl.Start));
                     }
                     else
                     {
@@ -325,7 +325,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Contexturaliser,
                             pred.Line,
-                            pred.Character));
+                            pred.Start));
                     }
                     domain.PredicateTypeTable.Add(pred.Name, argTypeList);
                 }
@@ -346,7 +346,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 arg.Line,
-                                arg.Character));
+                                arg.Start));
                         }
                     }
                 }
@@ -367,7 +367,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
-                                param.Character));
+                                param.Start));
                         }
                     }
 
@@ -391,7 +391,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
-                                param.Character));
+                                param.Start));
                         }
                     }
 
@@ -428,7 +428,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
-                            arg.Character));
+                            arg.Start));
                     }
                     index++;
                 }
@@ -447,7 +447,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             cons.Line,
-                            cons.Character));
+                            cons.Start));
                     }
                 }
             }
@@ -467,7 +467,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 predicate.Line,
-                                predicate.Character));
+                                predicate.Start));
                     }
                     predicates.Add(predicate.Name);
                 }
@@ -489,7 +489,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 param.Line,
-                                param.Character));
+                                param.Start));
                         }
                         parameterNames.Add(param.Name);
                     }
@@ -510,7 +510,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             act.Line,
-                            act.Character));
+                            act.Start));
                     }
                     actions.Add(act.Name);
                 }
@@ -532,7 +532,7 @@ namespace PDDLParser.Analysers
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
                                     param.Line,
-                                    param.Character));
+                                    param.Start));
                         }
                         parameterNames.Add(param.Name);
                     }
@@ -555,7 +555,7 @@ namespace PDDLParser.Analysers
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
                                     param.Line,
-                                    param.Character));
+                                    param.Start));
                         }
                         parameterNames.Add(param.Name);
                     }
@@ -629,14 +629,14 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             pred.Line,
-                            pred.Character));
+                            pred.Start));
                     else
                         listener.AddError(new ParseError(
                             $"Undefined predicate used '{pred.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             pred.Line,
-                            pred.Character));
+                            pred.Start));
                 }
             }
         }

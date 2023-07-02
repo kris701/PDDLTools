@@ -9,15 +9,17 @@ namespace PDDLParser.AST
     public class ASTNode
     {
         public int Line { get; set; }
-        public int Character { get; set; }
+        public int Start { get; set; }
+        public int End { get; set; }
 
         public string Content { get; set; }
         public List<ASTNode> Children { get; set; }
 
-        public ASTNode(int character, string content, List<ASTNode> children)
+        public ASTNode(int start, int end, string content, List<ASTNode> children)
         {
             Line = -1;
-            Character = character;
+            Start = start;
+            End = end;
             Content = content;
             Children = children;
         }
@@ -28,19 +30,29 @@ namespace PDDLParser.AST
             Children = children;
         }
 
+        public ASTNode(ASTNode other)
+        {
+            Line = other.Line;
+            Start = other.Start;
+            End = other.End;
+            Content = other.Content;
+            Children = new List<ASTNode>();
+        }
 
-        public ASTNode(int character, string content)
+        public ASTNode(int start, int end, string content)
         {
             Line = -1;
-            Character = character;
+            Start = start;
+            End = end;
             Content = content;
             Children = new List<ASTNode>();
         }
 
-        public ASTNode(int character, int line, string content)
+        public ASTNode(int start, int end, int line, string content)
         {
             Line = line;
-            Character = character;
+            Start = start;
+            End = end;
             Content = content;
             Children = new List<ASTNode>();
         }

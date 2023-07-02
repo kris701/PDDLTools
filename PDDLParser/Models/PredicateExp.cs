@@ -13,7 +13,7 @@ namespace PDDLParser.Models
         public string Name { get; set; }
         public List<NameExp> Arguments { get; set; }
 
-        public PredicateExp(ASTNode node, string name, List<NameExp> arguments) : base(node)
+        public PredicateExp(ASTNode node, INode parent, string name, List<NameExp> arguments) : base(node, parent)
         {
             Name = name;
             Arguments = arguments;
@@ -46,10 +46,10 @@ namespace PDDLParser.Models
 
         public object Clone()
         {
-            List<NameExp> copyNames = new List<NameExp>();
+            var newPredicateExp = new PredicateExp(new ASTNode(Start, Line, ""), Parent, Name, new List<NameExp>());
             foreach (var arg in Arguments)
-                copyNames.Add(new NameExp(new ASTNode(arg.Character, arg.Line, ""), arg.Name));
-            return new PredicateExp(new ASTNode(Character, Line, ""), Name, copyNames);
+                newPredicateExp.Arguments.Add(new NameExp(new ASTNode(arg.Start, arg.End, arg.Line, ""), newPredicateExp, arg.Name));
+            return newPredicateExp;
         }
 
         public override HashSet<INode> FindName(string name)

@@ -12,7 +12,7 @@ namespace PDDLParser.Models.Problem
     {
         public List<NameExp> Objs { get; set; }
 
-        public ObjectsDecl(ASTNode node, List<NameExp> types) : base(node)
+        public ObjectsDecl(ASTNode node, INode parent, List<NameExp> types) : base(node, parent)
         {
             Objs = types;
         }

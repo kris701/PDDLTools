@@ -20,7 +20,7 @@ namespace PDDLParser.Visitors
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     node.Line,
-                    node.Character));
+                    node.Start));
         }
 
         internal static void DoesNodeHaveSpecificChildCount(ASTNode node, string nodeName, int targetChildren, IErrorListener listener)
@@ -33,7 +33,7 @@ namespace PDDLParser.Visitors
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         node.Line,
-                        node.Character));
+                        node.Start));
             }
             else
             {
@@ -43,7 +43,7 @@ namespace PDDLParser.Visitors
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         node.Line,
-                        node.Character));
+                        node.Start));
             }
         }
 
@@ -55,10 +55,10 @@ namespace PDDLParser.Visitors
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     node.Line,
-                    node.Character));
+                    node.Start));
         }
 
-        internal static List<NameExp> LooseParseString(ASTNode node, string nodeType, string content, IErrorListener listener)
+        internal static List<NameExp> LooseParseString(ASTNode node, INode parent, string nodeType, string content, IErrorListener listener)
         {
             List<NameExp> objs = new List<NameExp>();
             foreach (var param in content.Split(' '))
@@ -66,9 +66,10 @@ namespace PDDLParser.Visitors
                 if (param != "" && param != nodeType)
                 {
                     var parsed = ExpVisitor.Visit(new ASTNode(
-                        node.Character,
+                        node.Start,
+                        node.End,
                         node.Line,
-                        param), listener);
+                        param), parent, listener);
                     if (parsed is NameExp nExp)
                         objs.Add(nExp);
                     else
@@ -78,44 +79,44 @@ namespace PDDLParser.Visitors
                             ParseErrorType.Error,
                             ParseErrorLevel.Parsing,
                             parsed.Line,
-                            parsed.Character));
+                            parsed.Start));
                     }
                 }
             }
             return objs;
         }
 
-        internal static List<PredicateExp> ParseAsPredicateList(ASTNode node, IErrorListener listener)
+        internal static List<PredicateExp> ParseAsPredicateList(ASTNode node, INode parent, IErrorListener listener)
         {
             List<PredicateExp> predicates = new List<PredicateExp>();
             foreach (var predicate in node.Children)
             {
-                var newNode = ExpVisitor.Visit(predicate, listener) as PredicateExp;
+                var newNode = ExpVisitor.Visit(predicate, parent, listener) as PredicateExp;
                 if (newNode == null)
                     listener.AddError(new ParseError(
                         $"Could not parse predicate!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         predicate.Line,
-                        predicate.Character));
+                        predicate.Start));
                 predicates.Add(newNode);
             }
             return predicates;
         }
 
-        internal static List<NameExp> ParseAsNameList(ASTNode node, IErrorListener listener)
+        internal static List<NameExp> ParseAsNameList(ASTNode node, INode parent, IErrorListener listener)
         {
             List<NameExp> name = new List<NameExp>();
             foreach (var child in node.Children)
             {
-                var newNode = ExpVisitor.Visit(child, listener) as NameExp;
+                var newNode = ExpVisitor.Visit(child, parent, listener) as NameExp;
                 if (newNode == null)
                     listener.AddError(new ParseError(
                         $"Could not parse name!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         child.Line,
-                        child.Character));
+                        child.Start));
                 name.Add(newNode);
             }
             return name;
@@ -129,7 +130,7 @@ namespace PDDLParser.Visitors
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     node.Line,
-                    node.Character));
+                    node.Start));
         }
 
         internal static string PurgeEscapeChars(string str) => str.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");

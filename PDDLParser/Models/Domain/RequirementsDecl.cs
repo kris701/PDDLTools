@@ -12,7 +12,7 @@ namespace PDDLParser.Models.Domain
     {
         public List<NameExp> Requirements {  get; set; }
 
-        public RequirementsDecl(ASTNode node, List<NameExp> requirements) : base(node)
+        public RequirementsDecl(ASTNode node, INode parent, List<NameExp> requirements) : base(node, parent)
         {
             Requirements = requirements;
         }

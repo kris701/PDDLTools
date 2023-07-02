@@ -9,18 +9,23 @@ namespace PDDLParser.Models
 {
     public abstract class BaseNode : INode
     {
-        public int Character { get; set; }
+        public INode Parent { get; }
+        public int Start { get; set; }
+        public int End { get; set; }
         public int Line { get; set; }
 
-        public BaseNode(ASTNode node)
+        public BaseNode(ASTNode node, INode parent)
         {
             Line = -1;
-            Character = -1;
+            Start = -1;
+            End = -1;
             if (node != null)
             {
                 Line = node.Line;
-                Character = node.Character;
+                Start = node.Start;
+                End = node.End;
             }
+            Parent = parent;
         }
 
         public abstract HashSet<INode> FindName(string name);
@@ -29,7 +34,7 @@ namespace PDDLParser.Models
 
         public override int GetHashCode()
         {
-            return Character.GetHashCode() + Line.GetHashCode();
+            return Start.GetHashCode() + Line.GetHashCode();
         }
     }
 }

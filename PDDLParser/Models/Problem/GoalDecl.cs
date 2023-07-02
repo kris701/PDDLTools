@@ -22,7 +22,7 @@ namespace PDDLParser.Models.Problem
         public bool DoesContainPredicates { get; internal set; }
         public bool DoesContainNames { get; internal set; }
 
-        public GoalDecl(ASTNode node, IExp goalExp) : base(node)
+        public GoalDecl(ASTNode node, INode parent, IExp goalExp) : base(node, parent)
         {
             GoalExp = goalExp;
         }

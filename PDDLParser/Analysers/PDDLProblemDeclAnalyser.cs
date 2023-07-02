@@ -40,42 +40,42 @@ namespace PDDLParser.Analysers
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
             if (domain.Objects == null)
                 listener.AddError(new ParseError(
                     $"Missing objects declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
             if (domain.Objects != null && domain.Objects.Objs.Count == 0)
                 listener.AddError(new ParseError(
                     $"Missing objects",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
             if (domain.Init == null)
                 listener.AddError(new ParseError(
                     $"Missing Init declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
             if (domain.Init != null && domain.Init.Predicates.Count == 0)
                 listener.AddError(new ParseError(
                     $"No init predicates declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
             if (domain.Goal == null)
                 listener.AddError(new ParseError(
                     $"Missing Goal declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
                     domain.Line,
-                    domain.Character));
+                    domain.Start));
         }
 
         private void CheckForUndeclaredObjects(ProblemDecl problem, IErrorListener listener)
@@ -99,7 +99,7 @@ namespace PDDLParser.Analysers
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
                                     arg.Line,
-                                    arg.Character));
+                                    arg.Start));
                             }
                         }
                     }
@@ -136,7 +136,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             arg.Line,
-                            arg.Character));
+                            arg.Start));
                     }
                 }
             }
@@ -175,7 +175,7 @@ namespace PDDLParser.Analysers
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
                             obj.Line,
-                            obj.Character));
+                            obj.Start));
                 }
             }
         }
@@ -216,7 +216,7 @@ namespace PDDLParser.Analysers
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 obj.Line,
-                                obj.Character));
+                                obj.Start));
                     }
                     objs.Add(obj.Name);
                 }
@@ -234,7 +234,7 @@ namespace PDDLParser.Analysers
                         ParseErrorType.Warning,
                         ParseErrorLevel.Analyser,
                         problem.Goal.GoalExp.Line,
-                        problem.Goal.GoalExp.Character));
+                        problem.Goal.GoalExp.Start));
                 }
             }
         }
