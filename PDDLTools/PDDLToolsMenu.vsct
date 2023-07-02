@@ -5,16 +5,16 @@
 
 	<Commands package="PDDLPackageGuid">
 		<Groups>
-			<Group guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" priority="0x0600">
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" priority="0x0000">
 				<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenu" />
 			</Group>
-			<Group guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" priority="0x0600">
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsToolbarGroup" priority="0x0000">
 				<Parent guid="PDDLCommandSetGuid" id="PDDLToolsToolbar" />
 			</Group>
-			<Group guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" priority="0x0600">
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" priority="0x0000">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
 			</Group>
-			<Group guid="PDDLCommandSetGuid" id="PDDLToolsCodeContextMenuGroup" priority="0x0600">
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsCodeContextMenuGroup" priority="0x0000">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
 			</Group>
 		</Groups>
@@ -42,8 +42,9 @@
 			<Bitmap guid="DomainImageGuid" href="Commands\Resources\Domain.png" />
 			<Bitmap guid="ProblemImageGuid" href="Commands\Resources\Problem.png" />
 			<Bitmap guid="VisualiserImageGuid" href="Commands\Resources\VisualisorIcon.png" />
+			<Bitmap guid="RenameImageGuid" href="Commands\Resources\Rename.png" />
 		</Bitmaps>
-
+		
 		<Combos>
 			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileListCommandID" defaultWidth="150" priority="0x0100" type="DropDownCombo">
 				<CommandFlag>StretchHorizontally</CommandFlag>
@@ -129,6 +130,7 @@
 
 			<!--Solution Explore Context Menu-->
 			<Button guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" priority="0x0100" type="Button">
+				<Icon guid="ProblemImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -136,6 +138,7 @@
 				</Strings>
 			</Button>
 			<Button guid="PDDLCommandSetGuid" id="SelectDomainFileCtxCommandID" priority="0x0100" type="Button">
+				<Icon guid="DomainImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -144,6 +147,7 @@
 			</Button>
 
 			<Button guid="PDDLCommandSetGuid" id="SendToVisualiserCtxCommandID" priority="0x0100" type="Button">
+				<Icon guid="VisualiserImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -152,6 +156,7 @@
 			</Button>
 
 			<Button guid="PDDLCommandSetGuid" id="SendDomainToValidatorCtxCommandId" priority="0x0100" type="Button">
+				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -159,6 +164,7 @@
 				</Strings>
 			</Button>
 			<Button guid="PDDLCommandSetGuid" id="SendProblemToValidatorCtxCommandId" priority="0x0100" type="Button">
+				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -166,6 +172,7 @@
 				</Strings>
 			</Button>
 			<Button guid="PDDLCommandSetGuid" id="SendPlanToValidatorCtxCommandId" priority="0x0100" type="Button">
+				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -175,6 +182,7 @@
 			
 			<!--Code Context Menu-->
 			<Button guid="PDDLCommandSetGuid" id="RenameCodeCommandID" priority="0x0100" type="Button">
+				<Icon guid="RenameImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
 				<Strings>
@@ -332,6 +340,9 @@
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
 		<GuidSymbol value="{CABCC988-9A7E-48D8-81DB-573C95B3434B}" name="VisualiserImageGuid">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
+		<GuidSymbol value="{ED888B71-18C3-43A0-830E-7D7DCF30B681}" name="RenameImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
   </Symbols>

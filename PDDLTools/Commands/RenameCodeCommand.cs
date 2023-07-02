@@ -22,6 +22,7 @@ using static PDDLTools.Windows.RenameCodeWindow.RenameCodeWindowControl;
 using PDDLParser.Models.Domain;
 using PDDLParser;
 using PDDLParser.Models.Problem;
+using System.ComponentModel.Design;
 
 namespace PDDLTools.Commands
 {
@@ -30,7 +31,7 @@ namespace PDDLTools.Commands
         public override int CommandId { get; } = 277;
         public static RenameCodeCommand Instance { get; internal set; }
 
-        private RenameCodeCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
+        private RenameCodeCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {
         }
 
@@ -39,7 +40,42 @@ namespace PDDLTools.Commands
             Instance = new RenameCodeCommand(package, await InitializeCommandServiceAsync(package));
         }
 
+        public override async void CheckQueryStatus(object sender, EventArgs e)
+        {
+            if (sender is MenuCommand button)
+            {
+                button.Visible = false;
+                var document = GetDocument();
+                if (document == null)
+                    return;
+                var selectedWord = GetSelectedWord(document);
+                if (selectedWord == null)
+                    return;
+                var selectedNode = await GetSelectedAsNodeAsync(selectedWord, document.Caret.Position.BufferPosition.Position);
+                if (selectedNode == null)
+                    return;
+                button.Visible = true;
+            }
+        }
+
         public override async Task ExecuteAsync(object sender, EventArgs e)
+        {
+            var document = GetDocument();
+            if (document == null)
+                return;
+            var selectedWord = GetSelectedWord(document);
+            if (selectedWord == null)
+                return;
+            var selectedNode = await GetSelectedAsNodeAsync(selectedWord, document.Caret.Position.BufferPosition.Position);
+            if (selectedNode == null)
+                return;
+
+            var scope = GetReplaceTypeFromNodeContext(selectedNode);
+            if (scope != ReplaceScopeTypes.None)
+                await CreateWindowAsync(selectedNode, selectedWord, scope);
+        }
+
+        private IWpfTextView GetDocument()
         {
             var componentModel = (IComponentModel)Package.GetGlobalService(typeof(SComponentModel));
             var textManager = (IVsTextManager)Package.GetGlobalService(typeof(SVsTextManager));
@@ -48,38 +84,35 @@ namespace PDDLTools.Commands
             var editorAdapter = componentModel.GetService<IVsEditorAdaptersFactoryService>();
             var textView = editorAdapter.GetWpfTextView(activeView);
             var document = (textView.TextBuffer.ContentType.TypeName.Equals(Constants.PDDLLanguageName)) ? textView : null;
-            if (document != null)
+            return document;
+        }
+
+        private string GetSelectedWord(IWpfTextView document)
+        {
+            var word = GetSelectedWord(document.Caret.Position, document.TextBuffer);
+            if (word != null)
+                return word.Value.GetText();
+            return null;
+        }
+
+        private async Task<INode> GetSelectedAsNodeAsync(string word, int atIndex)
+        {
+            var currentFile = await DTE2Helper.GetSourceFilePathAsync();
+            if (PDDLHelper.IsFileDomain(currentFile))
             {
-                var word = GetSelectedWord(document.Caret.Position, document.TextBuffer);
-                if (word != null)
-                {
-                    var currentFile = await DTE2Helper.GetSourceFilePathAsync();
-                    if (PDDLHelper.IsFileDomain(currentFile))
-                    {
-                        IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
-                        var domainContext = parser.Parse(currentFile).Domain;
-                        var node = GetValidNodeFromWord(domainContext, document, word.Value.GetText());
-                        if (node != null)
-                        {
-                            var scope = GetReplaceTypeFromNodeContext(node);
-                            if (scope != ReplaceScopeTypes.None)
-                                await CreateWindowAsync(node, word.Value.GetText(), scope);
-                        }
-                    } 
-                    else if (PDDLHelper.IsFileProblem(currentFile))
-                    {
-                        IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
-                        var problemContext = parser.Parse(null, currentFile).Problem;
-                        var node = GetValidNodeFromWord(problemContext, document, word.Value.GetText());
-                        if (node != null)
-                        {
-                            var scope = GetReplaceTypeFromNodeContext(node);
-                            if (scope != ReplaceScopeTypes.None)
-                                await CreateWindowAsync(node, word.Value.GetText(), scope);
-                        }
-                    }
-                }
+                IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
+                var domainContext = parser.Parse(currentFile).Domain;
+                var node = GetValidNodeFromWord(domainContext, atIndex, word);
+                return node;
             }
+            else if (PDDLHelper.IsFileProblem(currentFile))
+            {
+                IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
+                var problemContext = parser.Parse(null, currentFile).Problem;
+                var node = GetValidNodeFromWord(problemContext, atIndex, word);
+                return node;
+            }
+            return null;
         }
 
         private async Task CreateWindowAsync(INode node, string word, ReplaceScopeTypes scope)
@@ -135,17 +168,16 @@ namespace PDDLTools.Commands
                 && currentRequest.Snapshot.GetText(word.Span).Any(c => char.IsLetter(c));
         }
 
-        private INode GetValidNodeFromWord(INode source, IWpfTextView document, string word)
+        private INode GetValidNodeFromWord(INode source, int cursor, string word)
         {
             var possibleNodes = source.FindNames(word);
             if (possibleNodes.Count > 0)
             {
-                int simpleCursorPosition = document.Caret.Position.BufferPosition.Position;
                 INode targetNode = possibleNodes.First();
-                int shortestDist = Math.Abs(targetNode.Start - simpleCursorPosition);
+                int shortestDist = Math.Abs(targetNode.Start - cursor);
                 foreach (var node in possibleNodes.Skip(1))
                 {
-                    var dist = Math.Abs(node.Start - simpleCursorPosition);
+                    var dist = Math.Abs(node.Start - cursor);
                     if (dist < shortestDist)
                     {
                         shortestDist = dist;
