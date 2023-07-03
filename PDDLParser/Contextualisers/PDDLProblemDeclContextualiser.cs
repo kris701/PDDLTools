@@ -14,7 +14,6 @@ namespace PDDLParser.Contextualisers
         public override void Contexturalise(ProblemDecl decl, IErrorListener listener)
         {
             SetGoalContext(decl.Goal);
-            SetInitContext(decl.Init);
             LinkObjects(decl);
         }
 
@@ -38,11 +37,6 @@ namespace PDDLParser.Contextualisers
             }
         }
 
-        private void SetInitContext(InitDecl init)
-        {
-
-        }
-
         private void LinkObjects(ProblemDecl decl)
         {
             if (decl.Objects != null)
@@ -56,13 +50,13 @@ namespace PDDLParser.Contextualisers
                             for (int i = 0; i < init.Arguments.Count; i++)
                             {
                                 if (init.Arguments[i].Name == obj.Name)
-                                    init.Arguments[i] = obj;
+                                    init.Arguments[i].Type.Name = obj.Type.Name;
                             }
                         }
                     }
 
                     if (decl.Goal != null)
-                        ReplaceNameExpWith(decl.Goal.GoalExp, obj);
+                        ReplaceNameExpTypeWith(decl.Goal.GoalExp, obj);
                 }
             }
         }

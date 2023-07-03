@@ -105,7 +105,7 @@ namespace PDDLParser.Analysers
             {
                 foreach (var predicate in domain.Predicates.Predicates)
                 {
-                    if (domain.FindNames(predicate.Name).Count == 0)
+                    if (domain.FindNames(predicate.Name).Count == 1)
                         listener.AddError(new ParseError(
                             $"Unused predicate detected '{predicate}'",
                             ParseErrorType.Message,

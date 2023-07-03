@@ -106,28 +106,28 @@ namespace PDDLParser.Contextualisers
             return false;
         }
 
-        internal void ReplaceNameExpWith(IExp node, NameExp with)
+        internal void ReplaceNameExpTypeWith(IExp node, NameExp with)
         {
             if (node is AndExp and)
             {
                 foreach (var child in and.Children)
-                    ReplaceNameExpWith(child, with);
+                    ReplaceNameExpTypeWith(child, with);
             }
             else if (node is OrExp or)
             {
-                ReplaceNameExpWith(or.Option1, with);
-                ReplaceNameExpWith(or.Option2, with);
+                ReplaceNameExpTypeWith(or.Option1, with);
+                ReplaceNameExpTypeWith(or.Option2, with);
             }
             else if (node is NotExp not)
             {
-                ReplaceNameExpWith(not.Child, with);
+                ReplaceNameExpTypeWith(not.Child, with);
             }
             else if (node is PredicateExp pred)
             {
                 for (int i = 0; i < pred.Arguments.Count; i++)
                 {
                     if (pred.Arguments[i].Name == with.Name)
-                        pred.Arguments[i] = with;
+                        pred.Arguments[i].Type.Name = with.Type.Name;
                 }
             }
         }

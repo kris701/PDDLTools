@@ -27,8 +27,8 @@ namespace PDDLParser.Contextualisers
                 {
                     foreach(var param in act.Parameters)
                     {
-                        ReplaceNameExpWith(act.Preconditions, param);
-                        ReplaceNameExpWith(act.Effects, param);
+                        ReplaceNameExpTypeWith(act.Preconditions, param);
+                        ReplaceNameExpTypeWith(act.Effects, param);
                     }
                 }
             }
@@ -42,8 +42,8 @@ namespace PDDLParser.Contextualisers
                 {
                     foreach (var param in axi.Vars)
                     {
-                        ReplaceNameExpWith(axi.Context, param);
-                        ReplaceNameExpWith(axi.Implies, param);
+                        ReplaceNameExpTypeWith(axi.Context, param);
+                        ReplaceNameExpTypeWith(axi.Implies, param);
                     }
                 }
             }

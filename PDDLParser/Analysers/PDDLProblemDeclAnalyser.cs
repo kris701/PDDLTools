@@ -143,62 +143,18 @@ namespace PDDLParser.Analysers
         }
         private void CheckDeclaredVsUsedObjects(ProblemDecl problem, IErrorListener listener)
         {
-            if (problem.Objects != null && problem.Init != null && problem.Goal != null)
+            if (problem.Objects != null)
             {
                 foreach (var obj in problem.Objects.Objs)
                 {
-                    bool isFound = false;
-                    foreach (var init in problem.Init.Predicates)
-                    {
-                        foreach (var arg in init.Arguments)
-                        {
-                            if (arg.Name == obj.Name)
-                            {
-                                isFound = true;
-                                break;
-                            }
-                        }
-                        if (isFound)
-                            break;
-                    }
-                    if (!isFound)
-                    {
-                        HashSet<string> found = new HashSet<string>();
-                        SeekParameters(problem.Goal.GoalExp, found);
-                        if (found.Contains(obj.Name))
-                            isFound = true;
-                    }
-
-                    if (!isFound)
+                    if (problem.FindNames(obj.Name).Count == 1)
                         listener.AddError(new ParseError(
-                            $"Unused object detected '{obj.Name}'",
+                            $"Unused object detected '{obj}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
                             obj.Line,
                             obj.Start));
                 }
-            }
-        }
-        private void SeekParameters(IExp exp, HashSet<string> found)
-        {
-            if (exp is AndExp and)
-            {
-                foreach (var child in and.Children)
-                    SeekParameters(child, found);
-            }
-            else if (exp is OrExp or)
-            {
-                SeekParameters(or.Option1, found);
-                SeekParameters(or.Option2, found);
-            }
-            else if (exp is NotExp not)
-            {
-                SeekParameters(not.Child, found);
-            }
-            else if (exp is PredicateExp pred)
-            {
-                foreach (var param in pred.Arguments)
-                    found.Add(param.Name);
             }
         }
 
