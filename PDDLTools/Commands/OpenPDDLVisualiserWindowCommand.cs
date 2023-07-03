@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class OpenPDDLVisualiserWindowCommand : BaseCommand
+    internal sealed class OpenPDDLVisualiserWindowCommand : BaseCommand<OpenPDDLVisualiserWindowCommand>
     {
         public override int CommandId { get; } = 270;
-        public static OpenPDDLVisualiserWindowCommand Instance { get; internal set; }
 
         private OpenPDDLVisualiserWindowCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
@@ -24,11 +23,7 @@ namespace PDDLTools.Commands
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
         {
-            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(PDDLVisualiserWindow), 0, true, this.package.DisposalToken);
-            if ((null == window) || (null == window.Frame))
-            {
-                throw new NotSupportedException("Cannot create tool window");
-            }
+            await OpenWindowOfTypeAsync(typeof(PDDLVisualiserWindow));
         }
     }
 }

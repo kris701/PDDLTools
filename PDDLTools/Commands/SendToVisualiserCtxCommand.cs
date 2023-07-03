@@ -2,6 +2,7 @@
 using PDDLParser.Helpers;
 using PDDLTools.Helpers;
 using PDDLTools.Windows.PDDLVisualiserWindow;
+using PDDLTools.Windows.PlanValidatorWindow;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -12,10 +13,9 @@ using System.Threading.Tasks;
 
 namespace PDDLTools.Commands
 {
-    internal class SendToVisualiserCtxCommand : BaseCommand
+    internal class SendToVisualiserCtxCommand : BaseCommand<SendToVisualiserCtxCommand>
     {
         public override int CommandId { get; } = 273;
-        public static SendToVisualiserCtxCommand Instance { get; internal set; }
 
         private SendToVisualiserCtxCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {
@@ -41,11 +41,7 @@ namespace PDDLTools.Commands
             var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
             if (selected != null && PDDLHelper.IsFileDomain(selected)) 
             {
-                ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(PDDLVisualiserWindow), 0, true, this.package.DisposalToken);
-                if ((null == window) || (null == window.Frame))
-                {
-                    throw new NotSupportedException("Cannot create tool window");
-                }
+                var window = await OpenWindowOfTypeAsync(typeof(PDDLVisualiserWindow));
                 if (window.Content is PDDLVisualiserWindowControl control)
                 {
                     while (!control.IsUILoaded)

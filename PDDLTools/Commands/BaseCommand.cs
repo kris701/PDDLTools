@@ -3,30 +3,31 @@ using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel.Design;
 using System.Threading.Tasks;
+using PDDLTools.Windows.PDDLVisualiserWindow;
 
 namespace PDDLTools.Commands
 {
-    internal abstract class BaseCommand : IDisposable
+    internal abstract class BaseCommand<T> : IDisposable
     {
+        public static T Instance { get; internal set; }
         public abstract int CommandId { get; }
         public static readonly Guid CommandSet = new Guid(Constants.CommandSetGuid);
-
-        internal readonly AsyncPackage package;
-        internal readonly OleMenuCommand command;
-
         public bool CanBeDisabled { get; } = true;
+
+        internal readonly AsyncPackage _package;
+        internal readonly OleMenuCommand _command;
 
         public BaseCommand(AsyncPackage package, OleMenuCommandService commandService, bool canBeDisabled = true)
         {
             CanBeDisabled = canBeDisabled;
-            this.package = package ?? throw new ArgumentNullException(nameof(package));
+            this._package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
-            command = new OleMenuCommand(this.Execute, menuCommandID);
+            _command = new OleMenuCommand(this.Execute, menuCommandID);
             if (CanBeDisabled)
-                command.BeforeQueryStatus += CheckQueryStatus;
-            commandService.AddCommand(command);
+                _command.BeforeQueryStatus += CheckQueryStatus;
+            commandService.AddCommand(_command);
         }
 
         public static async Task<OleMenuCommandService> InitializeCommandServiceAsync(AsyncPackage package)
@@ -38,7 +39,7 @@ namespace PDDLTools.Commands
 
         public virtual void Execute(object sender, EventArgs e)
         {
-            this.package.JoinableTaskFactory.RunAsync(async delegate
+            this._package.JoinableTaskFactory.RunAsync(async delegate
             {
                 await ExecuteAsync(sender, e);
             });
@@ -57,12 +58,22 @@ namespace PDDLTools.Commands
 
         public void Dispose()
         {
-            this.command.BeforeQueryStatus -= this.CheckQueryStatus;
+            this._command.BeforeQueryStatus -= this.CheckQueryStatus;
         }
 
         public void SetToggleState(bool toState)
         {
-            command.Checked = toState;
+            _command.Checked = toState;
+        }
+
+        public async Task<ToolWindowPane> OpenWindowOfTypeAsync(Type type)
+        {
+            ToolWindowPane window = await this._package.ShowToolWindowAsync(type, 0, true, this._package.DisposalToken);
+            if ((null == window) || (null == window.Frame))
+            {
+                throw new NotSupportedException("Cannot create tool window");
+            }
+            return window;
         }
     }
 }

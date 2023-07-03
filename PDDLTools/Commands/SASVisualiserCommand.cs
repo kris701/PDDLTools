@@ -21,11 +21,9 @@ using System.Runtime.InteropServices;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SASVisualiserCommand : BaseCommand
+    internal sealed class SASVisualiserCommand : BaseCommand<SASVisualiserCommand>
     {
         public override int CommandId { get; } = 268;
-        public static SASVisualiserCommand Instance { get; internal set; }
-        public static string SelectedDomainPath { get; internal set; } = "";
 
         private SASVisualiserCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {

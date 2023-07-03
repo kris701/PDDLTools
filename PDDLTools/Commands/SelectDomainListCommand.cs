@@ -25,10 +25,9 @@ using PDDLParser.Helpers;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectDomainListCommand : BaseCommand
+    internal sealed class SelectDomainListCommand : BaseCommand<SelectDomainListCommand>
     {
         public override int CommandId { get; } = 259;
-        public static SelectDomainListCommand Instance { get; internal set; }
         public static string NoneFoundComboboxName = "No open valid PDDL domains found";
 
         private SelectDomainListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)

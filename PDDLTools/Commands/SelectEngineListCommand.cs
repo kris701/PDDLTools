@@ -25,10 +25,9 @@ using CMDRunners.FastDownward;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectEngineListCommand : BaseCommand
+    internal sealed class SelectEngineListCommand : BaseCommand<SelectEngineListCommand>
     {
         public override int CommandId { get; } = 264;
-        public static SelectEngineListCommand Instance { get; internal set; }
         private List<string> _engines;
 
         private SelectEngineListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)

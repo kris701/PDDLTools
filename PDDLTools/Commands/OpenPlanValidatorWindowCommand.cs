@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.Shell;
+using PDDLTools.Windows.PDDLVisualiserWindow;
 using PDDLTools.Windows.PlanValidatorWindow;
 using System;
 using System.Collections.Generic;
@@ -8,10 +9,9 @@ using System.Threading.Tasks;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class OpenPlanValidatorWindowCommand : BaseCommand
+    internal sealed class OpenPlanValidatorWindowCommand : BaseCommand<OpenPlanValidatorWindowCommand>
     {
         public override int CommandId { get; } = 269;
-        public static OpenPlanValidatorWindowCommand Instance { get; internal set; }
 
         private OpenPlanValidatorWindowCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
@@ -24,11 +24,7 @@ namespace PDDLTools.Commands
 
         public override async Task ExecuteAsync(object sender, EventArgs e)
         {
-            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(PlanValidatorWindow), 0, true, this.package.DisposalToken);
-            if ((null == window) || (null == window.Frame))
-            {
-                throw new NotSupportedException("Cannot create tool window");
-            }
+            await OpenWindowOfTypeAsync(typeof(PlanValidatorWindow));
         }
     }
 }

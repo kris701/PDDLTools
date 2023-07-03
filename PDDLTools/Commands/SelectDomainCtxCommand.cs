@@ -23,10 +23,9 @@ using PDDLParser.Helpers;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectDomainCtxCommand : BaseCommand
+    internal sealed class SelectDomainCtxCommand : BaseCommand<SelectDomainCtxCommand>
     {
         public override int CommandId { get; } = 272;
-        public static SelectDomainCtxCommand Instance { get; internal set; }
 
         private SelectDomainCtxCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {

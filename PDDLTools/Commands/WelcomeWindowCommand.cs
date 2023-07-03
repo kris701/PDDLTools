@@ -10,13 +10,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Task = System.Threading.Tasks.Task;
 using PDDLTools.Windows.WelcomeWindow;
+using PDDLTools.Windows.PDDLVisualiserWindow;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class WelcomeWindowCommand : BaseCommand
+    internal sealed class WelcomeWindowCommand : BaseCommand<WelcomeWindowCommand>
     {
         public override int CommandId { get; } = 262;
-        public static WelcomeWindowCommand Instance { get; internal set; }
 
         private WelcomeWindowCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
@@ -31,16 +31,12 @@ namespace PDDLTools.Commands
         {
             while (!await DTE2Helper.IsFullyVSOpenAsync())
             {
-                if (this.package.DisposalToken.IsCancellationRequested)
+                if (_package.DisposalToken.IsCancellationRequested)
                     return;
                 await Task.Delay(5000);
             }
             await Task.Delay(10000);
-            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(WelcomeWindow), 0, true, this.package.DisposalToken);
-            if ((null == window) || (null == window.Frame))
-            {
-                throw new NotSupportedException("Cannot create tool window");
-            }
+            var window = await OpenWindowOfTypeAsync(typeof(WelcomeWindow));
         }
     }
 }

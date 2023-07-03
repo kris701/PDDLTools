@@ -23,10 +23,9 @@ using PDDLTools.Projects;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectEngineCommand : BaseCommand
+    internal sealed class SelectEngineCommand : BaseCommand<SelectEngineCommand>
     {
         public override int CommandId { get; } = 263;
-        public static SelectEngineCommand Instance { get; internal set; }
 
         private SelectEngineCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {

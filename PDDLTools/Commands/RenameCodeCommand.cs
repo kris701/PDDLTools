@@ -23,13 +23,13 @@ using PDDLParser.Models.Domain;
 using PDDLParser;
 using PDDLParser.Models.Problem;
 using System.ComponentModel.Design;
+using PDDLTools.Windows.PlanValidatorWindow;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class RenameCodeCommand : BaseCommand
+    internal sealed class RenameCodeCommand : BaseCommand<RenameCodeCommand>
     {
         public override int CommandId { get; } = 277;
-        public static RenameCodeCommand Instance { get; internal set; }
 
         private RenameCodeCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {
@@ -117,13 +117,9 @@ namespace PDDLTools.Commands
 
         private async Task CreateWindowAsync(INode node, string word, ReplaceScopeTypes scope)
         {
-            ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(RenameCodeWindow), 0, true, this.package.DisposalToken);
-            if ((null == window) || (null == window.Frame))
-            {
-                throw new NotSupportedException("Cannot create tool window");
-            }
+            var window = await OpenWindowOfTypeAsync(typeof(RenameCodeWindow));
             if (window.Content is RenameCodeWindowControl control)
-                await control.UpdateReplaceDataAsync(this.package as PDDLToolsPackage, node, word, scope);
+                await control.UpdateReplaceDataAsync(this._package as PDDLToolsPackage, node, word, scope);
         }
 
         private SnapshotSpan? GetSelectedWord(CaretPosition caretPosition, ITextBuffer buffer)

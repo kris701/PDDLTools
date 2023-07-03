@@ -13,10 +13,9 @@ using System.Threading.Tasks;
 
 namespace PDDLTools.Commands
 {
-    internal class SendDomainToValidatorCtxCommand : BaseCommand
+    internal class SendDomainToValidatorCtxCommand : BaseCommand<SendDomainToValidatorCtxCommand>
     {
         public override int CommandId { get; } = 274;
-        public static SendDomainToValidatorCtxCommand Instance { get; internal set; }
 
         private SendDomainToValidatorCtxCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {
@@ -42,11 +41,7 @@ namespace PDDLTools.Commands
             var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
             if (selected != null && PDDLHelper.IsFileDomain(selected)) 
             {
-                ToolWindowPane window = await this.package.ShowToolWindowAsync(typeof(PlanValidatorWindow), 0, true, this.package.DisposalToken);
-                if ((null == window) || (null == window.Frame))
-                {
-                    throw new NotSupportedException("Cannot create tool window");
-                }
+                var window = await OpenWindowOfTypeAsync(typeof(PlanValidatorWindow));
                 if (window.Content is PlanValidatorWindowControl control)
                     control.SelectedDomainFile = selected;
             }

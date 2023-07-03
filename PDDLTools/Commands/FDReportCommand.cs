@@ -21,10 +21,9 @@ using System.Runtime.InteropServices;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class FDReportCommand : BaseCommand
+    internal sealed class FDReportCommand : BaseCommand<FDReportCommand>
     {
         public override int CommandId { get; } = 267;
-        public static FDReportCommand Instance { get; internal set; }
         public static string SelectedDomainPath { get; internal set; } = "";
 
         private FDReportCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)

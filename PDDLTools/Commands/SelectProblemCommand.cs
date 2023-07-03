@@ -24,10 +24,9 @@ using PDDLTools.Projects;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectProblemCommand : BaseCommand
+    internal sealed class SelectProblemCommand : BaseCommand<SelectProblemCommand>
     {
         public override int CommandId { get; } = 265;
-        public static SelectProblemCommand Instance { get; internal set; }
 
         private SelectProblemCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, true)
         {

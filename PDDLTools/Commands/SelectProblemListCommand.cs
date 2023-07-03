@@ -25,10 +25,9 @@ using PDDLParser.Helpers;
 
 namespace PDDLTools.Commands
 {
-    internal sealed class SelectProblemListCommand : BaseCommand
+    internal sealed class SelectProblemListCommand : BaseCommand<SelectProblemListCommand>
     {
         public override int CommandId { get; } = 266;
-        public static SelectProblemListCommand Instance { get; internal set; }
         public static string NoneFoundComboboxName = "No open valid PDDL problems found";
 
         private SelectProblemListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)

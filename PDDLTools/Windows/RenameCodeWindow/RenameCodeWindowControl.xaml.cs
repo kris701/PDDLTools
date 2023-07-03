@@ -58,7 +58,9 @@ namespace PDDLTools.Windows.RenameCodeWindow
         {
             if (text == "")
                 return false;
-            if (PDDLInfo.PDDLInfo.PDDLDefinition != null)
+            else if (text.Contains(":"))
+                return false;
+            else if (PDDLInfo.PDDLInfo.PDDLDefinition != null)
             {
                 foreach (var element in PDDLInfo.PDDLInfo.PDDLDefinition.Elements)
                     if (element.Key == text)
@@ -79,7 +81,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
                 {
                     ReplaceWithBorder.BorderThickness = new Thickness(1);
                     var newTip = new ToolTip();
-                    newTip.Content = "Invaid replacement name! Might conflict with other names!";
+                    newTip.Content = "Invaid replacement name! Might conflict with other names or default PDDL names!";
                     newTip.IsOpen = true;
                     ReplaceWithTextbox.ToolTip = newTip;
                 }
