@@ -46,7 +46,7 @@ namespace PDDLParser.Models
 
         public object Clone()
         {
-            var newPredicateExp = new PredicateExp(new ASTNode(Start, Line, ""), Parent, Name, new List<NameExp>());
+            var newPredicateExp = new PredicateExp(new ASTNode(Start, End, Line, ""), Parent, Name, new List<NameExp>());
             foreach (var arg in Arguments)
                 newPredicateExp.Arguments.Add(new NameExp(new ASTNode(arg.Start, arg.End, arg.Line, ""), newPredicateExp, arg.Name));
             return newPredicateExp;
