@@ -14,6 +14,7 @@ namespace PDDLParser.Models
         int Line { get; set; }
 
         HashSet<INode> FindNames(string name);
+        HashSet<T> FindTypes<T>();
         bool Equals(object obj);
         int GetHashCode();
     }

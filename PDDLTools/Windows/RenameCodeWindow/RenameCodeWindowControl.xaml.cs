@@ -1,9 +1,12 @@
-﻿using Microsoft.VisualStudio;
+﻿using EnvDTE;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.VCProjectEngine;
+using PDDLParser.Helpers;
 using PDDLParser.Models;
 using PDDLParser.Models.Domain;
+using PDDLTools.ContextStorage;
 using PDDLTools.Helpers;
 using System;
 using System.Collections.Generic;
@@ -90,31 +93,95 @@ namespace PDDLTools.Windows.RenameCodeWindow
 
         private async Task StartReplacingAsync()
         {
-            var doc = await DTE2Helper.GetSourceFilePathAsync();
-            var text = File.ReadAllText(doc);
-            var newText = ReplaceNamesOfType(text, ReplaceTextTextbox.Text, ReplaceWithTextbox.Text, _scopeType);
-            File.WriteAllText(doc, newText);
+            if (IsGlobalRenameValid(_scopeType))
+            {
+                string targetDomain = null;
+                var sourceFile = await DTE2Helper.GetSourceFilePathAsync();
+                var decl = PDDLFileContexts.TryGetContextForFile(sourceFile);
+                if (decl != null)
+                {
+                    if (decl.Domain != null)
+                        targetDomain = decl.Domain.Name.Name;
+                    else if (decl.Problem != null)
+                        targetDomain = decl.Problem.DomainName.Name;
+                }
+                if (targetDomain != null)
+                {
+                    List<string> targetFiles = new List<string>() { sourceFile };
+                    foreach (var file in Directory.GetFiles(new FileInfo(sourceFile).Directory.FullName))
+                    {
+                        if (targetFiles.Contains(file))
+                            continue;
+                        var otherDecl = PDDLFileContexts.TryGetContextForFile(file);
+                        if (otherDecl != null)
+                        {
+                            if (otherDecl.Domain != null)
+                            {
+                                if (otherDecl.Domain.Name.Name == targetDomain)
+                                    targetFiles.Add(file);
+                            }
+                            else if (otherDecl.Problem != null)
+                            {
+                                if (otherDecl.Problem.DomainName.Name == targetDomain)
+                                    targetFiles.Add(file);
+                            }
+                        } 
+                    }
+
+                    foreach (var file in targetFiles)
+                    {
+                        var context = PDDLFileContexts.TryGetContextForFile(file);
+                        if (context != null)
+                            ReplaceNamesOfType(
+                                file,
+                                context.FindNames(ReplaceTextTextbox.Text).ToList(),
+                                ReplaceTextTextbox.Text,
+                                ReplaceWithTextbox.Text,
+                                _scopeType);
+                    }
+                }
+            }
+            else
+            {
+                var file = await DTE2Helper.GetSourceFilePathAsync();
+                List<INode> nodes = new List<INode>();
+                switch (_scopeType)
+                {
+                    case ReplaceScopeTypes.ActionParameter:
+                        nodes = GetActionFromScope(_node).FindNames(ReplaceTextTextbox.Text).ToList(); break;
+                    case ReplaceScopeTypes.AxiomParameter:
+                        nodes = GetAxiomFromScope(_node).FindNames(ReplaceTextTextbox.Text).ToList(); break;
+                    case ReplaceScopeTypes.ActionName:
+                    case ReplaceScopeTypes.Predicate:
+                    case ReplaceScopeTypes.ProblemObjects:
+                    case ReplaceScopeTypes.TypeName:
+                        var context = PDDLFileContexts.TryGetContextForFile(file);
+                        if (context != null)
+                            nodes = context.FindNames(ReplaceTextTextbox.Text).ToList();
+                        break;
+                }
+                if (nodes.Count > 0)
+                    ReplaceNamesOfType(file, nodes, ReplaceTextTextbox.Text, ReplaceWithTextbox.Text, _scopeType);
+            }
 
             await HideThisWindowAsync();
         }
 
-        private string ReplaceNamesOfType(string text, string from, string to, ReplaceScopeTypes scopeType)
+        private bool IsGlobalRenameValid(ReplaceScopeTypes scopeType)
         {
-            List<INode> nodes = new List<INode>();
-
-            switch (scopeType)
+            if (IsGlobalRename.IsChecked == false)
+                return false;
+            else if (IsGlobalRename.IsChecked == true)
             {
-                case ReplaceScopeTypes.ActionParameter:
-                    nodes = GetActionFromScope(_node).FindNames(from).ToList(); break;
-                case ReplaceScopeTypes.AxiomParameter:
-                    nodes = GetAxiomFromScope(_node).FindNames(from).ToList(); break;
-                case ReplaceScopeTypes.ActionName:
-                case ReplaceScopeTypes.Predicate:
-                case ReplaceScopeTypes.ProblemObjects:
-                case ReplaceScopeTypes.TypeName:
-                    nodes = GetFullScope(_node).FindNames(from).ToList(); 
-                    break;
+                if (scopeType == ReplaceScopeTypes.ActionParameter || scopeType == ReplaceScopeTypes.AxiomParameter)
+                    return false;
             }
+            return true;
+        }
+
+        private void ReplaceNamesOfType(string file, List<INode> nodes, string from, string to, ReplaceScopeTypes scopeType)
+        {
+            var text = File.ReadAllText(file);
 
             int offset = 0;
             foreach(var node in nodes)
@@ -153,7 +220,8 @@ namespace PDDLTools.Windows.RenameCodeWindow
                         break;
                 }
             }
-            return text;
+
+            File.WriteAllText(file, text);
         }
 
         private string ReplaceTextWithinNode(string text, string from, string to, INode node, int offset)
@@ -180,13 +248,6 @@ namespace PDDLTools.Windows.RenameCodeWindow
             if (exp.Parent is AxiomDecl act)
                 return act;
             return GetAxiomFromScope(exp.Parent);
-        }
-
-        private INode GetFullScope(INode node)
-        {
-            if (node.Parent == null)
-                return node;
-            return GetFullScope(node.Parent);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

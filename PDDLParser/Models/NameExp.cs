@@ -62,5 +62,14 @@ namespace PDDLParser.Models
             result.AddRange(Type.FindNames(name));
             return result;
         }
+
+        public override HashSet<T> FindTypes<T>()
+        {
+            HashSet<T> res = new HashSet<T>();
+            if (this is T v)
+                res.Add(v);
+            res.AddRange(Type.FindTypes<T>());
+            return res;
+        }
     }
 }

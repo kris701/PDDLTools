@@ -36,6 +36,17 @@ namespace PDDLParser.Models.Domain
             return res;
         }
 
+        public override HashSet<T> FindTypes<T>()
+        {
+            HashSet<T> res = new HashSet<T>();
+            if (this is T v)
+                res.Add(v);
+            res.AddRange(TypeName.FindTypes<T>());
+            foreach (var subType in SubTypes)
+                res.AddRange(subType.FindTypes<T>());
+            return res;
+        }
+
         public override int GetHashCode()
         {
             var hash = base.GetHashCode() + TypeName.GetHashCode();

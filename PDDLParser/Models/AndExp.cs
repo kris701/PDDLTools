@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PDDLParser.Models
 {
@@ -30,6 +31,16 @@ namespace PDDLParser.Models
             HashSet<INode> res = new HashSet<INode>();
             foreach (var child in Children)
                 res.AddRange(child.FindNames(name));
+            return res;
+        }
+
+        public override HashSet<T> FindTypes<T>()
+        {
+            HashSet<T> res = new HashSet<T>();
+            if (this is T v)
+                res.Add(v);
+            foreach (var child in Children)
+                res.AddRange(child.FindTypes<T>());
             return res;
         }
 

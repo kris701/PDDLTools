@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using PDDLTools.ContextStorage;
 using PDDLTools.Helpers;
 using PDDLParser.Helpers;
+using System.Runtime.Remoting.Contexts;
 
 namespace PDDLTools.Classifiers
 { 
@@ -56,27 +57,26 @@ namespace PDDLTools.Classifiers
             ClassificationStorage[PDDLTypes.Predicates] = new List<string>();
             ClassificationStorage[PDDLTypes.Objects] = new List<string>();
 
-            try
+            var file = DTE2Helper.GetSourceFilePathAsync().Result;
+            var decl = PDDLFileContexts.TryGetContextForFile(file);
+            if (decl != null)
             {
-                var file = DTE2Helper.GetSourceFilePathAsync().Result;
-                if (PDDLHelper.IsFileDomain(file))
+                if (decl.Domain != null)
                 {
-                    var context = PDDLFileContexts.GetDomainContextForFile(file);
-                    if (context.Predicates != null)
-                        foreach (var pred in context.Predicates.Predicates)
+                    if (decl.Domain.Predicates != null)
+                        foreach (var pred in decl.Domain.Predicates.Predicates)
                             ClassificationStorage[PDDLTypes.Predicates].Add(pred.Name);
                 }
-                else if (PDDLHelper.IsFileProblem(file))
+                else if (decl.Problem != null)
                 {
-                    var context = PDDLFileContexts.GetProblemContextForFile(file);
-                    if (context.Init != null)
-                        foreach (var pred in context.Init.Predicates)
+                    if (decl.Problem.Init != null)
+                        foreach (var pred in decl.Problem.Init.Predicates)
                             ClassificationStorage[PDDLTypes.Predicates].Add(pred.Name);
-                    if (context.Objects != null)
-                        foreach (var obj in context.Objects.Objs)
+                    if (decl.Problem.Objects != null)
+                        foreach (var obj in decl.Problem.Objects.Objs)
                             ClassificationStorage[PDDLTypes.Objects].Add(obj.Name);
                 }
-            } catch { }
+            }
         }
 
         public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span)

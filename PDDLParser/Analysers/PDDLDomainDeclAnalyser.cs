@@ -17,6 +17,7 @@ namespace PDDLParser.Analysers
             CheckForBasicDomain(decl, listener);
 
             // Declare Checking
+            CheckForUndeclaredPredicates(decl, listener);
             CheckForUnusedPredicates(decl, listener);
             CheckForUnusedActionParameters(decl, listener);
             CheckForUnusedAxiomParameters(decl, listener);
@@ -78,107 +79,41 @@ namespace PDDLParser.Analysers
                     domain.Start));
         }
 
+        private void CheckForUndeclaredPredicates(DomainDecl domain, IErrorListener listener)
+        {
+            if (domain.Predicates != null)
+            {
+                List<string> simplePredNames = new List<string>();
+                foreach (var pred in domain.Predicates.Predicates)
+                    simplePredNames.Add(pred.Name);
+                var allPreds = domain.FindTypes<PredicateExp>();
+                foreach(var pred in allPreds)
+                {
+                    if (!simplePredNames.Contains(pred.Name))
+                        listener.AddError(new ParseError(
+                            $"Undefined predicate! '{pred}'",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
+                            pred.Line,
+                            pred.Start));
+                }
+            }
+        }
         private void CheckForUnusedPredicates(DomainDecl domain, IErrorListener listener)
         {
             if (domain.Predicates != null)
             {
-                List<PredicateExp> predicates = new List<PredicateExp>();
                 foreach (var predicate in domain.Predicates.Predicates)
-                    predicates.Add(predicate.Clone() as PredicateExp);
-
-                if (domain.Actions != null)
                 {
-                    foreach (var action in domain.Actions)
-                    {
-                        for (int i = 0; i < predicates.Count; i++)
-                        {
-                            if (action.Preconditions != null)
-                            {
-                                if (IsPredicateUsed(action.Preconditions, predicates[i].Name))
-                                {
-                                    predicates.RemoveAt(i);
-                                    i = -1;
-                                    continue;
-                                }
-                            }
-
-                            if (action.Effects != null)
-                            {
-                                if (IsPredicateUsed(action.Effects, predicates[i].Name))
-                                {
-                                    predicates.RemoveAt(i);
-                                    i = -1;
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (domain.Axioms != null)
-                {
-                    foreach (var axiom in domain.Axioms)
-                    {
-                        for (int i = 0; i < predicates.Count; i++)
-                        {
-                            if (axiom.Context != null)
-                            {
-                                if (IsPredicateUsed(axiom.Context, predicates[i].Name))
-                                {
-                                    predicates.RemoveAt(i);
-                                    i = -1;
-                                    continue;
-                                }
-                            }
-                            if (axiom.Implies != null)
-                            {
-                                if (IsPredicateUsed(axiom.Implies, predicates[i].Name))
-                                {
-                                    predicates.RemoveAt(i);
-                                    i = -1;
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                foreach (var predicate in predicates)
-                {
-                    listener.AddError(new ParseError(
-                        $"Unused predicate detected '{predicate}'",
-                        ParseErrorType.Message,
-                        ParseErrorLevel.Analyser,
-                        predicate.Line,
-                        predicate.Start));
+                    if (domain.FindNames(predicate.Name).Count == 0)
+                        listener.AddError(new ParseError(
+                            $"Unused predicate detected '{predicate}'",
+                            ParseErrorType.Message,
+                            ParseErrorLevel.Analyser,
+                            predicate.Line,
+                            predicate.Start));
                 }
             }
-        }
-        private bool IsPredicateUsed(IExp exp, string predicate)
-        {
-            if (exp is AndExp and)
-            {
-                foreach (var child in and.Children)
-                    if (IsPredicateUsed(child, predicate))
-                        return true;
-            }
-            else if (exp is OrExp or)
-            {
-                if (IsPredicateUsed(or.Option1, predicate))
-                    return true;
-                if (IsPredicateUsed(or.Option2, predicate))
-                    return true;
-            }
-            else if (exp is NotExp not)
-            {
-                return IsPredicateUsed(not.Child, predicate);
-            }
-            else if (exp is PredicateExp pred)
-            {
-                if (pred.Name == predicate)
-                    return true;
-            }
-            return false;
         }
         private void CheckForUnusedActionParameters(DomainDecl domain, IErrorListener listener)
         {
@@ -186,12 +121,8 @@ namespace PDDLParser.Analysers
             {
                 foreach (var act in domain.Actions)
                 {
-                    HashSet<string> found = new HashSet<string>();
-                    SeekParameters(act.Preconditions, found);
-                    SeekParameters(act.Effects, found);
-
                     foreach (var param in act.Parameters)
-                        if (!found.Contains(param.Name))
+                        if (act.FindNames(param.Name).Count == 0)
                             listener.AddError(new ParseError(
                                 $"Unused action parameter found '{param.Name}'",
                                 ParseErrorType.Message,
@@ -207,12 +138,8 @@ namespace PDDLParser.Analysers
             {
                 foreach (var axi in domain.Axioms)
                 {
-                    HashSet<string> found = new HashSet<string>();
-                    SeekParameters(axi.Context, found);
-                    SeekParameters(axi.Implies, found);
-
                     foreach (var param in axi.Vars)
-                        if (!found.Contains(param.Name))
+                        if (axi.FindNames(param.Name).Count == 0)
                             listener.AddError(new ParseError(
                                 $"Unused axiom variable found '{param.Name}'",
                                 ParseErrorType.Message,
@@ -220,28 +147,6 @@ namespace PDDLParser.Analysers
                                 param.Line,
                                 param.Start));
                 }
-            }
-        }
-        private void SeekParameters(IExp exp, HashSet<string> found)
-        {
-            if (exp is AndExp and)
-            {
-                foreach (var child in and.Children)
-                    SeekParameters(child, found);
-            }
-            else if (exp is OrExp or)
-            {
-                SeekParameters(or.Option1, found);
-                SeekParameters(or.Option2, found);
-            }
-            else if (exp is NotExp not)
-            {
-                SeekParameters(not.Child, found);
-            }
-            else if (exp is PredicateExp pred)
-            {
-                foreach (var param in pred.Arguments)
-                    found.Add(param.Name);
             }
         }
 

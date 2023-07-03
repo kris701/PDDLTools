@@ -14,7 +14,7 @@ namespace PDDLParser.Visitors
     {
         public static IExp Visit(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (node.Content.StartsWith("and"))
+            if (IsOfValidNodeType(node.Content, "and"))
             {
                 DoesNodeHaveMoreThanNChildren(node, "and", 0, listener);
                 DoesContentContainAnyStrayCharacters(node, "and", listener);
@@ -25,7 +25,7 @@ namespace PDDLParser.Visitors
 
                 return newAndExp;
             } 
-            else if (node.Content.StartsWith("or"))
+            else if (IsOfValidNodeType(node.Content, "or"))
             {
                 DoesNodeHaveSpecificChildCount(node, "or", 2, listener);
                 DoesContentContainAnyStrayCharacters(node, "or", listener);
@@ -35,7 +35,7 @@ namespace PDDLParser.Visitors
                 newOrExp.Option2 = Visit(node.Children[1], newOrExp, listener);
                 return newOrExp;
             }
-            else if (node.Content.StartsWith("not"))
+            else if (IsOfValidNodeType(node.Content, "not"))
             {
                 DoesNodeHaveSpecificChildCount(node, "not", 1, listener);
                 DoesContentContainAnyStrayCharacters(node, "not", listener);
@@ -106,6 +106,23 @@ namespace PDDLParser.Visitors
                 var newNameExp = new NameExp(node, parent, node.Content.Replace("?", ""));
                 return newNameExp;
             }
+        }
+
+        private static bool IsOfValidNodeType(string content, string nodeType)
+        {
+            if (content.StartsWith(nodeType))
+            {
+                if (nodeType.Length == content.Length)
+                    return true;
+                var nextCharacter = content[nodeType.Length];
+                if (nextCharacter == ' ')
+                    return true;
+                if (nextCharacter == '(')
+                    return true;
+                if (nextCharacter == '\n')
+                    return true;
+            }
+            return false;
         }
     }
 }

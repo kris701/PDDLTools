@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,14 @@ namespace PDDLParser.Models.Domain
             if (Name == name)
                 return new HashSet<INode>() { this };
             return new HashSet<INode>();
+        }
+
+        public override HashSet<T> FindTypes<T>()
+        {
+            HashSet<T> res = new HashSet<T>();
+            if (this is T v)
+                res.Add(v);
+            return res;
         }
 
         public override int GetHashCode()

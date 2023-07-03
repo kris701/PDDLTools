@@ -72,34 +72,29 @@ namespace PDDLTools.EditorMargins
                 DomainPanel.Visibility = Visibility.Hidden;
                 ProblemPanel.Visibility = Visibility.Hidden;
 
-                try
+                var decl = PDDLFileContexts.TryGetContextForFile(file);
+                if (decl  != null)
                 {
-                    if (PDDLHelper.IsFileDomain(file))
+                    if (decl.Domain != null)
                     {
                         DomainPanel.Visibility = Visibility.Visible;
-
-                        var domain = PDDLFileContexts.GetDomainContextForFile(file);
-
-                        if (domain.Predicates != null)
-                            PredicateCountLabel.Content = $"{domain.Predicates.Predicates.Count}";
-                        if (domain.Actions != null)
-                            ActionCountLabel.Content = $"{domain.Actions.Count}";
+                        if (decl.Domain.Predicates != null)
+                            PredicateCountLabel.Content = $"{decl.Domain.Predicates.Predicates.Count}";
+                        if (decl.Domain.Actions != null)
+                            ActionCountLabel.Content = $"{decl.Domain.Actions.Count}";
                     }
-                    else if (PDDLHelper.IsFileProblem(file))
+                    else if (decl.Problem != null)
                     {
                         ProblemPanel.Visibility = Visibility.Visible;
 
-                        var problem = PDDLFileContexts.GetProblemContextForFile(file);
-
-                        if (problem.Objects != null)
-                            ObjectCountLabel.Content = $"{problem.Objects.Objs.Count}";
-                        if (problem.Init != null)
-                            InitCountLabel.Content = $"{problem.Init.Predicates.Count}";
-                        if (problem.Goal != null)
-                            GoalCountLabel.Content = $"{problem.Goal.PredicateCount}";
+                        if (decl.Problem.Objects != null)
+                            ObjectCountLabel.Content = $"{decl.Problem.Objects.Objs.Count}";
+                        if (decl.Problem.Init != null)
+                            InitCountLabel.Content = $"{decl.Problem.Init.Predicates.Count}";
+                        if (decl.Problem.Goal != null)
+                            GoalCountLabel.Content = $"{decl.Problem.Goal.PredicateCount}";
                     }
                 }
-                catch (Exception) { }
             }
         }
 

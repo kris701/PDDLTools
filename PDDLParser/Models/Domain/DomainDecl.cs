@@ -52,6 +52,7 @@ namespace PDDLParser.Models.Domain
 
             return false;
         }
+
         public override HashSet<INode> FindNames(string name)
         {
             HashSet<INode> res = new HashSet<INode>();
@@ -76,6 +77,35 @@ namespace PDDLParser.Models.Domain
             if (Axioms != null)
                 foreach(var axi in Axioms)
                     res.AddRange(axi.FindNames(name));
+
+            return res;
+        }
+
+        public override HashSet<T> FindTypes<T>()
+        {
+            HashSet<T> res = new HashSet<T>();
+            if (this is T v)
+                res.Add(v);
+            if (Name != null)
+                res.AddRange(Name.FindTypes<T>());
+            if (Requirements != null)
+                res.AddRange(Requirements.FindTypes<T>());
+            if (Extends != null)
+                res.AddRange(Extends.FindTypes<T>());
+            if (Timeless != null)
+                res.AddRange(Timeless.FindTypes<T>());
+            if (Types != null)
+                res.AddRange(Types.FindTypes<T>());
+            if (Constants != null)
+                res.AddRange(Constants.FindTypes<T>());
+            if (Predicates != null)
+                res.AddRange(Predicates.FindTypes<T>());
+            if (Actions != null)
+                foreach (var act in Actions)
+                    res.AddRange(act.FindTypes<T>());
+            if (Axioms != null)
+                foreach (var axi in Axioms)
+                    res.AddRange(axi.FindTypes<T>());
 
             return res;
         }

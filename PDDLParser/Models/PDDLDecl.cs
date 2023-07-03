@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PDDLParser.Models
 {
@@ -27,6 +28,16 @@ namespace PDDLParser.Models
                 matches.AddRange(Domain.FindNames(name));
             if (Problem != null)
                 matches.AddRange(Problem.FindNames(name));
+            return matches;
+        }
+
+        public HashSet<T> FindTypes<T>()
+        {
+            var matches = new HashSet<T>();
+            if (Domain != null)
+                matches.AddRange(Domain.FindTypes<T>());
+            if (Problem != null)
+                matches.AddRange(Problem.FindTypes<T>());
             return matches;
         }
     }

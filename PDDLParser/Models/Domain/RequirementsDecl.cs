@@ -32,6 +32,15 @@ namespace PDDLParser.Models.Domain
                 res.AddRange(requirement.FindNames(name));
             return res;
         }
+        public override HashSet<T> FindTypes<T>()
+        {
+            HashSet<T> res = new HashSet<T>();
+            if (this is T v)
+                res.Add(v);
+            foreach (var req in Requirements)
+                res.AddRange(req.FindTypes<T>());
+            return res;
+        }
 
         public override int GetHashCode()
         {

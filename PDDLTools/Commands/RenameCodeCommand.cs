@@ -98,19 +98,13 @@ namespace PDDLTools.Commands
         private async Task<INode> GetSelectedAsNodeAsync(string word, int atIndex)
         {
             var currentFile = await DTE2Helper.GetSourceFilePathAsync();
-            if (PDDLHelper.IsFileDomain(currentFile))
+            var decl = PDDLFileContexts.TryGetContextForFile(currentFile);
+            if (decl != null)
             {
-                IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
-                var domainContext = parser.Parse(currentFile).Domain;
-                var node = GetValidNodeFromWord(domainContext, atIndex, word);
-                return node;
-            }
-            else if (PDDLHelper.IsFileProblem(currentFile))
-            {
-                IPDDLParser parser = new PDDLParser.PDDLParser(false, false);
-                var problemContext = parser.Parse(null, currentFile).Problem;
-                var node = GetValidNodeFromWord(problemContext, atIndex, word);
-                return node;
+                if (decl.Domain != null)
+                    return GetValidNodeFromWord(decl.Domain, atIndex, word);
+                if (decl.Problem != null)
+                    return GetValidNodeFromWord(decl.Problem, atIndex, word);
             }
             return null;
         }

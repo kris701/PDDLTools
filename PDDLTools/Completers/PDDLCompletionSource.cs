@@ -38,25 +38,26 @@ namespace PDDLTools.Completers
             foreach (string str in strList)
                 m_compList.Add(new Completion(str, str, str, null, null));
 
-            try
+            var currentFile = DTE2Helper.GetSourceFilePathAsync().Result;
+            var decl = PDDLFileContexts.TryGetContextForFile(currentFile);
+            if (decl != null)
             {
-                var currentFile = DTE2Helper.GetSourceFilePathAsync().Result;
-                if (PDDLHelper.IsFileDomain(currentFile))
+                if (decl.Domain != null)
                 {
-                    var domainContext = PDDLFileContexts.GetDomainContextForFile(currentFile);
-                    if (domainContext.Predicates != null)
-                        foreach (var predicate in domainContext.Predicates.Predicates)
+                    if (decl.Domain.Predicates != null)
+                        foreach (var predicate in decl.Domain.Predicates.Predicates)
                             m_compList.Add(new Completion(predicate.Name, predicate.Name, predicate.Name, null, null));
                 }
-                else if (PDDLHelper.IsFileProblem(currentFile))
+                else if (decl.Problem != null)
                 {
-                    var problemContext = PDDLFileContexts.GetProblemContextForFile(currentFile);
-                    if (problemContext.Objects != null)
-                        foreach (var obj in problemContext.Objects.Objs)
+                    if (decl.Problem.Objects != null)
+                        foreach (var obj in decl.Problem.Objects.Objs)
                             m_compList.Add(new Completion(obj.Name, obj.Name, obj.Name, null, null));
+                    if (decl.Problem.Init != null)
+                        foreach (var pred in decl.Problem.Init.Predicates)
+                            m_compList.Add(new Completion(pred.Name, pred.Name, pred.Name, null, null));
                 }
             }
-            catch { }
 
             completionSets.Add(new CompletionSet(
                 "Tokens",    //the non-localized title of the tab

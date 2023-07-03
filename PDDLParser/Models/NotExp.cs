@@ -1,4 +1,5 @@
 ﻿using PDDLParser.AST;
+using PDDLParser.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,15 @@ namespace PDDLParser.Models
         public override HashSet<INode> FindNames(string name)
         {
             return Child.FindNames(name);
+        }
+
+        public override HashSet<T> FindTypes<T>()
+        {
+            HashSet<T> res = new HashSet<T>();
+            if (this is T v)
+                res.Add(v);
+            res.AddRange(Child.FindTypes<T>());
+            return res;
         }
 
         public override int GetHashCode()

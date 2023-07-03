@@ -1,4 +1,5 @@
 ﻿using PDDLParser;
+using PDDLParser.Helpers;
 using PDDLParser.Models;
 using PDDLParser.Models.Domain;
 using PDDLParser.Models.Problem;
@@ -18,7 +19,23 @@ namespace PDDLTools.ContextStorage
         private static Dictionary<string, DateTime> _problemTimes = new Dictionary<string, DateTime>();
         private static Dictionary<string, ProblemDecl> _problems = new Dictionary<string, ProblemDecl>();
 
-        public static DomainDecl GetDomainContextForFile(string fileName)
+        public static PDDLDecl TryGetContextForFile(string fileName)
+        {
+            try
+            {
+                if (PDDLHelper.IsFileDomain(fileName))
+                    return new PDDLDecl(GetDomainContextForFile(fileName), null);
+                if (PDDLHelper.IsFileProblem(fileName))
+                    return new PDDLDecl(null, GetProblemContextForFile(fileName));
+            }
+            catch
+            {
+                return null;
+            }
+            return null;
+        }
+
+        private static DomainDecl GetDomainContextForFile(string fileName)
         {
             UpdateDomainContextIfNeeded(fileName);
             return _domains[fileName];
@@ -46,7 +63,7 @@ namespace PDDLTools.ContextStorage
             }
         }
 
-        public static ProblemDecl GetProblemContextForFile(string fileName)
+        private static ProblemDecl GetProblemContextForFile(string fileName)
         {
             UpdateProblemContextIfNeeded(fileName);
             return _problems[fileName];
