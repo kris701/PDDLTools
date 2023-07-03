@@ -18,6 +18,8 @@ namespace PDDLTools.EditorMargins
     {
         public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer)
         {
+            if (OptionsManager.Instance == null)
+                return null;
             if (!OptionsManager.Instance.EnableEditorMargin)
                 return null;
 

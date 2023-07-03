@@ -23,6 +23,8 @@ namespace PDDLTools.Completers
 
         public ICompletionSource TryCreateCompletionSource(ITextBuffer textBuffer)
         {
+            if (OptionsManager.Instance == null)
+                return null;
             if (!OptionsManager.Instance.EnableAutoCompleteOfStatements)
                 return null;
 

@@ -12,7 +12,7 @@ namespace PDDLTools.Helpers
 {
     public class OutputPanelController
     {
-        public string OutputPaneName { get; set; }
+        public string OutputPaneName { get; }
         private OutputWindowPane targetPanel = null;
 
         public OutputPanelController(string outputPanelName)

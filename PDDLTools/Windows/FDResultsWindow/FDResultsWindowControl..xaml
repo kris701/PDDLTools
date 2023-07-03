@@ -15,7 +15,7 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Label x:Name="ResultsTitleLabel" Content="Fast Downward Run Results: " Foreground="White" VerticalAlignment="Center" FontSize="10"/>
+        <Label x:Name="ResultsTitleLabel" Content="Fast Downward Run Results" Foreground="White" VerticalAlignment="Center" FontSize="10"/>
         <ScrollViewer Grid.Row="1">
             <StackPanel>
                 <Expander x:Name="GeneralExpander" Header="General" Foreground="White" IsExpanded="True">

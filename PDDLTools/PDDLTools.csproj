@@ -216,7 +216,6 @@
     <Compile Include="Language\ContentTypeDefinition.cs" />
     <Compile Include="PDDLInfo\PDDLInfo.cs" />
     <Compile Include="Language\PDDLLanguageFactory.cs" />
-    <Compile Include="Helpers\DirHelper.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSource.cs" />
     <Compile Include="QuickInfo\PDDLQuickInfoSourceProvider.cs" />
     <Compile Include="Helpers\ComUtils.cs" />

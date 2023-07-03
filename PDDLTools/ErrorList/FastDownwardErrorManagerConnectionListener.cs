@@ -18,6 +18,8 @@ namespace PDDLTools.ErrorList
     {
         public void SubjectBuffersConnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
+            if (OptionsManager.Instance == null)
+                return;
             if (!OptionsManager.Instance.EnableErrorCheckingOnSave)
                 return;
 
@@ -27,6 +29,8 @@ namespace PDDLTools.ErrorList
 
         public void SubjectBuffersDisconnected(ITextView textView, ConnectionReason reason, IReadOnlyCollection<ITextBuffer> subjectBuffers)
         {
+            if (OptionsManager.Instance == null)
+                return;
             if (!OptionsManager.Instance.EnableErrorCheckingOnSave)
                 return;
 
