@@ -47,7 +47,11 @@ namespace PDDLTools.Commands
                     throw new NotSupportedException("Cannot create tool window");
                 }
                 if (window.Content is PDDLVisualiserWindowControl control)
+                {
+                    while (!control.IsUILoaded)
+                        await Task.Delay(100);
                     control.SelectedDomainFile = selected;
+                }
             }
         }
     }

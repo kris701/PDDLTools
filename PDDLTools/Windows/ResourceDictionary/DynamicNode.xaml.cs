@@ -18,8 +18,9 @@ namespace PDDLTools.Windows.ResourceDictionary
         private bool _isSetup = false;
         private bool _isMouseDown = false;
         private Point _startLocation = new Point();
+        private Point _targetLocation = new Point();
         
-        public DynamicNode(int nodeID, string text, Canvas parent, List<int> targetIDs, Point? location = null)
+        public DynamicNode(int nodeID, string text, Canvas parent, List<int> targetIDs, Point startLocation, Point targetLocation)
         {
             ParentCanvas = parent;
 
@@ -29,18 +30,17 @@ namespace PDDLTools.Windows.ResourceDictionary
 
             InitializeComponent();
 
+            _targetLocation = targetLocation;
+
             var toolTip = new ToolTip();
             toolTip.Content = text;
             ToolTip = toolTip;
 
-            if (location != null)
-            {
-                Margin = new Thickness(
-                    location.Value.X,
-                    location.Value.Y,
-                    0,
-                    0);
-            }
+            Margin = new Thickness(
+                startLocation.X,
+                startLocation.Y,
+                0,
+                0);
 
             NodeLines = new List<ArrowLine>();
             foreach(var target in targetIDs)
@@ -54,6 +54,22 @@ namespace PDDLTools.Windows.ResourceDictionary
                 NodeLines.Add(newLine);
                 ParentCanvas.Children.Add(newLine.Path);
             }
+        }
+
+        public bool MoveTowardsTarget()
+        {
+            if (Math.Abs(Margin.Left - _targetLocation.X) > 5 ||
+                Math.Abs(Margin.Top - _targetLocation.Y) > 5)
+            {
+                Margin = new Thickness(
+                    Margin.Left + (_targetLocation.X - Margin.Left) / 2,
+                    Margin.Top + (_targetLocation.Y - Margin.Top) / 2,
+                    0, 0);
+                UpdateLines();
+                return false;
+            }
+            UpdateLines();
+            return true;
         }
 
         public void Setup()

@@ -98,12 +98,13 @@ namespace PDDLTools.Windows.SASSolutionWindow
                         var centerPoint = new Point((int)VisualPlan.ActualWidth / 2, (int)VisualPlan.ActualHeight / 2);
                         List<DynamicNode> nodes = new List<DynamicNode>();
 
-                        nodes.Add(AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, plan.Count));
+                        int index = 0;
+                        nodes.Add(AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, locs[index++], plan.Count));
 
                         for (int i = 0; i < plan.Count; i++)
                         {
                             simulator.Step();
-                            nodes.Add(AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, plan.Count));
+                            nodes.Add(AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, locs[index++], plan.Count));
                         }
 
                         foreach (var node in nodes)
@@ -113,19 +114,9 @@ namespace PDDLTools.Windows.SASSolutionWindow
                         while (!isAllThere)
                         {
                             isAllThere = true;
-                            for (int i = 0; i < nodes.Count; i++)
-                            {
-                                if (Math.Abs(nodes[i].Margin.Left - locs[i].X) > 5 ||
-                                    Math.Abs(nodes[i].Margin.Top - locs[i].Y) > 5)
-                                {
-                                    nodes[i].Margin = new Thickness(
-                                        nodes[i].Margin.Left + (locs[i].X - nodes[i].Margin.Left) / 2,
-                                        nodes[i].Margin.Top + (locs[i].Y - nodes[i].Margin.Top) / 2, 
-                                        0,0);
+                            foreach (var node in nodes)
+                                if (!node.MoveTowardsTarget())
                                     isAllThere = false;
-                                }
-                                nodes[i].UpdateLines();
-                            }
                             await Task.Delay(50);
                         }
                     }
@@ -154,7 +145,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
             }
         }
 
-        private DynamicNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point loc, int totalSteps)
+        private DynamicNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point start, Point target, int totalSteps)
         {
             var goalCount = GetGoalCountInState(_pddlData.Problem.Goal.GoalExp, state);
             bool isGoal = goalCount == totalGoal;
@@ -165,7 +156,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
             List<int> targetIds = new List<int>();
             if (id != totalSteps)
                 targetIds.Add(id + 1);
-            var newNode = new DynamicNode(id, $"{id}", VisualPlan, targetIds, loc);
+            var newNode = new DynamicNode(id, $"{id}", VisualPlan, targetIds, start, target);
 
             var toolTip = new ToolTip();
             toolTip.BorderThickness = new Thickness(0);
