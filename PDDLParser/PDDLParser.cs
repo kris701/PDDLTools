@@ -126,51 +126,8 @@ namespace PDDLParser
                     absAST.Line,
                     absAST.Start));
 
-            IsChildrenOnly(absAST, "define");
-
-            var returnProblem = new ProblemDecl(absAST);
-
-            foreach (var node in absAST.Children)
-            {
-                if (node.OuterContent.StartsWith("problem"))
-                    returnProblem.Name = ProblemVisitor.Visit(node, returnProblem, Listener) as ProblemNameDecl;
-                else if (node.OuterContent.StartsWith(":domain"))
-                    returnProblem.DomainName = ProblemVisitor.Visit(node, returnProblem, Listener) as DomainNameRefDecl;
-                else if (node.OuterContent.StartsWith(":objects"))
-                    returnProblem.Objects = ProblemVisitor.Visit(node, returnProblem, Listener) as ObjectsDecl;
-                else if (node.OuterContent.StartsWith(":init")) {
-                    if (IsChildrenOnly(node, ":init"))
-                        returnProblem.Init = ProblemVisitor.Visit(node, returnProblem, Listener) as InitDecl;
-                }
-                else if (node.OuterContent.StartsWith(":goal")) {
-                    if (IsChildrenOnly(node, ":goal"))
-                        returnProblem.Goal = ProblemVisitor.Visit(node, returnProblem, Listener) as GoalDecl;
-                }
-                else
-                    Listener.AddError(new ParseError(
-                        $"Could not parse content of AST node: {node.OuterContent}",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing,
-                        node.Line,
-                        node.Start));
-            }
-
-            return returnProblem;
-        }
-
-        private bool IsChildrenOnly(ASTNode node, string targetName)
-        {
-            if (node.OuterContent.Replace(targetName, "").Trim() != "")
-            {
-                Listener.AddError(new ParseError(
-                    $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.OuterContent.Replace(targetName, "").Trim()}",
-                    ParseErrorType.Error,
-                    ParseErrorLevel.Parsing,
-                    node.Line,
-                    node.Start));
-                return false;
-            }
-            return true;
+            var returnProblem = ProblemVisitor.Visit(absAST, null, Listener);
+            return returnProblem as ProblemDecl;
         }
 
         private ASTNode ParseAsASTTree(string path, IErrorListener listener)
