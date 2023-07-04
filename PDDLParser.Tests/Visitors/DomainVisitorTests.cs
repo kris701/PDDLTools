@@ -14,6 +14,7 @@ namespace PDDLParser.Tests.Visitors
     public class DomainVisitorTests
     {
         [TestMethod]
+        [DataRow("(define (domain a))", typeof(DomainDecl))]
         [DataRow("(domain abc)", typeof(DomainNameDecl))]
         [DataRow("(:requirements abc)", typeof(RequirementsDecl))]
         [DataRow("(:extends :abc :other)", typeof(ExtendsDecl))]
@@ -37,8 +38,8 @@ namespace PDDLParser.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(domain abc)")]
-        [DataRow("(domain)")]
+        [DataRow("(define)")]
+        [DataRow("(define (domain a))")]
         public void Can_ParseDomainNode(string toParse)
         {
             // ARRANGE
@@ -47,7 +48,24 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            DomainVisitor.TryVisitDomainNode(node, null, null, out decl);
+            DomainVisitor.TryVisitDomainDeclNode(node, null, null, out decl);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(DomainDecl));
+        }
+
+        [TestMethod]
+        [DataRow("(domain abc)")]
+        [DataRow("(domain)")]
+        public void Can_ParseDomainNameNode(string toParse)
+        {
+            // ARRANGE
+            var parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IDecl decl;
+            DomainVisitor.TryVisitDomainNameNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DomainNameDecl));

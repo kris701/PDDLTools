@@ -101,51 +101,8 @@ namespace PDDLParser
                     absAST.Line,
                     absAST.Start));
 
-            IsChildrenOnly(absAST, "define");
-
-            var returnDomain = new DomainDecl(absAST);
-
-            foreach (var node in absAST.Children)
-            {
-                if (node.OuterContent.StartsWith("domain"))
-                    returnDomain.Name = DomainVisitor.Visit(node, returnDomain, Listener) as DomainNameDecl;
-                else if (node.OuterContent.StartsWith(":requirements"))
-                    returnDomain.Requirements = DomainVisitor.Visit(node, returnDomain, Listener) as RequirementsDecl;
-                else if (node.OuterContent.StartsWith(":extends"))
-                    returnDomain.Extends = DomainVisitor.Visit(node, returnDomain, Listener) as ExtendsDecl;
-                else if (node.OuterContent.StartsWith(":types"))
-                    returnDomain.Types = DomainVisitor.Visit(node, returnDomain, Listener) as TypesDecl;
-                else if (node.OuterContent.StartsWith(":constants"))
-                    returnDomain.Constants = DomainVisitor.Visit(node, returnDomain, Listener) as ConstantsDecl;
-                else if (node.OuterContent.StartsWith(":timeless"))
-                    returnDomain.Timeless = DomainVisitor.Visit(node, returnDomain, Listener) as TimelessDecl;
-                else if (node.OuterContent.StartsWith(":predicates"))
-                {
-                    if (IsChildrenOnly(node, ":predicates"))
-                        returnDomain.Predicates = DomainVisitor.Visit(node, returnDomain, Listener) as PredicatesDecl;
-                }
-                else if (node.OuterContent.StartsWith(":action"))
-                {
-                    if (returnDomain.Actions == null)
-                        returnDomain.Actions = new List<ActionDecl>();
-                    returnDomain.Actions.Add(DomainVisitor.Visit(node, returnDomain, Listener) as ActionDecl);
-                }
-                else if (node.OuterContent.StartsWith(":axiom"))
-                {
-                    if (returnDomain.Axioms == null)
-                        returnDomain.Axioms = new List<AxiomDecl>();
-                    returnDomain.Axioms.Add(DomainVisitor.Visit(node, returnDomain, Listener) as AxiomDecl);
-                }
-                else
-                    Listener.AddError(new ParseError(
-                        $"Could not parse content of AST node: {node.OuterContent}",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing,
-                        node.Line,
-                        node.Start));
-            }
-
-            return returnDomain;
+            var returnDomain = DomainVisitor.Visit(absAST, null, Listener);
+            return returnDomain as DomainDecl;
         }
 
         private ProblemDecl ParseProblem(string parseFile)

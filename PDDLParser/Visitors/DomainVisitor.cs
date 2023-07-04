@@ -17,7 +17,9 @@ namespace PDDLParser.Visitors
         public static IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
         {
             IDecl returnNode = null;
-            if (TryVisitDomainNode(node, parent, listener, out returnNode))
+            if (TryVisitDomainDeclNode(node, parent, listener, out returnNode))
+                return returnNode;
+            if (TryVisitDomainNameNode(node, parent, listener, out returnNode))
                 return returnNode;
             else if (TryVisitRequirementsNode(node, parent, listener, out returnNode))
                 return returnNode;
@@ -43,7 +45,51 @@ namespace PDDLParser.Visitors
             return default;
         }
 
-        public static bool TryVisitDomainNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public static bool TryVisitDomainDeclNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "define"))
+            {
+                DoesContentContainAnyStrayCharacters(node, "define", listener);
+
+                var returnDomain = new DomainDecl(node);
+                foreach (var child in node.Children)
+                {
+                    var visited = DomainVisitor.Visit(child, returnDomain, listener);
+                    if (visited is DomainNameDecl domainName)
+                        returnDomain.Name = domainName;
+                    else if (visited is RequirementsDecl requirements)
+                        returnDomain.Requirements = requirements;
+                    else if (visited is ExtendsDecl extends)
+                        returnDomain.Extends = extends;
+                    else if (visited is TypesDecl types)
+                        returnDomain.Types = types;
+                    else if (visited is ConstantsDecl constants)
+                        returnDomain.Constants = constants;
+                    else if (visited is TimelessDecl timeless)
+                        returnDomain.Timeless = timeless;
+                    else if (visited is PredicatesDecl predicates)
+                        returnDomain.Predicates = predicates;
+                    else if (visited is ActionDecl act)
+                    {
+                        if (returnDomain.Actions == null)
+                            returnDomain.Actions = new List<ActionDecl>();
+                        returnDomain.Actions.Add(act);
+                    }
+                    else if (visited is AxiomDecl axi)
+                    {
+                        if (returnDomain.Axioms == null)
+                            returnDomain.Axioms = new List<AxiomDecl>();
+                        returnDomain.Axioms.Add(axi);
+                    }
+                }
+                decl = returnDomain;
+                return true;
+            }
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitDomainNameNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, "domain"))
             {
