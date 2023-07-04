@@ -16,29 +16,82 @@ namespace PDDLParser.Visitors
     {
         public static IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (node.OuterContent.StartsWith("domain"))
+            IDecl returnNode = null;
+            if (TryVisitDomainNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitRequirementsNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitExtendsNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitTypesNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitConstantsNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitPredicatesNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitTimelessNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitActionNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitAxiomNode(node, parent, listener, out returnNode))
+                return returnNode;
+
+            listener.AddError(new ParseError(
+                $"Could not parse content of AST node: {node.OuterContent}",
+                ParseErrorType.Error,
+                ParseErrorLevel.Parsing));
+            return default;
+        }
+
+        public static bool TryVisitDomainNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, "domain"))
             {
-                var name = PurgeEscapeChars(node.OuterContent).Remove(0, "domain".Length).Trim();
-                return new DomainNameDecl(node, parent, name);
+                var name = PurgeEscapeChars(node.InnerContent).Remove(0, "domain".Length).Trim();
+                decl = new DomainNameDecl(node, parent, name);
+
+                return true;
             }
-            else if (node.OuterContent.StartsWith(":requirements"))
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitRequirementsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":requirements"))
             {
-                var str = PurgeEscapeChars(node.OuterContent).Remove(0, ":requirements".Length).Trim();
+                var str = PurgeEscapeChars(node.InnerContent).Remove(0, ":requirements".Length).Trim();
                 var newReq = new RequirementsDecl(node, parent, new List<NameExp>());
                 newReq.Requirements = LooseParseString(node, newReq, ":requirements", str, listener);
-                return newReq;
+
+                decl = newReq;
+                return true;
             }
-            else if (node.OuterContent.StartsWith(":extends"))
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitExtendsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":extends"))
             {
-                var str = PurgeEscapeChars(node.OuterContent).Remove(0, ":extends".Length).Trim();
+                var str = PurgeEscapeChars(node.InnerContent).Remove(0, ":extends".Length).Trim();
                 var newExt = new ExtendsDecl(node, parent, new List<NameExp>());
                 newExt.Extends = LooseParseString(node, newExt, ":extends", str, listener);
-                return newExt;
+
+                decl = newExt;
+                return true;
             }
-            else if (node.OuterContent.StartsWith(":types"))
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitTypesNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":types"))
             {
                 var newTypesDecl = new TypesDecl(node, parent, new List<TypeDecl>());
-                var str = node.OuterContent.Replace(":types", "");
+                var str = node.InnerContent.Replace(":types", "");
                 foreach (var typeDec in str.Split(ASTTokens.BreakToken))
                 {
                     if (typeDec != "")
@@ -53,29 +106,61 @@ namespace PDDLParser.Visitors
                         newTypesDecl.Types.Add(newTypeDecl);
                     }
                 }
-                return newTypesDecl;
+
+                decl = newTypesDecl;
+                return true;
             }
-            else if (node.OuterContent.StartsWith(":constants"))
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitConstantsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":constants"))
             {
                 var newCons = new ConstantsDecl(node, parent, new List<NameExp>());
-                newCons.Constants = LooseParseString(node, newCons, ":constants", node.OuterContent.Replace(":constants", "").Trim(), listener);
-                return newCons;
+                newCons.Constants = LooseParseString(node, newCons, ":constants", node.InnerContent.Replace(":constants", "").Trim(), listener);
+
+                decl = newCons;
+                return true;
             }
-            else if (node.OuterContent.StartsWith(":predicates"))
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitPredicatesNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":predicates"))
             {
                 var newPred = new PredicatesDecl(node, parent, new List<PredicateExp>());
                 newPred.Predicates = ParseAsPredicateList(node, newPred, listener);
-                return newPred;
+
+                decl = newPred;
+                return true;
             }
-            else if (node.OuterContent.StartsWith(":timeless"))
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitTimelessNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":timeless"))
             {
                 var newTime = new TimelessDecl(node, parent, new List<PredicateExp>());
                 newTime.Items = ParseAsPredicateList(node, newTime, listener);
-                return newTime;
+
+                decl = newTime;
+                return true;
             }
-            else if (node.OuterContent.StartsWith(":action"))
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitActionNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":action"))
             {
-                var actionName = node.OuterContent.Replace(":action", "").Trim().Split(' ')[0].Trim();
+                var actionName = node.InnerContent.Replace(":action", "").Trim().Split(' ')[0].Trim();
 
                 CheckIfContentIncludes(node, ":action", ":parameters", listener);
                 CheckIfContentIncludes(node, ":action", ":precondition", listener);
@@ -85,7 +170,7 @@ namespace PDDLParser.Visitors
                 var newActionDecl = new ActionDecl(node, parent, actionName, new List<NameExp>(), null, null);
 
                 // Parameters
-                newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].OuterContent.Replace(actionName, "").Trim(), listener);
+                newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].InnerContent.Replace(actionName, "").Trim(), listener);
 
                 // Preconditions
                 newActionDecl.Preconditions = ExpVisitor.Visit(node.Children[1], newActionDecl, listener);
@@ -93,9 +178,16 @@ namespace PDDLParser.Visitors
                 // Effects
                 newActionDecl.Effects = ExpVisitor.Visit(node.Children[2], newActionDecl, listener);
 
-                return newActionDecl;
+                decl = newActionDecl;
+                return true;
             }
-            else if (node.OuterContent.StartsWith(":axiom"))
+            decl = null;
+            return false;
+        }
+
+        public static bool TryVisitAxiomNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":axiom"))
             {
                 CheckIfContentIncludes(node, ":axiom", ":vars", listener);
                 CheckIfContentIncludes(node, ":axiom", ":context", listener);
@@ -105,7 +197,7 @@ namespace PDDLParser.Visitors
                 var newAxiomDecl = new AxiomDecl(node, parent, new List<NameExp>(), null, null);
 
                 // Vars
-                newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].OuterContent.Trim(), listener);
+                newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].InnerContent.Trim(), listener);
 
                 // Context
                 newAxiomDecl.Context = ExpVisitor.Visit(node.Children[1], newAxiomDecl, listener);
@@ -113,14 +205,11 @@ namespace PDDLParser.Visitors
                 // Implies
                 newAxiomDecl.Implies = ExpVisitor.Visit(node.Children[2], newAxiomDecl, listener);
 
-                return newAxiomDecl;
+                decl = newAxiomDecl;
+                return true;
             }
-
-            listener.AddError(new ParseError(
-                $"Could not parse content of AST node: {node.OuterContent}",
-                ParseErrorType.Error,
-                ParseErrorLevel.Parsing));
-            return default;
+            decl = null;
+            return false;
         }
     }
 }
