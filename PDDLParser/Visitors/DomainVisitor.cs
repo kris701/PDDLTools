@@ -16,29 +16,29 @@ namespace PDDLParser.Visitors
     {
         public static IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (node.Content.StartsWith("domain"))
+            if (node.OuterContent.StartsWith("domain"))
             {
-                var name = PurgeEscapeChars(node.Content).Remove(0, "domain".Length).Trim();
+                var name = PurgeEscapeChars(node.OuterContent).Remove(0, "domain".Length).Trim();
                 return new DomainNameDecl(node, parent, name);
             }
-            else if (node.Content.StartsWith(":requirements"))
+            else if (node.OuterContent.StartsWith(":requirements"))
             {
-                var str = PurgeEscapeChars(node.Content).Remove(0, ":requirements".Length).Trim();
+                var str = PurgeEscapeChars(node.OuterContent).Remove(0, ":requirements".Length).Trim();
                 var newReq = new RequirementsDecl(node, parent, new List<NameExp>());
                 newReq.Requirements = LooseParseString(node, newReq, ":requirements", str, listener);
                 return newReq;
             }
-            else if (node.Content.StartsWith(":extends"))
+            else if (node.OuterContent.StartsWith(":extends"))
             {
-                var str = PurgeEscapeChars(node.Content).Remove(0, ":extends".Length).Trim();
+                var str = PurgeEscapeChars(node.OuterContent).Remove(0, ":extends".Length).Trim();
                 var newExt = new ExtendsDecl(node, parent, new List<NameExp>());
                 newExt.Extends = LooseParseString(node, newExt, ":extends", str, listener);
                 return newExt;
             }
-            else if (node.Content.StartsWith(":types"))
+            else if (node.OuterContent.StartsWith(":types"))
             {
                 var newTypesDecl = new TypesDecl(node, parent, new List<TypeDecl>());
-                var str = node.Content.Replace(":types", "");
+                var str = node.OuterContent.Replace(":types", "");
                 foreach (var typeDec in str.Split(ASTTokens.BreakToken))
                 {
                     if (typeDec != "")
@@ -55,27 +55,27 @@ namespace PDDLParser.Visitors
                 }
                 return newTypesDecl;
             }
-            else if (node.Content.StartsWith(":constants"))
+            else if (node.OuterContent.StartsWith(":constants"))
             {
                 var newCons = new ConstantsDecl(node, parent, new List<NameExp>());
-                newCons.Constants = LooseParseString(node, newCons, ":constants", node.Content.Replace(":constants", "").Trim(), listener);
+                newCons.Constants = LooseParseString(node, newCons, ":constants", node.OuterContent.Replace(":constants", "").Trim(), listener);
                 return newCons;
             }
-            else if (node.Content.StartsWith(":predicates"))
+            else if (node.OuterContent.StartsWith(":predicates"))
             {
                 var newPred = new PredicatesDecl(node, parent, new List<PredicateExp>());
                 newPred.Predicates = ParseAsPredicateList(node, newPred, listener);
                 return newPred;
             }
-            else if (node.Content.StartsWith(":timeless"))
+            else if (node.OuterContent.StartsWith(":timeless"))
             {
                 var newTime = new TimelessDecl(node, parent, new List<PredicateExp>());
                 newTime.Items = ParseAsPredicateList(node, newTime, listener);
                 return newTime;
             }
-            else if (node.Content.StartsWith(":action"))
+            else if (node.OuterContent.StartsWith(":action"))
             {
-                var actionName = node.Content.Replace(":action", "").Trim().Split(' ')[0].Trim();
+                var actionName = node.OuterContent.Replace(":action", "").Trim().Split(' ')[0].Trim();
 
                 CheckIfContentIncludes(node, ":action", ":parameters", listener);
                 CheckIfContentIncludes(node, ":action", ":precondition", listener);
@@ -85,7 +85,7 @@ namespace PDDLParser.Visitors
                 var newActionDecl = new ActionDecl(node, parent, actionName, new List<NameExp>(), null, null);
 
                 // Parameters
-                newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].Content.Replace(actionName, "").Trim(), listener);
+                newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].OuterContent.Replace(actionName, "").Trim(), listener);
 
                 // Preconditions
                 newActionDecl.Preconditions = ExpVisitor.Visit(node.Children[1], newActionDecl, listener);
@@ -95,7 +95,7 @@ namespace PDDLParser.Visitors
 
                 return newActionDecl;
             }
-            else if (node.Content.StartsWith(":axiom"))
+            else if (node.OuterContent.StartsWith(":axiom"))
             {
                 CheckIfContentIncludes(node, ":axiom", ":vars", listener);
                 CheckIfContentIncludes(node, ":axiom", ":context", listener);
@@ -105,7 +105,7 @@ namespace PDDLParser.Visitors
                 var newAxiomDecl = new AxiomDecl(node, parent, new List<NameExp>(), null, null);
 
                 // Vars
-                newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].Content.Trim(), listener);
+                newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].OuterContent.Trim(), listener);
 
                 // Context
                 newAxiomDecl.Context = ExpVisitor.Visit(node.Children[1], newAxiomDecl, listener);
@@ -117,7 +117,7 @@ namespace PDDLParser.Visitors
             }
 
             listener.AddError(new ParseError(
-                $"Could not parse content of AST node: {node.Content}",
+                $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return default;

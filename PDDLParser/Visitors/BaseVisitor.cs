@@ -14,9 +14,9 @@ namespace PDDLParser.Visitors
     {
         internal static void DoesContentContainAnyStrayCharacters(ASTNode node, string targetName, IErrorListener listener)
         {
-            if (node.Content.Replace(targetName, "").Trim() != "")
+            if (node.InnerContent.Replace(targetName, "").Trim() != "")
                 listener.AddError(new ParseError(
-                    $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.Content.Replace(targetName, "").Trim()}",
+                    $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.OuterContent.Replace(targetName, "").Trim()}",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     node.Line,
@@ -62,7 +62,7 @@ namespace PDDLParser.Visitors
         {
             List<NameExp> objs = new List<NameExp>();
             int offset = node.Start;
-            if (node.Content.Contains(nodeType))
+            if (node.InnerContent.Contains(nodeType))
                 offset += nodeType.Length;
             foreach (var param in content.Split(' '))
             {
@@ -72,6 +72,7 @@ namespace PDDLParser.Visitors
                         offset,
                         offset + param.Length,
                         node.Line,
+                        param,
                         param), parent, listener);
                     if (parsed is NameExp nExp)
                         objs.Add(nExp);
@@ -128,13 +129,30 @@ namespace PDDLParser.Visitors
 
         internal static void CheckIfContentIncludes(ASTNode node, string nodeName, string targetName, IErrorListener listener)
         {
-            if (!node.Content.Contains(targetName))
+            if (!node.InnerContent.Contains(targetName))
                 listener.AddError(new ParseError(
                     $"'{nodeName}' is malformed! missing '{targetName}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     node.Line,
                     node.Start));
+        }
+
+        internal static bool IsOfValidNodeType(string content, string nodeType)
+        {
+            if (content.StartsWith(nodeType))
+            {
+                if (nodeType.Length == content.Length)
+                    return true;
+                var nextCharacter = content[nodeType.Length];
+                if (nextCharacter == ' ')
+                    return true;
+                if (nextCharacter == '(')
+                    return true;
+                if (nextCharacter == '\n')
+                    return true;
+            }
+            return false;
         }
 
         internal static string PurgeEscapeChars(string str) => str.Replace("\r", " ").Replace("\n", " ").Replace("\t", " ");

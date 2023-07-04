@@ -10,64 +10,63 @@ namespace PDDLParser.AST
 {
     public class ASTParser
     {
-        public IErrorListener Listener { get; }
-
-        public ASTParser(IErrorListener listener)
-        {
-            Listener = listener;
-        }
-
         public ASTNode Parse(string text)
         {
             text = text.Replace(" - ", ASTTokens.TypeToken);
-            var node = ParseAsNodeRec(text, text.IndexOf("("), text.LastIndexOf(")") + 2);
+            var node = ParseAsNodeRec(text, 0, text.Length);
             SetLineNumberByCharacterNumberRec(text, node);
             return node;
         }
 
         private ASTNode ParseAsNodeRec(string text, int thisStart, int thisEnd)
         {
-            if (text.Count(x => x == ')') > 1)
+            if (text.Contains('('))
             {
-                int thisP = text.IndexOf("(");
+                var firstP = text.IndexOf("(");
+                var lastP = text.LastIndexOf(")");
+                var innerContent = ReplaceRangeWithSpaces(text, firstP, firstP + 1);
+                innerContent = ReplaceRangeWithSpaces(innerContent, lastP, lastP + 1);
 
                 var children = new List<ASTNode>();
-                while (text.Count(x => x == ')' || x == '(') > 2)
+                while (innerContent.Count(x => x == ')' || x == '(') >= 2)
                 {
                     int currentLevel = 0;
-                    int startP = text.IndexOf("(", thisP + 1);
-                    int endP = text.Length;
-                    for (int i = startP + 1; i < text.Length; i++)
+                    int startP = innerContent.IndexOf("(");
+                    int endP = innerContent.Length;
+                    for (int i = startP + 1; i < innerContent.Length; i++)
                     {
-                        if (text[i] == '(')
+                        if (innerContent[i] == '(')
                             currentLevel++;
-                        if (text[i] == ')')
+                        if (innerContent[i] == ')')
                         {
                             if (currentLevel == 0)
                             {
-                                endP = i;
+                                endP = i + 1;
                                 break;
                             }
                             currentLevel--;
                         }
                     }
 
-                    children.Add(ParseAsNodeRec(text.Substring(startP, endP - startP + 1), thisStart + startP, thisStart + endP));
-                    text = ReplaceRangeWithSpaces(text, startP, endP);
+                    var newContent = innerContent.Substring(startP, endP - startP);
+                    children.Add(ParseAsNodeRec(newContent, thisStart + startP, thisStart + endP));
+                    innerContent = ReplaceRangeWithSpaces(innerContent, startP, endP);
                 }
-                var newText = text.Replace("(", "").Replace(")", "").Trim();
+                var outer = $"({innerContent.Trim()})";
                 return new ASTNode(
-                    thisStart + 1,
-                    thisEnd + 2,
-                    newText,
+                    thisStart,
+                    thisEnd,
+                    outer,
+                    innerContent.Trim(),
                     children);
             }
             else
             {
-                var newText = text.Replace("(", "").Replace(")", "").Trim();
+                var newText = text.Trim();
                 return new ASTNode(
-                    thisStart + 1,
-                    thisEnd + 2,
+                    thisStart,
+                    thisEnd,
+                    newText,
                     newText);
             }
         }
@@ -75,8 +74,8 @@ namespace PDDLParser.AST
         private string ReplaceRangeWithSpaces(string text, int from, int to)
         {
             var newText = text.Substring(0, from);
-            newText += new string(' ', to - from + 1);
-            newText += text.Substring(to + 1);
+            newText += new string(' ', to - from);
+            newText += text.Substring(to);
             return newText;
         }
 

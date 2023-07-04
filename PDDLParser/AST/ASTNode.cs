@@ -12,60 +12,79 @@ namespace PDDLParser.AST
         public int Start { get; set; }
         public int End { get; set; }
 
-        public string Content { get; set; }
+        public string OuterContent { get; set; }
+        public string InnerContent { get; set; }
         public List<ASTNode> Children { get; set; }
+        public int Count { 
+            get 
+            {
+                int count = 0;
+                foreach (var child in Children)
+                    count += child.Count;
+                return count + 1;
+            } 
+        }
 
-        public ASTNode(int start, int end, string content, List<ASTNode> children)
+        public ASTNode()
+        {
+            Line = -1;
+            Start = -1;
+            End = -1;
+            OuterContent = "";
+            InnerContent = "";
+            Children = new List<ASTNode>();
+        }
+
+        public ASTNode(int start, int end, string outer, string inner, List<ASTNode> children)
         {
             Line = -1;
             Start = start;
             End = end;
-            Content = content;
+            OuterContent = outer;
+            InnerContent = inner;
             Children = children;
         }
 
-        public ASTNode(string content, List<ASTNode> children)
-        {
-            Content = content;
-            Children = children;
-        }
-
-        public ASTNode(ASTNode other)
-        {
-            Line = other.Line;
-            Start = other.Start;
-            End = other.End;
-            Content = other.Content;
-            Children = new List<ASTNode>();
-        }
-
-        public ASTNode(int start, int end, string content)
+        public ASTNode(int start, int end, string outer, string inner)
         {
             Line = -1;
             Start = start;
             End = end;
-            Content = content;
+            OuterContent = outer;
+            InnerContent = inner;
             Children = new List<ASTNode>();
         }
 
-        public ASTNode(int start, int end, int line, string content)
+        public ASTNode(int start, int end, int line, string outer, string inner)
         {
             Line = line;
             Start = start;
             End = end;
-            Content = content;
+            OuterContent = outer;
+            InnerContent = inner;
             Children = new List<ASTNode>();
         }
 
-        public ASTNode(string content)
+        public ASTNode(int start, int end, int line)
         {
-            Content = content;
+            Line = line;
+            Start = start;
+            End = end;
+            OuterContent = "";
+            InnerContent = "";
+            Children = new List<ASTNode>();
+        }
+
+        public ASTNode(string outer, string inner)
+        {
+            OuterContent = outer;
+            InnerContent = inner;
             Children = new List<ASTNode>();
         }
 
         public override string ToString()
         {
-            return Content;
+            return OuterContent;
         }
     }
 }

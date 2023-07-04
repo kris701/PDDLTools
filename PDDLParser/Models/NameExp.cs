@@ -51,7 +51,7 @@ namespace PDDLParser.Models
 
         public object Clone()
         {
-            return new NameExp(new ASTNode(Start, Line, ""), Parent, Name, Type);
+            return new NameExp(new ASTNode(Start, End, Line), Parent, Name, Type);
         }
 
         public override HashSet<INode> FindNames(string name)

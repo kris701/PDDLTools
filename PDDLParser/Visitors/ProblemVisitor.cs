@@ -14,34 +14,34 @@ namespace PDDLParser.Visitors
     {
         public static IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
         {
-            if (node.Content.StartsWith("problem"))
+            if (node.OuterContent.StartsWith("problem"))
             {
-                var name = PurgeEscapeChars(node.Content).Remove(0, "problem".Length).Trim();
+                var name = PurgeEscapeChars(node.OuterContent).Remove(0, "problem".Length).Trim();
                 return new ProblemNameDecl(node, parent, name);
             } 
-            else if (node.Content.StartsWith(":domain"))
+            else if (node.OuterContent.StartsWith(":domain"))
             {
-                var name = PurgeEscapeChars(node.Content).Remove(0, ":domain".Length).Trim();
+                var name = PurgeEscapeChars(node.OuterContent).Remove(0, ":domain".Length).Trim();
                 return new DomainNameRefDecl(node, parent, name);
             } 
-            else if (node.Content.StartsWith(":objects"))
+            else if (node.OuterContent.StartsWith(":objects"))
             {
                 DoesNodeHaveSpecificChildCount(node, ":objects", 0, listener);
 
                 var newObjs = new ObjectsDecl(node, parent, new List<NameExp>());
 
-                var parseStr = PurgeEscapeChars(node.Content.Replace(":objects", "")).Trim();
+                var parseStr = PurgeEscapeChars(node.OuterContent.Replace(":objects", "")).Trim();
                 newObjs.Objs = LooseParseString(node, newObjs, ":objects", parseStr, listener);
 
                 return newObjs;
             }
-            else if (node.Content.StartsWith(":init"))
+            else if (node.OuterContent.StartsWith(":init"))
             {
                 var newInit = new InitDecl(node, parent, new List<PredicateExp>());
                 newInit.Predicates = ParseAsPredicateList(node, newInit, listener);
                 return newInit;
             }
-            else if (node.Content.StartsWith(":goal"))
+            else if (node.OuterContent.StartsWith(":goal"))
             {
                 DoesNodeHaveSpecificChildCount(node, ":goal", 1, listener);
                 var newGoal = new GoalDecl(node, parent, null);
@@ -50,7 +50,7 @@ namespace PDDLParser.Visitors
             }
 
             listener.AddError(new ParseError(
-                $"Could not parse content of AST node: {node.Content}",
+                $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
                 ParseErrorLevel.Parsing));
             return default;

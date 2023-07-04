@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLProjectTemplate", "PDDL
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{931A292D-CDE2-44C0-8F11-BCECC93A6864}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLParser.Tests", "PDDLParser.Tests\PDDLParser.Tests.csproj", "{D1CF973D-7A61-4627-AAD3-104BF213D28A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +209,18 @@ Global
 		{651EBED8-058E-4104-A3B5-2E06330822F2}.Release|arm64.Build.0 = Release|arm64
 		{651EBED8-058E-4104-A3B5-2E06330822F2}.Release|x86.ActiveCfg = Release|x86
 		{651EBED8-058E-4104-A3B5-2E06330822F2}.Release|x86.Build.0 = Release|x86
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Debug|arm64.Build.0 = Debug|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Debug|x86.Build.0 = Debug|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Release|arm64.ActiveCfg = Release|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Release|arm64.Build.0 = Release|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Release|x86.ActiveCfg = Release|Any CPU
+		{D1CF973D-7A61-4627-AAD3-104BF213D28A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
