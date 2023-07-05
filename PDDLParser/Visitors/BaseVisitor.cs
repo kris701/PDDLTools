@@ -168,10 +168,15 @@ namespace PDDLParser.Visitors
         internal static bool DoesContentContainNLooseChildren(ASTNode node, string nodeName, int target, IErrorListener listener)
         {
             var looseChildren = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, nodeName));
-            if (looseChildren.Split(' ').Length != target)
+            var split = looseChildren.Split(' ');
+            var actualCount = split.Length;
+            if (split.Length == 1)
+                if (split[0] == "")
+                    actualCount--;
+            if (actualCount != target)
             {
                 listener.AddError(new ParseError(
-                    $"'{nodeName}' is malformed! Expected {target} loose children.",
+                    $"'{nodeName}' is malformed! Expected {target} loose children but got {actualCount}.",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
                     ParserErrorCode.NeedExactLooseChildren,

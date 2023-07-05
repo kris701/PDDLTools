@@ -69,9 +69,12 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "problem"))
             {
-                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "problem");
-                decl = new ProblemNameDecl(node, parent, name);
-                return true;
+                if (DoesContentContainNLooseChildren(node, "problem", 1, listener))
+                {
+                    var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "problem");
+                    decl = new ProblemNameDecl(node, parent, name);
+                    return true;
+                }
             }
             decl = null;
             return false;
@@ -81,9 +84,12 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "domain"))
             {
-                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":domain");
-                decl = new DomainNameRefDecl(node, parent, name);
-                return true;
+                if (DoesContentContainNLooseChildren(node, "domain", 1, listener))
+                {
+                    var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "domain");
+                    decl = new DomainNameRefDecl(node, parent, name);
+                    return true;
+                }
             }
             decl = null;
             return false;
