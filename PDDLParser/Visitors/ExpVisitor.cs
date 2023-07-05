@@ -30,7 +30,8 @@ namespace PDDLParser.Visitors
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
-                ParseErrorLevel.Parsing));
+                ParseErrorLevel.Parsing,
+                ParserErrorCode.UnknownNode));
             return default;
         }
 
@@ -126,6 +127,7 @@ namespace PDDLParser.Visitors
                         $"Context indicated the use of a type, but an object name was not given!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
+                        ParserErrorCode.ExpectedNameButGotNone,
                         node.Line,
                         node.Start));
                 }
@@ -135,6 +137,7 @@ namespace PDDLParser.Visitors
                         $"Context indicated the use of a type, but a type was not given!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
+                        ParserErrorCode.ExpectedTypeButGotNone,
                         node.Line,
                         node.Start));
                 }

@@ -89,17 +89,10 @@ namespace PDDLParser
                 Listener.AddError(new ParseError(
                     $"Attempted file to parse was not a domain file!",
                     ParseErrorType.Error,
-                    ParseErrorLevel.PreParsing));
+                    ParseErrorLevel.PreParsing,
+                    ParserErrorCode.FileNotDomain));
 
             var absAST = ParseAsASTTree(parseFile, Listener);
-
-            if (!absAST.OuterContent.StartsWith("define"))
-                Listener.AddError(new ParseError(
-                    $"Root 'define' node not found?",
-                    ParseErrorType.Error,
-                    ParseErrorLevel.Parsing,
-                    absAST.Line,
-                    absAST.Start));
 
             var returnDomain = DomainVisitor.Visit(absAST, null, Listener);
             return returnDomain as DomainDecl;
@@ -114,17 +107,10 @@ namespace PDDLParser
                 Listener.AddError(new ParseError(
                     $"Attempted file to parse was not a problem file!",
                     ParseErrorType.Error,
-                    ParseErrorLevel.PreParsing));
+                    ParseErrorLevel.PreParsing,
+                    ParserErrorCode.FileNotProblem));
 
             var absAST = ParseAsASTTree(parseFile, Listener);
-
-            if (!absAST.OuterContent.StartsWith("define"))
-                Listener.AddError(new ParseError(
-                    $"Root 'define' node not found?",
-                    ParseErrorType.Error,
-                    ParseErrorLevel.Parsing,
-                    absAST.Line,
-                    absAST.Start));
 
             var returnProblem = ProblemVisitor.Visit(absAST, null, Listener);
             return returnProblem as ProblemDecl;
@@ -148,7 +134,8 @@ namespace PDDLParser
                 listener.AddError(new ParseError(
                     $"Could not find the file to parse: '{path}'",
                     ParseErrorType.Error,
-                    ParseErrorLevel.PreParsing));
+                    ParseErrorLevel.PreParsing,
+                    ParserErrorCode.FileNotFound));
             }
             string text = ReplaceCommentsWithWhiteSpace(File.ReadAllLines(path).ToList());
             text = text.ToLower();

@@ -31,7 +31,8 @@ namespace PDDLParser.Visitors
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
                 ParseErrorType.Error,
-                ParseErrorLevel.Parsing));
+                ParseErrorLevel.Parsing,
+                ParserErrorCode.UnknownNode));
             return default;
         }
 

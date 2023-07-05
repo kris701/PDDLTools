@@ -19,6 +19,7 @@ namespace PDDLParser.Visitors
                     $"The node '{targetName}' has unknown content inside! Contains stray characters: {node.OuterContent.Replace(targetName, "").Trim()}",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
+                    ParserErrorCode.StrayCharactersFound,
                     node.Line,
                     node.Start));
         }
@@ -32,6 +33,7 @@ namespace PDDLParser.Visitors
                         $"'{nodeName}' must not contain any children!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
+                        ParserErrorCode.NoChildrenAllowed,
                         node.Line,
                         node.Start));
             }
@@ -42,6 +44,7 @@ namespace PDDLParser.Visitors
                         $"'{nodeName}' must have exactly {targetChildren} children, but it has '{node.Children.Count}'!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
+                        ParserErrorCode.NeedExactChildren,
                         node.Line,
                         node.Start));
             }
@@ -54,6 +57,7 @@ namespace PDDLParser.Visitors
                     $"'{nodeName}' must have more than {targetChildren} children, but it has '{node.Children.Count}'!",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
+                    ParserErrorCode.MustHaveMoreThanChildren,
                     node.Line,
                     node.Start));
         }
@@ -82,6 +86,7 @@ namespace PDDLParser.Visitors
                             $"Unexpected node type while parsing '{nodeType}'!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Parsing,
+                            ParserErrorCode.UnexpectedNodeType,
                             parsed.Line,
                             parsed.Start));
                     }
@@ -102,6 +107,7 @@ namespace PDDLParser.Visitors
                         $"Could not parse predicate!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
+                        ParserErrorCode.CouldNotParsePredicate,
                         predicate.Line,
                         predicate.Start));
                 predicates.Add(newNode);
@@ -120,6 +126,7 @@ namespace PDDLParser.Visitors
                         $"Could not parse name!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
+                        ParserErrorCode.CouldNotParseName,
                         child.Line,
                         child.Start));
                 name.Add(newNode);
@@ -134,6 +141,7 @@ namespace PDDLParser.Visitors
                     $"'{nodeName}' is malformed! missing '{targetName}'",
                     ParseErrorType.Error,
                     ParseErrorLevel.Parsing,
+                    ParserErrorCode.UnexpectedNodeType,
                     node.Line,
                     node.Start));
         }

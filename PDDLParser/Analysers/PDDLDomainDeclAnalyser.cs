@@ -54,6 +54,7 @@ namespace PDDLParser.Analysers
                     $"Missing predicates declaration.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Predicates != null && domain.Predicates.Predicates.Count == 0)
@@ -61,6 +62,7 @@ namespace PDDLParser.Analysers
                     $"No predicates defined.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Actions == null)
@@ -68,6 +70,7 @@ namespace PDDLParser.Analysers
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Actions != null && domain.Actions.Count == 0)
@@ -75,6 +78,7 @@ namespace PDDLParser.Analysers
                     $"Missing actions.",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
         }
@@ -94,6 +98,7 @@ namespace PDDLParser.Analysers
                             $"Undefined predicate! '{pred}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.UseOfUndeclaredPredicate,
                             pred.Line,
                             pred.Start));
                 }
@@ -110,6 +115,7 @@ namespace PDDLParser.Analysers
                             $"Unused predicate detected '{predicate}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.UnusedPredicate,
                             predicate.Line,
                             predicate.Start));
                 }
@@ -127,6 +133,7 @@ namespace PDDLParser.Analysers
                                 $"Unused action parameter found '{param.Name}'",
                                 ParseErrorType.Message,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.UnusedParameter,
                                 param.Line,
                                 param.Start));
                 }
@@ -144,6 +151,7 @@ namespace PDDLParser.Analysers
                                 $"Unused axiom variable found '{param.Name}'",
                                 ParseErrorType.Message,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.UnusedParameter,
                                 param.Line,
                                 param.Start));
                 }
@@ -164,6 +172,7 @@ namespace PDDLParser.Analysers
                             $"Multiple declarations of super types with the same name '{typeDecl.TypeName}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.MultipleDeclarationsOfSuperType,
                             typeDecl.Line,
                             typeDecl.Start));
                     }
@@ -177,6 +186,7 @@ namespace PDDLParser.Analysers
                                 $"Multiple declarations of sub types with the same name '{typeName}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.MultipleDeclarationsOfSubType,
                                 typeDecl.Line,
                                 typeDecl.Start));
                         }
@@ -198,6 +208,7 @@ namespace PDDLParser.Analysers
                             $"Multiply defined types!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Contexturaliser,
+                            ParserErrorCode.MultipleDeclarationsOfType,
                             typeDecl.Line,
                             typeDecl.Start));
                     }
@@ -229,6 +240,7 @@ namespace PDDLParser.Analysers
                             $"Multiply defined predicates!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Contexturaliser,
+                            ParserErrorCode.MultipleDeclarationsOfPredicate,
                             pred.Line,
                             pred.Start));
                     }
@@ -250,6 +262,7 @@ namespace PDDLParser.Analysers
                                 $"Predicate arguments contains unknown type!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.UnknownType,
                                 arg.Line,
                                 arg.Start));
                         }
@@ -271,6 +284,7 @@ namespace PDDLParser.Analysers
                                 $"Parameter contains unknow type!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.UnknownType,
                                 param.Line,
                                 param.Start));
                         }
@@ -295,6 +309,7 @@ namespace PDDLParser.Analysers
                                 $"Parameter contains unknow type!",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.UnknownType,
                                 param.Line,
                                 param.Start));
                         }
@@ -332,6 +347,7 @@ namespace PDDLParser.Analysers
                             $"Predicate has an invalid argument type! Expected a '{predicateTypeTable[pred.Name][index]}' but got a '{arg.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.TypeMissmatch,
                             arg.Line,
                             arg.Start));
                     }
@@ -351,6 +367,7 @@ namespace PDDLParser.Analysers
                             $"Constant contains unknown type!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.UnknownType,
                             cons.Line,
                             cons.Start));
                     }
@@ -371,6 +388,7 @@ namespace PDDLParser.Analysers
                                 $"Multiple declarations of predicates with the same name '{predicate.Name}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.MultipleDeclarationsOfPredicate,
                                 predicate.Line,
                                 predicate.Start));
                     }
@@ -393,6 +411,7 @@ namespace PDDLParser.Analysers
                                 $"Multiple declarations of arguments with the same name '{param.Name}' in the predicate '{predicate.Name}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.MultipleDeclarationsOfParameter,
                                 param.Line,
                                 param.Start));
                         }
@@ -414,6 +433,7 @@ namespace PDDLParser.Analysers
                             $"Multiple declarations of actions with the same name '{act.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.MultipleDeclarationsOfActions,
                             act.Line,
                             act.Start));
                     }
@@ -436,6 +456,7 @@ namespace PDDLParser.Analysers
                                     $"Multiple declarations of arguments with the same name '{param.Name}' in the action '{action.Name}'",
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
+                                    ParserErrorCode.MultipleDeclarationsOfParameter,
                                     param.Line,
                                     param.Start));
                         }
@@ -459,6 +480,7 @@ namespace PDDLParser.Analysers
                                     $"Multiple declarations of arguments with the same name '{param.Name}' in axiom",
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
+                                    ParserErrorCode.MultipleDeclarationsOfParameter,
                                     param.Line,
                                     param.Start));
                         }
@@ -533,13 +555,15 @@ namespace PDDLParser.Analysers
                             $"Used predicate '{pred.Name}' did not match the type definitions from the parameters!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.TypeMissmatch,
                             pred.Line,
                             pred.Start));
                     else
                         listener.AddError(new ParseError(
-                            $"Undefined predicate used '{pred.Name}'",
+                            $"Undeclared predicate used '{pred.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.UseOfUndeclaredPredicate,
                             pred.Line,
                             pred.Start));
                 }

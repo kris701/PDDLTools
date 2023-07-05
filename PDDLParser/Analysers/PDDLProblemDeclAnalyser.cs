@@ -39,6 +39,7 @@ namespace PDDLParser.Analysers
                     $"Missing domain name reference",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Objects == null)
@@ -46,6 +47,7 @@ namespace PDDLParser.Analysers
                     $"Missing objects declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Objects != null && domain.Objects.Objs.Count == 0)
@@ -53,6 +55,7 @@ namespace PDDLParser.Analysers
                     $"Missing objects",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Init == null)
@@ -60,6 +63,7 @@ namespace PDDLParser.Analysers
                     $"Missing Init declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Init != null && domain.Init.Predicates.Count == 0)
@@ -67,6 +71,7 @@ namespace PDDLParser.Analysers
                     $"No init predicates declared",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
             if (domain.Goal == null)
@@ -74,6 +79,7 @@ namespace PDDLParser.Analysers
                     $"Missing Goal declaration",
                     ParseErrorType.Message,
                     ParseErrorLevel.Analyser,
+                    ParserErrorCode.MissingItem,
                     domain.Line,
                     domain.Start));
         }
@@ -98,6 +104,7 @@ namespace PDDLParser.Analysers
                                     $"Undeclared object detected!",
                                     ParseErrorType.Error,
                                     ParseErrorLevel.Analyser,
+                                    ParserErrorCode.UseOfUndeclaredObject,
                                     arg.Line,
                                     arg.Start));
                             }
@@ -135,6 +142,7 @@ namespace PDDLParser.Analysers
                             $"Undeclared object detected!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.UseOfUndeclaredObject,
                             arg.Line,
                             arg.Start));
                     }
@@ -152,6 +160,7 @@ namespace PDDLParser.Analysers
                             $"Unused object detected '{obj}'",
                             ParseErrorType.Message,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.UnusedObject,
                             obj.Line,
                             obj.Start));
                 }
@@ -171,6 +180,7 @@ namespace PDDLParser.Analysers
                                 $"Multiple declarations of object with the same name '{obj.Name}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.MultipleDeclarationsOfObjects,
                                 obj.Line,
                                 obj.Start));
                     }
@@ -189,6 +199,7 @@ namespace PDDLParser.Analysers
                         $"No actual goal predicates in the goal declaration!",
                         ParseErrorType.Warning,
                         ParseErrorLevel.Analyser,
+                        ParserErrorCode.NoGoalsDeclared,
                         problem.Goal.GoalExp.Line,
                         problem.Goal.GoalExp.Start));
                 }

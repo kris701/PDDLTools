@@ -44,6 +44,7 @@ namespace PDDLParser.Analysers
                             $"Used of undeclared predicate in problem '{init.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.UseOfUndeclaredPredicate,
                             init.Line,
                             init.Start));
             }
@@ -76,6 +77,7 @@ namespace PDDLParser.Analysers
                         $"Used of undeclared predicate in expression '{pred.Name}'",
                         ParseErrorType.Error,
                         ParseErrorLevel.Analyser,
+                        ParserErrorCode.UseOfUndeclaredPredicate,
                         pred.Line,
                         pred.Start));
             }
@@ -91,6 +93,7 @@ namespace PDDLParser.Analysers
                             $"Unknown type for object! '{obj.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.InvalidObjectType,
                             obj.Line,
                             obj.Start));
             }
@@ -109,6 +112,7 @@ namespace PDDLParser.Analysers
                                 $"Invalid type for init precondition! Got '{init.Arguments[i].Type}' but expected '{target.Arguments[i].Type}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
+                                ParserErrorCode.InvalidPredicateType,
                                 init.Line,
                                 init.Start));
                     }
@@ -163,13 +167,15 @@ namespace PDDLParser.Analysers
                             $"Used predicate '{pred.Name}' did not match the type definitions from the parameters!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.TypeMissmatch,
                             pred.Line,
                             pred.Start));
                     else
                         listener.AddError(new ParseError(
-                            $"Undefined predicate used '{pred.Name}'",
+                            $"Undeclared predicate used '{pred.Name}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
+                            ParserErrorCode.UseOfUndeclaredPredicate,
                             pred.Line,
                             pred.Start));
                 }

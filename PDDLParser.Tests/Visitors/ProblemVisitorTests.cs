@@ -68,7 +68,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
-            Assert.IsTrue(listener.Errors[0].Message.Contains("Contains stray characters"));
+            Assert.IsTrue(listener.Errors[0].Code == ParserErrorCode.StrayCharactersFound);
         }
 
         [TestMethod]
