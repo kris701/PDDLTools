@@ -43,6 +43,7 @@ namespace PDDLParser.Listener
         StrayCharactersFound,
         NoChildrenAllowed,
         NeedExactChildren,
+        NeedExactLooseChildren,
         MustHaveMoreThanChildren,
         UnexpectedNodeType,
         CouldNotParsePredicate,

@@ -39,15 +39,16 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "and"))
             {
-                DoesNodeHaveMoreThanNChildren(node, "and", 0, listener);
-                DoesContentContainAnyStrayCharacters(node, "and", listener);
+                if (DoesNodeHaveMoreThanNChildren(node, "and", 0, listener) &&
+                    DoesNotContainStrayCharacters(node, "and", listener))
+                {
+                    var newAndExp = new AndExp(node, parent, new List<IExp>());
+                    foreach (var child in node.Children)
+                        newAndExp.Children.Add(Visit(child, newAndExp, listener));
 
-                var newAndExp = new AndExp(node, parent, new List<IExp>());
-                foreach (var child in node.Children)
-                    newAndExp.Children.Add(Visit(child, newAndExp, listener));
-
-                exp = newAndExp;
-                return true;
+                    exp = newAndExp;
+                    return true;
+                }
             }
             exp = null;
             return false;
@@ -57,14 +58,16 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "or"))
             {
-                DoesNodeHaveSpecificChildCount(node, "or", 2, listener);
-                DoesContentContainAnyStrayCharacters(node, "or", listener);
+                if (DoesNodeHaveSpecificChildCount(node, "or", 2, listener) &&
+                    DoesNotContainStrayCharacters(node, "or", listener))
+                {
 
-                var newOrExp = new OrExp(node, parent, null, null);
-                newOrExp.Option1 = Visit(node.Children[0], newOrExp, listener);
-                newOrExp.Option2 = Visit(node.Children[1], newOrExp, listener);
-                exp = newOrExp;
-                return true;
+                    var newOrExp = new OrExp(node, parent, null, null);
+                    newOrExp.Option1 = Visit(node.Children[0], newOrExp, listener);
+                    newOrExp.Option2 = Visit(node.Children[1], newOrExp, listener);
+                    exp = newOrExp;
+                    return true;
+                }
             }
             exp = null;
             return false;
@@ -74,13 +77,14 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "not"))
             {
-                DoesNodeHaveSpecificChildCount(node, "not", 1, listener);
-                DoesContentContainAnyStrayCharacters(node, "not", listener);
-
-                var newNotExp = new NotExp(node, parent, null);
-                newNotExp.Child = Visit(node.Children[0], newNotExp, listener);
-                exp = newNotExp;
-                return true;
+                if (DoesNodeHaveSpecificChildCount(node, "not", 1, listener) &&
+                    DoesNotContainStrayCharacters(node, "not", listener))
+                {
+                    var newNotExp = new NotExp(node, parent, null);
+                    newNotExp.Child = Visit(node.Children[0], newNotExp, listener);
+                    exp = newNotExp;
+                    return true;
+                }
             }
             exp = null;
             return false;
@@ -90,23 +94,24 @@ namespace PDDLParser.Visitors
         {
             if (node.OuterContent.Contains('(') && node.OuterContent.Contains(')') && node.InnerContent != "")
             {
-                DoesNodeHaveSpecificChildCount(node, "predicate", 0, listener);
-
-                var predicateName = node.InnerContent.Split(' ')[0];
-                var newPredicateExp = new PredicateExp(node, parent, predicateName, new List<NameExp>());
-
-                var paramSplit = node.InnerContent.Split(' ');
-                int offset = 0;
-                foreach (var param in paramSplit)
+                if (DoesNodeHaveSpecificChildCount(node, "predicate", 0, listener))
                 {
-                    if (param != "" && param != predicateName)
+                    var predicateName = node.InnerContent.Split(' ')[0];
+                    var newPredicateExp = new PredicateExp(node, parent, predicateName, new List<NameExp>());
+
+                    var paramSplit = node.InnerContent.Split(' ');
+                    int offset = 0;
+                    foreach (var param in paramSplit)
                     {
-                        newPredicateExp.Arguments.Add(Visit(new ASTNode(node.Start + offset, node.End, param, param), newPredicateExp, listener) as NameExp);
+                        if (param != "" && param != predicateName)
+                        {
+                            newPredicateExp.Arguments.Add(Visit(new ASTNode(node.Start + offset, node.End, param, param), newPredicateExp, listener) as NameExp);
+                        }
+                        offset += param.Length;
                     }
-                    offset += param.Length;
+                    exp = newPredicateExp;
+                    return true;
                 }
-                exp = newPredicateExp;
-                return true;
             } 
             exp = null;
             return false;
@@ -116,52 +121,56 @@ namespace PDDLParser.Visitors
         {
             if (node.InnerContent.Contains(ASTTokens.TypeToken))
             {
-                DoesNodeHaveSpecificChildCount(node, "name", 0, listener);
-
-                var left = node.InnerContent.Substring(0, node.InnerContent.IndexOf(ASTTokens.TypeToken)).Trim();
-                var right = node.InnerContent.Substring(node.InnerContent.IndexOf(ASTTokens.TypeToken) + 3).Trim();
-
-                if (left == "")
+                if (DoesNodeHaveSpecificChildCount(node, "name", 0, listener))
                 {
-                    listener.AddError(new ParseError(
-                        $"Context indicated the use of a type, but an object name was not given!",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing,
-                        ParserErrorCode.ExpectedNameButGotNone,
-                        node.Line,
-                        node.Start));
-                }
-                if (right == "")
-                {
-                    listener.AddError(new ParseError(
-                        $"Context indicated the use of a type, but a type was not given!",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing,
-                        ParserErrorCode.ExpectedTypeButGotNone,
-                        node.Line,
-                        node.Start));
-                }
+                    var left = node.InnerContent.Substring(0, node.InnerContent.IndexOf(ASTTokens.TypeToken)).Trim();
+                    var right = node.InnerContent.Substring(node.InnerContent.IndexOf(ASTTokens.TypeToken) + 3).Trim();
 
-                var newNameExp = new NameExp(node, parent, left.Replace("?", ""));
-                newNameExp.Type = new TypeNameDecl(
-                    new ASTNode(
-                        node.Start + left.Length + 3,
-                        node.Start + left.Length + 3 + right.Length,
-                        right,
-                        right),
-                    newNameExp,
-                    right);
-                exp =  newNameExp;
-                return true;
+                    if (left == "")
+                    {
+                        listener.AddError(new ParseError(
+                            $"Context indicated the use of a type, but an object name was not given!",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Parsing,
+                            ParserErrorCode.ExpectedNameButGotNone,
+                            node.Line,
+                            node.Start));
+                    }
+                    if (right == "")
+                    {
+                        listener.AddError(new ParseError(
+                            $"Context indicated the use of a type, but a type was not given!",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Parsing,
+                            ParserErrorCode.ExpectedTypeButGotNone,
+                            node.Line,
+                            node.Start));
+                    }
+
+                    var newNameExp = new NameExp(node, parent, left.Replace("?", ""));
+                    newNameExp.Type = new TypeNameDecl(
+                        new ASTNode(
+                            node.Start + left.Length + 3,
+                            node.Start + left.Length + 3 + right.Length,
+                            right,
+                            right),
+                        newNameExp,
+                        right);
+                    exp = newNameExp;
+                    return true;
+                }
             }
             else
             {
-                DoesNodeHaveSpecificChildCount(node, "name", 0, listener);
-
-                var newNameExp = new NameExp(node, parent, node.InnerContent.Replace("?", ""));
-                exp = newNameExp;
-                return true;
+                if (DoesNodeHaveSpecificChildCount(node, "name", 0, listener))
+                {
+                    var newNameExp = new NameExp(node, parent, node.InnerContent.Replace("?", ""));
+                    exp = newNameExp;
+                    return true;
+                }
             }
+            exp = null;
+            return false;
         }
     }
 }

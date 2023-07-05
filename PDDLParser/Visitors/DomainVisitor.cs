@@ -50,41 +50,42 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "define"))
             {
-                DoesContentContainAnyStrayCharacters(node, "define", listener);
-
-                var returnDomain = new DomainDecl(node);
-                foreach (var child in node.Children)
+                if (DoesNotContainStrayCharacters(node, "define", listener))
                 {
-                    var visited = DomainVisitor.Visit(child, returnDomain, listener);
-                    if (visited is DomainNameDecl domainName)
-                        returnDomain.Name = domainName;
-                    else if (visited is RequirementsDecl requirements)
-                        returnDomain.Requirements = requirements;
-                    else if (visited is ExtendsDecl extends)
-                        returnDomain.Extends = extends;
-                    else if (visited is TypesDecl types)
-                        returnDomain.Types = types;
-                    else if (visited is ConstantsDecl constants)
-                        returnDomain.Constants = constants;
-                    else if (visited is TimelessDecl timeless)
-                        returnDomain.Timeless = timeless;
-                    else if (visited is PredicatesDecl predicates)
-                        returnDomain.Predicates = predicates;
-                    else if (visited is ActionDecl act)
+                    var returnDomain = new DomainDecl(node);
+                    foreach (var child in node.Children)
                     {
-                        if (returnDomain.Actions == null)
-                            returnDomain.Actions = new List<ActionDecl>();
-                        returnDomain.Actions.Add(act);
+                        var visited = DomainVisitor.Visit(child, returnDomain, listener);
+                        if (visited is DomainNameDecl domainName)
+                            returnDomain.Name = domainName;
+                        else if (visited is RequirementsDecl requirements)
+                            returnDomain.Requirements = requirements;
+                        else if (visited is ExtendsDecl extends)
+                            returnDomain.Extends = extends;
+                        else if (visited is TypesDecl types)
+                            returnDomain.Types = types;
+                        else if (visited is ConstantsDecl constants)
+                            returnDomain.Constants = constants;
+                        else if (visited is TimelessDecl timeless)
+                            returnDomain.Timeless = timeless;
+                        else if (visited is PredicatesDecl predicates)
+                            returnDomain.Predicates = predicates;
+                        else if (visited is ActionDecl act)
+                        {
+                            if (returnDomain.Actions == null)
+                                returnDomain.Actions = new List<ActionDecl>();
+                            returnDomain.Actions.Add(act);
+                        }
+                        else if (visited is AxiomDecl axi)
+                        {
+                            if (returnDomain.Axioms == null)
+                                returnDomain.Axioms = new List<AxiomDecl>();
+                            returnDomain.Axioms.Add(axi);
+                        }
                     }
-                    else if (visited is AxiomDecl axi)
-                    {
-                        if (returnDomain.Axioms == null)
-                            returnDomain.Axioms = new List<AxiomDecl>();
-                        returnDomain.Axioms.Add(axi);
-                    }
+                    decl = returnDomain;
+                    return true;
                 }
-                decl = returnDomain;
-                return true;
             }
             decl = null;
             return false;
@@ -94,7 +95,7 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "domain"))
             {
-                var name = PurgeEscapeChars(node.InnerContent).Remove(0, "domain".Length).Trim();
+                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "domain");
                 decl = new DomainNameDecl(node, parent, name);
 
                 return true;
@@ -107,7 +108,7 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":requirements"))
             {
-                var str = PurgeEscapeChars(node.InnerContent).Remove(0, ":requirements".Length).Trim();
+                var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":requirements");
                 var newReq = new RequirementsDecl(node, parent, new List<NameExp>());
                 newReq.Requirements = LooseParseString(node, newReq, ":requirements", str, listener);
 
@@ -122,7 +123,7 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":extends"))
             {
-                var str = PurgeEscapeChars(node.InnerContent).Remove(0, ":extends".Length).Trim();
+                var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":extends");
                 var newExt = new ExtendsDecl(node, parent, new List<NameExp>());
                 newExt.Extends = LooseParseString(node, newExt, ":extends", str, listener);
 
@@ -138,7 +139,7 @@ namespace PDDLParser.Visitors
             if (IsOfValidNodeType(node.InnerContent, ":types"))
             {
                 var newTypesDecl = new TypesDecl(node, parent, new List<TypeDecl>());
-                var str = node.InnerContent.Replace(":types", "");
+                var str = node.InnerContent.Remove(node.InnerContent.IndexOf(":types"), ":types".Length).Trim();
                 foreach (var typeDec in str.Split(ASTTokens.BreakToken))
                 {
                     if (typeDec != "")
@@ -166,7 +167,8 @@ namespace PDDLParser.Visitors
             if (IsOfValidNodeType(node.InnerContent, ":constants"))
             {
                 var newCons = new ConstantsDecl(node, parent, new List<NameExp>());
-                newCons.Constants = LooseParseString(node, newCons, ":constants", node.InnerContent.Replace(":constants", "").Trim(), listener);
+                var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":constants");
+                newCons.Constants = LooseParseString(node, newCons, ":constants", str, listener);
 
                 decl = newCons;
                 return true;
@@ -207,26 +209,30 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":action"))
             {
-                var actionName = node.InnerContent.Replace(":action", "").Trim().Split(' ')[0].Trim();
+                if (DoesContentContainTarget(node, ":action", ":parameters", listener) &&
+                    DoesContentContainTarget(node, ":action", ":precondition", listener) &&
+                    DoesContentContainTarget(node, ":action", ":effect", listener) &&
+                    DoesNodeHaveSpecificChildCount(node, ":action", 3, listener) &&
+                    DoesContentContainNLooseChildren(node, ":action", 4, listener))
+                {
 
-                CheckIfContentIncludes(node, ":action", ":parameters", listener);
-                CheckIfContentIncludes(node, ":action", ":precondition", listener);
-                CheckIfContentIncludes(node, ":action", ":effect", listener);
-                DoesNodeHaveSpecificChildCount(node, ":action", 3, listener);
+                    var nameFindStr = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, ":action"));
+                    var actionName = nameFindStr.Split(' ')[0].Trim();
 
-                var newActionDecl = new ActionDecl(node, parent, actionName, new List<NameExp>(), null, null);
+                    var newActionDecl = new ActionDecl(node, parent, actionName, new List<NameExp>(), null, null);
 
-                // Parameters
-                newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].InnerContent.Replace(actionName, "").Trim(), listener);
+                    // Parameters
+                    newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].InnerContent, listener);
 
-                // Preconditions
-                newActionDecl.Preconditions = ExpVisitor.Visit(node.Children[1], newActionDecl, listener);
+                    // Preconditions
+                    newActionDecl.Preconditions = ExpVisitor.Visit(node.Children[1], newActionDecl, listener);
 
-                // Effects
-                newActionDecl.Effects = ExpVisitor.Visit(node.Children[2], newActionDecl, listener);
+                    // Effects
+                    newActionDecl.Effects = ExpVisitor.Visit(node.Children[2], newActionDecl, listener);
 
-                decl = newActionDecl;
-                return true;
+                    decl = newActionDecl;
+                    return true;
+                }
             }
             decl = null;
             return false;
@@ -236,24 +242,27 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":axiom"))
             {
-                CheckIfContentIncludes(node, ":axiom", ":vars", listener);
-                CheckIfContentIncludes(node, ":axiom", ":context", listener);
-                CheckIfContentIncludes(node, ":axiom", ":implies", listener);
-                DoesNodeHaveSpecificChildCount(node, ":action", 3, listener);
+                if (DoesContentContainTarget(node, ":axiom", ":vars", listener) &&
+                    DoesContentContainTarget(node, ":axiom", ":context", listener) &&
+                    DoesContentContainTarget(node, ":axiom", ":implies", listener) &&
+                    DoesNodeHaveSpecificChildCount(node, ":axiom", 3, listener) &&
+                    DoesContentContainNLooseChildren(node, ":axiom", 3, listener))
+                {
 
-                var newAxiomDecl = new AxiomDecl(node, parent, new List<NameExp>(), null, null);
+                    var newAxiomDecl = new AxiomDecl(node, parent, new List<NameExp>(), null, null);
 
-                // Vars
-                newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].InnerContent.Trim(), listener);
+                    // Vars
+                    newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].InnerContent.Trim(), listener);
 
-                // Context
-                newAxiomDecl.Context = ExpVisitor.Visit(node.Children[1], newAxiomDecl, listener);
+                    // Context
+                    newAxiomDecl.Context = ExpVisitor.Visit(node.Children[1], newAxiomDecl, listener);
 
-                // Implies
-                newAxiomDecl.Implies = ExpVisitor.Visit(node.Children[2], newAxiomDecl, listener);
+                    // Implies
+                    newAxiomDecl.Implies = ExpVisitor.Visit(node.Children[2], newAxiomDecl, listener);
 
-                decl = newAxiomDecl;
-                return true;
+                    decl = newAxiomDecl;
+                    return true;
+                }
             }
             decl = null;
             return false;

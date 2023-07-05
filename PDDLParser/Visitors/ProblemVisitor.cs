@@ -40,25 +40,26 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "define"))
             {
-                DoesContentContainAnyStrayCharacters(node, "define", listener);
-
-                var returnProblem = new ProblemDecl(node);
-                foreach (var child in node.Children)
+                if (DoesNotContainStrayCharacters(node, "define", listener))
                 {
-                    var visited = ProblemVisitor.Visit(child, returnProblem, listener);
-                    if (visited is ProblemNameDecl name)
-                        returnProblem.Name = name;
-                    else if (visited is DomainNameRefDecl domainName)
-                        returnProblem.DomainName = domainName;
-                    else if (visited is ObjectsDecl objects)
-                        returnProblem.Objects = objects;
-                    else if (visited is InitDecl inits)
-                        returnProblem.Init = inits;
-                    else if (visited is GoalDecl goal)
-                        returnProblem.Goal = goal;
+                    var returnProblem = new ProblemDecl(node);
+                    foreach (var child in node.Children)
+                    {
+                        var visited = ProblemVisitor.Visit(child, returnProblem, listener);
+                        if (visited is ProblemNameDecl name)
+                            returnProblem.Name = name;
+                        else if (visited is DomainNameRefDecl domainName)
+                            returnProblem.DomainName = domainName;
+                        else if (visited is ObjectsDecl objects)
+                            returnProblem.Objects = objects;
+                        else if (visited is InitDecl inits)
+                            returnProblem.Init = inits;
+                        else if (visited is GoalDecl goal)
+                            returnProblem.Goal = goal;
+                    }
+                    decl = returnProblem;
+                    return true;
                 }
-                decl = returnProblem;
-                return true;
             }
             decl = null;
             return false;
@@ -68,7 +69,7 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "problem"))
             {
-                var name = PurgeEscapeChars(node.InnerContent).Remove(0, "problem".Length).Trim();
+                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "problem");
                 decl = new ProblemNameDecl(node, parent, name);
                 return true;
             }
@@ -80,7 +81,7 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "domain"))
             {
-                var name = PurgeEscapeChars(node.InnerContent).Remove(0, ":domain".Length).Trim();
+                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":domain");
                 decl = new DomainNameRefDecl(node, parent, name);
                 return true;
             }
@@ -92,15 +93,16 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":objects"))
             {
-                DoesNodeHaveSpecificChildCount(node, ":objects", 0, listener);
+                if (DoesNodeHaveSpecificChildCount(node, ":objects", 0, listener))
+                {
+                    var newObjs = new ObjectsDecl(node, parent, new List<NameExp>());
 
-                var newObjs = new ObjectsDecl(node, parent, new List<NameExp>());
+                    var parseStr = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":objects");
+                    newObjs.Objs = LooseParseString(node, newObjs, ":objects", parseStr, listener);
 
-                var parseStr = PurgeEscapeChars(node.InnerContent.Replace(":objects", "")).Trim();
-                newObjs.Objs = LooseParseString(node, newObjs, ":objects", parseStr, listener);
-
-                decl = newObjs;
-                return true;
+                    decl = newObjs;
+                    return true;
+                }
             }
             decl = null;
             return false;
@@ -110,10 +112,13 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":init"))
             {
-                var newInit = new InitDecl(node, parent, new List<PredicateExp>());
-                newInit.Predicates = ParseAsPredicateList(node, newInit, listener);
-                decl = newInit;
-                return true;
+                if (DoesNotContainStrayCharacters(node, ":init", listener))
+                {
+                    var newInit = new InitDecl(node, parent, new List<PredicateExp>());
+                    newInit.Predicates = ParseAsPredicateList(node, newInit, listener);
+                    decl = newInit;
+                    return true;
+                }
             }
             decl = null;
             return false;
@@ -123,11 +128,14 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":goal"))
             {
-                DoesNodeHaveSpecificChildCount(node, ":goal", 1, listener);
-                var newGoal = new GoalDecl(node, parent, null);
-                newGoal.GoalExp = ExpVisitor.Visit(node.Children[0], newGoal, listener);
-                decl = newGoal;
-                return true;
+                if (DoesNodeHaveSpecificChildCount(node, ":goal", 1, listener) &&
+                    DoesNotContainStrayCharacters(node, ":goal", listener))
+                {
+                    var newGoal = new GoalDecl(node, parent, null);
+                    newGoal.GoalExp = ExpVisitor.Visit(node.Children[0], newGoal, listener);
+                    decl = newGoal;
+                    return true;
+                }
             }
             decl = null;
             return false;

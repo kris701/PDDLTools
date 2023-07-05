@@ -143,5 +143,26 @@ namespace PDDLParser.Tests.Visitors
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(GoalDecl));
         }
+
+        [TestMethod]
+        [DataRow("(:goal () () ())")]
+        [DataRow("(:goal () ())")]
+        [DataRow("(:goal)")]
+        public void Cant_VisitGoalNode_IfNotHaveingSingleChild(string toParse)
+        {
+            // ARRANGE
+            var parser = new ASTParser();
+            var node = parser.Parse(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IDecl decl;
+            ProblemVisitor.TryVisitGoalNode(node, null, listener, out decl);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+            Assert.IsTrue(listener.Errors[0].Code == ParserErrorCode.NeedExactChildren);
+        }
     }
 }
