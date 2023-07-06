@@ -95,6 +95,7 @@
     <Compile Include="Visitors\BaseVisitor.cs" />
     <Compile Include="Visitors\DomainVisitor.cs" />
     <Compile Include="Visitors\ExpVisitor.cs" />
+    <Compile Include="Visitors\IVisitor.cs" />
     <Compile Include="Visitors\ProblemVisitor.cs" />
   </ItemGroup>
   <ItemGroup />

@@ -87,7 +87,7 @@ namespace PDDLParser.Visitors
             {
                 if (param != "" && param != nodeType)
                 {
-                    var parsed = ExpVisitor.Visit(new ASTNode(
+                    var parsed = new ExpVisitor().Visit(new ASTNode(
                         offset,
                         offset + param.Length,
                         node.Line,
@@ -116,7 +116,7 @@ namespace PDDLParser.Visitors
             List<PredicateExp> predicates = new List<PredicateExp>();
             foreach (var predicate in node.Children)
             {
-                var newNode = ExpVisitor.Visit(predicate, parent, listener) as PredicateExp;
+                var newNode = new ExpVisitor().Visit(predicate, parent, listener) as PredicateExp;
                 if (newNode == null)
                     listener.AddError(new ParseError(
                         $"Could not parse predicate!",
@@ -135,7 +135,7 @@ namespace PDDLParser.Visitors
             List<NameExp> name = new List<NameExp>();
             foreach (var child in node.Children)
             {
-                var newNode = ExpVisitor.Visit(child, parent, listener) as NameExp;
+                var newNode = new ExpVisitor().Visit(child, parent, listener) as NameExp;
                 if (newNode == null)
                     listener.AddError(new ParseError(
                         $"Could not parse name!",

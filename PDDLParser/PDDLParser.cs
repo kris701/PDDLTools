@@ -94,7 +94,8 @@ namespace PDDLParser
 
             var absAST = ParseAsASTTree(parseFile, Listener);
 
-            var returnDomain = DomainVisitor.Visit(absAST, null, Listener);
+            IVisitor<ASTNode, INode, IDecl> visitor = new DomainVisitor();
+            var returnDomain = visitor.Visit(absAST, null, Listener);
             return returnDomain as DomainDecl;
         }
 
@@ -112,7 +113,8 @@ namespace PDDLParser
 
             var absAST = ParseAsASTTree(parseFile, Listener);
 
-            var returnProblem = ProblemVisitor.Visit(absAST, null, Listener);
+            IVisitor<ASTNode, INode, IDecl> visitor = new ProblemVisitor();
+            var returnProblem = visitor.Visit(absAST, null, Listener);
             return returnProblem as ProblemDecl;
         }
 

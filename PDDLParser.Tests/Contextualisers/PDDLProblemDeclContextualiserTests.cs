@@ -29,7 +29,7 @@ namespace PDDLParser.Tests.Contextualisers
 
             IASTParser<ASTNode> parser = new ASTParser();
             var node = parser.Parse(toParse);
-            ProblemDecl? decl = ProblemVisitor.Visit(node, null, listener) as ProblemDecl;
+            ProblemDecl? decl = new ProblemVisitor().Visit(node, null, listener) as ProblemDecl;
             Assert.IsNotNull(decl);
 
             IContextualiser<ProblemDecl> contextualiser = new PDDLProblemDeclContextualiser();

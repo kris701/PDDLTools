@@ -12,9 +12,9 @@ using PDDLParser.Models.Domain;
 
 namespace PDDLParser.Visitors
 {
-    public class DomainVisitor : BaseVisitor
+    public class DomainVisitor : BaseVisitor, IVisitor<ASTNode, INode, IDecl>
     {
-        public static IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
+        public IDecl Visit(ASTNode node, INode parent, IErrorListener listener)
         {
             IDecl returnNode = null;
             if (TryVisitDomainDeclNode(node, parent, listener, out returnNode))
@@ -46,7 +46,7 @@ namespace PDDLParser.Visitors
             return default;
         }
 
-        public static bool TryVisitDomainDeclNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitDomainDeclNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, "define"))
             {
@@ -55,7 +55,7 @@ namespace PDDLParser.Visitors
                     var returnDomain = new DomainDecl(node);
                     foreach (var child in node.Children)
                     {
-                        var visited = DomainVisitor.Visit(child, returnDomain, listener);
+                        var visited = Visit(child, returnDomain, listener);
                         if (visited is DomainNameDecl domainName)
                             returnDomain.Name = domainName;
                         else if (visited is RequirementsDecl requirements)
@@ -91,7 +91,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitDomainNameNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitDomainNameNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, "domain"))
             {
@@ -106,7 +106,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitRequirementsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitRequirementsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, ":requirements"))
             {
@@ -121,7 +121,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitExtendsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitExtendsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, ":extends"))
             {
@@ -136,7 +136,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitTypesNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitTypesNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, ":types"))
             {
@@ -164,7 +164,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitConstantsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitConstantsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, ":constants"))
             {
@@ -179,7 +179,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitPredicatesNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitPredicatesNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, ":predicates"))
             {
@@ -193,7 +193,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitTimelessNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitTimelessNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, ":timeless"))
             {
@@ -209,7 +209,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitActionNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitActionNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, ":action"))
             {
@@ -224,15 +224,16 @@ namespace PDDLParser.Visitors
                     var actionName = nameFindStr.Split(' ')[0].Trim();
 
                     var newActionDecl = new ActionDecl(node, parent, actionName, new List<NameExp>(), null, null);
+                    var visitor = new ExpVisitor();
 
                     // Parameters
                     newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].InnerContent, listener);
 
                     // Preconditions
-                    newActionDecl.Preconditions = ExpVisitor.Visit(node.Children[1], newActionDecl, listener);
+                    newActionDecl.Preconditions = visitor.Visit(node.Children[1], newActionDecl, listener);
 
                     // Effects
-                    newActionDecl.Effects = ExpVisitor.Visit(node.Children[2], newActionDecl, listener);
+                    newActionDecl.Effects = visitor.Visit(node.Children[2], newActionDecl, listener);
 
                     decl = newActionDecl;
                     return true;
@@ -242,7 +243,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitAxiomNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        public bool TryVisitAxiomNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
             if (IsOfValidNodeType(node.InnerContent, ":axiom"))
             {
@@ -254,15 +255,16 @@ namespace PDDLParser.Visitors
                 {
 
                     var newAxiomDecl = new AxiomDecl(node, parent, new List<NameExp>(), null, null);
+                    var visitor = new ExpVisitor();
 
                     // Vars
                     newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].InnerContent.Trim(), listener);
 
                     // Context
-                    newAxiomDecl.Context = ExpVisitor.Visit(node.Children[1], newAxiomDecl, listener);
+                    newAxiomDecl.Context = visitor.Visit(node.Children[1], newAxiomDecl, listener);
 
                     // Implies
-                    newAxiomDecl.Implies = ExpVisitor.Visit(node.Children[2], newAxiomDecl, listener);
+                    newAxiomDecl.Implies = visitor.Visit(node.Children[2], newAxiomDecl, listener);
 
                     decl = newAxiomDecl;
                     return true;

@@ -29,7 +29,7 @@ namespace PDDLParser.Tests.Visitors
             var node = parser.Parse(toParse);
 
             // ACT
-            var decl = ProblemVisitor.Visit(node, null, null);
+            var decl = new ProblemVisitor().Visit(node, null, null);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, expectedType);
@@ -46,7 +46,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitProblemDeclNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitProblemDeclNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ProblemDecl));
@@ -65,7 +65,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitProblemDeclNode(node, null, listener, out decl);
+            new ProblemVisitor().TryVisitProblemDeclNode(node, null, listener, out decl);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -84,7 +84,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitProblemNameNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitProblemNameNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ProblemNameDecl));
@@ -104,7 +104,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitProblemNameNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitProblemNameNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ProblemNameDecl));
@@ -125,7 +125,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitProblemNameNode(node, null, listener, out decl);
+            new ProblemVisitor().TryVisitProblemNameNode(node, null, listener, out decl);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -144,7 +144,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitDomainRefNameNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitDomainRefNameNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DomainNameRefDecl));
@@ -164,7 +164,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitDomainRefNameNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitDomainRefNameNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(DomainNameRefDecl));
@@ -185,7 +185,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitDomainRefNameNode(node, null, listener, out decl);
+            new ProblemVisitor().TryVisitDomainRefNameNode(node, null, listener, out decl);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -205,7 +205,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitObjectsNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitObjectsNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ObjectsDecl));
@@ -224,7 +224,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitObjectsNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitObjectsNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ObjectsDecl));
@@ -250,7 +250,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitObjectsNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitObjectsNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(ObjectsDecl));
@@ -275,7 +275,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitObjectsNode(node, null, listener, out decl);
+            new ProblemVisitor().TryVisitObjectsNode(node, null, listener, out decl);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -295,7 +295,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitInitsNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitInitsNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(InitDecl));
@@ -314,7 +314,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitInitsNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitInitsNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(InitDecl));
@@ -339,7 +339,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitInitsNode(node, null, listener, out decl);
+            new ProblemVisitor().TryVisitInitsNode(node, null, listener, out decl);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -358,7 +358,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitGoalNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitGoalNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(GoalDecl));
@@ -375,7 +375,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitGoalNode(node, null, null, out decl);
+            new ProblemVisitor().TryVisitGoalNode(node, null, null, out decl);
 
             // ASSERT
             Assert.IsInstanceOfType(decl, typeof(GoalDecl));
@@ -401,7 +401,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitGoalNode(node, null, listener, out decl);
+            new ProblemVisitor().TryVisitGoalNode(node, null, listener, out decl);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
@@ -422,7 +422,7 @@ namespace PDDLParser.Tests.Visitors
 
             // ACT
             IDecl decl;
-            ProblemVisitor.TryVisitGoalNode(node, null, listener, out decl);
+            new ProblemVisitor().TryVisitGoalNode(node, null, listener, out decl);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);

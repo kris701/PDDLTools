@@ -11,9 +11,9 @@ using System.Xml.Linq;
 
 namespace PDDLParser.Visitors
 {
-    public class ExpVisitor : BaseVisitor
+    public class ExpVisitor : BaseVisitor, IVisitor<ASTNode, INode, IExp>
     {
-        public static IExp Visit(ASTNode node, INode parent, IErrorListener listener)
+        public IExp Visit(ASTNode node, INode parent, IErrorListener listener)
         {
             IExp returnNode = null;
             if (TryVisitAndNode(node, parent, listener, out returnNode))
@@ -35,7 +35,7 @@ namespace PDDLParser.Visitors
             return default;
         }
 
-        public static bool TryVisitAndNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
+        public bool TryVisitAndNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
         {
             if (IsOfValidNodeType(node.InnerContent, "and"))
             {
@@ -54,7 +54,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitOrNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
+        public bool TryVisitOrNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
         {
             if (IsOfValidNodeType(node.InnerContent, "or"))
             {
@@ -73,7 +73,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitNotNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
+        public bool TryVisitNotNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
         {
             if (IsOfValidNodeType(node.InnerContent, "not"))
             {
@@ -90,7 +90,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitPredicateNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
+        public bool TryVisitPredicateNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
         {
             if (node.OuterContent.Contains('(') && node.OuterContent.Contains(')') && node.InnerContent != "")
             {
@@ -117,7 +117,7 @@ namespace PDDLParser.Visitors
             return false;
         }
 
-        public static bool TryVisitNameNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
+        public bool TryVisitNameNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
         {
             if (node.InnerContent.Contains(ASTTokens.TypeToken))
             {
