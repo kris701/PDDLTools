@@ -15,11 +15,11 @@ namespace PDDLParser.Contextualisers
     {
         public override void Contexturalise(DomainDecl decl, IErrorListener listener)
         {
-            LinkActionParameters(decl, listener);
-            LinkAxiomVars(decl, listener);
+            DecorateActionParameters(decl, listener);
+            DecorateAxiomVars(decl, listener);
         }
 
-        private void LinkActionParameters(DomainDecl decl, IErrorListener listener)
+        private void DecorateActionParameters(DomainDecl decl, IErrorListener listener)
         {
             if (decl.Actions != null)
             {
@@ -34,7 +34,7 @@ namespace PDDLParser.Contextualisers
             }
         }
 
-        private void LinkAxiomVars(DomainDecl decl, IErrorListener listener)
+        private void DecorateAxiomVars(DomainDecl decl, IErrorListener listener)
         {
             if (decl.Axioms != null)
             {

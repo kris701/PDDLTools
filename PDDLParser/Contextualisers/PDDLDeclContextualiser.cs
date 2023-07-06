@@ -18,14 +18,6 @@ namespace PDDLParser.Contextualisers
             domainContextualiser.Contexturalise(decl.Domain, listener);
             IContextualiser<ProblemDecl> problemContextualiser = new PDDLProblemDeclContextualiser();
             problemContextualiser.Contexturalise(decl.Problem, listener);
-
-            SetDomainReference(decl.Problem, decl.Domain);
-        }
-
-        private void SetDomainReference(ProblemDecl problem, DomainDecl targetDomain)
-        {
-            if (problem.DomainName != null)
-                problem.DomainName.DomainReference = targetDomain;
         }
     }
 }

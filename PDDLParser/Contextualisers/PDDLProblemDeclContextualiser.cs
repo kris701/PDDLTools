@@ -14,7 +14,7 @@ namespace PDDLParser.Contextualisers
         public override void Contexturalise(ProblemDecl decl, IErrorListener listener)
         {
             SetGoalContext(decl.Goal);
-            LinkObjects(decl);
+            DecorateObjects(decl);
         }
 
         private void SetGoalContext(GoalDecl goal)
@@ -37,7 +37,7 @@ namespace PDDLParser.Contextualisers
             }
         }
 
-        private void LinkObjects(ProblemDecl decl)
+        private void DecorateObjects(ProblemDecl decl)
         {
             if (decl.Objects != null)
             {
