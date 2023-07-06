@@ -28,7 +28,7 @@ namespace PDDLParser.Models
             Parent = parent;
         }
 
-        public abstract HashSet<INode> FindNames(string name);
+        public abstract HashSet<INamedNode> FindNames(string name);
         public abstract HashSet<T> FindTypes<T>();
 
         public abstract bool Equals(object obj);

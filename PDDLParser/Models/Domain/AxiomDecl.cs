@@ -23,9 +23,9 @@ namespace PDDLParser.Models.Domain
             Implies = implies;
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            HashSet<INode> res = new HashSet<INode>();
+            HashSet<INamedNode> res = new HashSet<INamedNode>();
             foreach (var var in Vars)
                 res.AddRange(var.FindNames(name));
             res.AddRange(Context.FindNames(name));

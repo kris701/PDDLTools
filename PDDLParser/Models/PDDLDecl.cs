@@ -21,9 +21,9 @@ namespace PDDLParser.Models
             Problem = problem;
         }
 
-        public HashSet<INode> FindNames(string name)
+        public HashSet<INamedNode> FindNames(string name)
         {
-            var matches = new HashSet<INode>();
+            var matches = new HashSet<INamedNode>();
             if (Domain != null)
                 matches.AddRange(Domain.FindNames(name));
             if (Problem != null)

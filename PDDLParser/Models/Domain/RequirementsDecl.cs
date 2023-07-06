@@ -25,9 +25,9 @@ namespace PDDLParser.Models.Domain
             return $"(:requirements{reqStr})";
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            HashSet<INode> res = new HashSet<INode>();
+            HashSet<INamedNode> res = new HashSet<INamedNode>();
             foreach (var requirement in Requirements)
                 res.AddRange(requirement.FindNames(name));
             return res;

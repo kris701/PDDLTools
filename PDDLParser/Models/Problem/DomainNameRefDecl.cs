@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Problem
 {
-    public class DomainNameRefDecl : BaseNode, IDecl
+    public class DomainNameRefDecl : BaseNode, IDecl, INamedNode
     {
         public string Name { get; set; }
 
@@ -26,11 +26,11 @@ namespace PDDLParser.Models.Problem
             return $"(:domain {Name})";
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
             if (Name == name)
-                return new HashSet<INode>() { this };
-            return new HashSet<INode>();
+                return new HashSet<INamedNode>() { this };
+            return new HashSet<INamedNode>();
         }
 
         public override HashSet<T> FindTypes<T>()

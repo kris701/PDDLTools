@@ -27,9 +27,9 @@ namespace PDDLParser.Models.Domain
             return $"(:constants{retStr})";
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            HashSet<INode> res = new HashSet<INode>();
+            HashSet<INamedNode> res = new HashSet<INamedNode>();
             foreach (var cons in Constants)
                 res.AddRange(cons.FindNames(name));
             return res;

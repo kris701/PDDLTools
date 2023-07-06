@@ -82,11 +82,11 @@ namespace PDDLParser.Visitors
 
         public bool TryVisitDomainRefNameNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
         {
-            if (IsOfValidNodeType(node.InnerContent, "domain"))
+            if (IsOfValidNodeType(node.InnerContent, ":domain"))
             {
-                if (DoesContentContainNLooseChildren(node, "domain", 1, listener))
+                if (DoesContentContainNLooseChildren(node, ":domain", 1, listener))
                 {
-                    var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "domain");
+                    var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":domain");
                     decl = new DomainNameRefDecl(node, parent, name);
                     return true;
                 }

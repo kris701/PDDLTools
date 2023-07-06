@@ -70,6 +70,7 @@
     <Compile Include="Models\Domain\TypeNameDecl.cs" />
     <Compile Include="Models\IDecl.cs" />
     <Compile Include="Models\IExp.cs" />
+    <Compile Include="Models\INamedNode.cs" />
     <Compile Include="Models\INode.cs" />
     <Compile Include="Models\NameExp.cs" />
     <Compile Include="Models\NotExp.cs" />

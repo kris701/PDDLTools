@@ -33,7 +33,7 @@ namespace PDDLParser.Models.Problem
             return $"(:goal {GoalExp})";
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
             return GoalExp.FindNames(name);
         }

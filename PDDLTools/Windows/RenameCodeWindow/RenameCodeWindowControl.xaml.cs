@@ -144,7 +144,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
             else
             {
                 var file = await DTE2Helper.GetSourceFilePathAsync();
-                List<INode> nodes = new List<INode>();
+                List<INamedNode> nodes = new List<INamedNode>();
                 switch (_scopeType)
                 {
                     case ReplaceScopeTypes.ActionParameter:
@@ -179,7 +179,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
             return true;
         }
 
-        private void ReplaceNamesOfType(string file, List<INode> nodes, string from, string to, ReplaceScopeTypes scopeType)
+        private void ReplaceNamesOfType(string file, List<INamedNode> nodes, string from, string to, ReplaceScopeTypes scopeType)
         {
             var text = File.ReadAllText(file);
 

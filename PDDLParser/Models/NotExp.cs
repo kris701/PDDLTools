@@ -22,7 +22,7 @@ namespace PDDLParser.Models
             return $"(not {Child})";
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
             return Child.FindNames(name);
         }

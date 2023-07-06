@@ -27,9 +27,9 @@ namespace PDDLParser.Models.Domain
             return $"{retStr} - {TypeName}";
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            HashSet<INode> res = new HashSet<INode>();
+            HashSet<INamedNode> res = new HashSet<INamedNode>();
             res.AddRange(TypeName.FindNames(name));
             foreach (var subtype in SubTypes)
                 res.AddRange(subtype.FindNames(name));

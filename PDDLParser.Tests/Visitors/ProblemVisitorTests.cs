@@ -18,7 +18,7 @@ namespace PDDLParser.Tests.Visitors
         [TestMethod]
         [DataRow("(define (problem a))", typeof(ProblemDecl))]
         [DataRow("(problem abc)", typeof(ProblemNameDecl))]
-        [DataRow("(domain abc)", typeof(DomainNameRefDecl))]
+        [DataRow("(:domain abc)", typeof(DomainNameRefDecl))]
         [DataRow("(:objects abc def - type)", typeof(ObjectsDecl))]
         [DataRow("(:init (a ?b) (c ?d))", typeof(InitDecl))]
         [DataRow("(:goal (not (a)))", typeof(GoalDecl))]
@@ -133,9 +133,9 @@ namespace PDDLParser.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(domain abc)")]
-        [DataRow("(domain    abc)")]
-        [DataRow("(domain    abc       )")]
+        [DataRow("(:domain abc)")]
+        [DataRow("(:domain    abc)")]
+        [DataRow("(:domain    abc       )")]
         public void Can_VisitDomainRefNameNode(string toParse)
         {
             // ARRANGE
@@ -151,11 +151,11 @@ namespace PDDLParser.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(domain abc)", "abc")]
-        [DataRow("(domain a)", "a")]
-        [DataRow("(domain    abc)", "abc")]
-        [DataRow("(domain    abc       )", "abc")]
-        [DataRow("(domain    abcaaaaaaaaaaaaaaaa       )", "abcaaaaaaaaaaaaaaaa")]
+        [DataRow("(:domain abc)", "abc")]
+        [DataRow("(:domain a)", "a")]
+        [DataRow("(:domain    abc)", "abc")]
+        [DataRow("(:domain    abc       )", "abc")]
+        [DataRow("(:domain    abcaaaaaaaaaaaaaaaa       )", "abcaaaaaaaaaaaaaaaa")]
         public void Can_VisitDomainRefNameNode_CoorectName(string toParse, string expected)
         {
             // ARRANGE
@@ -173,8 +173,8 @@ namespace PDDLParser.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(domain)")]
-        [DataRow("(domain         )")]
+        [DataRow("(:domain)")]
+        [DataRow("(:domain         )")]
         public void Cant_VisitDomainRefNameNode_IfNoLooseChild(string toParse)
         {
             // ARRANGE

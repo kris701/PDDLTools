@@ -18,9 +18,9 @@ namespace PDDLParser.Models.Problem
 
         public ProblemDecl(ASTNode node) : base(node, null) { }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            HashSet<INode> res = new HashSet<INode>();
+            HashSet<INamedNode> res = new HashSet<INamedNode>();
 
             if (Name != null)
                 res.AddRange(Name.FindNames(name));

@@ -26,9 +26,9 @@ namespace PDDLParser.Models.Domain
             return $"(:predicates{retStr})";
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            HashSet<INode> res = new HashSet<INode>();
+            HashSet<INamedNode> res = new HashSet<INamedNode>();
             foreach (var predicate in Predicates)
                 res.AddRange(predicate.FindNames(name));
             return res;

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class NameExp : BaseNode, IExp, ICloneable
+    public class NameExp : BaseNode, IExp, ICloneable, INamedNode
     {
         public string Name { get; set; }
         public TypeNameDecl Type { get; set; }
@@ -54,9 +54,9 @@ namespace PDDLParser.Models
             return new NameExp(new ASTNode(Start, End, Line), Parent, Name, Type);
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            var result = new HashSet<INode>();
+            var result = new HashSet<INamedNode>();
             if (Name == name)
                 result.Add(this);
             result.AddRange(Type.FindNames(name));

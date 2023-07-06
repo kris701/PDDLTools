@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class PredicateExp : BaseNode, IExp, ICloneable
+    public class PredicateExp : BaseNode, IExp, ICloneable, INamedNode
     {
         public string Name { get; set; }
         public List<NameExp> Arguments { get; set; }
@@ -52,9 +52,9 @@ namespace PDDLParser.Models
             return newPredicateExp;
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            HashSet<INode> res = new HashSet<INode>();
+            HashSet<INamedNode> res = new HashSet<INamedNode>();
             if (Name == name)
                 res.Add(this);
             foreach (var arg in Arguments)

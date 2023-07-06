@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class ActionDecl :  BaseNode, IDecl
+    public class ActionDecl :  BaseNode, IDecl, INamedNode
     {
         public string Name { get; set; }
 
@@ -25,9 +25,9 @@ namespace PDDLParser.Models.Domain
             Effects = effects;
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
-            HashSet<INode> res = new HashSet<INode>();
+            HashSet<INamedNode> res = new HashSet<INamedNode>();
             if (Name == name)
                 res.Add(this);
             foreach (var param in Parameters)

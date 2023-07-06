@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class TypeNameDecl : BaseNode, IExp
+    public class TypeNameDecl : BaseNode, IExp, INamedNode
     {
         public string Name { get; set; }
 
@@ -34,11 +34,11 @@ namespace PDDLParser.Models.Domain
             return false;
         }
 
-        public override HashSet<INode> FindNames(string name)
+        public override HashSet<INamedNode> FindNames(string name)
         {
             if (Name == name)
-                return new HashSet<INode>() { this };
-            return new HashSet<INode>();
+                return new HashSet<INamedNode>() { this };
+            return new HashSet<INamedNode>();
         }
 
         public override HashSet<T> FindTypes<T>()
