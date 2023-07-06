@@ -17,7 +17,7 @@ namespace PDDLParser.Tests.AST
         public void Can_ParseGeneralStructure(string toParse, int expectedNodes)
         {
             // ARRANGE
-            var parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -34,7 +34,7 @@ namespace PDDLParser.Tests.AST
         public void Can_ParseSingleNodeContent_1(string toParse, string expectedContent)
         {
             // ARRANGE
-            var parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -51,7 +51,7 @@ namespace PDDLParser.Tests.AST
         public void Can_ParseSingleNodeContent_2(string toParse, string expectedContent)
         {
             // ARRANGE
-            var parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -66,7 +66,7 @@ namespace PDDLParser.Tests.AST
         public void Can_ParseCorrectPositions(string toParse, int expectedStart, int expectedEnd)
         {
             // ARRANGE
-            var parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -82,7 +82,7 @@ namespace PDDLParser.Tests.AST
         public void Can_ParseCorrectPositions_SubNode(string toParse, int expectedStart, int expectedEnd)
         {
             // ARRANGE
-            var parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -98,7 +98,7 @@ namespace PDDLParser.Tests.AST
         public void Can_ParseCorrectPositions_SubNode2(string toParse, int expectedStart, int expectedEnd)
         {
             // ARRANGE
-            var parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
 
             // ACT
             var res = parser.Parse(toParse);
@@ -115,7 +115,7 @@ namespace PDDLParser.Tests.AST
         public void Can_CanSetCorrectLineNumber(string toParse, int targetChild, int expectedLineNumber)
         {
             // ARRANGE
-            var parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
 
             // ACT
             var res = parser.Parse(toParse);

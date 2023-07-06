@@ -122,7 +122,7 @@ namespace PDDLParser
             var analyser = new GeneralPreAnalyser();
             analyser.PreAnalyse(text, listener);
 
-            var astParser = new ASTParser();
+            IASTParser<ASTNode> astParser = new ASTParser();
             var absAST = astParser.Parse(text);
             return absAST;
         }

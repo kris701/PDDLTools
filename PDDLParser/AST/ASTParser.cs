@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.AST
 {
-    public class ASTParser
+    public class ASTParser : IASTParser<ASTNode>
     {
         public ASTNode Parse(string text)
         {
@@ -18,7 +18,7 @@ namespace PDDLParser.AST
             return node;
         }
 
-        private string TokenizeSpecials(string text)
+        public string TokenizeSpecials(string text)
         {
             text = text.Replace(" - ", ASTTokens.TypeToken);
             return text;

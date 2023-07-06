@@ -27,7 +27,7 @@ namespace PDDLParser.Tests.Contextualisers
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            ASTParser parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
             var node = parser.Parse(toParse);
             ProblemDecl? decl = ProblemVisitor.Visit(node, null, listener) as ProblemDecl;
             Assert.IsNotNull(decl);

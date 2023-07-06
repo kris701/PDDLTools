@@ -28,7 +28,7 @@ namespace PDDLParser.Tests.Contextualisers
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            ASTParser parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
             var node = parser.Parse(toParse);
             DomainDecl? decl = DomainVisitor.Visit(node, null, listener) as DomainDecl;
             Assert.IsNotNull(decl);
@@ -55,7 +55,7 @@ namespace PDDLParser.Tests.Contextualisers
             IErrorListener listener = new ErrorListener();
             listener.ThrowIfTypeAbove = ParseErrorType.Error;
 
-            ASTParser parser = new ASTParser();
+            IASTParser<ASTNode> parser = new ASTParser();
             var node = parser.Parse(toParse);
             DomainDecl? decl = DomainVisitor.Visit(node, null, listener) as DomainDecl;
             Assert.IsNotNull(decl);
