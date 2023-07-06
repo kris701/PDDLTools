@@ -10,9 +10,9 @@ namespace PDDLParser.Models.Domain
 {
     public class TimelessDecl : BaseNode, IDecl
     {
-        public List<PredicateExp> Items { get; set; }
+        public List<NameExp> Items { get; set; }
 
-        public TimelessDecl(ASTNode node, INode parent, List<PredicateExp> timeless) : base(node, parent)
+        public TimelessDecl(ASTNode node, INode parent, List<NameExp> timeless) : base(node, parent)
         {
             Items = timeless;
         }

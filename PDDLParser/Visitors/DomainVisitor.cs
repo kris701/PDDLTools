@@ -95,10 +95,12 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, "domain"))
             {
-                var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "domain");
-                decl = new DomainNameDecl(node, parent, name);
-
-                return true;
+                if (DoesContentContainNLooseChildren(node, "domain", 1, listener))
+                {
+                    var name = RemoveNodeTypeAndEscapeChars(node.InnerContent, "domain");
+                    decl = new DomainNameDecl(node, parent, name);
+                    return true;
+                }
             }
             decl = null;
             return false;
@@ -147,10 +149,10 @@ namespace PDDLParser.Visitors
                         var left = typeDec.Substring(0, typeDec.IndexOf(ASTTokens.TypeToken));
                         var right = typeDec.Substring(typeDec.IndexOf(ASTTokens.TypeToken) + 3);
                         var newTypeDecl = new TypeDecl(node, newTypesDecl, null, new List<TypeNameDecl>());
-                        newTypeDecl.TypeName = new TypeNameDecl(node, newTypeDecl, right);
+                        newTypeDecl.TypeName = new TypeNameDecl(node, newTypeDecl, right.Trim());
                         foreach (var subType in left.Split(' '))
                             if (subType != "")
-                                newTypeDecl.SubTypes.Add(new TypeNameDecl(node, newTypeDecl, subType));
+                                newTypeDecl.SubTypes.Add(new TypeNameDecl(node, newTypeDecl, subType.Trim()));
                         newTypesDecl.Types.Add(newTypeDecl);
                     }
                 }
@@ -195,8 +197,10 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":timeless"))
             {
-                var newTime = new TimelessDecl(node, parent, new List<PredicateExp>());
-                newTime.Items = ParseAsPredicateList(node, newTime, listener);
+                var newTime = new TimelessDecl(node, parent, new List<NameExp>());
+                foreach (var child in node.Children)
+                    child.OuterContent = child.InnerContent;
+                newTime.Items = ParseAsNameList(node, newTime, listener);
 
                 decl = newTime;
                 return true;

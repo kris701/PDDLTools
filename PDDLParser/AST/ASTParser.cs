@@ -12,10 +12,16 @@ namespace PDDLParser.AST
     {
         public ASTNode Parse(string text)
         {
-            text = text.Replace(" - ", ASTTokens.TypeToken);
+            text = TokenizeSpecials(text);
             var node = ParseAsNodeRec(text, 0, text.Length);
             SetLineNumberByCharacterNumberRec(text, node);
             return node;
+        }
+
+        private string TokenizeSpecials(string text)
+        {
+            text = text.Replace(" - ", ASTTokens.TypeToken);
+            return text;
         }
 
         private ASTNode ParseAsNodeRec(string text, int thisStart, int thisEnd)
