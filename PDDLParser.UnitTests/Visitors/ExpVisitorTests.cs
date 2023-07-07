@@ -303,8 +303,10 @@ namespace PDDLParser.Tests.Visitors
         [TestMethod]
         [DataRow("(pred ?a)", "")]
         [DataRow("(pred ?a - type)", "type")]
-        [DataRow("(pred ?a ?b - type)", "", "type")]
+        [DataRow("(pred ?a ?b - type)", "type", "type")]
         [DataRow("(pred ?a - type ?b - type)", "type", "type")]
+        [DataRow("(pred ?a - type2 ?b - type)", "type2", "type")]
+        [DataRow("(pred ?a - type2 ?c ?b - type)", "type2", "type", "type")]
         public void Can_ParsePredicateNode_CorrectParameterTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE

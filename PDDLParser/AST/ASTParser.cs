@@ -20,6 +20,7 @@ namespace PDDLParser.AST
 
         public string TokenizeSpecials(string text)
         {
+            text = text.Replace("\n- ", $"\n{ASTTokens.TypeToken}");
             text = text.Replace(" - ", ASTTokens.TypeToken);
             return text;
         }

@@ -115,7 +115,7 @@ namespace PDDLParser.SystemTests
             {
                 if (new FileInfo(problem).Length < MaxFileSize)
                 {
-                    parser.TryParse(null, problem);
+                    parser.Parse(null, problem);
                     Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
                     parser.Listener.Errors.Clear();
                 }
@@ -143,7 +143,7 @@ namespace PDDLParser.SystemTests
             {
                 if (new FileInfo(problem).Length < MaxFileSize)
                 {
-                    parser.TryParse(null, problem);
+                    parser.Parse(null, problem);
                     Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
                     parser.Listener.Errors.Clear();
                 }
@@ -171,7 +171,91 @@ namespace PDDLParser.SystemTests
             {
                 if (new FileInfo(problem).Length < MaxFileSize)
                 {
-                    parser.TryParse(null, problem);
+                    parser.Parse(null, problem);
+                    Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
+                    parser.Listener.Errors.Clear();
+                }
+            }
+
+            // ASSERT
+            Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
+        public void Can_ParseProblemAndDomain_ParseOnly_STRIPS(string domain, List<string> problems)
+        {
+            System.Diagnostics.Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
+
+            // ARRANGE
+            IPDDLParser parser = new PDDLParser(false, false);
+            parser.Listener.ThrowIfTypeAbove = Listener.ParseErrorType.Warning;
+            if (!parser.IsDomainRequirementsSupported(domain))
+                Assert.Inconclusive("Contains unsupported packages!");
+            Random rnd = new Random();
+
+            // ACT
+            foreach (var problem in problems.OrderBy(x => rnd.Next()))
+            {
+                if (new FileInfo(problem).Length < MaxFileSize)
+                {
+                    parser.Parse(domain, problem);
+                    Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
+                    parser.Listener.Errors.Clear();
+                }
+            }
+
+            // ASSERT
+            Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
+        public void Can_ParseProblemAndDomain_Contextualise_STRIPS(string domain, List<string> problems)
+        {
+            System.Diagnostics.Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
+
+            // ARRANGE
+            IPDDLParser parser = new PDDLParser(true, false);
+            parser.Listener.ThrowIfTypeAbove = Listener.ParseErrorType.Warning;
+            if (!parser.IsDomainRequirementsSupported(domain))
+                Assert.Inconclusive("Contains unsupported packages!");
+            Random rnd = new Random();
+
+            // ACT
+            foreach (var problem in problems.OrderBy(x => rnd.Next()))
+            {
+                if (new FileInfo(problem).Length < MaxFileSize)
+                {
+                    parser.Parse(domain, problem);
+                    Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
+                    parser.Listener.Errors.Clear();
+                }
+            }
+
+            // ASSERT
+            Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
+        }
+
+        [TestMethod]
+        [DynamicData(nameof(GetDictionaryData), DynamicDataSourceType.Method)]
+        public void Can_ParseProblemAndDomain_Analyse_STRIPS(string domain, List<string> problems)
+        {
+            System.Diagnostics.Trace.WriteLine($"Domain: {new FileInfo(domain).Directory.Name}, problems: {problems.Count}");
+
+            // ARRANGE
+            IPDDLParser parser = new PDDLParser(true, true);
+            parser.Listener.ThrowIfTypeAbove = Listener.ParseErrorType.Warning;
+            if (!parser.IsDomainRequirementsSupported(domain))
+                Assert.Inconclusive("Contains unsupported packages!");
+            Random rnd = new Random();
+
+            // ACT
+            foreach (var problem in problems.OrderBy(x => rnd.Next()))
+            {
+                if (new FileInfo(problem).Length < MaxFileSize)
+                {
+                    parser.Parse(domain, problem);
                     Assert.IsFalse(parser.Listener.Errors.Any(x => x.Type == Listener.ParseErrorType.Error));
                     parser.Listener.Errors.Clear();
                 }

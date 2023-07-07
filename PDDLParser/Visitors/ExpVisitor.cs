@@ -101,16 +101,9 @@ namespace PDDLParser.Visitors
                     var predicateName = node.InnerContent.Split(' ')[0];
                     var newPredicateExp = new PredicateExp(node, parent, predicateName, new List<NameExp>());
 
-                    var paramSplit = node.InnerContent.Split(' ');
-                    int offset = 0;
-                    foreach (var param in paramSplit)
-                    {
-                        if (param != "" && param != predicateName)
-                        {
-                            newPredicateExp.Arguments.Add(Visit(new ASTNode(node.Start + offset, node.End, param, param), newPredicateExp, listener) as NameExp);
-                        }
-                        offset += param.Length;
-                    }
+                    var content = node.InnerContent.Substring(node.InnerContent.IndexOf(predicateName) + predicateName.Length);
+                    newPredicateExp.Arguments = LooseParseString<NameExp>(node, newPredicateExp, "predicate", content, listener);
+
                     exp = newPredicateExp;
                     return true;
                 }

@@ -20,6 +20,7 @@ namespace PDDLParser.Analysers
             domainAnalyser.PostAnalyse(decl.Domain, listener);
 
             // Declare Checking
+            CheckForUndeclaredProblemObjects(decl.Problem, decl.Domain, listener);
             CheckForUndeclaredPreconditionsInInits(decl.Domain, decl.Problem, listener);
             CheckForUndeclaredPreconditionsInGoal(decl.Domain, decl.Problem, listener);
 
@@ -34,7 +35,7 @@ namespace PDDLParser.Analysers
             throw new NotImplementedException();
         }
 
-        private void CheckForUndeclaredObjects(ProblemDecl problem, DomainDecl domain, IErrorListener listener)
+        private void CheckForUndeclaredProblemObjects(ProblemDecl problem, DomainDecl domain, IErrorListener listener)
         {
             if (problem.Objects != null)
             {
@@ -181,7 +182,13 @@ namespace PDDLParser.Analysers
                         var target = domain.Predicates.Predicates.Single(x => x.Name == pred.Name);
                         for (int i = 0; i < pred.Arguments.Count; i++)
                         {
-                            if (!target.Arguments[i].Type.IsTypeOf(pred.Arguments[i].Type.Name))
+                            if (!pred.Arguments[i].Type.IsTypeOf(target.Arguments[i].Type.Name))
+                            {
+                                if (domain.Constants != null)
+                                {
+                                    if (domain.Constants.Constants.Any(x => x.Name == pred.Arguments[i].Name))
+                                        continue;
+                                }
                                 listener.AddError(new ParseError(
                                     $"Invalid type for init precondition! Got '{pred.Arguments[i].Type.Name}' but expected '{target.Arguments[i].Type.Name}'",
                                     ParseErrorType.Error,
@@ -189,6 +196,7 @@ namespace PDDLParser.Analysers
                                     ParserErrorCode.InvalidPredicateType,
                                     init.Line,
                                     init.Start));
+                            }
                         }
                     }
                 }
@@ -226,8 +234,13 @@ namespace PDDLParser.Analysers
                         any = true;
                         for (int i = 0; i < predicate.Arguments.Count; i++)
                         {
-                            if (!predicate.Arguments[i].Type.IsTypeOf(pred.Arguments[i].Type.Name))
+                            if (!pred.Arguments[i].Type.IsTypeOf(predicate.Arguments[i].Type.Name))
                             {
+                                if (domain.Constants != null)
+                                {
+                                    if (domain.Constants.Constants.Any(x => x.Name == pred.Arguments[i].Name))
+                                        continue;
+                                }
                                 wasTypeMissmatch = true;
                                 any = false;
                                 break;

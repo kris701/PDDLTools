@@ -83,7 +83,7 @@ namespace PDDLParser.Visitors
             int offset = node.Start;
             if (node.InnerContent.Contains(nodeType))
                 offset += node.InnerContent.IndexOf(nodeType) + nodeType.Length;
-            content = PurgeEscapeChars(ReduceToSingleSpace(content));
+            content = ReduceToSingleSpace(PurgeEscapeChars(content)).Trim();
 
             string currentType = "";
             foreach (var param in content.Split(' ').Reverse())
