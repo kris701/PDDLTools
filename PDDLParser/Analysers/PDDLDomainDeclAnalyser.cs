@@ -228,10 +228,11 @@ namespace PDDLParser.Analysers
                 int index = 0;
                 foreach (var arg in pred.Arguments)
                 {
-                    if (!arg.Type.IsTypeOf(action.GetParameter(arg.Name).Type.Name))
+                    var argOrCons = action.GetParameterOrConstant(arg.Name);
+                    if (argOrCons.Name != arg.Name && !arg.Type.IsTypeOf(argOrCons.Type.Name))
                     {
                         listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{action.GetParameter(arg.Name).Name}' but got a '{arg.Type}'",
+                            $"Predicate has an invalid argument type! Expected a '{action.GetParameterOrConstant(arg.Name).Name}' but got a '{arg.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             ParserErrorCode.TypeMissmatch,
@@ -288,10 +289,10 @@ namespace PDDLParser.Analysers
                 int index = 0;
                 foreach (var arg in pred.Arguments)
                 {
-                    if (!arg.Type.IsTypeOf(axiom.GetParameter(arg.Name).Type.Name))
+                    if (!arg.Type.IsTypeOf(axiom.GetParameterOrConstant(arg.Name).Type.Name))
                     {
                         listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{axiom.GetParameter(arg.Name).Name}' but got a '{arg.Type}'",
+                            $"Predicate has an invalid argument type! Expected a '{axiom.GetParameterOrConstant(arg.Name).Name}' but got a '{arg.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             ParserErrorCode.TypeMissmatch,
@@ -489,6 +490,11 @@ namespace PDDLParser.Analysers
                         {
                             if (!pred.Arguments[i].Type.IsTypeOf(predicate.Arguments[i].Type.Name))
                             {
+                                if (domain.Constants != null)
+                                {
+                                    if (domain.Constants.Constants.Any(x => x.Name == pred.Arguments[i].Name))
+                                        continue;
+                                }
                                 wasTypeMissmatch = true;
                                 any = false;
                                 break;

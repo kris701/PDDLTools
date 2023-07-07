@@ -158,8 +158,26 @@ namespace PDDLParser.Visitors
                 var str = node.InnerContent.Remove(node.InnerContent.IndexOf(":types"), ":types".Length).Trim();
                 str = ReduceToSingleSpace(str);
 
+                List<string> lines = new List<string>();
+                if (str.Contains(ASTTokens.TypeToken))
+                {
+                    var splits = str.Split(ASTTokens.BreakToken);
+                    string addLine = "";
+                    foreach (var split in splits)
+                    {
+                        addLine += split;
+                        if (addLine.Contains(ASTTokens.TypeToken))
+                        {
+                            lines.Add(addLine.Trim());
+                            addLine = "";
+                        }
+                    }
+                }
+                else
+                    lines.Add(str);
+
                 int indexOffset = 0;
-                foreach (var line in str.Split(ASTTokens.BreakToken))
+                foreach (var line in lines)
                 {
                     if (line != "")
                     {

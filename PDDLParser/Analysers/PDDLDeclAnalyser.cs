@@ -34,6 +34,75 @@ namespace PDDLParser.Analysers
             throw new NotImplementedException();
         }
 
+        private void CheckForUndeclaredObjects(ProblemDecl problem, DomainDecl domain, IErrorListener listener)
+        {
+            if (problem.Objects != null)
+            {
+                List<NameExp> objects = problem.Objects.Objs;
+                if (domain.Constants != null)
+                    objects.AddRange(domain.Constants.Constants);
+
+                if (problem.Init != null)
+                {
+                    foreach (var init in problem.Init.Predicates)
+                    {
+                        if (init is PredicateExp pred)
+                        {
+                            foreach (var arg in pred.Arguments)
+                            {
+                                if (!objects.Any(x => x.Name == arg.Name))
+                                {
+                                    listener.AddError(new ParseError(
+                                        $"Undeclared object detected!",
+                                        ParseErrorType.Error,
+                                        ParseErrorLevel.Analyser,
+                                        ParserErrorCode.UseOfUndeclaredObject,
+                                        arg.Line,
+                                        arg.Start));
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (problem.Goal != null)
+                    CheckForUndeclaredExpObjects(problem.Goal.GoalExp, objects, listener);
+            }
+        }
+        private void CheckForUndeclaredExpObjects(IExp exp, List<NameExp> objects, IErrorListener listener)
+        {
+            if (exp is AndExp and)
+            {
+                foreach (var child in and.Children)
+                    CheckForUndeclaredExpObjects(child, objects, listener);
+            }
+            else if (exp is OrExp or)
+            {
+                CheckForUndeclaredExpObjects(or.Option1, objects, listener);
+                CheckForUndeclaredExpObjects(or.Option2, objects, listener);
+            }
+            else if (exp is NotExp not)
+            {
+                CheckForUndeclaredExpObjects(not.Child, objects, listener);
+            }
+            else if (exp is PredicateExp pred)
+            {
+                foreach (var arg in pred.Arguments)
+                {
+                    if (!objects.Any(x => x.Name == arg.Name))
+                    {
+                        listener.AddError(new ParseError(
+                            $"Undeclared object detected!",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
+                            ParserErrorCode.UseOfUndeclaredObject,
+                            arg.Line,
+                            arg.Start));
+                    }
+                }
+            }
+        }
+
         private void CheckForUndeclaredPreconditionsInInits(DomainDecl domain, ProblemDecl problem, IErrorListener listener)
         {
             if (problem.Init != null && domain.Predicates != null)

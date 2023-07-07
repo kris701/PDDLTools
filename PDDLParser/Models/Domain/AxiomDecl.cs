@@ -13,7 +13,15 @@ namespace PDDLParser.Models.Domain
     public class AxiomDecl : BaseNode, IDecl
     {
         public List<NameExp> Vars { get; set; }
-        public NameExp GetParameter(string name) => Vars.SingleOrDefault(x => x.Name == name);
+        public NameExp GetParameterOrConstant(string name)
+        {
+            var concrete = Vars.SingleOrDefault(x => x.Name == name);
+            if (concrete == null)
+                if (Parent is DomainDecl domain)
+                    if (domain.Constants != null)
+                        return domain.Constants.Constants.SingleOrDefault(x => x.Name == name);
+            return concrete;
+        }
         public IExp Context { get; set; }
         public IExp Implies { get; set; }
 

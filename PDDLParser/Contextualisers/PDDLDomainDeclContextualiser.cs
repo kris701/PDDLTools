@@ -15,9 +15,26 @@ namespace PDDLParser.Contextualisers
     {
         public override void Contexturalise(DomainDecl decl, IErrorListener listener)
         {
+            InsertDefaultPredicates(decl, listener);
             DecorateAllTypesWithInheritence(decl, listener);
             DecorateActionParameters(decl, listener);
             DecorateAxiomVars(decl, listener);
+        }
+
+        private void InsertDefaultPredicates(DomainDecl decl, IErrorListener listener)
+        {
+            if (decl.Predicates != null)
+            {
+                decl.Predicates.Predicates.Add(
+                    new PredicateExp(
+                        new AST.ASTNode(), 
+                        decl.Predicates, 
+                        "=", 
+                        new List<NameExp>() { 
+                            new NameExp(new AST.ASTNode(), decl.Predicates, "l"),
+                            new NameExp(new AST.ASTNode(), decl.Predicates, "r")
+                        }));
+            }
         }
 
         private void DecorateAllTypesWithInheritence(DomainDecl decl, IErrorListener listener)
