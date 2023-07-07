@@ -19,29 +19,29 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SASSimulator", "SASSimulato
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocationSpreader", "LocationSpreader\LocationSpreader.csproj", "{D774B8F9-EC43-402C-9001-8CD43D52EDCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSimpleDomainFileTemplate", "PDDLDomainFileTemplate\PDDLSimpleDomainFileTemplate.csproj", "{81EEBDEF-AC40-4E7A-8D8D-C0F609DE8721}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSimpleDomainFileTemplate", "ItemTemplates\PDDLDomainFileTemplate\PDDLSimpleDomainFileTemplate.csproj", "{81EEBDEF-AC40-4E7A-8D8D-C0F609DE8721}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLFullDomainFileTemplate", "PDDLFullDomainFileTemplate\PDDLFullDomainFileTemplate.csproj", "{EB383EB1-F3EE-4123-9BB6-DEB650AD72FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLFullDomainFileTemplate", "ItemTemplates\PDDLFullDomainFileTemplate\PDDLFullDomainFileTemplate.csproj", "{EB383EB1-F3EE-4123-9BB6-DEB650AD72FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLEmptyDomainFileTemplate", "PDDLEmptyDomainFileTemplate\PDDLEmptyDomainFileTemplate.csproj", "{61363573-4B8D-4545-ABD2-C5553EB0E359}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLEmptyDomainFileTemplate", "ItemTemplates\PDDLEmptyDomainFileTemplate\PDDLEmptyDomainFileTemplate.csproj", "{61363573-4B8D-4545-ABD2-C5553EB0E359}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FileTemplates", "FileTemplates", "{5E600DBA-8476-4BA8-BBFE-7E8F412FEA2B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ItemTemplates", "ItemTemplates", "{5E600DBA-8476-4BA8-BBFE-7E8F412FEA2B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLEmptyProblemFileTemplate", "PDDLEmptyProblemFileTemplate\PDDLEmptyProblemFileTemplate.csproj", "{970840FF-7A37-496A-9361-86AD125CFE5A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLEmptyProblemFileTemplate", "ItemTemplates\PDDLEmptyProblemFileTemplate\PDDLEmptyProblemFileTemplate.csproj", "{970840FF-7A37-496A-9361-86AD125CFE5A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSimpleProblemFileTemplate", "PDDLSimpleProblemFileTemplate\PDDLSimpleProblemFileTemplate.csproj", "{28449582-C3EB-4034-881B-E9349796789D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLSimpleProblemFileTemplate", "ItemTemplates\PDDLSimpleProblemFileTemplate\PDDLSimpleProblemFileTemplate.csproj", "{28449582-C3EB-4034-881B-E9349796789D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLFullProblemFileTemplate", "PDDLFullProblemFileTemplate\PDDLFullProblemFileTemplate.csproj", "{AA488EBA-93DB-4F77-B9BF-C7DCB2E126F3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLFullProblemFileTemplate", "ItemTemplates\PDDLFullProblemFileTemplate\PDDLFullProblemFileTemplate.csproj", "{AA488EBA-93DB-4F77-B9BF-C7DCB2E126F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMDRunners", "CMDRunners\CMDRunners.csproj", "{00A388BE-B31E-4472-BFFB-DA51CB79A55B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestCMD", "TestCMD\TestCMD.csproj", "{C6BF38D2-A792-4E6D-935D-C2D58C4999B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLProjectTemplate", "PDDLProjectTemplate\PDDLProjectTemplate.csproj", "{651EBED8-058E-4104-A3B5-2E06330822F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLProjectTemplate", "ProjectTemplates\PDDLProjectTemplate\PDDLProjectTemplate.csproj", "{651EBED8-058E-4104-A3B5-2E06330822F2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ProjectTemplates", "ProjectTemplates", "{931A292D-CDE2-44C0-8F11-BCECC93A6864}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLParser.Tests", "PDDLParser.Tests\PDDLParser.Tests.csproj", "{D1CF973D-7A61-4627-AAD3-104BF213D28A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PDDLParser.UnitTests", "PDDLParser.UnitTests\PDDLParser.UnitTests.csproj", "{D1CF973D-7A61-4627-AAD3-104BF213D28A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
