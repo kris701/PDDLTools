@@ -230,10 +230,11 @@ namespace PDDLParser.Tests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(:types a - b \n c - d)", "b", "d")]
-        [DataRow("(:types a q - b \n e c - d)", "b", "d")]
-        [DataRow("(:types a - b)", "b")]
-        public void Can_ParseTypesNode_CorrectSuperTypeNames(string toParse, params string[] expected)
+        [DataRow("(:types a \n c)", "a", "c", "")]
+        [DataRow("(:types a q \n e c)", "a", "q", "e", "c", "")]
+        [DataRow("(:types a q e c)", "a", "q", "e", "c", "")]
+        [DataRow("(:types a)", "a", "")]
+        public void Can_ParseTypesNode_CorrectTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
             IASTParser<ASTNode> parser = new ASTParser();
@@ -249,15 +250,17 @@ namespace PDDLParser.Tests.Visitors
             {
                 Assert.AreEqual(expected.Length, types.Types.Count);
                 for (int i = 0; i < types.Types.Count; i++)
-                    Assert.AreEqual(expected[i], types.Types[i].TypeName.Name);
+                    Assert.AreEqual(expected[i], types.Types[i].Name);
             }
         }
 
         [TestMethod]
-        [DataRow("(:types a - b \n c - d)", "a", "c")]
-        [DataRow("(:types a q - b \n e c - d)", "a", "q", "e", "c")]
-        [DataRow("(:types a - b)", "a")]
-        public void Can_ParseTypesNode_CorrectSubTypeNames(string toParse, params string[] expected)
+        [DataRow("(:types site material - object \n bricks cables windows - material)", "object", "object", "", "material", "material", "material", "")]
+        [DataRow("(:types a - b \n c - d)", "b", "", "d", "", "")]
+        [DataRow("(:types a q - b \n e c - d)", "b", "b", "", "d", "d", "", "")]
+        [DataRow("(:types a q - b - e c - d)", "b", "b", "e", "d", "d", "", "")]
+        [DataRow("(:types a - b)", "b", "", "")]
+        public void Can_ParseTypesNode_CorrectInheritTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
             IASTParser<ASTNode> parser = new ASTParser();
@@ -271,11 +274,9 @@ namespace PDDLParser.Tests.Visitors
             Assert.IsInstanceOfType(decl, typeof(TypesDecl));
             if (decl is TypesDecl types)
             {
-                int offset = 0;
+                Assert.AreEqual(expected.Length, types.Types.Count);
                 for (int i = 0; i < types.Types.Count; i++)
-                    for (int j = 0; j < types.Types[i].SubTypes.Count; j++)
-                        Assert.AreEqual(expected[offset++], types.Types[i].SubTypes[j].Name);
-                Assert.AreEqual(expected.Length, offset);
+                    Assert.IsTrue(types.Types[i].IsTypeOf(expected[i]));
             }
         }
 

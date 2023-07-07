@@ -15,8 +15,30 @@ namespace PDDLParser.Contextualisers
     {
         public override void Contexturalise(DomainDecl decl, IErrorListener listener)
         {
+            DecorateAllTypesWithInheritence(decl, listener);
             DecorateActionParameters(decl, listener);
             DecorateAxiomVars(decl, listener);
+        }
+
+        private void DecorateAllTypesWithInheritence(DomainDecl decl, IErrorListener listener)
+        {
+            if (decl.Types != null)
+            {
+                var allTypes = decl.FindTypes<TypeExp>();
+                foreach(var typeDecl in decl.Types.Types)
+                {
+                    foreach (var type in allTypes)
+                    {
+                        if (type != typeDecl)
+                        {
+                            if (typeDecl.Name == type.Name)
+                            {
+                                type.SuperTypes = typeDecl.SuperTypes;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void DecorateActionParameters(DomainDecl decl, IErrorListener listener)

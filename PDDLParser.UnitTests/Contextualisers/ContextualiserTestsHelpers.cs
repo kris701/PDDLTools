@@ -9,37 +9,37 @@ namespace PDDLParser.Tests.Contextualisers
 {
     internal static class ContextualiserTestsHelpers
     {
-        internal static bool AreAllNameExpOfType(IExp exp, string name, string type)
+        internal static bool AreAllNameExpOfTypeOrSubType(IExp exp, string name, string type)
         {
             if (exp is AndExp and)
             {
                 foreach (var child in and.Children)
-                    if (!AreAllNameExpOfType(child, name, type))
+                    if (!AreAllNameExpOfTypeOrSubType(child, name, type))
                         return false;
             }
             else if (exp is OrExp or)
             {
-                if (!AreAllNameExpOfType(or.Option1, name, type))
+                if (!AreAllNameExpOfTypeOrSubType(or.Option1, name, type))
                     return false;
-                if (!AreAllNameExpOfType(or.Option2, name, type))
+                if (!AreAllNameExpOfTypeOrSubType(or.Option2, name, type))
                     return false;
             }
             else if (exp is NotExp not)
             {
-                if (!AreAllNameExpOfType(not.Child, name, type))
+                if (!AreAllNameExpOfTypeOrSubType(not.Child, name, type))
                     return false;
             }
             else if (exp is PredicateExp pred)
             {
                 foreach (var arg in pred.Arguments)
-                    if (!AreAllNameExpOfType(arg, name, type))
+                    if (!AreAllNameExpOfTypeOrSubType(arg, name, type))
                         return false;
             }
             else if (exp is NameExp nameExp)
             {
                 if (nameExp.Name == name)
                 {
-                    if (nameExp.Type.Name != type)
+                    if (!nameExp.Type.IsTypeOf(type))
                         return false;
                 }
             }

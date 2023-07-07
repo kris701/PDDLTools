@@ -28,8 +28,8 @@ namespace PDDLParser.AST
         {
             if (text.Contains('('))
             {
-                var firstP = text.IndexOf("(");
-                var lastP = text.LastIndexOf(")");
+                var firstP = text.IndexOf('(');
+                var lastP = text.LastIndexOf(')');
                 var innerContent = ReplaceRangeWithSpaces(text, firstP, firstP + 1);
                 innerContent = ReplaceRangeWithSpaces(innerContent, lastP, lastP + 1);
 
@@ -37,7 +37,7 @@ namespace PDDLParser.AST
                 while (innerContent.Count(x => x == ')' || x == '(') >= 2)
                 {
                     int currentLevel = 0;
-                    int startP = innerContent.IndexOf("(");
+                    int startP = innerContent.IndexOf('(');
                     int endP = innerContent.Length;
                     for (int i = startP + 1; i < innerContent.Length; i++)
                     {

@@ -148,7 +148,7 @@ namespace PDDLParser.Visitors
                     }
 
                     var newNameExp = new NameExp(node, parent, left.Replace("?", ""));
-                    newNameExp.Type = new TypeNameDecl(
+                    newNameExp.Type = new TypeExp(
                         new ASTNode(
                             node.Start + left.Length + 3,
                             node.Start + left.Length + 3 + right.Length,

@@ -240,11 +240,8 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
             {
                 foreach (var type in decl.Domain.Types.Types)
                 {
-                    if (!typeDict.ContainsKey(type.TypeName.Name))
-                        typeDict.Add(type.TypeName.Name, locCounter++);
-                    foreach(var subType in type.SubTypes)
-                        if (!typeDict.ContainsKey(subType.Name))
-                            typeDict.Add(subType.Name, locCounter++);
+                    if (!typeDict.ContainsKey(type.Name) && type.Name != "")
+                        typeDict.Add(type.Name, locCounter++);
                 }
             }
 
@@ -283,33 +280,22 @@ namespace PDDLTools.Windows.PDDLVisualiserWindow
             {
                 foreach (var type in decl.Domain.Types.Types)
                 {
+                    if (type.Name == "")
+                        continue;
+
                     List<int> superTargetIDs = new List<int>();
-                    foreach (var subType in type.SubTypes)
+                    foreach (var otherType in decl.Domain.Types.Types)
                     {
-                        superTargetIDs.Add(typeDict[subType.Name]);
-                        if (subType.Name != type.TypeName.Name && !decl.Domain.Types.Types.Any(x => x.TypeName.Name == subType.Name))
+                        if (type.SuperTypes.Contains(otherType.Name) && typeDict.ContainsKey(otherType.Name))
                         {
-                            
-                            var subNode = new DynamicNode(typeDict[subType.Name], $"SubType {Environment.NewLine} {subType.Name}", MainGrid, new List<int>(), centerPoint, locs[index++]);
-                            subNode.EllipseArea.Fill = Brushes.Orange;
-                            if (!subTypeTargets.Values.Any(x => x == typeDict[subType.Name]))
-                            {
-                                subNode.EllipseArea.Fill = Brushes.Gray;
-                                foreach (var line in subNode.NodeLines)
-                                {
-                                    line.Path.Stroke = Brushes.DarkGray;
-                                    line.Path.Fill = Brushes.DarkGray;
-                                    line.Path.StrokeDashArray = new DoubleCollection() { 2 };
-                                }
-                            }
-                            nodes.Add(subNode);
-                            MainGrid.Children.Add(subNode);
+                            if (!superTargetIDs.Contains(typeDict[otherType.Name]))
+                                superTargetIDs.Add(typeDict[otherType.Name]);
                         }
                     }
 
-                    var newNode = new DynamicNode(typeDict[type.TypeName.Name], $"Supertype {Environment.NewLine} {type.TypeName.Name}", MainGrid, superTargetIDs, centerPoint, locs[index++]);
+                    var newNode = new DynamicNode(typeDict[type.Name], $"Type {Environment.NewLine} {type.Name}", MainGrid, superTargetIDs, centerPoint, locs[index++]);
                     newNode.EllipseArea.Fill = Brushes.Red;
-                    if (!subTypeTargets.Values.Any(x => x == typeDict[type.TypeName.Name]))
+                    if (superTargetIDs.Count == 0)
                     {
                         newNode.EllipseArea.Fill = Brushes.Gray;
                         foreach (var line in newNode.NodeLines)

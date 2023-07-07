@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using PDDLParser.Models.Domain;
+using PDDLParser.Helpers;
 
 namespace PDDLParser.Visitors
 {
@@ -112,7 +113,7 @@ namespace PDDLParser.Visitors
             {
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":requirements");
                 var newReq = new RequirementsDecl(node, parent, new List<NameExp>());
-                newReq.Requirements = LooseParseString(node, newReq, ":requirements", str, listener);
+                newReq.Requirements = LooseParseString<NameExp>(node, newReq, ":requirements", str, listener);
 
                 decl = newReq;
                 return true;
@@ -127,7 +128,7 @@ namespace PDDLParser.Visitors
             {
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":extends");
                 var newExt = new ExtendsDecl(node, parent, new List<NameExp>());
-                newExt.Extends = LooseParseString(node, newExt, ":extends", str, listener);
+                newExt.Extends = LooseParseString<NameExp>(node, newExt, ":extends", str, listener);
 
                 decl = newExt;
                 return true;
@@ -140,20 +141,67 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":types"))
             {
-                var newTypesDecl = new TypesDecl(node, parent, new List<TypeDecl>());
+                var newTypesDecl = new TypesDecl(node, parent, new List<TypeExp>());
+                var newTypes = new List<TypeExp>();
                 var str = node.InnerContent.Remove(node.InnerContent.IndexOf(":types"), ":types".Length).Trim();
-                foreach (var typeDec in str.Split(ASTTokens.BreakToken))
+                str = ReduceToSingleSpace(str);
+
+                int indexOffset = 0;
+                foreach (var line in str.Split('\n'))
                 {
-                    if (typeDec != "")
+                    if (line != "")
                     {
-                        var left = typeDec.Substring(0, typeDec.IndexOf(ASTTokens.TypeToken));
-                        var right = typeDec.Substring(typeDec.IndexOf(ASTTokens.TypeToken) + 3);
-                        var newTypeDecl = new TypeDecl(node, newTypesDecl, null, new List<TypeNameDecl>());
-                        newTypeDecl.TypeName = new TypeNameDecl(node, newTypeDecl, right.Trim());
-                        foreach (var subType in left.Split(' '))
-                            if (subType != "")
-                                newTypeDecl.SubTypes.Add(new TypeNameDecl(node, newTypeDecl, subType.Trim()));
-                        newTypesDecl.Types.Add(newTypeDecl);
+                        int thisOffset = 0;
+                        var editLine = PurgeEscapeChars(line);
+                        HashSet<string> subTypes = new HashSet<string>() { "" };
+                        while (editLine.Contains(ASTTokens.TypeToken))
+                        {
+                            var innerContent = editLine.Substring(editLine.LastIndexOf(ASTTokens.TypeToken) + ASTTokens.TypeToken.Length);
+
+                            TypeExp newCurrentType = null;
+                            foreach (var param in innerContent.Split(' ').Reverse())
+                            {
+                                if (param != "")
+                                {
+                                    var newType = new TypeExp(new ASTNode(), newTypesDecl, param, subTypes);
+                                    newTypes.Insert(indexOffset, newType);
+                                    thisOffset++;
+                                    newCurrentType = newType;
+                                }
+                            }
+                            subTypes.Add(newCurrentType.Name);
+
+                            editLine = editLine.Substring(0, editLine.LastIndexOf(ASTTokens.TypeToken));
+                        }
+
+                        foreach (var param in editLine.Split(' ').Reverse())
+                        {
+                            if (param != "")
+                            {
+                                var newType = new TypeExp(new ASTNode(), newTypesDecl, param, subTypes);
+                                newTypes.Insert(indexOffset, newType);
+                                thisOffset++;
+                            }
+                        }
+                        indexOffset += thisOffset;
+                    }
+                }
+                newTypes.Add(new TypeExp(new ASTNode(), newTypesDecl, ""));
+
+                foreach(var type in newTypes)
+                {
+                    if (!newTypesDecl.Types.Any(x => x.Name == type.Name))
+                    {
+                        var all = newTypes.FindAll(x => x.Name == type.Name);
+                        if (all.Count > 1)
+                        {
+                            HashSet<string> merged = new HashSet<string>();
+                            foreach (var copyType in all)
+                                merged.AddRange(copyType.SuperTypes);
+                            newTypesDecl.Types.Add(new TypeExp(new ASTNode(), newTypesDecl, type.Name, merged));
+                        }
+                        else
+                            newTypesDecl.Types.Add(type);
                     }
                 }
 
@@ -170,7 +218,7 @@ namespace PDDLParser.Visitors
             {
                 var newCons = new ConstantsDecl(node, parent, new List<NameExp>());
                 var str = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":constants");
-                newCons.Constants = LooseParseString(node, newCons, ":constants", str, listener);
+                newCons.Constants = LooseParseString<NameExp>(node, newCons, ":constants", str, listener);
 
                 decl = newCons;
                 return true;
@@ -227,7 +275,7 @@ namespace PDDLParser.Visitors
                     var visitor = new ExpVisitor();
 
                     // Parameters
-                    newActionDecl.Parameters = LooseParseString(node.Children[0], newActionDecl, ":action", node.Children[0].InnerContent, listener);
+                    newActionDecl.Parameters = LooseParseString<NameExp>(node.Children[0], newActionDecl, ":action", node.Children[0].InnerContent, listener);
 
                     // Preconditions
                     newActionDecl.Preconditions = visitor.Visit(node.Children[1], newActionDecl, listener);
@@ -258,7 +306,7 @@ namespace PDDLParser.Visitors
                     var visitor = new ExpVisitor();
 
                     // Vars
-                    newAxiomDecl.Vars = LooseParseString(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].InnerContent.Trim(), listener);
+                    newAxiomDecl.Vars = LooseParseString<NameExp>(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].InnerContent.Trim(), listener);
 
                     // Context
                     newAxiomDecl.Context = visitor.Visit(node.Children[1], newAxiomDecl, listener);

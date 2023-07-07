@@ -127,7 +127,9 @@ namespace PDDLParser.Contextualisers
                 for (int i = 0; i < pred.Arguments.Count; i++)
                 {
                     if (pred.Arguments[i].Name == with.Name)
-                        pred.Arguments[i].Type.Name = with.Type.Name;
+                    {
+                        pred.Arguments[i].Type = with.Type;
+                    }
                 }
             }
         }

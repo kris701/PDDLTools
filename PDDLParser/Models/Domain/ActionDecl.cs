@@ -14,6 +14,7 @@ namespace PDDLParser.Models.Domain
         public string Name { get; set; }
 
         public List<NameExp> Parameters { get; set; }
+        public NameExp GetParameter(string name) => Parameters.SingleOrDefault(x => x.Name == name);
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
 
 namespace PDDLParser.Analysers
 {
@@ -23,8 +24,6 @@ namespace PDDLParser.Analysers
             CheckForUnusedAxiomParameters(decl, listener);
 
             // Types
-            CheckForUniqueTypeNames(decl, listener);
-            BuildTypeTables(decl, listener);
             CheckForValidTypesInPredicates(decl, listener);
             CheckForValidTypesInConstants(decl, listener);
             CheckTypeMatchForActions(decl, listener);
@@ -158,96 +157,6 @@ namespace PDDLParser.Analysers
             }
         }
 
-        private void CheckForUniqueTypeNames(DomainDecl domain, IErrorListener listener)
-        {
-            if (domain.Types != null)
-            {
-                List<string> declaredSubTypes = new List<string>();
-                List<string> declaredSuperTypes = new List<string>();
-                foreach (var typeDecl in domain.Types.Types)
-                {
-                    if (declaredSuperTypes.Contains(typeDecl.TypeName.Name))
-                    {
-                        listener.AddError(new ParseError(
-                            $"Multiple declarations of super types with the same name '{typeDecl.TypeName}'",
-                            ParseErrorType.Error,
-                            ParseErrorLevel.Analyser,
-                            ParserErrorCode.MultipleDeclarationsOfSuperType,
-                            typeDecl.Line,
-                            typeDecl.Start));
-                    }
-                    declaredSuperTypes.Add(typeDecl.TypeName.Name);
-
-                    foreach (var typeName in typeDecl.SubTypes)
-                    {
-                        if (declaredSubTypes.Contains(typeName.Name))
-                        {
-                            listener.AddError(new ParseError(
-                                $"Multiple declarations of sub types with the same name '{typeName}'",
-                                ParseErrorType.Error,
-                                ParseErrorLevel.Analyser,
-                                ParserErrorCode.MultipleDeclarationsOfSubType,
-                                typeDecl.Line,
-                                typeDecl.Start));
-                        }
-                        declaredSubTypes.Add(typeName.Name);
-                    }
-                }
-            }
-        }
-        private void BuildTypeTables(DomainDecl domain, IErrorListener listener)
-        {
-            domain.TypesTable = new Dictionary<string, List<string>>();
-            if (domain.Types != null)
-            {
-                foreach (var typeDecl in domain.Types.Types)
-                {
-                    if (domain.TypesTable.ContainsKey(typeDecl.TypeName.Name))
-                    {
-                        listener.AddError(new ParseError(
-                            $"Multiply defined types!",
-                            ParseErrorType.Error,
-                            ParseErrorLevel.Contexturaliser,
-                            ParserErrorCode.MultipleDeclarationsOfType,
-                            typeDecl.Line,
-                            typeDecl.Start));
-                    }
-                    else
-                    {
-                        var directName = new List<string>();
-                        foreach (var typeName in typeDecl.SubTypes)
-                            directName.Add(typeName.Name);
-                        domain.TypesTable.Add(typeDecl.TypeName.Name, directName);
-                    }
-                }
-            }
-            if (!domain.TypesTable.ContainsKey(""))
-                domain.TypesTable.Add("", new List<string>());
-            if (!domain.TypesTable.ContainsKey("object"))
-                domain.TypesTable.Add("object", new List<string>());
-
-            if (domain.Predicates != null)
-            {
-                domain.PredicateTypeTable = new Dictionary<string, List<string>>();
-                foreach (var pred in domain.Predicates.Predicates)
-                {
-                    var argTypeList = new List<string>();
-                    foreach (var arg in pred.Arguments)
-                        argTypeList.Add(arg.Type.Name);
-                    if (domain.PredicateTypeTable.ContainsKey(pred.Name))
-                    {
-                        listener.AddError(new ParseError(
-                            $"Multiply defined predicates!",
-                            ParseErrorType.Error,
-                            ParseErrorLevel.Contexturaliser,
-                            ParserErrorCode.MultipleDeclarationsOfPredicate,
-                            pred.Line,
-                            pred.Start));
-                    }
-                    domain.PredicateTypeTable.Add(pred.Name, argTypeList);
-                }
-            }
-        }
         private void CheckForValidTypesInPredicates(DomainDecl domain, IErrorListener listener)
         {
             if (domain.Predicates != null)
@@ -290,8 +199,43 @@ namespace PDDLParser.Analysers
                         }
                     }
 
-                    CheckForValidTypesInExp(act.Preconditions, domain.PredicateTypeTable, domain.TypesTable, listener);
-                    CheckForValidTypesInExp(act.Effects, domain.PredicateTypeTable, domain.TypesTable, listener);
+                    CheckForValidTypesInAction(act.Preconditions, domain, act, listener);
+                    CheckForValidTypesInAction(act.Effects, domain, act, listener);
+                }
+            }
+        }
+        private void CheckForValidTypesInAction(IExp node, DomainDecl domain, ActionDecl action, IErrorListener listener)
+        {
+            if (node is AndExp and)
+            {
+                foreach (var child in and.Children)
+                    CheckForValidTypesInAction(child, domain, action, listener);
+            }
+            else if (node is OrExp or)
+            {
+                CheckForValidTypesInAction(or.Option1, domain, action, listener);
+                CheckForValidTypesInAction(or.Option2, domain, action, listener);
+            }
+            else if (node is NotExp not)
+            {
+                CheckForValidTypesInAction(not.Child, domain, action, listener);
+            }
+            else if (node is PredicateExp pred)
+            {
+                int index = 0;
+                foreach (var arg in pred.Arguments)
+                {
+                    if (!arg.Type.IsTypeOf(action.GetParameter(arg.Name).Type.Name))
+                    {
+                        listener.AddError(new ParseError(
+                            $"Predicate has an invalid argument type! Expected a '{action.GetParameter(arg.Name).Name}' but got a '{arg.Type}'",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
+                            ParserErrorCode.TypeMissmatch,
+                            arg.Line,
+                            arg.Start));
+                    }
+                    index++;
                 }
             }
         }
@@ -315,36 +259,36 @@ namespace PDDLParser.Analysers
                         }
                     }
 
-                    CheckForValidTypesInExp(axi.Context, domain.PredicateTypeTable, domain.TypesTable, listener);
-                    CheckForValidTypesInExp(axi.Implies, domain.PredicateTypeTable, domain.TypesTable, listener);
+                    CheckForValidTypesInAxiom(axi.Context, domain, axi, listener);
+                    CheckForValidTypesInAxiom(axi.Implies, domain, axi, listener);
                 }
             }
         }
-        private void CheckForValidTypesInExp(IExp node, Dictionary<string, List<string>> predicateTypeTable, Dictionary<string, List<string>> typesTable, IErrorListener listener)
+        private void CheckForValidTypesInAxiom(IExp node, DomainDecl domain, AxiomDecl axiom, IErrorListener listener)
         {
             if (node is AndExp and)
             {
                 foreach (var child in and.Children)
-                    CheckForValidTypesInExp(child, predicateTypeTable, typesTable, listener);
+                    CheckForValidTypesInAxiom(child, domain, axiom, listener);
             }
             else if (node is OrExp or)
             {
-                CheckForValidTypesInExp(or.Option1, predicateTypeTable, typesTable, listener);
-                CheckForValidTypesInExp(or.Option2, predicateTypeTable, typesTable, listener);
+                CheckForValidTypesInAxiom(or.Option1, domain, axiom, listener);
+                CheckForValidTypesInAxiom(or.Option2, domain, axiom, listener);
             }
             else if (node is NotExp not)
             {
-                CheckForValidTypesInExp(not.Child, predicateTypeTable, typesTable, listener);
+                CheckForValidTypesInAxiom(not.Child, domain, axiom, listener);
             }
             else if (node is PredicateExp pred)
             {
                 int index = 0;
-                foreach(var arg in pred.Arguments)
+                foreach (var arg in pred.Arguments)
                 {
-                    if (!IsTypeOrSubType(arg.Type.Name, predicateTypeTable[pred.Name][index], typesTable))
+                    if (!arg.Type.IsTypeOf(axiom.GetParameter(arg.Name).Type.Name))
                     {
                         listener.AddError(new ParseError(
-                            $"Predicate has an invalid argument type! Expected a '{predicateTypeTable[pred.Name][index]}' but got a '{arg.Type}'",
+                            $"Predicate has an invalid argument type! Expected a '{axiom.GetParameter(arg.Name).Name}' but got a '{arg.Type}'",
                             ParseErrorType.Error,
                             ParseErrorLevel.Analyser,
                             ParserErrorCode.TypeMissmatch,
@@ -355,6 +299,7 @@ namespace PDDLParser.Analysers
                 }
             }
         }
+
         private void CheckForValidTypesInConstants(DomainDecl domain, IErrorListener listener)
         {
             if (domain.Constants != null)
@@ -496,8 +441,8 @@ namespace PDDLParser.Analysers
             {
                 foreach (var action in domain.Actions)
                 {
-                    CheckExpUsesPredicates(action.Preconditions, domain.Predicates.Predicates, listener, domain.TypesTable);
-                    CheckExpUsesPredicates(action.Effects, domain.Predicates.Predicates, listener, domain.TypesTable);
+                    CheckExpUsesPredicates(action.Preconditions, domain.Predicates.Predicates, listener, domain);
+                    CheckExpUsesPredicates(action.Effects, domain.Predicates.Predicates, listener, domain);
                 }
             }
         }
@@ -507,26 +452,26 @@ namespace PDDLParser.Analysers
             {
                 foreach (var axiom in domain.Axioms)
                 {
-                    CheckExpUsesPredicates(axiom.Context, domain.Predicates.Predicates, listener, domain.TypesTable);
-                    CheckExpUsesPredicates(axiom.Implies, domain.Predicates.Predicates, listener, domain.TypesTable);
+                    CheckExpUsesPredicates(axiom.Context, domain.Predicates.Predicates, listener, domain);
+                    CheckExpUsesPredicates(axiom.Implies, domain.Predicates.Predicates, listener, domain);
                 }
             }
         }
-        private void CheckExpUsesPredicates(IExp node, List<PredicateExp> predicates, IErrorListener listener, Dictionary<string, List<string>> typeTable)
+        private void CheckExpUsesPredicates(IExp node, List<PredicateExp> predicates, IErrorListener listener, DomainDecl domain)
         {
             if (node is AndExp and)
             {
                 foreach (var child in and.Children)
-                    CheckExpUsesPredicates(child, predicates, listener, typeTable);
+                    CheckExpUsesPredicates(child, predicates, listener, domain);
             }
             else if (node is OrExp or)
             {
-                CheckExpUsesPredicates(or.Option1, predicates, listener, typeTable);
-                CheckExpUsesPredicates(or.Option2, predicates, listener, typeTable);
+                CheckExpUsesPredicates(or.Option1, predicates, listener, domain);
+                CheckExpUsesPredicates(or.Option2, predicates, listener, domain);
             }
             else if (node is NotExp not)
             {
-                CheckExpUsesPredicates(not.Child, predicates, listener, typeTable);
+                CheckExpUsesPredicates(not.Child, predicates, listener, domain);
             }
             else if (node is PredicateExp pred)
             {
@@ -539,7 +484,7 @@ namespace PDDLParser.Analysers
                         any = true;
                         for (int i = 0; i < predicate.Arguments.Count; i++)
                         {
-                            if (!IsTypeOrSubType(pred.Arguments[i].Type.Name, predicate.Arguments[i].Type.Name, typeTable))
+                            if (!pred.Arguments[i].Type.IsTypeOf(predicate.Arguments[i].Type.Name))
                             {
                                 wasTypeMissmatch = true;
                                 any = false;
@@ -568,19 +513,6 @@ namespace PDDLParser.Analysers
                             pred.Start));
                 }
             }
-        }
-        private bool IsTypeOrSubType(string typeName, string targetType, Dictionary<string, List<string>> typeTable)
-        {
-            if (typeName == targetType)
-                return true;
-
-            if (typeTable.ContainsKey(targetType))
-            {
-                if (typeTable[targetType].Contains(typeName))
-                    return true;
-            }
-
-            return false;
         }
     }
 }

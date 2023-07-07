@@ -77,28 +77,41 @@ namespace PDDLParser.Visitors
             return true;
         }
 
-        internal static List<NameExp> LooseParseString(ASTNode node, INode parent, string nodeType, string content, IErrorListener listener)
+        internal static List<T> LooseParseString<T>(ASTNode node, INode parent, string nodeType, string content, IErrorListener listener)
         {
-            List<NameExp> objs = new List<NameExp>();
+            List<T> objs = new List<T>();
             int offset = node.Start;
             if (node.InnerContent.Contains(nodeType))
                 offset += node.InnerContent.IndexOf(nodeType) + nodeType.Length;
-            foreach (var param in content.Split(' '))
+            content = PurgeEscapeChars(ReduceToSingleSpace(content));
+
+            string currentType = "";
+            foreach (var param in content.Split(' ').Reverse())
             {
                 if (param != "" && param != nodeType)
                 {
+                    var typedParam = param;
+                    if (typedParam.Contains(ASTTokens.TypeToken))
+                    {
+                        currentType = typedParam.Substring(typedParam.IndexOf(ASTTokens.TypeToken) + ASTTokens.TypeToken.Length);
+                        if (typedParam.Substring(0, typedParam.IndexOf(ASTTokens.TypeToken)).Trim() == "")
+                            continue;
+                    }
+                    else if (!typedParam.Contains(ASTTokens.TypeToken) && currentType != "")
+                        typedParam = $"{typedParam}{ASTTokens.TypeToken}{currentType}";
+
                     var parsed = new ExpVisitor().Visit(new ASTNode(
                         offset,
                         offset + param.Length,
                         node.Line,
-                        param,
-                        param), parent, listener);
-                    if (parsed is NameExp nExp)
+                        typedParam,
+                        typedParam), parent, listener);
+                    if (parsed is T nExp)
                         objs.Add(nExp);
                     else
                     {
                         listener.AddError(new ParseError(
-                            $"Unexpected node type while parsing '{nodeType}'!",
+                            $"Unexpected node type while parsing! Expected '{nodeType}' but got {nameof(T)}!",
                             ParseErrorType.Error,
                             ParseErrorLevel.Parsing,
                             ParserErrorCode.UnexpectedNodeType,
@@ -108,6 +121,7 @@ namespace PDDLParser.Visitors
                 }
                 offset += param.Length;
             }
+            objs.Reverse();
             return objs;
         }
 

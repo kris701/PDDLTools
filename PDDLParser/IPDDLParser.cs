@@ -17,5 +17,7 @@ namespace PDDLParser
         bool Analyse { get; set; }
 
         PDDLDecl Parse(string domainFile = null, string problemFile = null);
+        PDDLDecl TryParse(string domainFile = null, string problemFile = null);
+        bool IsDomainRequirementsSupported(string domainFile);
     }
 }

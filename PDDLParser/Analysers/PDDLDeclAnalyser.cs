@@ -88,7 +88,7 @@ namespace PDDLParser.Analysers
             if (problem.Objects != null)
             {
                 foreach(var obj in problem.Objects.Objs)
-                    if (!domain.ContainsType(obj.Type))
+                    if (!domain.ContainsType(obj.Type.Name))
                         listener.AddError(new ParseError(
                             $"Unknown type for object! '{obj.Type}'",
                             ParseErrorType.Error,
@@ -107,9 +107,9 @@ namespace PDDLParser.Analysers
                     var target = domain.Predicates.Predicates.Single(x => x.Name == init.Name);
                     for(int i = 0; i < init.Arguments.Count; i++)
                     {
-                        if (!domain.IsTypeOrSubType(init.Arguments[i].Type, target.Arguments[i].Type))
+                        if (!target.Arguments[i].Type.IsTypeOf(init.Arguments[i].Type.Name))
                             listener.AddError(new ParseError(
-                                $"Invalid type for init precondition! Got '{init.Arguments[i].Type}' but expected '{target.Arguments[i].Type}'",
+                                $"Invalid type for init precondition! Got '{init.Arguments[i].Type.Name}' but expected '{target.Arguments[i].Type.Name}'",
                                 ParseErrorType.Error,
                                 ParseErrorLevel.Analyser,
                                 ParserErrorCode.InvalidPredicateType,
@@ -151,7 +151,7 @@ namespace PDDLParser.Analysers
                         any = true;
                         for (int i = 0; i < predicate.Arguments.Count; i++)
                         {
-                            if (!domain.IsTypeOrSubType(pred.Arguments[i].Type, predicate.Arguments[i].Type))
+                            if (!predicate.Arguments[i].Type.IsTypeOf(pred.Arguments[i].Type.Name))
                             {
                                 wasTypeMissmatch = true;
                                 any = false;

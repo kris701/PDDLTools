@@ -24,32 +24,19 @@ namespace PDDLParser.Models.Domain
 
         // Context
         public Dictionary<string, List<string>> PredicateTypeTable { get; internal set; }
-        public Dictionary<string, List<string>> TypesTable { get; internal set; }
+        //public Dictionary<string, List<string>> TypesTable { get; internal set; }
 
-        public bool ContainsType(TypeNameDecl typeName) => ContainsType(typeName.Name);
-        public bool ContainsType(string typeName)
+        public bool ContainsType(string target)
         {
-            if (TypesTable == null)
+            if (target == "")
+                return true;
+            if (Types == null)
                 return false;
-            if (TypesTable.ContainsKey(typeName))
-                return true;
-            foreach (var subTypes in TypesTable.Values)
-                if (subTypes.Any(x => x == typeName))
-                    return true;
-            return false;
-        }
-        public bool IsTypeOrSubType(TypeNameDecl typeName, TypeNameDecl targetType) => IsTypeOrSubType(typeName.Name, targetType.Name);
-        public bool IsTypeOrSubType(string typeName, string targetType)
-        {
-            if (typeName == targetType)
-                return true;
-
-            if (TypesTable.ContainsKey(targetType))
+            foreach(var type in Types.Types)
             {
-                if (TypesTable[targetType].Contains(typeName))
+                if (type.IsTypeOf(target))
                     return true;
             }
-
             return false;
         }
 

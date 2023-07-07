@@ -9,56 +9,51 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class NameExp : BaseNode, IExp, ICloneable, INamedNode
+    public class TypeExp : BaseNode, IExp, INamedNode
     {
         public string Name { get; set; }
-        public TypeExp Type { get; set; }
+        public HashSet<string> SuperTypes { get; set; }
 
-        public NameExp(ASTNode node, INode parent, string name, TypeExp type) : base(node, parent)
+        public TypeExp(ASTNode node, INode parent, string name, HashSet<string> types) : base(node, parent)
         {
             Name = name;
-            Type = type;
+            SuperTypes = new HashSet<string>();
+            foreach (var type in types)
+                SuperTypes.Add(type);
         }
 
-        public NameExp(ASTNode node, INode parent, string name) : base(node, parent) 
+        public TypeExp(ASTNode node, INode parent, string name) : base(node, parent) 
         {
             Name = name;
-            Type = new TypeExp(node, this, "");
+            SuperTypes = new HashSet<string>();
         }
 
-        public NameExp(ASTNode node, INode parent) : base(node, parent)
+        public bool IsTypeOf(string typeName)
         {
-            Name = "";
-            Type = null;
+            if (typeName == Name)
+                return true;
+            return SuperTypes.Any(x => x == typeName);
         }
 
         public override string ToString()
         {
-            if (Type == null || Type.Name == "")
-                return $"({Name})";
-            else
-                return $"({Name} - {Type})";
+            return Name;
         }
 
         public override int GetHashCode()
         {
-            if (Type != null)
-                return Name.GetHashCode() + Type.GetHashCode();
+            if (SuperTypes != null)
+                return Name.GetHashCode() + SuperTypes.GetHashCode();
             return Name.GetHashCode();
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is NameExp exp)
+            if (obj is TypeExp exp)
             {
                 return exp.GetHashCode() == GetHashCode();
             }
             return false;
-        }
-
-        public object Clone()
-        {
-            return new NameExp(new ASTNode(Start, End, Line), Parent, Name, Type);
         }
 
         public override HashSet<INamedNode> FindNames(string name)
@@ -66,8 +61,6 @@ namespace PDDLParser.Models
             var result = new HashSet<INamedNode>();
             if (Name == name)
                 result.Add(this);
-            if (Type != null)
-                result.AddRange(Type.FindNames(name));
             return result;
         }
 
@@ -76,8 +69,6 @@ namespace PDDLParser.Models
             HashSet<T> res = new HashSet<T>();
             if (this is T v)
                 res.Add(v);
-            if (Type != null)
-                res.AddRange(Type.FindTypes<T>());
             return res;
         }
     }

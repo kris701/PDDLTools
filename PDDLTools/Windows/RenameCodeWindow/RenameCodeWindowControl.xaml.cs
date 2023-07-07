@@ -191,6 +191,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
                     case ReplaceScopeTypes.ActionParameter:
                     case ReplaceScopeTypes.AxiomParameter:
                     case ReplaceScopeTypes.ProblemObjects:
+                    case ReplaceScopeTypes.TypeName:
                         if (node is NameExp)
                         {
                             text = ReplaceTextWithinNode(text, from, to, node, offset);
@@ -206,13 +207,6 @@ namespace PDDLTools.Windows.RenameCodeWindow
                         break;
                     case ReplaceScopeTypes.ActionName:
                         if (node is ActionDecl)
-                        {
-                            text = ReplaceTextWithinNode(text, from, to, node, offset);
-                            offset += (to.Length - from.Length);
-                        }
-                        break;
-                    case ReplaceScopeTypes.TypeName:
-                        if (node is TypeNameDecl)
                         {
                             text = ReplaceTextWithinNode(text, from, to, node, offset);
                             offset += (to.Length - from.Length);

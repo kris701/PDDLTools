@@ -104,7 +104,7 @@ namespace PDDLParser.Visitors
                     var newObjs = new ObjectsDecl(node, parent, new List<NameExp>());
 
                     var parseStr = RemoveNodeTypeAndEscapeChars(node.InnerContent, ":objects");
-                    newObjs.Objs = LooseParseString(node, newObjs, ":objects", parseStr, listener);
+                    newObjs.Objs = LooseParseString<NameExp>(node, newObjs, ":objects", parseStr, listener);
 
                     decl = newObjs;
                     return true;

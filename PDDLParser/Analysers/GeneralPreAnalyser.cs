@@ -50,27 +50,9 @@ namespace PDDLParser.Analysers
             }
         }
 
-        private static List<string> _unsupportedPackages = new List<string>()
-        {
-            ":existential-preconditions",
-            ":adl",
-            ":universal-preconditions",
-            ":quantified-preconditions",
-            ":conditional-effects",
-            ":action-expansions",
-            ":foreach-expansions",
-            ":dag-expansions",
-            ":subgoals-through-axioms",
-            ":safety-constraints",
-            ":expression-evaluation",
-            ":fluents",
-            ":open-world",
-            ":true-negation",
-            ":ucpop"
-        };
         private void CheckForUnsupportedRequirements(string text, IErrorListener listener)
         {
-            foreach(var unsuportedPackage in _unsupportedPackages)
+            foreach(var unsuportedPackage in PDDLParser.UnsupportedPackages)
             {
                 if (text.Contains(unsuportedPackage))
                 {

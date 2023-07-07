@@ -95,6 +95,7 @@ namespace PDDLParser.Tests.Models
 
         [TestMethod]
         [DataRow("(define (problem a) (:objects a b c - q))", nameof(NameExp), 3)]
+        [DataRow("(define (problem a) (:objects a b c - q))", nameof(TypeExp), 3)]
         [DataRow("(define (problem a) (:init (pred a) (a p)))", nameof(PredicateExp), 2)]
         [DataRow("(define (problem a) (:init (pred a) (a p)) (:goal (pred a)))", nameof(PredicateExp), 3)]
         public void Can_FindTypes_Problem(string toParse, string targetType, int expectedCount)
@@ -113,6 +114,7 @@ namespace PDDLParser.Tests.Models
             switch (targetType)
             {
                 case "NameExp": FindTypesTest<NameExp>(decl, expectedCount); break;
+                case "TypeExp": FindTypesTest<TypeExp>(decl, expectedCount); break;
                 case "PredicateExp": FindTypesTest<PredicateExp>(decl, expectedCount); break;
                 default: Assert.Fail(); break;
             }

@@ -182,9 +182,6 @@ namespace PDDLTools.Commands
                     if (word == act.Name)
                         return targetNode;
                 }
-                else if (targetNode is TypeNameDecl typeDecl)
-                    if (word == typeDecl.Name)
-                        return targetNode;
 
             }
             return null;
@@ -196,8 +193,6 @@ namespace PDDLTools.Commands
                 return ReplaceScopeTypes.Predicate;
             else if (node is ActionDecl)
                 return ReplaceScopeTypes.ActionName;
-            else if (node is TypeNameDecl)
-                return ReplaceScopeTypes.TypeName;
             else if (node is NameExp name)
             {
                 if (IsActionScope(name))
@@ -206,6 +201,7 @@ namespace PDDLTools.Commands
                     return ReplaceScopeTypes.AxiomParameter;
                 else if (IsObjectScope(name))
                     return ReplaceScopeTypes.ProblemObjects;
+                else return ReplaceScopeTypes.TypeName;
             }
             return ReplaceScopeTypes.None;
         }

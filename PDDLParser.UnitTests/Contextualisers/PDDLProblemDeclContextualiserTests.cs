@@ -39,8 +39,8 @@ namespace PDDLParser.Tests.Contextualisers
 
             // ASSERT
             foreach(var init in decl.Init.Predicates)
-                Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfType(init, argName, expectedType));
-            Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfType(decl.Goal.GoalExp, argName, expectedType));
+                Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfTypeOrSubType(init, argName, expectedType));
+            Assert.IsTrue(ContextualiserTestsHelpers.AreAllNameExpOfTypeOrSubType(decl.Goal.GoalExp, argName, expectedType));
         }
     }
 }

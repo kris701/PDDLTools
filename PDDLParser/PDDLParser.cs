@@ -20,6 +20,27 @@ namespace PDDLParser
 {
     public class PDDLParser : IPDDLParser
     {
+        public static List<string> UnsupportedPackages = new List<string>()
+        {
+            ":existential-preconditions",
+            ":adl",
+            ":universal-preconditions",
+            ":quantified-preconditions",
+            ":conditional-effects",
+            ":action-expansions",
+            ":foreach-expansions",
+            ":dag-expansions",
+            ":subgoals-through-axioms",
+            ":safety-constraints",
+            ":expression-evaluation",
+            ":fluents",
+            ":open-world",
+            ":true-negation",
+            ":ucpop",
+            ":action-costs",
+            ":functions"
+        };
+
         public IErrorListener Listener { get; }
         public bool Contextualise { get; set; }
         public bool Analyse { get; set; }
@@ -30,6 +51,28 @@ namespace PDDLParser
             Listener.ThrowIfTypeAbove = ParseErrorType.Warning;
             Contextualise = contextualise;
             Analyse = analyse;
+        }
+
+        public bool IsDomainRequirementsSupported(string domainFile)
+        {
+            if (PDDLHelper.IsFileDomain(domainFile))
+            {
+                var text = File.ReadAllText(domainFile);
+                foreach (var unsuportedPackage in UnsupportedPackages)
+                    if (text.Contains(unsuportedPackage))
+                        return false;
+                return true;
+            }
+            return false;
+        }
+
+        public PDDLDecl TryParse(string domainFile = null, string problemFile = null)
+        {
+            try
+            {
+                return Parse(domainFile, problemFile);
+            }
+            catch { return null; }
         }
 
         public PDDLDecl Parse(string domainFile = null, string problemFile = null)

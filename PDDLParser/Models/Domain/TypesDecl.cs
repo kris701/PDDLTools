@@ -10,9 +10,9 @@ namespace PDDLParser.Models.Domain
 {
     public class TypesDecl : BaseNode, IDecl
     {
-        public List<TypeDecl> Types { get; set; }
+        public List<TypeExp> Types { get; set; }
 
-        public TypesDecl(ASTNode node, INode parent, List<TypeDecl> types) : base(node, parent)
+        public TypesDecl(ASTNode node, INode parent, List<TypeExp> types) : base(node, parent)
         {
             Types = types;
         }
