@@ -47,10 +47,13 @@ namespace PDDLParser.Contextualisers
                     {
                         foreach(var init in decl.Init.Predicates)
                         {
-                            for (int i = 0; i < init.Arguments.Count; i++)
+                            if (init is PredicateExp pred)
                             {
-                                if (init.Arguments[i].Name == obj.Name)
-                                    init.Arguments[i].Type.Name = obj.Type.Name;
+                                for (int i = 0; i < pred.Arguments.Count; i++)
+                                {
+                                    if (pred.Arguments[i].Name == obj.Name)
+                                        pred.Arguments[i].Type.Name = obj.Type.Name;
+                                }
                             }
                         }
                     }

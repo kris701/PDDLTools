@@ -27,6 +27,8 @@ namespace PDDLParser.Visitors
                 return returnNode;
             else if (TryVisitGoalNode(node, parent, listener, out returnNode))
                 return returnNode;
+            else if (TryVisitMetricNode(node, parent, listener, out returnNode))
+                return returnNode;
 
             listener.AddError(new ParseError(
                 $"Could not parse content of AST node: {node.OuterContent}",
@@ -56,6 +58,8 @@ namespace PDDLParser.Visitors
                             returnProblem.Init = inits;
                         else if (visited is GoalDecl goal)
                             returnProblem.Goal = goal;
+                        else if (visited is MetricDecl metric)
+                            returnProblem.Metric = metric;
                     }
                     decl = returnProblem;
                     return true;
@@ -120,8 +124,11 @@ namespace PDDLParser.Visitors
             {
                 if (DoesNotContainStrayCharacters(node, ":init", listener))
                 {
-                    var newInit = new InitDecl(node, parent, new List<PredicateExp>());
-                    newInit.Predicates = ParseAsPredicateList(node, newInit, listener);
+                    var newInit = new InitDecl(node, parent, new List<IExp>());
+                    var preds = ParseAsList<PredicateExp>(node, newInit, listener, false);
+                    var nums = ParseAsList<NumericExp>(node, newInit, listener, false);
+                    newInit.Predicates.AddRange(preds);
+                    newInit.Predicates.AddRange(nums);
                     decl = newInit;
                     return true;
                 }
@@ -141,6 +148,31 @@ namespace PDDLParser.Visitors
                     newGoal.GoalExp = new ExpVisitor().Visit(node.Children[0], newGoal, listener);
                     decl = newGoal;
                     return true;
+                }
+            }
+            decl = null;
+            return false;
+        }
+
+        private static HashSet<string> MetricNodeTypes = new HashSet<string>()
+        {
+            "maximize", "minimize"
+        };
+        public bool TryVisitMetricNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":metric"))
+            {
+                if (DoesNodeHaveSpecificChildCount(node, ":metric", 1, listener) &&
+                    DoesContentContainNLooseChildren(node, ":metric", 1, listener))
+                {
+                    var metricType = node.InnerContent.Substring(node.InnerContent.IndexOf(":metric") + ":metric".Length).Trim();
+                    if (MetricNodeTypes.Contains(metricType))
+                    {
+                        var newMetric = new MetricDecl(node, parent, metricType, null);
+                        newMetric.MetricExp = new ExpVisitor().Visit(node.Children[0], newMetric, listener);
+                        decl = newMetric;
+                        return true;
+                    }
                 }
             }
             decl = null;

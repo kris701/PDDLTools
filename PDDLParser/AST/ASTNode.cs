@@ -35,6 +35,16 @@ namespace PDDLParser.AST
             Children = new List<ASTNode>();
         }
 
+        public ASTNode(ASTNode node)
+        {
+            Line = node.Line;
+            Start = node.Start;
+            End = node.End;
+            OuterContent = node.OuterContent;
+            InnerContent = node.InnerContent;
+            Children = node.Children;
+        }
+
         public ASTNode(int start, int end, string outer, string inner, List<ASTNode> children)
         {
             Line = -1;

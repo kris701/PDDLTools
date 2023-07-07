@@ -89,6 +89,9 @@ namespace PDDLParser.Analysers
                 List<string> simplePredNames = new List<string>();
                 foreach (var pred in domain.Predicates.Predicates)
                     simplePredNames.Add(pred.Name);
+                if (domain.Functions != null)
+                    foreach (var func in domain.Functions.Functions)
+                        simplePredNames.Add(func.Name);
                 var allPreds = domain.FindTypes<PredicateExp>();
                 foreach(var pred in allPreds)
                 {

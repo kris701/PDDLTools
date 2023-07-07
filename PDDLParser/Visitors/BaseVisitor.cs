@@ -125,42 +125,24 @@ namespace PDDLParser.Visitors
             return objs;
         }
 
-        internal static List<PredicateExp> ParseAsPredicateList(ASTNode node, INode parent, IErrorListener listener)
+        internal static List<T> ParseAsList<T>(ASTNode node, INode parent, IErrorListener listener, bool throwIfNotCorrect = true)
         {
-            List<PredicateExp> predicates = new List<PredicateExp>();
-            foreach (var predicate in node.Children)
+            List<T> items = new List<T>();
+            foreach (var child in node.Children)
             {
-                var newNode = new ExpVisitor().Visit(predicate, parent, listener) as PredicateExp;
-                if (newNode == null)
+                var newNode = new ExpVisitor().Visit(child, parent, listener);
+                if (newNode is T nExp)
+                    items.Add(nExp);
+                else if (throwIfNotCorrect)
                     listener.AddError(new ParseError(
                         $"Could not parse predicate!",
                         ParseErrorType.Error,
                         ParseErrorLevel.Parsing,
                         ParserErrorCode.CouldNotParsePredicate,
-                        predicate.Line,
-                        predicate.Start));
-                predicates.Add(newNode);
-            }
-            return predicates;
-        }
-
-        internal static List<NameExp> ParseAsNameList(ASTNode node, INode parent, IErrorListener listener)
-        {
-            List<NameExp> name = new List<NameExp>();
-            foreach (var child in node.Children)
-            {
-                var newNode = new ExpVisitor().Visit(child, parent, listener) as NameExp;
-                if (newNode == null)
-                    listener.AddError(new ParseError(
-                        $"Could not parse name!",
-                        ParseErrorType.Error,
-                        ParseErrorLevel.Parsing,
-                        ParserErrorCode.CouldNotParseName,
                         child.Line,
                         child.Start));
-                name.Add(newNode);
             }
-            return name;
+            return items;
         }
 
         internal static bool DoesContentContainTarget(ASTNode node, string nodeName, string targetName, IErrorListener listener)

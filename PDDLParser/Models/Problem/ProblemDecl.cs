@@ -15,6 +15,7 @@ namespace PDDLParser.Models.Problem
         public ObjectsDecl Objects { get; set; }
         public InitDecl Init { get; set; }
         public GoalDecl Goal { get; set; }
+        public MetricDecl Metric { get; set; }
 
         public ProblemDecl(ASTNode node) : base(node, null) { }
 
@@ -32,6 +33,8 @@ namespace PDDLParser.Models.Problem
                 res.AddRange(Init.FindNames(name));
             if (Goal != null)
                 res.AddRange(Goal.FindNames(name));
+            if (Metric != null)
+                res.AddRange(Metric.FindNames(name));
 
             return res;
         }
@@ -52,6 +55,8 @@ namespace PDDLParser.Models.Problem
                 res.AddRange(Init.FindTypes<T>());
             if (Goal != null)
                 res.AddRange(Goal.FindTypes<T>());
+            if (Metric != null)
+                res.AddRange(Metric.FindTypes<T>());
 
             return res;
         }
@@ -69,6 +74,8 @@ namespace PDDLParser.Models.Problem
                 hash *= Init.GetHashCode();
             if (Goal != null)
                 hash *= Goal.GetHashCode();
+            if (Metric != null)
+                hash *= Metric.GetHashCode();
             return hash;
         }
 

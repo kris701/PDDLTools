@@ -6,29 +6,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Models.Problem
+namespace PDDLParser.Models.Domain
 {
-    public class InitDecl : BaseNode, IDecl
+    public class FunctionsDecl : BaseNode, IDecl
     {
-        public List<IExp> Predicates { get; set; }
+        public List<PredicateExp> Functions { get; set; }
 
-        public InitDecl(ASTNode node, INode parent, List<IExp> predicates) : base(node, parent)
+        public FunctionsDecl(ASTNode node, INode parent, List<PredicateExp> functions) : base(node, parent)
         {
-            Predicates = predicates;
+            Functions = functions;
         }
 
         public override string ToString()
         {
             string retStr = "";
-            foreach (var type in Predicates)
+            foreach (var type in Functions)
                 retStr += $" {type}{Environment.NewLine}";
-            return $"(:init{retStr})";
+            return $"(:functions{retStr})";
         }
 
         public override HashSet<INamedNode> FindNames(string name)
         {
             HashSet<INamedNode> res = new HashSet<INamedNode>();
-            foreach (var predicate in Predicates)
+            foreach (var predicate in Functions)
                 res.AddRange(predicate.FindNames(name));
             return res;
         }
@@ -38,7 +38,7 @@ namespace PDDLParser.Models.Problem
             HashSet<T> res = new HashSet<T>();
             if (this is T v)
                 res.Add(v);
-            foreach (var pred in Predicates)
+            foreach (var pred in Functions)
                 res.AddRange(pred.FindTypes<T>());
             return res;
         }
@@ -46,14 +46,14 @@ namespace PDDLParser.Models.Problem
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
-            foreach(var pred in Predicates)
+            foreach (var pred in Functions)
                 hash *= pred.GetHashCode();
             return hash;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is InitDecl exp)
+            if (obj is FunctionsDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
         }

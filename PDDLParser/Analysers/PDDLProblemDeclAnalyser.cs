@@ -96,17 +96,20 @@ namespace PDDLParser.Analysers
                 {
                     foreach (var init in problem.Init.Predicates)
                     {
-                        foreach (var arg in init.Arguments)
+                        if (init is PredicateExp pred)
                         {
-                            if (!objects.Any(x => x.Name == arg.Name))
+                            foreach (var arg in pred.Arguments)
                             {
-                                listener.AddError(new ParseError(
-                                    $"Undeclared object detected!",
-                                    ParseErrorType.Error,
-                                    ParseErrorLevel.Analyser,
-                                    ParserErrorCode.UseOfUndeclaredObject,
-                                    arg.Line,
-                                    arg.Start));
+                                if (!objects.Any(x => x.Name == arg.Name))
+                                {
+                                    listener.AddError(new ParseError(
+                                        $"Undeclared object detected!",
+                                        ParseErrorType.Error,
+                                        ParseErrorLevel.Analyser,
+                                        ParserErrorCode.UseOfUndeclaredObject,
+                                        arg.Line,
+                                        arg.Start));
+                                }
                             }
                         }
                     }

@@ -19,6 +19,7 @@ namespace PDDLParser.Tests.Visitors
         [DataRow("(or (aaa) (bbb))", typeof(OrExp))]
         [DataRow("(pred)", typeof(PredicateExp))]
         [DataRow("(pred ?a)", typeof(PredicateExp))]
+        [DataRow("(increase (pred ?a) 10)", typeof(NumericExp))]
         [DataRow("name=t=type", typeof(NameExp))]
         [DataRow("name", typeof(NameExp))]
         public void Can_VisitGeneral(string toParse, Type expectedType)
@@ -91,6 +92,31 @@ namespace PDDLParser.Tests.Visitors
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
             Assert.IsTrue(listener.Errors[0].Code == ParserErrorCode.StrayCharactersFound);
+        }
+
+        [TestMethod]
+        [DataRow("(increase (pred ?a) 10)")]
+        [DataRow("(increase (pred ?a) (pred ?b))")]
+        [DataRow("(decrease (pred ?a) 10)")]
+        [DataRow("(decrease (pred ?a) (pred ?b))")]
+        [DataRow("(assign (pred ?a) 10)")]
+        [DataRow("(assign (pred ?a) (pred ?b))")]
+        [DataRow("(scale-up (pred ?a) 10)")]
+        [DataRow("(scale-up (pred ?a) (pred ?b))")]
+        [DataRow("(scale-down (pred ?a) 10)")]
+        [DataRow("(scale-down (pred ?a) (pred ?b))")]
+        public void Can_ParseNumericExpNode(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IExp exp;
+            new ExpVisitor().TryVisitNumericNode(node, null, null, out exp);
+
+            // ASSERT
+            Assert.IsInstanceOfType(exp, typeof(NumericExp));
         }
 
         [TestMethod]

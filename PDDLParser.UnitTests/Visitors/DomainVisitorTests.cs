@@ -20,10 +20,12 @@ namespace PDDLParser.Tests.Visitors
         [DataRow("(:requirements abc)", typeof(RequirementsDecl))]
         [DataRow("(:extends :abc :other)", typeof(ExtendsDecl))]
         [DataRow("(:predicates (b) (c ?d))", typeof(PredicatesDecl))]
+        [DataRow("(:functions (b) (c ?d))", typeof(FunctionsDecl))]
         [DataRow("(:constants a - b)", typeof(ConstantsDecl))]
         [DataRow("(:types a - b \n c - d)", typeof(TypesDecl))]
         [DataRow("(:timeless (a - b))", typeof(TimelessDecl))]
         [DataRow("(:action name :parameters (a) :precondition (not (a)) :effect (a))", typeof(ActionDecl))]
+        [DataRow("(:durative-action name :parameters (a) :duration (= ?duration 10) :condition (not (a)) :effect (a))", typeof(DurativeActionDecl))]
         [DataRow("(:axiom :vars (a) :context (not (a)) :implies (a))", typeof(AxiomDecl))]
         public void Can_VisitGeneral(string toParse, Type expectedType)
         {
@@ -391,6 +393,47 @@ namespace PDDLParser.Tests.Visitors
         }
 
         [TestMethod]
+        [DataRow("(:functions)")]
+        [DataRow("(:functions (a))")]
+        [DataRow("(:functions (b) (c ?d))")]
+        public void Can_ParseFunctionsNode(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IDecl decl;
+            new DomainVisitor().TryVisitFunctionsNode(node, null, null, out decl);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(FunctionsDecl));
+        }
+
+        [TestMethod]
+        [DataRow("(:functions (a))", "a")]
+        [DataRow("(:functions (b) (c ?d))", "b", "c")]
+        public void Can_ParseFunctionsNode_CorrectName(string toParse, params string[] expecteds)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IDecl decl;
+            new DomainVisitor().TryVisitFunctionsNode(node, null, null, out decl);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(FunctionsDecl));
+            if (decl is FunctionsDecl funcs)
+            {
+                Assert.AreEqual(funcs.Functions.Count, expecteds.Length);
+                for (int i = 0; i < funcs.Functions.Count; i++)
+                    Assert.AreEqual(expecteds[i], funcs.Functions[i].Name);
+            }
+        }
+
+        [TestMethod]
         [DataRow("(:timeless)")]
         [DataRow("(:timeless (a))")]
         [DataRow("(:timeless (a - b))")]
@@ -508,6 +551,87 @@ namespace PDDLParser.Tests.Visitors
             // ACT
             IDecl decl;
             new DomainVisitor().TryVisitActionNode(node, null, listener, out decl);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+            Assert.IsTrue(listener.Errors[0].Code == ParserErrorCode.NeedExactLooseChildren);
+        }
+
+        [TestMethod]
+        [DataRow("(:durative-action name :parameters () :duration () :condition () :effect ())")]
+        [DataRow("(:durative-action name :parameters (a) :duration (= ?duration 10) :condition (not (a)) :effect (a))")]
+        public void Can_ParseDurativeActionNode(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IDecl decl;
+            new DomainVisitor().TryVisitDurativeActionNode(node, null, null, out decl);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(DurativeActionDecl));
+        }
+
+        [TestMethod]
+        [DataRow("(:durative-action name :parameters () :duration () :condition () :effect ())", "name")]
+        [DataRow("(:durative-action othername :parameters (a) :duration (= ?duration 10) :condition (not (a)) :effect (a))", "othername")]
+        public void Can_ParseDurativeActionNode_CorrectActionName(string toParse, string expected)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IDecl decl;
+            new DomainVisitor().TryVisitDurativeActionNode(node, null, null, out decl);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(DurativeActionDecl));
+            if (decl is ActionDecl act)
+                Assert.AreEqual(expected, act.Name);
+        }
+
+        [TestMethod]
+        [DataRow("(:durative-action name :parameters () :condition () :effect ())")]
+        [DataRow("(:durative-action name :parameters () :duration () :effect ())")]
+        [DataRow("(:durative-action name :condition () () :effect ())")]
+        [DataRow("(:durative-action name :condition () :precondition () ())")]
+        [DataRow("(:durative-action name () () ())")]
+
+        public void Cant_ParseDurativeActionNode_IfMissingPrimaryElements(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IDecl decl;
+            new DomainVisitor().TryVisitDurativeActionNode(node, null, listener, out decl);
+
+            // ASSERT
+            Assert.IsTrue(listener.Errors.Count > 0);
+            Assert.IsTrue(listener.Errors[0].Code == ParserErrorCode.UnexpectedNodeType);
+        }
+
+        [TestMethod]
+        [DataRow("(:durative-action  :parameters () :duration () :condition () :effect ())")]
+        [DataRow("(:durative-action             :parameters (a) :duration (= ?duration 10) :condition (not (a)) :effect (a))")]
+
+        public void Cant_ParseDurativeActionNode_IfMissingName(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+            IErrorListener listener = new ErrorListener();
+            listener.ThrowIfTypeAbove = ParseErrorType.Error;
+
+            // ACT
+            IDecl decl;
+            new DomainVisitor().TryVisitDurativeActionNode(node, null, listener, out decl);
 
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);

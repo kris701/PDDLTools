@@ -36,9 +36,7 @@ namespace PDDLParser
             ":fluents",
             ":open-world",
             ":true-negation",
-            ":ucpop",
-            ":action-costs",
-            ":functions"
+            ":ucpop"
         };
 
         public IErrorListener Listener { get; }

@@ -19,12 +19,10 @@ namespace PDDLParser.Models.Domain
         public TypesDecl Types { get; set; }
         public ConstantsDecl Constants { get; set; }
         public PredicatesDecl Predicates { get; set; }
+        public FunctionsDecl Functions { get; set; }
         public List<ActionDecl> Actions { get; set; }
+        public List<DurativeActionDecl> DurativeActions { get; set; }
         public List<AxiomDecl> Axioms { get; set; }
-
-        // Context
-        public Dictionary<string, List<string>> PredicateTypeTable { get; internal set; }
-        //public Dictionary<string, List<string>> TypesTable { get; internal set; }
 
         public bool ContainsType(string target)
         {
@@ -58,8 +56,13 @@ namespace PDDLParser.Models.Domain
                 res.AddRange(Constants.FindNames(name));
             if (Predicates != null)
                 res.AddRange(Predicates.FindNames(name));
+            if (Functions != null)
+                res.AddRange(Functions.FindNames(name));
             if (Actions != null)
-                foreach(var act in Actions)
+                foreach (var act in Actions)
+                    res.AddRange(act.FindNames(name));
+            if (DurativeActions != null)
+                foreach (var act in DurativeActions)
                     res.AddRange(act.FindNames(name));
             if (Axioms != null)
                 foreach(var axi in Axioms)
@@ -87,8 +90,13 @@ namespace PDDLParser.Models.Domain
                 res.AddRange(Constants.FindTypes<T>());
             if (Predicates != null)
                 res.AddRange(Predicates.FindTypes<T>());
+            if (Functions != null)
+                res.AddRange(Functions.FindTypes<T>());
             if (Actions != null)
                 foreach (var act in Actions)
+                    res.AddRange(act.FindTypes<T>());
+            if (DurativeActions != null)
+                foreach (var act in DurativeActions)
                     res.AddRange(act.FindTypes<T>());
             if (Axioms != null)
                 foreach (var axi in Axioms)
@@ -120,8 +128,13 @@ namespace PDDLParser.Models.Domain
                 hash *= Constants.GetHashCode();
             if (Predicates != null)
                 hash *= Predicates.GetHashCode();
+            if (Functions != null)
+                hash *= Functions.GetHashCode();
             if (Actions != null)
                 foreach(var act in Actions)
+                    hash *= act.GetHashCode();
+            if (DurativeActions != null)
+                foreach (var act in DurativeActions)
                     hash *= act.GetHashCode();
             if (Axioms != null)
                 foreach(var axi in Axioms)

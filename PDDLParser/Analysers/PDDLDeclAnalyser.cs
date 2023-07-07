@@ -39,14 +39,17 @@ namespace PDDLParser.Analysers
             if (problem.Init != null && domain.Predicates != null)
             {
                 foreach (var init in problem.Init.Predicates)
-                    if (!domain.Predicates.Predicates.Any(x => x.Name == init.Name))
-                        listener.AddError(new ParseError(
-                            $"Used of undeclared predicate in problem '{init.Name}'",
-                            ParseErrorType.Error,
-                            ParseErrorLevel.Analyser,
-                            ParserErrorCode.UseOfUndeclaredPredicate,
-                            init.Line,
-                            init.Start));
+                {
+                    if (init is PredicateExp pred)
+                        if (!domain.Predicates.Predicates.Any(x => x.Name == pred.Name))
+                            listener.AddError(new ParseError(
+                                $"Used of undeclared predicate in problem '{pred.Name}'",
+                                ParseErrorType.Error,
+                                ParseErrorLevel.Analyser,
+                                ParserErrorCode.UseOfUndeclaredPredicate,
+                                init.Line,
+                                init.Start));
+                }
             }
         }
         private void CheckForUndeclaredPreconditionsInGoal(DomainDecl domain, ProblemDecl problem, IErrorListener listener)
@@ -104,17 +107,20 @@ namespace PDDLParser.Analysers
             {
                 foreach(var init in problem.Init.Predicates)
                 {
-                    var target = domain.Predicates.Predicates.Single(x => x.Name == init.Name);
-                    for(int i = 0; i < init.Arguments.Count; i++)
+                    if (init is PredicateExp pred)
                     {
-                        if (!target.Arguments[i].Type.IsTypeOf(init.Arguments[i].Type.Name))
-                            listener.AddError(new ParseError(
-                                $"Invalid type for init precondition! Got '{init.Arguments[i].Type.Name}' but expected '{target.Arguments[i].Type.Name}'",
-                                ParseErrorType.Error,
-                                ParseErrorLevel.Analyser,
-                                ParserErrorCode.InvalidPredicateType,
-                                init.Line,
-                                init.Start));
+                        var target = domain.Predicates.Predicates.Single(x => x.Name == pred.Name);
+                        for (int i = 0; i < pred.Arguments.Count; i++)
+                        {
+                            if (!target.Arguments[i].Type.IsTypeOf(pred.Arguments[i].Type.Name))
+                                listener.AddError(new ParseError(
+                                    $"Invalid type for init precondition! Got '{pred.Arguments[i].Type.Name}' but expected '{target.Arguments[i].Type.Name}'",
+                                    ParseErrorType.Error,
+                                    ParseErrorLevel.Analyser,
+                                    ParserErrorCode.InvalidPredicateType,
+                                    init.Line,
+                                    init.Start));
+                        }
                     }
                 }
             }

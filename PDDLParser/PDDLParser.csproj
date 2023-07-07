@@ -65,12 +65,16 @@
     <Compile Include="Models\Domain\ConstantsDecl.cs" />
     <Compile Include="Models\Domain\DomainDecl.cs" />
     <Compile Include="Models\Domain\DomainNameDecl.cs" />
+    <Compile Include="Models\Domain\DurativeActionDecl.cs" />
     <Compile Include="Models\Domain\ExtendsDecl.cs" />
+    <Compile Include="Models\Domain\FunctionsDecl.cs" />
     <Compile Include="Models\Domain\TimelessDecl.cs" />
     <Compile Include="Models\IDecl.cs" />
     <Compile Include="Models\IExp.cs" />
     <Compile Include="Models\INamedNode.cs" />
     <Compile Include="Models\INode.cs" />
+    <Compile Include="Models\NumericExp.cs" />
+    <Compile Include="Models\Problem\MetricDecl.cs" />
     <Compile Include="Models\TypeExp.cs" />
     <Compile Include="Models\NameExp.cs" />
     <Compile Include="Models\NotExp.cs" />

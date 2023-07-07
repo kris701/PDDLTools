@@ -22,6 +22,7 @@ namespace PDDLParser.Tests.Visitors
         [DataRow("(:objects abc def - type)", typeof(ObjectsDecl))]
         [DataRow("(:init (a ?b) (c ?d))", typeof(InitDecl))]
         [DataRow("(:goal (not (a)))", typeof(GoalDecl))]
+        [DataRow("(:metric maximize (= (something) 10))", typeof(MetricDecl))]
         public void Can_VisitGeneral(string toParse, Type expectedType)
         {
             // ARRANGE
@@ -322,7 +323,7 @@ namespace PDDLParser.Tests.Visitors
             {
                 Assert.AreEqual(expPredi.Length, inits.Predicates.Count);
                 for (int i = 0; i < inits.Predicates.Count; i++)
-                    Assert.AreEqual(expPredi[i], inits.Predicates[i].Name);
+                    Assert.AreEqual(expPredi[i], (inits.Predicates[i] as PredicateExp).Name);
             }
         }
 
@@ -427,6 +428,24 @@ namespace PDDLParser.Tests.Visitors
             // ASSERT
             Assert.IsTrue(listener.Errors.Count > 0);
             Assert.IsTrue(listener.Errors[0].Code == ParserErrorCode.StrayCharactersFound);
+        }
+
+        [TestMethod]
+        [DataRow("(:metric maximize ())")]
+        [DataRow("(:metric minimize (a))")]
+        [DataRow("(:metric maximize (= (a) 10))")]
+        public void Can_VisitMetricNode(string toParse)
+        {
+            // ARRANGE
+            IASTParser<ASTNode> parser = new ASTParser();
+            var node = parser.Parse(toParse);
+
+            // ACT
+            IDecl decl;
+            new ProblemVisitor().TryVisitMetricNode(node, null, null, out decl);
+
+            // ASSERT
+            Assert.IsInstanceOfType(decl, typeof(MetricDecl));
         }
     }
 }

@@ -32,9 +32,13 @@ namespace PDDLParser.Visitors
                 return returnNode;
             else if (TryVisitPredicatesNode(node, parent, listener, out returnNode))
                 return returnNode;
+            else if (TryVisitFunctionsNode(node, parent, listener, out returnNode))
+                return returnNode;
             else if (TryVisitTimelessNode(node, parent, listener, out returnNode))
                 return returnNode;
             else if (TryVisitActionNode(node, parent, listener, out returnNode))
+                return returnNode;
+            else if (TryVisitDurativeActionNode(node, parent, listener, out returnNode))
                 return returnNode;
             else if (TryVisitAxiomNode(node, parent, listener, out returnNode))
                 return returnNode;
@@ -71,11 +75,19 @@ namespace PDDLParser.Visitors
                             returnDomain.Timeless = timeless;
                         else if (visited is PredicatesDecl predicates)
                             returnDomain.Predicates = predicates;
+                        else if (visited is FunctionsDecl funcs)
+                            returnDomain.Functions = funcs;
                         else if (visited is ActionDecl act)
                         {
                             if (returnDomain.Actions == null)
                                 returnDomain.Actions = new List<ActionDecl>();
                             returnDomain.Actions.Add(act);
+                        }
+                        else if (visited is DurativeActionDecl dAct)
+                        {
+                            if (returnDomain.DurativeActions == null)
+                                returnDomain.DurativeActions = new List<DurativeActionDecl>();
+                            returnDomain.DurativeActions.Add(dAct);
                         }
                         else if (visited is AxiomDecl axi)
                         {
@@ -147,7 +159,7 @@ namespace PDDLParser.Visitors
                 str = ReduceToSingleSpace(str);
 
                 int indexOffset = 0;
-                foreach (var line in str.Split('\n'))
+                foreach (var line in str.Split(ASTTokens.BreakToken))
                 {
                     if (line != "")
                     {
@@ -163,7 +175,7 @@ namespace PDDLParser.Visitors
                             {
                                 if (param != "")
                                 {
-                                    var newType = new TypeExp(new ASTNode(), newTypesDecl, param, subTypes);
+                                    var newType = new TypeExp(new ASTNode(node), newTypesDecl, param, subTypes);
                                     newTypes.Insert(indexOffset, newType);
                                     thisOffset++;
                                     newCurrentType = newType;
@@ -178,7 +190,7 @@ namespace PDDLParser.Visitors
                         {
                             if (param != "")
                             {
-                                var newType = new TypeExp(new ASTNode(), newTypesDecl, param, subTypes);
+                                var newType = new TypeExp(new ASTNode(node), newTypesDecl, param, subTypes);
                                 newTypes.Insert(indexOffset, newType);
                                 thisOffset++;
                             }
@@ -186,7 +198,7 @@ namespace PDDLParser.Visitors
                         indexOffset += thisOffset;
                     }
                 }
-                newTypes.Add(new TypeExp(new ASTNode(), newTypesDecl, ""));
+                newTypes.Add(new TypeExp(new ASTNode(node), newTypesDecl, ""));
 
                 foreach(var type in newTypes)
                 {
@@ -198,7 +210,7 @@ namespace PDDLParser.Visitors
                             HashSet<string> merged = new HashSet<string>();
                             foreach (var copyType in all)
                                 merged.AddRange(copyType.SuperTypes);
-                            newTypesDecl.Types.Add(new TypeExp(new ASTNode(), newTypesDecl, type.Name, merged));
+                            newTypesDecl.Types.Add(new TypeExp(new ASTNode(node), newTypesDecl, type.Name, merged));
                         }
                         else
                             newTypesDecl.Types.Add(type);
@@ -232,9 +244,23 @@ namespace PDDLParser.Visitors
             if (IsOfValidNodeType(node.InnerContent, ":predicates"))
             {
                 var newPred = new PredicatesDecl(node, parent, new List<PredicateExp>());
-                newPred.Predicates = ParseAsPredicateList(node, newPred, listener);
+                newPred.Predicates = ParseAsList<PredicateExp>(node, newPred, listener);
 
                 decl = newPred;
+                return true;
+            }
+            decl = null;
+            return false;
+        }
+
+        public bool TryVisitFunctionsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":functions"))
+            {
+                var newFuncs = new FunctionsDecl(node, parent, new List<PredicateExp>());
+                newFuncs.Functions = ParseAsList<PredicateExp>(node, newFuncs, listener);
+
+                decl = newFuncs;
                 return true;
             }
             decl = null;
@@ -248,7 +274,7 @@ namespace PDDLParser.Visitors
                 var newTime = new TimelessDecl(node, parent, new List<NameExp>());
                 foreach (var child in node.Children)
                     child.OuterContent = child.InnerContent;
-                newTime.Items = ParseAsNameList(node, newTime, listener);
+                newTime.Items = ParseAsList<NameExp>(node, newTime, listener);
 
                 decl = newTime;
                 return true;
@@ -282,6 +308,44 @@ namespace PDDLParser.Visitors
 
                     // Effects
                     newActionDecl.Effects = visitor.Visit(node.Children[2], newActionDecl, listener);
+
+                    decl = newActionDecl;
+                    return true;
+                }
+            }
+            decl = null;
+            return false;
+        }
+
+        public bool TryVisitDurativeActionNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)
+        {
+            if (IsOfValidNodeType(node.InnerContent, ":durative-action"))
+            {
+                if (DoesContentContainTarget(node, ":durative-action", ":parameters", listener) &&
+                    DoesContentContainTarget(node, ":durative-action", ":condition", listener) &&
+                    DoesContentContainTarget(node, ":durative-action", ":duration", listener) &&
+                    DoesContentContainTarget(node, ":durative-action", ":effect", listener) &&
+                    DoesNodeHaveSpecificChildCount(node, ":durative-action", 4, listener) &&
+                    DoesContentContainNLooseChildren(node, ":durative-action", 5, listener))
+                {
+
+                    var nameFindStr = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, ":durative-action"));
+                    var actionName = nameFindStr.Split(' ')[0].Trim();
+
+                    var newActionDecl = new DurativeActionDecl(node, parent, actionName, new List<NameExp>(), null, null, null);
+                    var visitor = new ExpVisitor();
+
+                    // Parameters
+                    newActionDecl.Parameters = LooseParseString<NameExp>(node.Children[0], newActionDecl, ":durative-action", node.Children[0].InnerContent, listener);
+
+                    // Duration
+                    newActionDecl.Duration = visitor.Visit(node.Children[1], newActionDecl, listener);
+
+                    // Preconditions
+                    newActionDecl.Condition = visitor.Visit(node.Children[2], newActionDecl, listener);
+
+                    // Effects
+                    newActionDecl.Effects = visitor.Visit(node.Children[3], newActionDecl, listener);
 
                     decl = newActionDecl;
                     return true;

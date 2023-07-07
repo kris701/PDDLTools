@@ -22,6 +22,8 @@ namespace PDDLParser.Visitors
                 return returnNode;
             else if (TryVisitNotNode(node, parent, listener, out returnNode))
                 return returnNode;
+            else if (TryVisitNumericNode(node, parent, listener, out returnNode))
+                return returnNode;
             else if (TryVisitPredicateNode(node, parent, listener, out returnNode))
                 return returnNode;
             else if (TryVisitNameNode(node, parent, listener, out returnNode))
@@ -114,6 +116,52 @@ namespace PDDLParser.Visitors
                 }
             } 
             exp = null;
+            return false;
+        }
+
+        private static HashSet<string> NumericNodeTypes = new HashSet<string>()
+        {
+            "increase", "decrease", "assign", "scale-up", "scale-down", "=", "+", "-", "*", "/", "<", ">"
+        };
+        public bool TryVisitNumericNode(ASTNode node, INode parent, IErrorListener listener, out IExp exp)
+        {
+            exp = null;
+            if (node.OuterContent.Contains('(') && node.OuterContent.Contains(')') && node.InnerContent != "")
+            {
+                if (node.Children.Count >= 1)
+                {
+                    var numericName = node.InnerContent.Split(' ')[0].Trim();
+                    if (NumericNodeTypes.Contains(numericName))
+                    {
+                        var newNumericExp = new NumericExp(node, parent, numericName, null, null);
+                        IExp arg1;
+                        IExp arg2;
+                        if (node.Children.Count == 2)
+                        {
+                            arg1 = Visit(node.Children[0], newNumericExp, listener);
+                            if (arg1 == null)
+                                return false;
+                            arg2 = Visit(node.Children[1], newNumericExp, listener);
+                            if (arg2 == null)
+                                return false;
+                        }
+                        else
+                        {
+                            arg1 = Visit(node.Children[0], newNumericExp, listener);
+                            if (arg1 == null)
+                                return false;
+                            var content = node.InnerContent.Substring(node.InnerContent.IndexOf(numericName) + numericName.Length);
+                            arg2 = Visit(new ASTNode(node.Start, node.End, content, content), newNumericExp, listener);
+                            if (arg2 == null)
+                                return false;
+                        }
+                        newNumericExp.Arg1 = arg1;
+                        newNumericExp.Arg2 = arg2;
+                        exp = newNumericExp;
+                        return true;
+                    }
+                }
+            }
             return false;
         }
 
