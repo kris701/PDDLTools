@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
 using PDDLParser.Helpers;
+using PDDLParser.Models;
 using PDDLTools.ContextStorage;
 using PDDLTools.Helpers;
 using System;
@@ -55,7 +56,8 @@ namespace PDDLTools.Completers
                             m_compList.Add(new Completion(obj.Name, obj.Name, obj.Name, null, null));
                     if (decl.Problem.Init != null)
                         foreach (var pred in decl.Problem.Init.Predicates)
-                            m_compList.Add(new Completion(pred.Name, pred.Name, pred.Name, null, null));
+                            if (pred is INamedNode node)
+                                m_compList.Add(new Completion(node.Name, node.Name, node.Name, null, null));
                 }
             }
 

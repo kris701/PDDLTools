@@ -26,11 +26,14 @@ namespace SASSimulator
             State = new List<PredicateExp>();
             foreach (var init in pDDL.Problem.Init.Predicates)
             {
-                var name = init.Name;
-                var args = new List<NameExp>();
-                foreach (var arg in init.Arguments)
-                    args.Add(new NameExp(null, null, arg.Name));
-                State.Add(new PredicateExp(null, null, name, args));
+                if (init is PredicateExp exp)
+                {
+                    var name = exp.Name;
+                    var args = new List<NameExp>();
+                    foreach (var arg in exp.Arguments)
+                        args.Add(new NameExp(null, null, arg.Name));
+                    State.Add(new PredicateExp(null, null, name, args));
+                }
             }
         }
 

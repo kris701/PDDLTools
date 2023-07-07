@@ -9,6 +9,7 @@ using PDDLTools.ContextStorage;
 using PDDLTools.Helpers;
 using PDDLParser.Helpers;
 using System.Runtime.Remoting.Contexts;
+using PDDLParser.Models;
 
 namespace PDDLTools.Classifiers
 { 
@@ -70,8 +71,9 @@ namespace PDDLTools.Classifiers
                 else if (decl.Problem != null)
                 {
                     if (decl.Problem.Init != null)
-                        foreach (var pred in decl.Problem.Init.Predicates)
-                            ClassificationStorage[PDDLTypes.Predicates].Add(pred.Name);
+                        foreach (var item in decl.Problem.Init.Predicates)
+                            if (item is INamedNode node)
+                                ClassificationStorage[PDDLTypes.Predicates].Add(node.Name);
                     if (decl.Problem.Objects != null)
                         foreach (var obj in decl.Problem.Objects.Objs)
                             ClassificationStorage[PDDLTypes.Objects].Add(obj.Name);
