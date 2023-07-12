@@ -63,8 +63,8 @@ namespace SASSimulator
         {
             Dictionary<string, string> retDict = new Dictionary<string, string>();
 
-            for (int i = 0; i < acc.Parameters.Count; i++)
-                retDict.Add(acc.Parameters[i].Name, args[i]);
+            for (int i = 0; i < acc.Parameters.Values.Count; i++)
+                retDict.Add(acc.Parameters.Values[i].Name, args[i]);
 
             return retDict;
         }

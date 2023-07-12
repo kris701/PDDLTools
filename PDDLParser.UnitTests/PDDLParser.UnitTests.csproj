@@ -20,4 +20,19 @@
     <ProjectReference Include="..\PDDLParser\PDDLParser.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="PositionTestsData\construction-domain-expected.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="PositionTestsData\construction-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="PositionTestsData\gripper-domain-expected.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="PositionTestsData\gripper-domain.pddl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

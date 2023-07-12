@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace PDDLParser.Tests.Contextualisers
+namespace PDDLParser.UnitTests.Contextualisers
 {
     [TestClass]
     public class PDDLDomainDeclContextualiserTests

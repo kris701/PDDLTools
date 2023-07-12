@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class PredicateExp : BaseNode, IExp, ICloneable, INamedNode
+    public class PredicateExp : BaseWalkableNode, IExp, ICloneable, INamedNode
     {
         public string Name { get; set; }
         public List<NameExp> Arguments { get; set; }
@@ -70,6 +70,11 @@ namespace PDDLParser.Models
             foreach (var arg in Arguments)
                 res.AddRange(arg.FindTypes<T>());
             return res;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            return Arguments.GetEnumerator();
         }
     }
 }

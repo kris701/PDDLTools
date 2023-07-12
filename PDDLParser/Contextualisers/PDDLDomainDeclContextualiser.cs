@@ -64,7 +64,7 @@ namespace PDDLParser.Contextualisers
             {
                 foreach(var act in decl.Actions)
                 {
-                    foreach(var param in act.Parameters)
+                    foreach(var param in act.Parameters.Values)
                     {
                         ReplaceNameExpTypeWith(act.Preconditions, param);
                         ReplaceNameExpTypeWith(act.Effects, param);
@@ -79,7 +79,7 @@ namespace PDDLParser.Contextualisers
             {
                 foreach (var axi in decl.Axioms)
                 {
-                    foreach (var param in axi.Vars)
+                    foreach (var param in axi.Vars.Values)
                     {
                         ReplaceNameExpTypeWith(axi.Context, param);
                         ReplaceNameExpTypeWith(axi.Implies, param);

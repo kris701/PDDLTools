@@ -10,12 +10,12 @@ using System.Xml.Linq;
 
 namespace PDDLParser.Models.Domain
 {
-    public class AxiomDecl : BaseNode, IDecl
+    public class AxiomDecl : BaseWalkableNode, IDecl
     {
-        public List<NameExp> Vars { get; set; }
+        public ParameterDecl Vars { get; set; }
         public NameExp GetParameterOrConstant(string name)
         {
-            var concrete = Vars.SingleOrDefault(x => x.Name == name);
+            var concrete = Vars.Values.SingleOrDefault(x => x.Name == name);
             if (concrete == null)
                 if (Parent is DomainDecl domain)
                     if (domain.Constants != null)
@@ -25,7 +25,7 @@ namespace PDDLParser.Models.Domain
         public IExp Context { get; set; }
         public IExp Implies { get; set; }
 
-        public AxiomDecl(ASTNode node, INode parent, List<NameExp> vars, IExp context, IExp implies) : base(node, parent)
+        public AxiomDecl(ASTNode node, INode parent, ParameterDecl vars, IExp context, IExp implies) : base(node, parent)
         {
             Vars = vars;
             Context = context;
@@ -35,8 +35,7 @@ namespace PDDLParser.Models.Domain
         public override HashSet<INamedNode> FindNames(string name)
         {
             HashSet<INamedNode> res = new HashSet<INamedNode>();
-            foreach (var var in Vars)
-                res.AddRange(var.FindNames(name));
+            res.AddRange(Vars.FindNames(name));
             res.AddRange(Context.FindNames(name));
             res.AddRange(Implies.FindNames(name));
             return res;
@@ -47,8 +46,7 @@ namespace PDDLParser.Models.Domain
             HashSet<T> res = new HashSet<T>();
             if (this is T v)
                 res.Add(v);
-            foreach (var var in Vars)
-                res.AddRange(var.FindTypes<T>());
+            res.AddRange(Vars.FindTypes<T>());
             res.AddRange(Context.FindTypes<T>());
             res.AddRange(Implies.FindTypes<T>());
             return res;
@@ -57,8 +55,7 @@ namespace PDDLParser.Models.Domain
         public override int GetHashCode()
         {
             var hash = base.GetHashCode();
-            foreach (var var in Vars)
-                hash *= var.GetHashCode();
+            hash *= Vars.GetHashCode();
             hash *= Context.GetHashCode();
             hash *= Implies.GetHashCode();
             return hash;
@@ -69,6 +66,13 @@ namespace PDDLParser.Models.Domain
             if (obj is AxiomDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            yield return Vars;
+            yield return Context;
+            yield return Implies;
         }
     }
 }

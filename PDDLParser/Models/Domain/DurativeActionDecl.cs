@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class DurativeActionDecl : BaseNode, IDecl, INamedNode
+    public class DurativeActionDecl : BaseWalkableNode, IDecl, INamedNode
     {
         public string Name { get; set; }
 
-        public List<NameExp> Parameters { get; set; }
+        public ParameterDecl Parameters { get; set; }
         public NameExp GetParameterOrConstant(string name)
         {
-            var concrete = Parameters.SingleOrDefault(x => x.Name == name);
+            var concrete = Parameters.Values.SingleOrDefault(x => x.Name == name);
             if (concrete == null)
                 if (Parent is DomainDecl domain)
                     if (domain.Constants != null)
@@ -26,7 +26,7 @@ namespace PDDLParser.Models.Domain
         public IExp Effects { get; set; }
         public IExp Duration { get; set; }
 
-        public DurativeActionDecl(ASTNode node, INode parent, string name, List<NameExp> parameters, IExp condition, IExp effects, IExp duration) : base(node, parent)
+        public DurativeActionDecl(ASTNode node, INode parent, string name, ParameterDecl parameters, IExp condition, IExp effects, IExp duration) : base(node, parent)
         {
             Name = name;
             Parameters = parameters;
@@ -40,8 +40,7 @@ namespace PDDLParser.Models.Domain
             HashSet<INamedNode> res = new HashSet<INamedNode>();
             if (Name == name)
                 res.Add(this);
-            foreach (var param in Parameters)
-                res.AddRange(param.FindNames(name));
+            res.AddRange(Parameters.FindNames(name));
             res.AddRange(Condition.FindNames(name));
             res.AddRange(Effects.FindNames(name));
             return res;
@@ -52,8 +51,7 @@ namespace PDDLParser.Models.Domain
             HashSet<T> res = new HashSet<T>();
             if (this is T v)
                 res.Add(v);
-            foreach (var param in Parameters)
-                res.AddRange(param.FindTypes<T>());
+            res.AddRange(Parameters.FindTypes<T>());
             res.AddRange(Condition.FindTypes<T>());
             res.AddRange(Effects.FindTypes<T>());
             return res;
@@ -63,8 +61,7 @@ namespace PDDLParser.Models.Domain
         {
             var hash = base.GetHashCode();
             hash *= Name.GetHashCode();
-            foreach (var param in Parameters)
-                hash *= param.GetHashCode();
+            hash *= Parameters.GetHashCode();
             hash *= Condition.GetHashCode();
             hash *= Effects.GetHashCode();
             hash *= Duration.GetHashCode();
@@ -76,6 +73,14 @@ namespace PDDLParser.Models.Domain
             if (obj is DurativeActionDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            yield return Parameters;
+            yield return Condition;
+            yield return Effects;
+            yield return Duration;
         }
     }
 }

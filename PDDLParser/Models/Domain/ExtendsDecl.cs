@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace PDDLParser.Models.Domain
 {
-    public class ExtendsDecl : BaseNode, IDecl
+    public class ExtendsDecl : BaseWalkableNode, IDecl
     {
         public List<NameExp> Extends { get; set; }
 
@@ -57,6 +57,11 @@ namespace PDDLParser.Models.Domain
             if (obj is ExtendsDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            return Extends.GetEnumerator();
         }
     }
 }

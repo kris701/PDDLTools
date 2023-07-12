@@ -1,7 +1,7 @@
 using PDDLParser.AST;
 using PDDLParser.Listener;
 
-namespace PDDLParser.Tests.AST
+namespace PDDLParser.UnitTests.AST
 {
     [TestClass]
     public class ASTParserTests
@@ -58,54 +58,6 @@ namespace PDDLParser.Tests.AST
 
             // ASSERT
             Assert.AreEqual(expectedContent, res.InnerContent);
-        }
-
-        [TestMethod]
-        [DataRow("(pred ?a ?b)", 0, 12)]
-        [DataRow("()", 0, 2)]
-        public void Can_ParseCorrectPositions(string toParse, int expectedStart, int expectedEnd)
-        {
-            // ARRANGE
-            IASTParser<ASTNode> parser = new ASTParser();
-
-            // ACT
-            var res = parser.Parse(toParse);
-
-            // ASSERT
-            Assert.AreEqual(expectedStart, res.Start);
-            Assert.AreEqual(expectedEnd, res.End);
-        }
-
-        [TestMethod]
-        [DataRow("(pred (var ?a))", 6, 14)]
-        [DataRow("(pred   (var ?a)    (var ?a))", 8, 16)]
-        public void Can_ParseCorrectPositions_SubNode(string toParse, int expectedStart, int expectedEnd)
-        {
-            // ARRANGE
-            IASTParser<ASTNode> parser = new ASTParser();
-
-            // ACT
-            var res = parser.Parse(toParse);
-
-            // ASSERT
-            Assert.AreEqual(expectedStart, res.Children[0].Start);
-            Assert.AreEqual(expectedEnd, res.Children[0].End);
-        }
-
-        [TestMethod]
-        [DataRow("(pred (not (var ?a)))", 11, 19)]
-        [DataRow("(pred (not (var ?a))) (not (var ?a)))", 11, 19)]
-        public void Can_ParseCorrectPositions_SubNode2(string toParse, int expectedStart, int expectedEnd)
-        {
-            // ARRANGE
-            IASTParser<ASTNode> parser = new ASTParser();
-
-            // ACT
-            var res = parser.Parse(toParse);
-
-            // ASSERT
-            Assert.AreEqual(expectedStart, res.Children[0].Children[0].Start);
-            Assert.AreEqual(expectedEnd, res.Children[0].Children[0].End);
         }
 
         [TestMethod]

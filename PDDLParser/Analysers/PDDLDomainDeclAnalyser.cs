@@ -129,7 +129,7 @@ namespace PDDLParser.Analysers
             {
                 foreach (var act in domain.Actions)
                 {
-                    foreach (var param in act.Parameters)
+                    foreach (var param in act.Parameters.Values)
                         if (act.FindNames(param.Name).Count == 0)
                             listener.AddError(new ParseError(
                                 $"Unused action parameter found '{param.Name}'",
@@ -147,7 +147,7 @@ namespace PDDLParser.Analysers
             {
                 foreach (var axi in domain.Axioms)
                 {
-                    foreach (var param in axi.Vars)
+                    foreach (var param in axi.Vars.Values)
                         if (axi.FindNames(param.Name).Count == 0)
                             listener.AddError(new ParseError(
                                 $"Unused axiom variable found '{param.Name}'",
@@ -188,7 +188,7 @@ namespace PDDLParser.Analysers
             {
                 foreach(var act in domain.Actions)
                 {
-                    foreach(var param in act.Parameters)
+                    foreach(var param in act.Parameters.Values)
                     {
                         if (!domain.ContainsType(param.Type.Name))
                         {
@@ -249,7 +249,7 @@ namespace PDDLParser.Analysers
             {
                 foreach (var axi in domain.Axioms)
                 {
-                    foreach (var param in axi.Vars)
+                    foreach (var param in axi.Vars.Values)
                     {
                         if (!domain.ContainsType(param.Type.Name))
                         {
@@ -397,7 +397,7 @@ namespace PDDLParser.Analysers
                 foreach (var action in domain.Actions)
                 {
                     List<string> parameterNames = new List<string>();
-                    foreach (var param in action.Parameters)
+                    foreach (var param in action.Parameters.Values)
                     {
                         if (parameterNames.Contains(param.Name))
                         {
@@ -421,7 +421,7 @@ namespace PDDLParser.Analysers
                 foreach (var axiom in domain.Axioms)
                 {
                     List<string> parameterNames = new List<string>();
-                    foreach (var param in axiom.Vars)
+                    foreach (var param in axiom.Vars.Values)
                     {
                         if (parameterNames.Contains(param.Name))
                         {

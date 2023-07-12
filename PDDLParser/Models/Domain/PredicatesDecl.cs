@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace PDDLParser.Models.Domain
 {
-    public class PredicatesDecl : BaseNode, IDecl
+    public class PredicatesDecl : BaseWalkableNode, IDecl
     {
         public List<PredicateExp> Predicates { get; set; }
 
@@ -57,6 +57,11 @@ namespace PDDLParser.Models.Domain
             if (obj is PredicatesDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            return Predicates.GetEnumerator();
         }
     }
 }

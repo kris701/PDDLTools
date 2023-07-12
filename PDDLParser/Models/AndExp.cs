@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace PDDLParser.Models
 {
-    public class AndExp : BaseNode, IExp
+    public class AndExp : BaseWalkableNode, IExp
     {
         public List<IExp> Children { get; set; }
 
@@ -59,6 +59,11 @@ namespace PDDLParser.Models
                 return exp.GetHashCode() == GetHashCode();
             }
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            return Children.GetEnumerator();
         }
     }
 }

@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class TimelessDecl : BaseNode, IDecl
+    public class TimelessDecl : BaseWalkableNode, IDecl
     {
-        public List<NameExp> Items { get; set; }
+        public List<PredicateExp> Items { get; set; }
 
-        public TimelessDecl(ASTNode node, INode parent, List<NameExp> timeless) : base(node, parent)
+        public TimelessDecl(ASTNode node, INode parent, List<PredicateExp> timeless) : base(node, parent)
         {
             Items = timeless;
         }
@@ -56,6 +56,11 @@ namespace PDDLParser.Models.Domain
             if (obj is TimelessDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            return Items.GetEnumerator();
         }
     }
 }

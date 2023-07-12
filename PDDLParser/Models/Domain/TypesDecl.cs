@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class TypesDecl : BaseNode, IDecl
+    public class TypesDecl : BaseWalkableNode, IDecl
     {
         public List<TypeExp> Types { get; set; }
 
@@ -56,6 +56,11 @@ namespace PDDLParser.Models.Domain
             if (obj is TypesDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            return Types.GetEnumerator();
         }
     }
 }

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Tests.Visitors
+namespace PDDLParser.UnitTests.Visitors
 {
     [TestClass]
     public class ExpVisitorTests

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Problem
 {
-    public class ProblemDecl : BaseNode, IDecl
+    public class ProblemDecl : BaseWalkableNode, IDecl
     {
         public ProblemNameDecl Name { get; set; }
         public DomainNameRefDecl DomainName { get; set; }
@@ -86,6 +86,22 @@ namespace PDDLParser.Models.Problem
                 return exp.GetHashCode() == GetHashCode();
             }
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            if (Name != null)
+                yield return Name;
+            if (DomainName != null) 
+                yield return DomainName;
+            if (Objects != null) 
+                yield return Objects;
+            if (Init != null)
+                yield return Init;
+            if (Goal != null) 
+                yield return Goal;
+            if (Metric != null) 
+                yield return Metric;
         }
     }
 }

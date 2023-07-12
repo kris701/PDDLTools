@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Problem
 {
-    public class MetricDecl : BaseNode, IDecl
+    public class MetricDecl : BaseWalkableNode, IDecl
     {
         public IExp MetricExp { get; set; }
         public string MetricType { get; set; }
@@ -48,6 +48,11 @@ namespace PDDLParser.Models.Problem
             if (obj is MetricDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            yield return MetricExp;
         }
     }
 }

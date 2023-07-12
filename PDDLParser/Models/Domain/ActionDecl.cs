@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class ActionDecl :  BaseNode, IDecl, INamedNode
+    public class ActionDecl : BaseWalkableNode, IDecl, INamedNode
     {
         public string Name { get; set; }
 
-        public List<NameExp> Parameters { get; set; }
+        public ParameterDecl Parameters { get; set; }
         public NameExp GetParameterOrConstant(string name)
         {
-            var concrete = Parameters.SingleOrDefault(x => x.Name == name);
+            var concrete = Parameters.Values.SingleOrDefault(x => x.Name == name);
             if (concrete == null)
                 if (Parent is DomainDecl domain)
                     if (domain.Constants != null)
@@ -26,7 +26,7 @@ namespace PDDLParser.Models.Domain
         public IExp Preconditions { get; set; }
         public IExp Effects { get; set; }
 
-        public ActionDecl(ASTNode node, INode parent, string name, List<NameExp> parameters, IExp preconditions, IExp effects) : base(node, parent)
+        public ActionDecl(ASTNode node, INode parent, string name, ParameterDecl parameters, IExp preconditions, IExp effects) : base(node, parent)
         {
             Name = name;
             Parameters = parameters;
@@ -51,8 +51,7 @@ namespace PDDLParser.Models.Domain
             HashSet<T> res = new HashSet<T>();
             if (this is T v)
                 res.Add(v);
-            foreach (var param in Parameters)
-                res.AddRange(param.FindTypes<T>());
+            res.AddRange(Parameters.FindTypes<T>());
             res.AddRange(Preconditions.FindTypes<T>());
             res.AddRange(Effects.FindTypes<T>());
             return res;
@@ -62,8 +61,7 @@ namespace PDDLParser.Models.Domain
         {
             var hash = base.GetHashCode();
             hash *= Name.GetHashCode();
-            foreach (var param in Parameters)
-                hash *= param.GetHashCode();
+            hash *= Parameters.GetHashCode();
             hash *= Preconditions.GetHashCode();
             hash *= Effects.GetHashCode();
             return hash;
@@ -74,6 +72,13 @@ namespace PDDLParser.Models.Domain
             if (obj is ActionDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            yield return Parameters;
+            yield return Preconditions;
+            yield return Effects;
         }
     }
 }

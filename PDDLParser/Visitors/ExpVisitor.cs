@@ -102,7 +102,7 @@ namespace PDDLParser.Visitors
                     var newPredicateExp = new PredicateExp(node, parent, predicateName, new List<NameExp>());
 
                     var content = node.InnerContent.Substring(node.InnerContent.IndexOf(predicateName) + predicateName.Length);
-                    newPredicateExp.Arguments = LooseParseString<NameExp>(node, newPredicateExp, "predicate", content, listener);
+                    newPredicateExp.Arguments = LooseParseString<NameExp>(node, newPredicateExp, predicateName, content, listener);
 
                     exp = newPredicateExp;
                     return true;
@@ -188,6 +188,7 @@ namespace PDDLParser.Visitors
                             node.Start));
                     }
 
+                    //var newNameExp = new NameExp(node, parent, left);
                     var newNameExp = new NameExp(node, parent, left.Replace("?", ""));
                     newNameExp.Type = new TypeExp(
                         new ASTNode(
@@ -205,6 +206,7 @@ namespace PDDLParser.Visitors
             {
                 if (DoesNodeHaveSpecificChildCount(node, "name", 0, listener))
                 {
+                    //var newNameExp = new NameExp(node, parent, node.InnerContent);
                     var newNameExp = new NameExp(node, parent, node.InnerContent.Replace("?", ""));
                     exp = newNameExp;
                     return true;

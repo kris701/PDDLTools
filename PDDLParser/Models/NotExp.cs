@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class NotExp : BaseNode, IExp
+    public class NotExp : BaseWalkableNode, IExp
     {
         public IExp Child { get; set; }
 
@@ -48,6 +48,11 @@ namespace PDDLParser.Models
                 return exp.GetHashCode() == GetHashCode();
             }
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            yield return Child;
         }
     }
 }

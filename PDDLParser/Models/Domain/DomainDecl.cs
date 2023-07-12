@@ -2,6 +2,7 @@
 using PDDLParser.Exceptions;
 using PDDLParser.Helpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Domain
 {
-    public class DomainDecl : BaseNode, IDecl
+    public class DomainDecl : BaseWalkableNode, IDecl
     {
         public DomainNameDecl Name { get; set; }
         public RequirementsDecl Requirements { get; set; }
@@ -148,6 +149,28 @@ namespace PDDLParser.Models.Domain
             if (obj is DomainDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            if (Name != null)
+                yield return Name;
+            if (Requirements != null) yield return Requirements;
+            if (Extends != null) yield return Extends;
+            if (Timeless != null) yield return Timeless;
+            if (Types != null) yield return Types;
+            if (Constants != null) yield return Constants;
+            if (Predicates != null) yield return Predicates;
+            if (Functions != null) yield return Functions;
+            if (Actions != null)
+                foreach (var act in Actions)
+                    yield return act;
+            if (DurativeActions != null)
+                foreach(var act in DurativeActions)
+                    yield return act;
+            if (Axioms != null)
+                foreach(var axi in Axioms)
+                    yield return axi;
         }
     }
 }

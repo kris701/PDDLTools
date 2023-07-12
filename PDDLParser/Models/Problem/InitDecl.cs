@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models.Problem
 {
-    public class InitDecl : BaseNode, IDecl
+    public class InitDecl : BaseWalkableNode, IDecl
     {
         public List<IExp> Predicates { get; set; }
 
@@ -56,6 +56,11 @@ namespace PDDLParser.Models.Problem
             if (obj is InitDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            return Predicates.GetEnumerator();
         }
     }
 }

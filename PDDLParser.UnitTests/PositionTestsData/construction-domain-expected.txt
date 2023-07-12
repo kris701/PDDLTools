@@ -1,0 +1,18 @@
+﻿0:1279:DomainDecl
+	12:33:DomainNameDecl
+	38:69:RequirementsDecl
+		53:60:NameExp
+		61:68:NameExp
+	74:93:ExtendsDecl
+		84:92:NameExp
+	98:136:TimelessDecl
+		109:135:PredicateExp
+			126:134:NameExp
+	141:226:TypesDecl
+		157:161:TypeExp
+		162:170:TypeExp
+		173:179:TypeExp
+		188:194:TypeExp
+		195:201:TypeExp
+		202:209:TypeExp
+		212:220:TypeExp

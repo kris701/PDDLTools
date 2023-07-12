@@ -1,6 +1,7 @@
 ﻿using PDDLParser.Listener;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
@@ -12,8 +13,19 @@ namespace PDDLParser.AST
     {
         public ASTNode Parse(string text)
         {
+            if (File.Exists(text))
+                text = File.ReadAllText(text);
+
             text = TokenizeSpecials(text);
-            var node = ParseAsNodeRec(text, 0, text.Length);
+
+            int start = 0;
+            int end = text.Length;
+            if (text.Contains('('))
+                start = text.IndexOf('(');
+            if (text.Contains(')'))
+                end = text.LastIndexOf(')') + 1;
+
+            var node = ParseAsNodeRec(text, start, end);
             SetLineNumberByCharacterNumberRec(text, node);
             return node;
         }

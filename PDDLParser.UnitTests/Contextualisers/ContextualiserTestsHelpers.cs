@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLParser.Tests.Contextualisers
+namespace PDDLParser.UnitTests.Contextualisers
 {
     internal static class ContextualiserTestsHelpers
     {

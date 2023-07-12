@@ -80,10 +80,10 @@ namespace PDDLParser.Visitors
         internal static List<T> LooseParseString<T>(ASTNode node, INode parent, string nodeType, string content, IErrorListener listener)
         {
             List<T> objs = new List<T>();
-            int offset = node.Start;
-            if (node.InnerContent.Contains(nodeType))
-                offset += node.InnerContent.IndexOf(nodeType) + nodeType.Length;
-            content = ReduceToSingleSpace(PurgeEscapeChars(content)).Trim();
+            int offset = node.End - 1;
+            //if (node.InnerContent.StartsWith(nodeType))
+            //    offset += node.InnerContent.IndexOf(nodeType) + nodeType.Length + 1;
+            content = PurgeEscapeChars(content);
 
             string currentType = "";
             foreach (var param in content.Split(' ').Reverse())
@@ -101,8 +101,8 @@ namespace PDDLParser.Visitors
                         typedParam = $"{typedParam}{ASTTokens.TypeToken}{currentType}";
 
                     var parsed = new ExpVisitor().Visit(new ASTNode(
+                        offset - param.Length,
                         offset,
-                        offset + param.Length,
                         node.Line,
                         typedParam,
                         typedParam), parent, listener);
@@ -119,7 +119,7 @@ namespace PDDLParser.Visitors
                             parsed.Start));
                     }
                 }
-                offset += param.Length;
+                offset -= param.Length + 1;
             }
             objs.Reverse();
             return objs;

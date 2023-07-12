@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace PDDLParser.Models.Problem
 {
-    public class GoalDecl : BaseNode, IDecl
+    public class GoalDecl : BaseWalkableNode, IDecl
     {
         public IExp GoalExp { get; set; }
 
@@ -57,6 +57,11 @@ namespace PDDLParser.Models.Problem
             if (obj is GoalDecl exp)
                 return exp.GetHashCode() == GetHashCode();
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            yield return GoalExp;
         }
     }
 }

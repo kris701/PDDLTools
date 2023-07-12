@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace PDDLParser.Models
 {
-    public class OrExp : BaseNode, IExp
+    public class OrExp : BaseWalkableNode, IExp
     {
         public IExp Option1 { get; set; }
         public IExp Option2 { get; set; }
@@ -55,6 +55,12 @@ namespace PDDLParser.Models
                 return exp.GetHashCode() == GetHashCode();
             }
             return false;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            yield return Option1;
+            yield return Option2;
         }
     }
 }

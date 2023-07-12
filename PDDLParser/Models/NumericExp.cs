@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PDDLParser.Models
 {
-    public class NumericExp : BaseNode, IExp, INamedNode
+    public class NumericExp : BaseWalkableNode, IExp, INamedNode
     {
         public string Name { get; set; }
         public IExp Arg1 { get; set; }
@@ -58,6 +58,12 @@ namespace PDDLParser.Models
             res.AddRange(Arg1.FindTypes<T>());
             res.AddRange(Arg2.FindTypes<T>());
             return res;
+        }
+
+        public override IEnumerator<INode> GetEnumerator()
+        {
+            yield return Arg1;
+            yield return Arg2;
         }
     }
 }

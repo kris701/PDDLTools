@@ -289,10 +289,8 @@ namespace PDDLParser.Visitors
         {
             if (IsOfValidNodeType(node.InnerContent, ":timeless"))
             {
-                var newTime = new TimelessDecl(node, parent, new List<NameExp>());
-                foreach (var child in node.Children)
-                    child.OuterContent = child.InnerContent;
-                newTime.Items = ParseAsList<NameExp>(node, newTime, listener);
+                var newTime = new TimelessDecl(node, parent, new List<PredicateExp>());
+                newTime.Items = ParseAsList<PredicateExp>(node, newTime, listener);
 
                 decl = newTime;
                 return true;
@@ -315,11 +313,14 @@ namespace PDDLParser.Visitors
                     var nameFindStr = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, ":action"));
                     var actionName = nameFindStr.Split(' ')[0].Trim();
 
-                    var newActionDecl = new ActionDecl(node, parent, actionName, new List<NameExp>(), null, null);
+                    var newActionDecl = new ActionDecl(node, parent, actionName, null, null, null);
                     var visitor = new ExpVisitor();
 
                     // Parameters
-                    newActionDecl.Parameters = LooseParseString<NameExp>(node.Children[0], newActionDecl, ":action", node.Children[0].InnerContent, listener);
+                    newActionDecl.Parameters = new ParameterDecl(
+                        node.Children[0],
+                        newActionDecl,
+                        LooseParseString<NameExp>(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent, listener));
 
                     // Preconditions
                     newActionDecl.Preconditions = visitor.Visit(node.Children[1], newActionDecl, listener);
@@ -350,11 +351,14 @@ namespace PDDLParser.Visitors
                     var nameFindStr = ReduceToSingleSpace(RemoveNodeTypeAndEscapeChars(node.InnerContent, ":durative-action"));
                     var actionName = nameFindStr.Split(' ')[0].Trim();
 
-                    var newActionDecl = new DurativeActionDecl(node, parent, actionName, new List<NameExp>(), null, null, null);
+                    var newActionDecl = new DurativeActionDecl(node, parent, actionName, null, null, null, null);
                     var visitor = new ExpVisitor();
 
                     // Parameters
-                    newActionDecl.Parameters = LooseParseString<NameExp>(node.Children[0], newActionDecl, ":durative-action", node.Children[0].InnerContent, listener);
+                    newActionDecl.Parameters = new ParameterDecl(
+                        node.Children[0],
+                        newActionDecl,
+                        LooseParseString<NameExp>(node.Children[0], newActionDecl, "parameters", node.Children[0].InnerContent, listener));
 
                     // Duration
                     newActionDecl.Duration = visitor.Visit(node.Children[1], newActionDecl, listener);
@@ -384,11 +388,14 @@ namespace PDDLParser.Visitors
                     DoesContentContainNLooseChildren(node, ":axiom", 3, listener))
                 {
 
-                    var newAxiomDecl = new AxiomDecl(node, parent, new List<NameExp>(), null, null);
+                    var newAxiomDecl = new AxiomDecl(node, parent, null, null, null);
                     var visitor = new ExpVisitor();
 
                     // Vars
-                    newAxiomDecl.Vars = LooseParseString<NameExp>(node.Children[0], newAxiomDecl, ":axiom", node.Children[0].InnerContent.Trim(), listener);
+                    newAxiomDecl.Vars = new ParameterDecl(
+                        node.Children[0],
+                        newAxiomDecl,
+                        LooseParseString<NameExp>(node.Children[0], newAxiomDecl, "parameters", node.Children[0].InnerContent.Trim(), listener));
 
                     // Context
                     newAxiomDecl.Context = visitor.Visit(node.Children[1], newAxiomDecl, listener);
