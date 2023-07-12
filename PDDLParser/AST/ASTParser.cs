@@ -102,6 +102,7 @@ namespace PDDLParser.AST
         {
             foreach (var child in node.Children)
                 SetLineNumberByCharacterNumberRec(source, child);
+            var test = source.Length;
             var partStr = source.Substring(0, node.Start);
             node.Line = partStr.Count(c => c == ASTTokens.BreakToken) + 1;
         }

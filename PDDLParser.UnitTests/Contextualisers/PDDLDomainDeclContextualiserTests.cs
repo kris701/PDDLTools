@@ -72,7 +72,8 @@ namespace PDDLParser.UnitTests.Contextualisers
 
         [TestMethod]
         [DataRow("(define (:types type - supertype) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "supertype")]
-        [DataRow("(define (:types type - other supertype - highersupertype) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "other")]
+        [DataRow("(define (:types type - other \n supertype - highersupertype) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "other")]
+        [DataRow("(define (:types type - other \n supertype - type) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "other")]
         [DataRow("(define (:types type) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "")]
         public void Can_CanDecorateSubtypes(string toParse, string argName, string expectedSuperType)
         {

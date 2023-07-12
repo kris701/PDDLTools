@@ -52,6 +52,8 @@ namespace PDDLParser.Listener
         UnknownNode,
         ExpectedTypeButGotNone,
         ExpectedNameButGotNone,
+
+        TypeDeclarationError,
     }
 
     public enum ParseErrorType { None, Message, Warning, Error }

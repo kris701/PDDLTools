@@ -232,10 +232,10 @@ namespace PDDLParser.UnitTests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(:types a \n c)", "a", "c", "")]
-        [DataRow("(:types a q \n e c)", "a", "q", "e", "c", "")]
-        [DataRow("(:types a q e c)", "a", "q", "e", "c", "")]
-        [DataRow("(:types a)", "a", "")]
+        [DataRow("(:types a \n c)", "a", "c")]
+        [DataRow("(:types a q \n e c)", "a", "q", "e", "c")]
+        [DataRow("(:types a q e c)", "a", "q", "e", "c")]
+        [DataRow("(:types a)", "a")]
         public void Can_ParseTypesNode_CorrectTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
@@ -257,11 +257,10 @@ namespace PDDLParser.UnitTests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(:types site material - object \n bricks cables windows - material)", "object", "object", "", "material", "material", "material", "")]
-        [DataRow("(:types a - b \n c - d)", "b", "", "d", "", "")]
-        [DataRow("(:types a q - b \n e c - d)", "b", "b", "", "d", "d", "", "")]
-        [DataRow("(:types a q - b - e c - d)", "b", "b", "e", "d", "d", "", "")]
-        [DataRow("(:types a - b)", "b", "", "")]
+        [DataRow("(:types site material - object \n bricks cables windows - material)", "object", "object", "", "material", "material", "material")]
+        [DataRow("(:types a - b \n c - d)", "b", "", "d", "")]
+        [DataRow("(:types a q - b \n e c - d)", "b", "b", "", "d", "d", "")]
+        [DataRow("(:types a - b)", "b", "")]
         public void Can_ParseTypesNode_CorrectInheritTypeNames(string toParse, params string[] expected)
         {
             // ARRANGE
@@ -436,8 +435,8 @@ namespace PDDLParser.UnitTests.Visitors
         [TestMethod]
         [DataRow("(:timeless)")]
         [DataRow("(:timeless (a))")]
-        [DataRow("(:timeless (a - b))")]
-        [DataRow("(:timeless (a - b) (c))")]
+        [DataRow("(:timeless (a ?q - b))")]
+        [DataRow("(:timeless (a ?q - b) (c))")]
         public void Can_ParseTimelessNode(string toParse)
         {
             // ARRANGE
@@ -454,9 +453,9 @@ namespace PDDLParser.UnitTests.Visitors
 
         [TestMethod]
         [DataRow("(:timeless (a))", "a")]
-        [DataRow("(:timeless (a - b))", "a")]
-        [DataRow("(:timeless (a - b) (c))", "a", "c")]
-        [DataRow("(:timeless (a - b) (c)    (d))", "a", "c", "d")]
+        [DataRow("(:timeless (a ?q - b))", "a")]
+        [DataRow("(:timeless (a ?q - b) (c))", "a", "c")]
+        [DataRow("(:timeless (a ?q - b) (c)    (d))", "a", "c", "d")]
         public void Can_ParseTimelessNode_CorrectNames(string toParse, params string[] expecteds)
         {
             // ARRANGE

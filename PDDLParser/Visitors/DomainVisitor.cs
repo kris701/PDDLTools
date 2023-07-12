@@ -154,13 +154,21 @@ namespace PDDLParser.Visitors
             if (IsOfValidNodeType(node.InnerContent, ":types"))
             {
                 var newTypesDecl = new TypesDecl(node, parent, new List<TypeExp>());
-                var newTypes = new List<TypeExp>();
-                var str = node.InnerContent.Remove(node.InnerContent.IndexOf(":types"), ":types".Length).Trim();
-                str = ReduceToSingleSpace(str);
 
-                List<string> lines = new List<string>();
+                var str = ReplaceRangeWithSpaces(node.InnerContent, node.InnerContent.IndexOf(":types"), ":types".Length);
+
+                if (str.Trim() == "")
+                {
+                    decl = newTypesDecl;
+                    return true;
+                }
+
                 if (str.Contains(ASTTokens.TypeToken))
                 {
+                    var newTypes = new List<TypeExp>();
+
+                    // Stitch type lines for inheritence
+                    List<string> lines = new List<string>();
                     var splits = str.Split(ASTTokens.BreakToken);
                     string addLine = "";
                     foreach (var split in splits)
@@ -168,70 +176,93 @@ namespace PDDLParser.Visitors
                         addLine += split;
                         if (addLine.Contains(ASTTokens.TypeToken))
                         {
-                            lines.Add(addLine.Trim());
+                            lines.Add(addLine);
                             addLine = "";
+                        }
+                    }
+
+                    int indexOffset = 0;
+                    int characterOffset = node.Start + 1;
+                    foreach (var line in lines)
+                    {
+                        characterOffset += line.Length + 1;
+                        if (line != "")
+                        {
+                            int innerCharacterOffset = characterOffset;
+                            int typesAdded = 0;
+                            HashSet<string> superTypes = new HashSet<string>();
+                            var superTypeStr = line.Substring(line.LastIndexOf(ASTTokens.TypeToken) + ASTTokens.TypeToken.Length);
+                            if (superTypeStr.Contains(ASTTokens.TypeToken) || superTypeStr.Trim().Contains(' '))
+                                listener.AddError(new ParseError(
+                                    "Type definition cannot have two supertypes!",
+                                    ParseErrorType.Error,
+                                    ParseErrorLevel.Parsing,
+                                    ParserErrorCode.TypeDeclarationError
+                                    ));
+
+                            var superType = superTypeStr.Trim();
+                            superTypes.Add(superType);
+                            var newType = new TypeExp(
+                                new ASTNode(innerCharacterOffset - superType.Length, innerCharacterOffset, node.Line),
+                                newTypesDecl,
+                                superType, new HashSet<string>());
+                            newTypes.Insert(indexOffset, newType);
+                            innerCharacterOffset -= superType.Length + ASTTokens.TypeToken.Length;
+                            typesAdded++;
+
+                            var subTypesStr = line.Substring(0, line.IndexOf(ASTTokens.TypeToken));
+                            foreach (var param in subTypesStr.Split(' ').Reverse())
+                            {
+                                if (param != "")
+                                {
+                                    var newSubType = new TypeExp(
+                                        new ASTNode(innerCharacterOffset - param.Length, innerCharacterOffset, node.Line),
+                                        newTypesDecl, param, superTypes);
+                                    newTypes.Insert(indexOffset, newSubType);
+                                    innerCharacterOffset -= param.Length + 1;
+                                    typesAdded++;
+                                }
+                            }
+
+                            indexOffset += typesAdded;
+                        }
+                    }
+
+                    foreach (var type in newTypes)
+                    {
+                        if (!newTypesDecl.Types.Any(x => x.Name == type.Name))
+                        {
+                            var all = newTypes.FindAll(x => x.Name == type.Name);
+                            if (all.Count > 1)
+                            {
+                                HashSet<string> merged = new HashSet<string>();
+                                foreach (var copyType in all)
+                                    merged.AddRange(copyType.SuperTypes);
+                                newTypesDecl.Types.Add(
+                                    new TypeExp(new ASTNode(type.Start, type.End, type.Line),
+                                    newTypesDecl,
+                                    type.Name,
+                                    merged));
+                            }
+                            else
+                                newTypesDecl.Types.Add(type);
                         }
                     }
                 }
                 else
-                    lines.Add(str);
-
-                int indexOffset = 0;
-                foreach (var line in lines)
                 {
-                    if (line != "")
+                    int characterOffset = node.End - 1;
+                    str = ReduceToSingleSpace(PurgeEscapeChars(str));
+                    foreach (var param in str.Split(' ').Reverse())
                     {
-                        int thisOffset = 0;
-                        var editLine = PurgeEscapeChars(line);
-                        HashSet<string> subTypes = new HashSet<string>() { "" };
-                        while (editLine.Contains(ASTTokens.TypeToken))
+                        if (param != "")
                         {
-                            var innerContent = editLine.Substring(editLine.LastIndexOf(ASTTokens.TypeToken) + ASTTokens.TypeToken.Length);
-
-                            TypeExp newCurrentType = null;
-                            foreach (var param in innerContent.Split(' ').Reverse())
-                            {
-                                if (param != "")
-                                {
-                                    var newType = new TypeExp(new ASTNode(node), newTypesDecl, param, subTypes);
-                                    newTypes.Insert(indexOffset, newType);
-                                    thisOffset++;
-                                    newCurrentType = newType;
-                                }
-                            }
-                            subTypes.Add(newCurrentType.Name);
-
-                            editLine = editLine.Substring(0, editLine.LastIndexOf(ASTTokens.TypeToken));
+                            var newSubType = new TypeExp(
+                                new ASTNode(characterOffset - param.Length, characterOffset, node.Line),
+                                newTypesDecl, param, new HashSet<string>());
+                            newTypesDecl.Types.Insert(0, newSubType);
+                            characterOffset -= param.Length + 1;
                         }
-
-                        foreach (var param in editLine.Split(' ').Reverse())
-                        {
-                            if (param != "")
-                            {
-                                var newType = new TypeExp(new ASTNode(node), newTypesDecl, param, subTypes);
-                                newTypes.Insert(indexOffset, newType);
-                                thisOffset++;
-                            }
-                        }
-                        indexOffset += thisOffset;
-                    }
-                }
-                newTypes.Add(new TypeExp(new ASTNode(node), newTypesDecl, ""));
-
-                foreach(var type in newTypes)
-                {
-                    if (!newTypesDecl.Types.Any(x => x.Name == type.Name))
-                    {
-                        var all = newTypes.FindAll(x => x.Name == type.Name);
-                        if (all.Count > 1)
-                        {
-                            HashSet<string> merged = new HashSet<string>();
-                            foreach (var copyType in all)
-                                merged.AddRange(copyType.SuperTypes);
-                            newTypesDecl.Types.Add(new TypeExp(new ASTNode(node), newTypesDecl, type.Name, merged));
-                        }
-                        else
-                            newTypesDecl.Types.Add(type);
                     }
                 }
 
@@ -240,6 +271,14 @@ namespace PDDLParser.Visitors
             }
             decl = null;
             return false;
+        }
+
+        private string ReplaceRangeWithSpaces(string text, int from, int to)
+        {
+            var newText = text.Substring(0, from);
+            newText += new string(' ', to - from);
+            newText += text.Substring(to);
+            return newText;
         }
 
         public bool TryVisitConstantsNode(ASTNode node, INode parent, IErrorListener listener, out IDecl decl)

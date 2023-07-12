@@ -30,6 +30,8 @@ namespace PDDLParser.Models
 
         public bool IsTypeOf(string typeName)
         {
+            if (typeName == "")
+                return true;
             if (typeName == Name)
                 return true;
             return SuperTypes.Any(x => x == typeName);
