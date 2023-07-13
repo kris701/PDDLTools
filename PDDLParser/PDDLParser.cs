@@ -180,22 +180,35 @@ namespace PDDLParser
                     ParseErrorLevel.PreParsing,
                     ParserErrorCode.FileNotFound));
             }
-            string text = ReplaceCommentsWithWhiteSpace(File.ReadAllLines(path).ToList());
+            var text = File.ReadAllText(path);
+            text = ReplaceSpecialCharacters(text);
+            text = ReplaceCommentsWithWhiteSpace(text);
             text = text.ToLower();
             return text;
         }
 
-        private string ReplaceCommentsWithWhiteSpace(List<string> lines)
+        private string ReplaceSpecialCharacters(string text)
+        {
+            text = text.Replace('\r', ' ');
+            text = text.Replace('\t', ' ');
+            return text;
+        }
+
+        private string ReplaceCommentsWithWhiteSpace(string text)
         {
             string returnStr = "";
-            foreach (var line in lines)
+            bool isComment = false;
+            for (int i = 0; i < text.Length; i++)
             {
-                if (line.Trim().StartsWith(";"))
-                {
-                    returnStr += new string(' ', line.Length) + "\n";
-                }
+                if (text[i] == ';')
+                    isComment = true;
+                else if (text[i] == ASTTokens.BreakToken)
+                    isComment = false;
+
+                if (isComment)
+                    returnStr += ' ';
                 else
-                    returnStr += line + "\n";
+                    returnStr += text[i];
             }
             return returnStr;
         }

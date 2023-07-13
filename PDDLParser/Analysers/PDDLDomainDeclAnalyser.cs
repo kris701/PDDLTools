@@ -20,6 +20,7 @@ namespace PDDLParser.Analysers
             // Declare Checking
             CheckForUndeclaredPredicates(decl, listener);
             CheckForUnusedPredicates(decl, listener);
+            CheckForUnusedTypes(decl, listener);
             CheckForUnusedActionParameters(decl, listener);
             CheckForUnusedAxiomParameters(decl, listener);
 
@@ -120,6 +121,24 @@ namespace PDDLParser.Analysers
                             ParserErrorCode.UnusedPredicate,
                             predicate.Line,
                             predicate.Start));
+                }
+            }
+        }
+        private void CheckForUnusedTypes(DomainDecl domain, IErrorListener listener)
+        {
+            if (domain.Types != null)
+            {
+                var allTypes = domain.FindTypes<TypeExp>();
+                foreach (var type in domain.Types.Types)
+                {
+                    if (allTypes.Count(x => x.Name == type.Name) == 1)
+                        listener.AddError(new ParseError(
+                            $"Unused type detected '{type}'",
+                            ParseErrorType.Message,
+                            ParseErrorLevel.Analyser,
+                            ParserErrorCode.UnusedPredicate,
+                            type.Line,
+                            type.Start));
                 }
             }
         }
@@ -229,7 +248,17 @@ namespace PDDLParser.Analysers
                 foreach (var arg in pred.Arguments)
                 {
                     var argOrCons = action.GetParameterOrConstant(arg.Name);
-                    if (argOrCons.Name != arg.Name && !arg.Type.IsTypeOf(argOrCons.Type.Name))
+                    if (argOrCons == null)
+                    {
+                        listener.AddError(new ParseError(
+                            $"Arguments does not match the predicate definition!",
+                            ParseErrorType.Error,
+                            ParseErrorLevel.Analyser,
+                            ParserErrorCode.InvalidPredicateType,
+                            arg.Line,
+                            arg.Start));
+                    }
+                    else if (argOrCons.Name != arg.Name && !arg.Type.IsTypeOf(argOrCons.Type.Name))
                     {
                         listener.AddError(new ParseError(
                             $"Predicate has an invalid argument type! Expected a '{action.GetParameterOrConstant(arg.Name).Name}' but got a '{arg.Type}'",

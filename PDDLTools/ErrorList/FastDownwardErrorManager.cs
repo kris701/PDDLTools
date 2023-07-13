@@ -136,17 +136,20 @@ namespace PDDLTools.ErrorList
             {
                 if (i > sourceDocumentLines.Length)
                     break;
-                offset += sourceDocumentLines[i].Length + 1;
+                offset += sourceDocumentLines[i].Length + 2;
             }
-            return characterNumber - offset - 1;
+            return characterNumber - offset;
         }
 
         private async void JumpToError(object sender, EventArgs e)
         {
             if (sender is ErrorTask item) {
-                TextField.Caret.MoveTo(TextField.TextSnapshot.GetLineFromLineNumber(item.Line).Start + item.Column);
-                TextField.Caret.EnsureVisible();
-                await DTE2Helper.FocusActiveDocumentAsync();
+                if (item.Line != -1 && item.Line <= TextField.TextSnapshot.LineCount)
+                {
+                    TextField.Caret.MoveTo(TextField.TextSnapshot.GetLineFromLineNumber(item.Line).Start + item.Column);
+                    TextField.Caret.EnsureVisible();
+                    await DTE2Helper.FocusActiveDocumentAsync();
+                }
             }
         }
     }

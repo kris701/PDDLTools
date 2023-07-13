@@ -61,9 +61,8 @@ namespace PDDLParser.UnitTests.AST
         }
 
         [TestMethod]
-        [DataRow("(pred (not (var ?a)))\n(pred (not (var ?a)))", 0, 1)]
-        [DataRow("(pred (not (var ?a)))\n(pred (not (var ?a)))", 0, 1)]
-        [DataRow("(pred (not (var ?a)))\n(pred (not (var ?a)))", 1, 2)]
+        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a))))", 0, 1)]
+        [DataRow("((pred (not (var ?a)))\n(pred (not (var ?a))))", 1, 2)]
         public void Can_CanSetCorrectLineNumber(string toParse, int targetChild, int expectedLineNumber)
         {
             // ARRANGE

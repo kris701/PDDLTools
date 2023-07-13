@@ -18,15 +18,12 @@ namespace PDDLParser.AST
 
             text = TokenizeSpecials(text);
 
-            int start = 0;
             int end = text.Length;
-            if (text.Contains('('))
-                start = text.IndexOf('(');
             if (text.Contains(')'))
                 end = text.LastIndexOf(')') + 1;
 
-            var node = ParseAsNodeRec(text, start, end);
-            SetLineNumberByCharacterNumberRec(text, node);
+            var node = ParseAsNodeRec(text, 0, end);
+            SetLineNumberByCharacterNumberRec(text.Replace("\r", " ").Replace("\t", " "), node);
             return node;
         }
 
@@ -56,7 +53,7 @@ namespace PDDLParser.AST
                     {
                         if (innerContent[i] == '(')
                             currentLevel++;
-                        if (innerContent[i] == ')')
+                        else if (innerContent[i] == ')')
                         {
                             if (currentLevel == 0)
                             {
@@ -102,7 +99,6 @@ namespace PDDLParser.AST
         {
             foreach (var child in node.Children)
                 SetLineNumberByCharacterNumberRec(source, child);
-            var test = source.Length;
             var partStr = source.Substring(0, node.Start);
             node.Line = partStr.Count(c => c == ASTTokens.BreakToken) + 1;
         }
