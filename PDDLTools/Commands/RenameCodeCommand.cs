@@ -98,7 +98,7 @@ namespace PDDLTools.Commands
         private async Task<INode> GetSelectedAsNodeAsync(string word, int atIndex)
         {
             var currentFile = await DTE2Helper.GetSourceFilePathAsync();
-            var decl = PDDLFileContexts.TryGetContextForFile(currentFile);
+            var decl = await PDDLFileContexts.TryGetContextForFileAsync(currentFile);
             if (decl != null)
             {
                 if (decl.Domain != null)

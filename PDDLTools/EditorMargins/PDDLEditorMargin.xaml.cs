@@ -72,7 +72,7 @@ namespace PDDLTools.EditorMargins
                 DomainPanel.Visibility = Visibility.Hidden;
                 ProblemPanel.Visibility = Visibility.Hidden;
 
-                var decl = PDDLFileContexts.TryGetContextForFile(file);
+                var decl = await PDDLFileContexts.TryGetContextForFileAsync(file);
                 if (decl  != null)
                 {
                     if (decl.Domain != null)

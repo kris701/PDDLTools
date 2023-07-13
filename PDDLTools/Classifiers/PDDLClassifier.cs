@@ -18,10 +18,10 @@ namespace PDDLTools.Classifiers
         internal Dictionary<string, List<string>> ClassificationStorage = new Dictionary<string, List<string>>()
         {
             { PDDLTypes.Declaration, new List<string>(){ "define", "domain", "problem" } },
-            { PDDLTypes.Type, new List<string>(){ ":extends", ":requirements", ":types", ":constants", ":predicates", ":timeless", ":action", ":axiom", ":domain", ":objects", ":init", ":goal" } },
+            { PDDLTypes.Type, new List<string>(){ ":extends", ":requirements", ":types", ":constants", ":predicates", ":timeless", ":action", ":axiom", ":domain", ":objects", ":init", ":goal", ":functions", ":durative-action" } },
             { PDDLTypes.Expression, new List<string>(){ "and", "or", "not", "=" } },
-            { PDDLTypes.Parameter, new List<string>(){ ":parameters", ":precondition", ":effect", ":vars", ":context", ":implies" } },
-            { PDDLTypes.Externals, new List<string>(){ ":strips", ":typing" } },
+            { PDDLTypes.Parameter, new List<string>(){ ":parameters", ":precondition", ":condition", ":duration", ":effect", ":vars", ":context", ":implies" } },
+            { PDDLTypes.Externals, new List<string>(){ ":strips", ":typing", ":equality", ":action-costs", ":conditional-effects", ":negative-preconditions" } },
             { PDDLTypes.MinorToken, new List<string>(){ "(", ")", " - ", "?" } },
             { PDDLTypes.Predicates, new List<string>() },
             { PDDLTypes.Objects, new List<string>() },

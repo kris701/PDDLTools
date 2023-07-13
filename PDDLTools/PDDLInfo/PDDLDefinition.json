@@ -112,6 +112,51 @@
       ]
     },
     {
+      "Key": ":functions",
+      "Blocks": [
+        {
+          "Text": "':functions' Keyword",
+          "Type": "keyword"
+        },
+        {
+          "Text": "Domain Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines the numeric functions in this domain.",
+          "Type": "comment"
+        },
+        {
+          "Text": "",
+          "Type": "type"
+        },
+        {
+          "Text": "Syntax",
+          "Type": "type"
+        },
+        {
+          "Text": "(:functions",
+          "Type": "text"
+        },
+        {
+          "Text": "    (numericExp)",
+          "Type": "text"
+        },
+        {
+          "Text": "    (numericExp)",
+          "Type": "text"
+        },
+        {
+          "Text": "    ...",
+          "Type": "text"
+        },
+        {
+          "Text": ")",
+          "Type": "text"
+        }
+      ]
+    },
+    {
       "Key": ":extends",
       "Blocks": [
         {
@@ -272,6 +317,7 @@
         }
       ]
     },
+
     {
       "Key": ":action",
       "Blocks": [
@@ -400,6 +446,114 @@
         },
         {
           "Text": ":effect (exp)",
+          "Type": "text"
+        }
+      ]
+    },
+
+    {
+      "Key": ":durative-action",
+      "Blocks": [
+        {
+          "Text": "':durative-action' Keyword",
+          "Type": "keyword"
+        },
+        {
+          "Text": "Domain Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines a durative action in this domain. Each of these actions have a corresponding ':parameters', ':conditions', ':effect' and ':duration'.",
+          "Type": "comment"
+        },
+        {
+          "Text": "",
+          "Type": "type"
+        },
+        {
+          "Text": "Syntax",
+          "Type": "type"
+        },
+        {
+          "Text": "(:durative-action string",
+          "Type": "text"
+        },
+        {
+          "Text": "    :parameters   (...)",
+          "Type": "text"
+        },
+        {
+          "Text": "    :duration (...)",
+          "Type": "text"
+        },
+        {
+          "Text": "    :condition (...)",
+          "Type": "text"
+        },
+        {
+          "Text": "    :effect       (...)",
+          "Type": "text"
+        },
+        {
+          "Text": ")",
+          "Type": "text"
+        }
+      ]
+    },
+    {
+      "Key": ":duration",
+      "Blocks": [
+        {
+          "Text": "':duration' Keyword",
+          "Type": "keyword"
+        },
+        {
+          "Text": "Durative Action Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines the numeric expression for the duration of this action.",
+          "Type": "comment"
+        },
+        {
+          "Text": "",
+          "Type": "type"
+        },
+        {
+          "Text": "Syntax",
+          "Type": "type"
+        },
+        {
+          "Text": ":duration (= ?duration 10)",
+          "Type": "text"
+        }
+      ]
+    },
+    {
+      "Key": ":condition",
+      "Blocks": [
+        {
+          "Text": "':condition' Keyword",
+          "Type": "keyword"
+        },
+        {
+          "Text": "Durative Action Keyword",
+          "Type": "type"
+        },
+        {
+          "Text": "Defines the conditions for a given action to run.",
+          "Type": "comment"
+        },
+        {
+          "Text": "",
+          "Type": "type"
+        },
+        {
+          "Text": "Syntax",
+          "Type": "type"
+        },
+        {
+          "Text": ":condition (exp)",
           "Type": "text"
         }
       ]

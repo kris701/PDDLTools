@@ -44,7 +44,8 @@ namespace PDDLParser.AST
                 innerContent = ReplaceRangeWithSpaces(innerContent, lastP, lastP + 1);
 
                 var children = new List<ASTNode>();
-                while (innerContent.Count(x => x == ')' || x == '(') >= 2)
+                //while (innerContent.Count(x => x == ')' || x == '(') >= 2)
+                while (innerContent.Contains('(') && innerContent.Contains(')'))
                 {
                     int currentLevel = 0;
                     int startP = innerContent.IndexOf('(');

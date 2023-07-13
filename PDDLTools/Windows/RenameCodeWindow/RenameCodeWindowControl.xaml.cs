@@ -97,7 +97,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
             {
                 string targetDomain = null;
                 var sourceFile = await DTE2Helper.GetSourceFilePathAsync();
-                var decl = PDDLFileContexts.TryGetContextForFile(sourceFile);
+                var decl = await PDDLFileContexts.TryGetContextForFileAsync(sourceFile);
                 if (decl != null)
                 {
                     if (decl.Domain != null)
@@ -112,7 +112,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
                     {
                         if (targetFiles.Contains(file))
                             continue;
-                        var otherDecl = PDDLFileContexts.TryGetContextForFile(file);
+                        var otherDecl = await PDDLFileContexts.TryGetContextForFileAsync(file);
                         if (otherDecl != null)
                         {
                             if (otherDecl.Domain != null)
@@ -130,7 +130,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
 
                     foreach (var file in targetFiles)
                     {
-                        var context = PDDLFileContexts.TryGetContextForFile(file);
+                        var context = await PDDLFileContexts.TryGetContextForFileAsync(file);
                         if (context != null)
                             ReplaceNamesOfType(
                                 file,
@@ -155,7 +155,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
                     case ReplaceScopeTypes.Predicate:
                     case ReplaceScopeTypes.ProblemObjects:
                     case ReplaceScopeTypes.TypeName:
-                        var context = PDDLFileContexts.TryGetContextForFile(file);
+                        var context = await PDDLFileContexts.TryGetContextForFileAsync(file);
                         if (context != null)
                             nodes = context.FindNames(ReplaceTextTextbox.Text).ToList();
                         break;
