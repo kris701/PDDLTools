@@ -20,6 +20,7 @@ using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using System.IO;
 using PDDLParser.Helpers;
+using PDDLTools.FileMonitors;
 
 namespace PDDLTools.Commands
 {
@@ -41,8 +42,10 @@ namespace PDDLTools.Commands
             if (sender is MenuCommand button)
             {
                 var selected = await DTE2Helper.GetSourceFilePathFromSolutionExploreAsync();
+                var project = await DTE2Helper.GetActiveProjectPathAsync();
+                var files = await ProjectFileMonitorService.Instance.GetDomainCacheAsync(project);
                 if (selected != null)
-                    button.Visible = await DTE2Helper.IsItemInPDDLProjectAsync(selected) && PDDLHelper.IsFileDomain(selected);
+                    button.Visible = files.Contains(selected);
             }
         }
 

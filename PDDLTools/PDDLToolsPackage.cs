@@ -23,6 +23,7 @@ using PDDLTools.Helpers;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using PDDLTools.Windows.RenameCodeWindow;
+using PDDLTools.FileMonitors;
 
 namespace PDDLTools
 {
@@ -93,10 +94,15 @@ namespace PDDLTools
 
             new FastDownwardErrorManager(this);
 
+            new ProjectFileMonitorService();
+
             var dte2 = DTE2Helper.GetDTE2();
             var docEvent = dte2.Events.CommandEvents;
             events.Add(docEvent);
             docEvent.AfterExecute += LoadPropertiesIntoVS;
+            var solEvent = dte2.Events.SolutionEvents;
+            events.Add(solEvent);
+            solEvent.Opened += InitializeFileIndexesAsync;
         }
 
         // This is a rather expensive method. But i couldnt find any other way of attaching an event to the "Set as Startup Project" command
@@ -113,6 +119,22 @@ namespace PDDLTools
                     SelectEngineCommand.Instance.Execute(null, new OleMenuCmdEventArgs(await proj.GetSelectedEngineAsync(), IntPtr.Zero));
                 }
             }
+        }
+
+        private async void InitializeFileIndexesAsync()
+        {
+            await Task.Delay(2000);
+            int retry = 0;
+            int maxRetry = 10;
+            while(ProjectFileMonitorService.Instance == null)
+            {
+                await Task.Delay(1000);
+                retry++;
+                if (retry > maxRetry)
+                    return;
+            }
+            var project = await DTE2Helper.GetActiveProjectPathAsync();
+            await ProjectFileMonitorService.Instance.InitialiseAsync(project);
         }
     }
 }

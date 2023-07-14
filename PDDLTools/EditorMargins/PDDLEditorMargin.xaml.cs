@@ -44,6 +44,7 @@ namespace PDDLTools.EditorMargins
 
         private async void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            await Task.Delay(1000);
             await SetupMarginAsync();
         }
 

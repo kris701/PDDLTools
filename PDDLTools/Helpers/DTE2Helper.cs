@@ -142,37 +142,6 @@ namespace PDDLTools.Helpers
             return null;
         }
 
-        public static async Task<bool> IsItemInPDDLProjectAsync(string item)
-        {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            if (item == null)
-                return false;
-
-            EnvDTE80.DTE2 _applicationObject = GetDTE2();
-            var target = _applicationObject.Solution.SolutionBuild.StartupProjects;
-            var projects = _applicationObject.Solution.Projects;
-
-            if (target != null && target is Array arr && arr.Length != 0 && arr.GetValue(0) is string targetStr)
-            {
-                for (int i = 0; i < projects.Count; i++)
-                {
-                    var proj = projects.Item(i + 1);
-                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID) && proj.UniqueName == targetStr)
-                    {
-                        foreach (ProjectItem file in proj.ProjectItems)
-                        {
-                            string filePath = file.Properties.Item("FullPath").Value.ToString();
-                            if (filePath == item)
-                                return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
         public static async Task<bool> IsActiveProjectPDDLProjectAsync()
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
@@ -196,7 +165,18 @@ namespace PDDLTools.Helpers
             return "None";
         }
 
-        public static async Task<List<string>> GetAllFilesInPDDLProjectsAsync()
+        public static async Task<string> GetActiveProjectPathAsync()
+        {
+            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+            EnvDTE80.DTE2 _applicationObject = GetDTE2();
+            var projects = _applicationObject.Solution.SolutionBuild.StartupProjects;
+            if (projects != null && projects is Array arr && arr.Length != 0 && arr.GetValue(0) is string proj)
+                return new FileInfo(proj).Directory.Name;
+            return "None";
+        }
+
+        public static async Task<List<string>> GetAllFilesInPDDLProjectsAsync(string targetExt)
         {
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
@@ -213,15 +193,30 @@ namespace PDDLTools.Helpers
                     var proj = projects.Item(i + 1);
                     if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID) && proj.UniqueName == targetStr)
                     {
-                        foreach (ProjectItem file in proj.ProjectItems)
+                        foreach (ProjectItem item in proj.ProjectItems)
                         {
-                            string filePath = file.Properties.Item("FullPath").Value.ToString();
-                            retFiles.Add(filePath);
+                            if (item.ProjectItems.Count > 0)
+                                AddAllOptions(retFiles, item, targetExt);
+                            string filePath = item.Properties.Item("FullPath").Value.ToString();
+                            if (filePath.ToUpper().EndsWith(targetExt.ToUpper()))
+                                retFiles.Add(filePath);
                         }
                     }
                 }
             }
             return retFiles;
+        }
+
+        private static void AddAllOptions(List<string> options, ProjectItem parent, string targetExt)
+        {
+            foreach (ProjectItem item in parent.ProjectItems)
+            {
+                if (item.ProjectItems.Count > 0)
+                    AddAllOptions(options, item, targetExt);
+                string filePath = item.Properties.Item("FullPath").Value.ToString();
+                if (filePath.ToUpper().EndsWith(targetExt.ToUpper()))
+                    options.Add(filePath);
+            }
         }
     }
 }

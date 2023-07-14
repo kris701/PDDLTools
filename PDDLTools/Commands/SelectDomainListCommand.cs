@@ -22,6 +22,8 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.IO;
 using PDDLParser.Helpers;
+using PDDLTools.FileMonitors;
+using System.Linq;
 
 namespace PDDLTools.Commands
 {
@@ -47,24 +49,17 @@ namespace PDDLTools.Commands
                 IntPtr pOutValue = eventArgs.OutValue;
                 if (pOutValue != IntPtr.Zero)
                 {
-                    var allDocuments = await DTE2Helper.GetAllFilesInPDDLProjectsAsync();
-                    var possibleDomains = GetDomainsOnly(allDocuments);
-                    if (possibleDomains.Count == 0)
-                        possibleDomains.Add(NoneFoundComboboxName);
-                    Marshal.GetNativeVariantForObject(possibleDomains.ToArray(), pOutValue);
+                    if (ProjectFileMonitorService.Instance != null)
+                    {
+                        var project = await DTE2Helper.GetActiveProjectPathAsync();
+                        var files = await ProjectFileMonitorService.Instance.GetDomainCacheAsync(project);
+                        if (files.Count == 0)
+                            files.Add(NoneFoundComboboxName);
+                        Marshal.GetNativeVariantForObject(files.ToArray(), pOutValue);
+                    }
                 }
             }
         }
 
-        private List<string> GetDomainsOnly(List<string> source)
-        {
-            List<string> resultList = new List<string>();
-
-            foreach(var possibleDomain in source)
-                if (PDDLHelper.IsFileDomain(possibleDomain))
-                    resultList.Add(possibleDomain);
-
-            return resultList;
-        }
     }
 }
