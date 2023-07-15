@@ -114,6 +114,8 @@
                             $"Warnings: {parser.Listener.Errors.Count(x => x.Type == PDDLParser.Listener.ParseErrorType.Warning)}, " +
                             $"Messages: {parser.Listener.Errors.Count(x => x.Type == PDDLParser.Listener.ParseErrorType.Message)}, ");
                     }
+                    else
+                        canLaunch = true;
                 }
                 else
                     canLaunch = true;

@@ -88,36 +88,44 @@ namespace PDDLTools.Windows.SASSolutionWindow
                         SimulationStepSlider.Maximum = plan.Count;
                         SimulationStepSlider.Value = SimulationStepSlider.Maximum;
 
-                        ISASSimulator simulator = new SASSimulator.SASSimulator(
-                            _pddlData,
-                            plan);
-
-                        ILocationSpreader spreader = LocationSpreaderBuilder.GetSpreader(SelectSpreaderCombobox.SelectedItem as string);
-                        var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
-
-                        var centerPoint = new Point((int)VisualPlan.ActualWidth / 2, (int)VisualPlan.ActualHeight / 2);
-                        List<DynamicNode> nodes = new List<DynamicNode>();
-
-                        int index = 0;
-                        nodes.Add(AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, locs[index++], plan.Count));
-
-                        for (int i = 0; i < plan.Count; i++)
+                        if (_pddlData.Problem == null || _pddlData.Domain == null)
                         {
-                            simulator.Step();
-                            nodes.Add(AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, locs[index++], plan.Count));
+                            CannotParseLabel.Visibility = Visibility.Visible;
                         }
-
-                        foreach (var node in nodes)
-                            node.Setup();
-
-                        bool isAllThere = false;
-                        while (!isAllThere)
+                        else
                         {
-                            isAllThere = true;
+                            CannotParseLabel.Visibility = Visibility.Hidden;
+                            ISASSimulator simulator = new SASSimulator.SASSimulator(
+                                _pddlData,
+                                plan);
+
+                            ILocationSpreader spreader = LocationSpreaderBuilder.GetSpreader(SelectSpreaderCombobox.SelectedItem as string);
+                            var locs = spreader.GenerateSuitableLocations((int)VisualPlan.ActualWidth, (int)VisualPlan.ActualHeight, plan.Count + 1, 50);
+
+                            var centerPoint = new Point((int)VisualPlan.ActualWidth / 2, (int)VisualPlan.ActualHeight / 2);
+                            List<DynamicNode> nodes = new List<DynamicNode>();
+
+                            int index = 0;
+                            nodes.Add(AddNewNode(0, "Start Step", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, locs[index++], plan.Count));
+
+                            for (int i = 0; i < plan.Count; i++)
+                            {
+                                simulator.Step();
+                                nodes.Add(AddNewNode(i + 1, $"{i + 1}: {plan[i]}", simulator.State, _pddlData.Problem.Goal.PredicateCount, centerPoint, locs[index++], plan.Count));
+                            }
+
                             foreach (var node in nodes)
-                                if (!node.MoveTowardsTarget())
-                                    isAllThere = false;
-                            await Task.Delay(50);
+                                node.Setup();
+
+                            bool isAllThere = false;
+                            while (!isAllThere)
+                            {
+                                isAllThere = true;
+                                foreach (var node in nodes)
+                                    if (!node.MoveTowardsTarget())
+                                        isAllThere = false;
+                                await Task.Delay(50);
+                            }
                         }
                     }
 

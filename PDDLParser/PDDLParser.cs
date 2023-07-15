@@ -70,7 +70,7 @@ namespace PDDLParser
             {
                 return Parse(domainFile, problemFile);
             }
-            catch { return null; }
+            catch { return new PDDLDecl(null, null); }
         }
 
         public PDDLDecl Parse(string domainFile = null, string problemFile = null)
