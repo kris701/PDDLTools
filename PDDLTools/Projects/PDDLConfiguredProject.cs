@@ -49,11 +49,19 @@
 
         private async void LoadAsync()
         {
-            await SelectDomainCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedDomainAsync(), IntPtr.Zero));
-            await SelectProblemCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedProblemAsync(), IntPtr.Zero));
-            await SelectEngineCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedEngineAsync(), IntPtr.Zero));
-            if (ProjectFileMonitorService.Instance != null)
-                await ProjectFileMonitorService.Instance.InitialiseAsync(new FileInfo(ConfiguredProject.UnconfiguredProject.FullPath).Directory.FullName);
+            await Task.Delay(2000);
+            try
+            {
+                if (SelectDomainCommand.Instance != null)
+                    await SelectDomainCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedDomainAsync(), IntPtr.Zero));
+                if (SelectProblemCommand.Instance != null)
+                    await SelectProblemCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedProblemAsync(), IntPtr.Zero));
+                if (SelectEngineCommand.Instance != null)
+                    await SelectEngineCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedEngineAsync(), IntPtr.Zero));
+                if (ProjectFileMonitorService.Instance != null)
+                    await ProjectFileMonitorService.Instance.InitialiseAsync(new FileInfo(ConfiguredProject.UnconfiguredProject.FullPath).Directory.FullName);
+            }
+            catch { }
         }
 
         public DateTime LastRefresh { get; internal set; }

@@ -18,8 +18,8 @@ namespace CMDRunners.Helpers
         public TimeSpan OutputTimeout { get; set; } = TimeSpan.Zero;
 
         private Process _process;
-        DispatcherTimer _timer;
-        DispatcherTimer _OutputTimer;
+        System.Timers.Timer _timer;
+        System.Timers.Timer _OutputTimer;
         private bool _didForceKill = false;
         private bool _didEncounterError = false;
 
@@ -100,9 +100,9 @@ namespace CMDRunners.Helpers
                 return ProcessCompleteReson.StoppedOnError;
             if (IsRunning)
             {
-                _timer = new DispatcherTimer();
-                _timer.Interval = timeout;
-                _timer.Tick += ForceKillTimer;
+                _timer = new System.Timers.Timer();
+                _timer.Interval = timeout.TotalMilliseconds;
+                _timer.Elapsed += ForceKillTimer;
                 _timer.Start();
                 await WaitForExitAsync();
                 if (_didForceKill)
@@ -136,7 +136,7 @@ namespace CMDRunners.Helpers
 
         private void ForceKillTimer(object sender, EventArgs e)
         {
-            if (sender is DispatcherTimer timer)
+            if (sender is System.Timers.Timer timer)
             {
                 timer.Stop();
                 _didForceKill = true;
@@ -162,9 +162,9 @@ namespace CMDRunners.Helpers
 
             if (OutputTimeout > TimeSpan.Zero)
             {
-                _OutputTimer = new DispatcherTimer();
-                _OutputTimer.Interval = OutputTimeout;
-                _OutputTimer.Tick += ForceKillTimer;
+                _OutputTimer = new System.Timers.Timer();
+                _OutputTimer.Interval = OutputTimeout.TotalMilliseconds;
+                _OutputTimer.Elapsed += ForceKillTimer;
             }
 
             _process.Start();

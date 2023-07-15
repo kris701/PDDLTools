@@ -113,9 +113,12 @@ namespace PDDLTools
                 var proj = await PDDLProjectManager.GetCurrentProjectAsync();
                 if (proj != null)
                 {
-                    await SelectDomainCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedDomainAsync(), IntPtr.Zero));
-                    await SelectProblemCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedProblemAsync(), IntPtr.Zero));
-                    await SelectEngineCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedEngineAsync(), IntPtr.Zero));
+                    if (SelectDomainCommand.Instance != null)
+                        await SelectDomainCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedDomainAsync(), IntPtr.Zero));
+                    if (SelectProblemCommand.Instance != null)
+                        await SelectProblemCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedProblemAsync(), IntPtr.Zero));
+                    if (SelectEngineCommand.Instance != null)
+                        await SelectEngineCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedEngineAsync(), IntPtr.Zero));
                     if (ProjectFileMonitorService.Instance != null)
                         await ProjectFileMonitorService.Instance.InitialiseAsync(new FileInfo(proj.ConfiguredProject.UnconfiguredProject.FullPath).Directory.FullName);
                 }
