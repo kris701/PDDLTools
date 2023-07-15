@@ -238,10 +238,12 @@
     <Content Include="Commands\Resources\VisualisorIcon.png" />
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
+    <Content Include="Windows\WelcomeWindow\Resources\Icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Windows\PlanValidatorWindow\Resources\reset.png" />
     <Resource Include="Windows\PDDLVisualiserWindow\Resources\reset.png" />
     <Resource Include="Windows\SASSolutionWindow\Resources\reset.png" />
-    <Resource Include="Windows\WelcomeWindow\Resources\WelcomeLogo.png" />
     <Content Include="Grammars\pddl.tmLanguage">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
@@ -293,11 +295,11 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="languages.pkgdef">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="Icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="Icon.png">
+    <Content Include="languages.pkgdef">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>

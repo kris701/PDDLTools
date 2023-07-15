@@ -17,7 +17,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Orientation="Horizontal">
-                <Image Source="/PDDLTools;component/Windows/WelcomeWindow/Resources/WelcomeLogo.png" Width="75"/>
+                <Image Source="/PDDLTools;component/Windows/WelcomeWindow/Resources/Icon.png" Width="75"/>
                 <Separator Width="20" Height="0"/>
                 <Label Content="PDDL Tools" FontSize="40" Foreground="White" VerticalAlignment="Center"/>
             </StackPanel>
