@@ -172,51 +172,8 @@ namespace PDDLTools.Helpers
             EnvDTE80.DTE2 _applicationObject = GetDTE2();
             var projects = _applicationObject.Solution.SolutionBuild.StartupProjects;
             if (projects != null && projects is Array arr && arr.Length != 0 && arr.GetValue(0) is string proj)
-                return new FileInfo(proj).Directory.Name;
+                return new FileInfo(proj).Directory.FullName;
             return "None";
-        }
-
-        public static async Task<List<string>> GetAllFilesInPDDLProjectsAsync(string targetExt)
-        {
-            await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-            List<string> retFiles = new List<string>();
-
-            EnvDTE80.DTE2 _applicationObject = GetDTE2();
-            var target = _applicationObject.Solution.SolutionBuild.StartupProjects;
-            var projects = _applicationObject.Solution.Projects;
-
-            if (target != null && target is Array arr && arr.Length != 0 && arr.GetValue(0) is string targetStr)
-            {
-                for (int i = 0; i < projects.Count; i++)
-                {
-                    var proj = projects.Item(i + 1);
-                    if (new Guid(proj.Kind) == new Guid(Constants.PDDLProjectTypeID) && proj.UniqueName == targetStr)
-                    {
-                        foreach (ProjectItem item in proj.ProjectItems)
-                        {
-                            if (item.ProjectItems.Count > 0)
-                                AddAllOptions(retFiles, item, targetExt);
-                            string filePath = item.Properties.Item("FullPath").Value.ToString();
-                            if (filePath.ToUpper().EndsWith(targetExt.ToUpper()))
-                                retFiles.Add(filePath);
-                        }
-                    }
-                }
-            }
-            return retFiles;
-        }
-
-        private static void AddAllOptions(List<string> options, ProjectItem parent, string targetExt)
-        {
-            foreach (ProjectItem item in parent.ProjectItems)
-            {
-                if (item.ProjectItems.Count > 0)
-                    AddAllOptions(options, item, targetExt);
-                string filePath = item.Properties.Item("FullPath").Value.ToString();
-                if (filePath.ToUpper().EndsWith(targetExt.ToUpper()))
-                    options.Add(filePath);
-            }
         }
     }
 }

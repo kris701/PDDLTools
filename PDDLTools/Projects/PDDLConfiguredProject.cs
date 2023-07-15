@@ -8,18 +8,21 @@
     using System.Net.Sockets;
     using System.Threading.Tasks;
     using Microsoft.VisualStudio.ProjectSystem;
+    using Microsoft.VisualStudio.Shell;
     using PDDLParser.Helpers;
     using PDDLTools.Commands;
+    using PDDLTools.FileMonitors;
     using PDDLTools.Helpers;
 
     [Export]
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     public class PDDLConfiguredProject
     {
-        //[Import, SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "MEF")]
+        public delegate void ProjectLoadedHandler();
+        public event ProjectLoadedHandler ProjectLoaded;
+
         internal ConfiguredProject ConfiguredProject { get; private set; }
 
-        //[Import, SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "MEF")]
         internal ProjectProperties Properties { get; private set; }
 
         [ImportingConstructor]
@@ -31,6 +34,8 @@
             LastRefresh = DateTime.Now;
 
             ConfiguredProject.ProjectUnloading += DoUnloadAsync;
+            ProjectLoaded += LoadAsync;
+            ProjectLoaded.Invoke();
         }
 
         private async Task DoUnloadAsync(object sender, EventArgs e)
@@ -38,6 +43,17 @@
             var key = new FileInfo(ConfiguredProject.UnconfiguredProject.FullPath).Name.ToUpper();
             if (PDDLProjectManager.PDDLProjects.ContainsKey(key))
                 PDDLProjectManager.PDDLProjects.Remove(key);
+            if (ProjectFileMonitorService.Instance != null)
+                ProjectFileMonitorService.Instance.Uninitialise(new FileInfo(ConfiguredProject.UnconfiguredProject.FullPath).Directory.FullName);
+        }
+
+        private async void LoadAsync()
+        {
+            await SelectDomainCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedDomainAsync(), IntPtr.Zero));
+            await SelectProblemCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedProblemAsync(), IntPtr.Zero));
+            await SelectEngineCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await GetSelectedEngineAsync(), IntPtr.Zero));
+            if (ProjectFileMonitorService.Instance != null)
+                await ProjectFileMonitorService.Instance.InitialiseAsync(new FileInfo(ConfiguredProject.UnconfiguredProject.FullPath).Directory.FullName);
         }
 
         public DateTime LastRefresh { get; internal set; }

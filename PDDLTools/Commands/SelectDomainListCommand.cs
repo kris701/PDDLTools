@@ -55,6 +55,11 @@ namespace PDDLTools.Commands
                         var files = await ProjectFileMonitorService.Instance.GetDomainCacheAsync(project);
                         if (files.Count == 0)
                             files.Add(NoneFoundComboboxName);
+                        else if (files.Count > 100)
+                        {
+                            files = files.Take(100).ToHashSet();
+                            files.Add("Too many files to display here!");
+                        }
                         Marshal.GetNativeVariantForObject(files.ToArray(), pOutValue);
                     }
                 }

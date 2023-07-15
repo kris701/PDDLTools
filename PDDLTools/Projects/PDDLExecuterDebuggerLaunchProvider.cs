@@ -25,6 +25,7 @@
     using PDDLTools.Options;
     using PDDLTools.Windows.FDResultsWindow;
     using PDDLTools.Windows.SASSolutionWindow;
+    using Microsoft.VisualStudio.Threading;
     using static Microsoft.VisualStudio.VSConstants;
 
     [ExportDebugger("PDDLExecuter")]
@@ -33,6 +34,7 @@
     {
         //[Import]
         internal PDDLConfiguredProject Project { get; set; }
+        internal Guid DebuggerID { get; }
 
         private static OutputPanelController OutputPanel = new OutputPanelController("Fast Downward Output");
         private DateTime _lastRefresh = DateTime.Now;
@@ -46,6 +48,7 @@
             : base(configuredProject.ConfiguredProject)
         {
             Project = configuredProject;
+            DebuggerID = Guid.NewGuid();
         }
 
         [ExportPropertyXamlRuleDefinition("PDDL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9be6e469bc4921f1", "XamlRuleToCode:PDDLExecuter.xaml", "Project")]
@@ -63,8 +66,7 @@
         {
             if (OptionsManager.Instance == null)
                 return false;
-            var proj = await PDDLProjectManager.GetCurrentProjectAsync();
-            if (proj != null && _lastRefresh < proj.LastRefresh)
+            if (Project != null && (DateTime.Now - _lastRefresh).Seconds > 1)
             {
                 await LoadFromSavedProjectPropertiesAsync(Project);
                 _lastCheckResult = PDDLHelper.IsFileDomain(_lastDomain) && PDDLHelper.IsFileProblem(_lastProblem) && _lastEngine != "";
@@ -81,48 +83,63 @@
 
         public override async Task LaunchAsync(DebugLaunchOptions launchOptions)
         {
-            await OutputPanel.InitializeAsync();
-            await OutputPanel.ClearOutputAsync();
-            await OutputPanel.WriteLineAsync("Checking if files are valid...");
-
-            bool canLaunch = false;
-            try
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            ThreadingService.JoinableTaskFactory.RunAsync(async delegate
             {
-                IPDDLParser parser = new PDDLParser();
-                parser.Parse(_lastDomain, _lastProblem);
-                canLaunch = true;
-            }
-            catch 
-            {
-                await OutputPanel.WriteLineAsync("There are parse errors in the execution files!");
-            }
+                await ThreadingService.JoinableTaskFactory.SwitchToMainThreadAsync();
+                await OutputPanel.InitializeAsync();
+                await OutputPanel.ClearOutputAsync();
+                await OutputPanel.WriteLineAsync("Checking if files are valid...");
 
-            if (canLaunch)
-            {
-                var proj = await PDDLProjectManager.GetCurrentProjectAsync();
-                var dir = await proj.GetProjectPathAsync();
-                var outPath = Path.Combine(dir, OptionsManager.Instance.OutputPlanPath);
-                var intPath = Path.Combine(dir, OptionsManager.Instance.IntermediateOutputPath);
-                if (!Directory.Exists(outPath))
-                    Directory.CreateDirectory(outPath);
-                if (!Directory.Exists(intPath))
-                    Directory.CreateDirectory(intPath);
+                bool canLaunch = false;
+                try
+                {
+                    IPDDLParser parser = new PDDLParser();
+                    parser.Parse(_lastDomain, _lastProblem);
+                    await OutputPanel.WriteLineAsync("Files are valid!");
+                    canLaunch = true;
+                }
+                catch
+                {
+                    await OutputPanel.WriteLineAsync("There are parse errors in the execution files!");
+                }
 
-                var planName = $"{new FileInfo(_lastDomain).Name.Replace(".pddl","")}-{new FileInfo(_lastProblem).Name.Replace(".pddl", "")}";
+                if (canLaunch)
+                {
+                    var proj = await PDDLProjectManager.GetCurrentProjectAsync();
+                    var dir = await proj.GetProjectPathAsync();
+                    var outPath = Path.Combine(dir, OptionsManager.Instance.OutputPlanPath);
+                    var intPath = Path.Combine(dir, OptionsManager.Instance.IntermediateOutputPath);
+                    if (!Directory.Exists(outPath))
+                        Directory.CreateDirectory(outPath);
+                    if (!Directory.Exists(intPath))
+                        Directory.CreateDirectory(intPath);
 
-                await OutputPanel.WriteLineAsync("Executing PDDL File");
-                FDRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
-                var resultData = await fdRunner.RunAsync(
-                    _lastDomain, 
-                    _lastProblem, 
-                    _lastEngine,
-                    Path.Combine(outPath, $"{planName}.pddlplan"),
-                    Path.Combine(intPath, "intermediate.sas"));
+                    var planName = $"{new FileInfo(_lastDomain).Name.Replace(".pddl", "")}-{new FileInfo(_lastProblem).Name.Replace(".pddl", "")}";
 
-                await WriteToOutputWindowAsync(resultData);
-                if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
-                    await SetupResultWindowsAsync(resultData, _lastDomain, _lastProblem, Path.Combine(outPath, $"{planName}.pddlplan"));
-            }
+                    await OutputPanel.WriteLineAsync("Executing PDDL File");
+
+                    await TaskScheduler.Default;
+                    var resultData = await ExecuteFDAsync(outPath, planName, intPath);
+                    await ThreadingService.JoinableTaskFactory.SwitchToMainThreadAsync();
+
+                    await WriteToOutputWindowAsync(resultData);
+                    if (resultData.ResultReason == ProcessCompleteReson.RanToCompletion)
+                        await SetupResultWindowsAsync(resultData, _lastDomain, _lastProblem, Path.Combine(outPath, $"{planName}.pddlplan"));
+                }
+            });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+        }
+
+        private async Task<FDResults> ExecuteFDAsync(string outPath, string planName, string intPath)
+        {
+            FDRunner fdRunner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
+            return await fdRunner.RunAsync(
+                _lastDomain,
+                _lastProblem,
+                _lastEngine,
+                Path.Combine(outPath, $"{planName}.pddlplan"),
+                Path.Combine(intPath, "intermediate.sas"));
         }
 
         private async Task WriteToOutputWindowAsync(FDResults resultData)

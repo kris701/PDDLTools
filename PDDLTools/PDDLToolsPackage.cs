@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using System.Reflection.Metadata;
 using PDDLTools.Windows.RenameCodeWindow;
 using PDDLTools.FileMonitors;
+using Microsoft.VisualStudio.ProjectSystem;
+using System.IO;
 
 namespace PDDLTools
 {
@@ -100,9 +102,6 @@ namespace PDDLTools
             var docEvent = dte2.Events.CommandEvents;
             events.Add(docEvent);
             docEvent.AfterExecute += LoadPropertiesIntoVS;
-            var solEvent = dte2.Events.SolutionEvents;
-            events.Add(solEvent);
-            solEvent.Opened += InitializeFileIndexesAsync;
         }
 
         // This is a rather expensive method. But i couldnt find any other way of attaching an event to the "Set as Startup Project" command
@@ -114,27 +113,13 @@ namespace PDDLTools
                 var proj = await PDDLProjectManager.GetCurrentProjectAsync();
                 if (proj != null)
                 {
-                    SelectDomainCommand.Instance.Execute(null, new OleMenuCmdEventArgs(await proj.GetSelectedDomainAsync(), IntPtr.Zero));
-                    SelectProblemCommand.Instance.Execute(null, new OleMenuCmdEventArgs(await proj.GetSelectedProblemAsync(), IntPtr.Zero));
-                    SelectEngineCommand.Instance.Execute(null, new OleMenuCmdEventArgs(await proj.GetSelectedEngineAsync(), IntPtr.Zero));
+                    await SelectDomainCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedDomainAsync(), IntPtr.Zero));
+                    await SelectProblemCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedProblemAsync(), IntPtr.Zero));
+                    await SelectEngineCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedEngineAsync(), IntPtr.Zero));
+                    if (ProjectFileMonitorService.Instance != null)
+                        await ProjectFileMonitorService.Instance.InitialiseAsync(new FileInfo(proj.ConfiguredProject.UnconfiguredProject.FullPath).Directory.FullName);
                 }
             }
-        }
-
-        private async void InitializeFileIndexesAsync()
-        {
-            await Task.Delay(2000);
-            int retry = 0;
-            int maxRetry = 10;
-            while(ProjectFileMonitorService.Instance == null)
-            {
-                await Task.Delay(1000);
-                retry++;
-                if (retry > maxRetry)
-                    return;
-            }
-            var project = await DTE2Helper.GetActiveProjectPathAsync();
-            await ProjectFileMonitorService.Instance.InitialiseAsync(project);
         }
     }
 }

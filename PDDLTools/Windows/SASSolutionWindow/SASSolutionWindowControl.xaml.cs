@@ -129,6 +129,7 @@ namespace PDDLTools.Windows.SASSolutionWindow
         private void SetTextPlanData(string[] lines)
         {
             TextPlan.Text = "";
+            int length = 0;
             for (int i = 0; i < lines.Length; i++)
             {
                 if (lines[i].StartsWith(";"))
@@ -136,11 +137,13 @@ namespace PDDLTools.Windows.SASSolutionWindow
                     var fromIndex = lines[i].IndexOf("=") + 1;
                     var toIndex = lines[i].IndexOf("(");
                     var planCost = lines[i].Substring(fromIndex, toIndex - fromIndex).Trim();
-                    PlanLengthLabel.Content = planCost;
+                    PlanCostLabel.Content = planCost;
+                    PlanLengthLabel.Content = length;
                 }
                 else
                 {
                     TextPlan.Text += $"[{i + 1}] {lines[i]}{Environment.NewLine}";
+                    length++;
                 }
             }
         }

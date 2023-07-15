@@ -62,9 +62,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Label Content="Plan Length: " Foreground="White"/>
             <Label x:Name="PlanLengthLabel" Grid.Column="1" Content="x" Foreground="White"/>
+            <Label Grid.Column="2" Content="Plan Cost: " Foreground="White"/>
+            <Label x:Name="PlanCostLabel" Grid.Column="3" Content="x" Foreground="White"/>
         </Grid>
     </Grid>
 </UserControl>
