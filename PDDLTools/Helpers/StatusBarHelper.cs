@@ -23,9 +23,33 @@ namespace PDDLTools.Helpers
             statusBar.FreezeOutput(1);
         }
 
+        public async Task ShowProgressAsync(string text, uint value, uint max)
+        {
+            IVsStatusbar statusBar = (IVsStatusbar)(await ServiceProvider.GetGlobalServiceAsync(typeof(SVsStatusbar)));
+
+            int frozen;
+            statusBar.IsFrozen(out frozen);
+            if (frozen != 0)
+                statusBar.FreezeOutput(0);
+
+            uint cookie = 0;
+            statusBar.Progress(ref cookie, 1, "", value, max);
+            statusBar.SetText(text);
+        }
+
+        public async Task ClearProgressAsync()
+        {
+            IVsStatusbar statusBar = (IVsStatusbar)(await ServiceProvider.GetGlobalServiceAsync(typeof(SVsStatusbar)));
+            uint cookie = 0; 
+            statusBar.Progress(ref cookie, 0, "", 0, 0);
+            statusBar.FreezeOutput(0);
+            statusBar.Clear();
+        }
+
         public async Task ClearAsync()
         {
             IVsStatusbar statusBar = (IVsStatusbar)(await ServiceProvider.GetGlobalServiceAsync(typeof(SVsStatusbar)));
+            statusBar.FreezeOutput(0); 
             statusBar.Clear();
         }
     }

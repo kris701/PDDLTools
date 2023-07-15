@@ -119,8 +119,6 @@ namespace PDDLTools
                         await SelectProblemCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedProblemAsync(), IntPtr.Zero));
                     if (SelectEngineCommand.Instance != null)
                         await SelectEngineCommand.Instance.ExecuteAsync(null, new OleMenuCmdEventArgs(await proj.GetSelectedEngineAsync(), IntPtr.Zero));
-                    if (ProjectFileMonitorService.Instance != null)
-                        await ProjectFileMonitorService.Instance.InitialiseAsync(new FileInfo(proj.ConfiguredProject.UnconfiguredProject.FullPath).Directory.FullName);
                 }
             }
         }

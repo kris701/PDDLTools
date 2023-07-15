@@ -61,23 +61,23 @@ namespace PDDLTools.FileMonitors
 
                 await TaskScheduler.Default;
                 // Find all pddl files in project dir
-                var docs = new List<string>();
-                foreach(var file in new DirectoryInfo(projectPath).GetFiles("*.pddl", SearchOption.AllDirectories))
-                {
-                    docs.Add(file.FullName);
-                }
+                var docs = new DirectoryInfo(projectPath).GetFiles("*.pddl", SearchOption.AllDirectories);
+
                 // Categorise them
+                int current = 0;
                 foreach (var document in docs)
                 {
-                    if (PDDLHelper.IsFileDomain(document))
-                        _domainCache[projectPath].Add(document);
-                    else if (PDDLHelper.IsFileProblem(document))
-                        _problemCache[projectPath].Add(document);
+                    if (current % 100 == 0)
+                        await statusBar.ShowProgressAsync("Indexing project pddl files...", (uint)current, (uint)docs.Length);
+                    current++;
+                    if (PDDLHelper.IsFileDomain(document.FullName))
+                        _domainCache[projectPath].Add(document.FullName);
+                    else if (PDDLHelper.IsFileProblem(document.FullName))
+                        _problemCache[projectPath].Add(document.FullName);
                 }
 
                 await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
-
-                await statusBar.ClearAsync();
+                await statusBar.ClearProgressAsync();
 
                 // Setup listener
                 _watchers.Add(projectPath, new FileSystemWatcher()
