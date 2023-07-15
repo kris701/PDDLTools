@@ -53,7 +53,11 @@
             this.label6 = new System.Windows.Forms.Label();
             this.OutputPlanPathTextbox = new System.Windows.Forms.TextBox();
             this.OutputPlanPathLabel = new System.Windows.Forms.Label();
+            this.ComboboxItemLimitNumberic = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
+            this.ParseCheckFilesCheckbox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ComboboxItemLimitNumberic)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -306,12 +310,58 @@
             this.OutputPlanPathLabel.TabIndex = 22;
             this.OutputPlanPathLabel.Text = "Output Plan Path";
             // 
+            // ComboboxItemLimitNumberic
+            // 
+            this.ComboboxItemLimitNumberic.Location = new System.Drawing.Point(140, 372);
+            this.ComboboxItemLimitNumberic.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.ComboboxItemLimitNumberic.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.ComboboxItemLimitNumberic.Name = "ComboboxItemLimitNumberic";
+            this.ComboboxItemLimitNumberic.Size = new System.Drawing.Size(189, 20);
+            this.ComboboxItemLimitNumberic.TabIndex = 25;
+            this.ComboboxItemLimitNumberic.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.ComboboxItemLimitNumberic.ValueChanged += new System.EventHandler(this.ComboboxItemLimitNumberic_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(12, 374);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(104, 13);
+            this.label7.TabIndex = 24;
+            this.label7.Text = "Combobox Item Limit";
+            // 
+            // ParseCheckFilesCheckbox
+            // 
+            this.ParseCheckFilesCheckbox.AutoSize = true;
+            this.ParseCheckFilesCheckbox.Location = new System.Drawing.Point(140, 398);
+            this.ParseCheckFilesCheckbox.Name = "ParseCheckFilesCheckbox";
+            this.ParseCheckFilesCheckbox.Size = new System.Drawing.Size(160, 17);
+            this.ParseCheckFilesCheckbox.TabIndex = 26;
+            this.ParseCheckFilesCheckbox.Text = "Check files before execution";
+            this.ParseCheckFilesCheckbox.UseVisualStyleBackColor = true;
+            this.ParseCheckFilesCheckbox.CheckedChanged += new System.EventHandler(this.ParseCheckFilesCheckbox_CheckedChanged);
+            // 
             // OptionsPageCustomControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.Controls.Add(this.ParseCheckFilesCheckbox);
+            this.Controls.Add(this.ComboboxItemLimitNumberic);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.OutputPlanPathTextbox);
             this.Controls.Add(this.OutputPlanPathLabel);
             this.Controls.Add(this.IntermediateOutputPathTextbox);
@@ -337,9 +387,10 @@
             this.Controls.Add(this.FastDownwardPathTextbox);
             this.Controls.Add(this.label1);
             this.Name = "OptionsPageCustomControl";
-            this.Size = new System.Drawing.Size(397, 367);
+            this.Size = new System.Drawing.Size(397, 418);
             this.Load += new System.EventHandler(this.OptionsPageCustomControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.FastDownwardTimeoutNumericUpDown)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ComboboxItemLimitNumberic)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -372,5 +423,8 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox OutputPlanPathTextbox;
         private System.Windows.Forms.Label OutputPlanPathLabel;
+        private System.Windows.Forms.NumericUpDown ComboboxItemLimitNumberic;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.CheckBox ParseCheckFilesCheckbox;
     }
 }

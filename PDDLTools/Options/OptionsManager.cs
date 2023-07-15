@@ -56,6 +56,9 @@ namespace PDDLTools.Options
             _EnableErrorCheckingOnSave = GetValueOrSetDefault("EnableErrorCheckingOnSave", true);
             _EnableQuickInfo = GetValueOrSetDefault("EnableQuickInfo", true);
             _EnableHighlightingOfWords = GetValueOrSetDefault("EnableHighlightingOfWords", true);
+            _EnableBraceMatching = GetValueOrSetDefault("EnableBraceMatching", true);
+            _ParseCheckBeforeExecute = GetValueOrSetDefault("ParseCheckBeforeExecute", true);
+            _DropDownListLimit = GetValueOrSetDefault("DropDownListLimit", 100);
             _IntermediateOutputPath = GetValueOrSetDefault("IntermediateOutputPath", "obj/");
             _OutputPlanPath = GetValueOrSetDefault("OutputPlanPath", "bin/");
         }
@@ -279,6 +282,33 @@ namespace PDDLTools.Options
             {
                 _userSettingsStore.SetBoolean(SettingsCategory, "EnableBraceMatching", value);
                 _EnableBraceMatching = value;
+            }
+        }
+
+        private bool _ParseCheckBeforeExecute = true;
+        public bool ParseCheckBeforeExecute
+        {
+            get { return _ParseCheckBeforeExecute; }
+            set
+            {
+                _userSettingsStore.SetBoolean(SettingsCategory, "ParseCheckBeforeExecute", value);
+                _ParseCheckBeforeExecute = value;
+            }
+        }
+
+        private int _DropDownListLimit = 100;
+        public int DropDownListLimit
+        {
+            get { return _DropDownListLimit; }
+            set
+            {
+                if (value > 0)
+                {
+                    _userSettingsStore.SetInt32(SettingsCategory, "DropDownListLimit", value);
+                    _DropDownListLimit = value;
+                }
+                else
+                    MessageBox.Show("Limit must be larger than 0!");
             }
         }
 

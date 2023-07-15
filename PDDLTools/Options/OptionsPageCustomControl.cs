@@ -35,6 +35,8 @@ namespace PDDLTools.Options
             EnableWordHighlightingCheckbox.Checked = OptionsManager.Instance.EnableHighlightingOfWords;
             IntermediateOutputPathTextbox.Text = OptionsManager.Instance.IntermediateOutputPath;
             OutputPlanPathTextbox.Text = OptionsManager.Instance.OutputPlanPath;
+            ComboboxItemLimitNumberic.Value = OptionsManager.Instance.DropDownListLimit;
+            ParseCheckFilesCheckbox.Checked = OptionsManager.Instance.ParseCheckBeforeExecute;
             _isLoaded = true;
         }
 
@@ -179,6 +181,24 @@ namespace PDDLTools.Options
 
             OptionsManager.Instance.OutputPlanPath = OutputPlanPathTextbox.Text;
             OutputPlanPathTextbox.Text = OptionsManager.Instance.OutputPlanPath;
+        }
+
+        private void ComboboxItemLimitNumberic_ValueChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.DropDownListLimit = (int)ComboboxItemLimitNumberic.Value;
+            ComboboxItemLimitNumberic.Value = OptionsManager.Instance.DropDownListLimit;
+        }
+
+        private void ParseCheckFilesCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!_isLoaded)
+                return;
+
+            OptionsManager.Instance.ParseCheckBeforeExecute = ParseCheckFilesCheckbox.Checked;
+            ParseCheckFilesCheckbox.Checked = OptionsManager.Instance.ParseCheckBeforeExecute;
         }
     }
 }

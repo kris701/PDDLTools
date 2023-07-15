@@ -18,7 +18,6 @@
     using Microsoft.VisualStudio.ProjectSystem.VS.Debug;
     using Microsoft.VisualStudio.Shell;
     using Microsoft.VisualStudio.Shell.Interop;
-    using PDDLParser;
     using PDDLParser.Helpers;
     using PDDLTools.Commands;
     using PDDLTools.Helpers;
@@ -89,20 +88,35 @@
                 await ThreadingService.JoinableTaskFactory.SwitchToMainThreadAsync();
                 await OutputPanel.InitializeAsync();
                 await OutputPanel.ClearOutputAsync();
-                await OutputPanel.WriteLineAsync("Checking if files are valid...");
 
                 bool canLaunch = false;
-                try
+                if (OptionsManager.Instance != null)
                 {
-                    IPDDLParser parser = new PDDLParser();
-                    parser.Parse(_lastDomain, _lastProblem);
-                    await OutputPanel.WriteLineAsync("Files are valid!");
+                    if (OptionsManager.Instance.ParseCheckBeforeExecute)
+                    {
+                        await OutputPanel.WriteLineAsync("Checking if files are valid...");
+                        await OutputPanel.WriteLineAsync($"Domain: {_lastDomain}");
+                        await OutputPanel.WriteLineAsync($"Problem: {_lastProblem}");
+                        PDDLParser.IPDDLParser parser = new PDDLParser.PDDLParser();
+                        try
+                        {
+                            parser.Parse(_lastDomain, _lastProblem);
+                            await OutputPanel.WriteLineAsync("Files are valid!");
+                            canLaunch = true;
+                        }
+                        catch
+                        {
+                            await OutputPanel.WriteLineAsync("There are parse errors in the execution files!");
+                            await OutputPanel.WriteLineAsync("(You can disable this check in the settings)");
+                        }
+                        await OutputPanel.WriteLineAsync(
+                            $"Errors: {parser.Listener.Errors.Count(x => x.Type == PDDLParser.Listener.ParseErrorType.Error)}, " +
+                            $"Warnings: {parser.Listener.Errors.Count(x => x.Type == PDDLParser.Listener.ParseErrorType.Warning)}, " +
+                            $"Messages: {parser.Listener.Errors.Count(x => x.Type == PDDLParser.Listener.ParseErrorType.Message)}, ");
+                    }
+                }
+                else
                     canLaunch = true;
-                }
-                catch
-                {
-                    await OutputPanel.WriteLineAsync("There are parse errors in the execution files!");
-                }
 
                 if (canLaunch)
                 {
@@ -189,8 +203,8 @@
 
                 if (resultData.WasSolutionFound && OptionsManager.Instance.OpenSASSolutionVisualiser)
                 {
-                    IPDDLParser parser = new PDDLParser(true, false);
-                    var pddlDoc = parser.Parse(domainFilePath, problemFilePath);
+                    PDDLParser.IPDDLParser parser = new PDDLParser.PDDLParser(true, false);
+                    var pddlDoc = parser.TryParse(domainFilePath, problemFilePath);
 
                     ToolWindowPane sasWindow = await package.ShowToolWindowAsync(typeof(SASSolutionWindow), 0, true, package.DisposalToken);
                     if ((null == sasWindow) || (null == sasWindow.Frame))
