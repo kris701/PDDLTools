@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImageManifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns="http://schemas.microsoft.com/VisualStudio/ImageManifestSchema/2014">
+  <Symbols>
+    <Guid Name="PDDLImageGuid" Value="BC795B8C-3B33-4FBD-AFBA-6817D9A28F01" />
+    <ID Name="ProjectIcon" Value="0" />
+  </Symbols>
+  <Images>
+    <Image Guid="$(PDDLImageGuid)" ID="$(ProjectIcon)">
+      <Source Uri="/PDDLTools;component/Images/PDDLProjectIcon.png" >
+        <Size Value="16" />
+      </Source>  
+    </Image>
+  </Images>
+  <ImageLists />
+</ImageManifest>

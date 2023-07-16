@@ -31,7 +31,6 @@
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
     public class PDDLExecuterDebuggerLaunchProvider : DebugLaunchProviderBase
     {
-        //[Import]
         internal PDDLConfiguredProject Project { get; set; }
         internal Guid DebuggerID { get; }
 

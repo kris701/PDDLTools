@@ -169,8 +169,10 @@
     <Compile Include="PDDLInfo\PDDLDefinitionElements\InfoElement.cs" />
     <Compile Include="PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
     <Compile Include="PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
+    <Compile Include="Projects\Images\PDDLProjectIconMoinkers.cs" />
     <Compile Include="Projects\PDDLConfiguredProject.cs" />
     <Compile Include="Projects\PDDLProjectManager.cs" />
+    <Compile Include="Projects\PDDLProjectTreePropertiesProvider.cs" />
     <Compile Include="Projects\PDDLUnconfiguredProject.cs" />
     <Compile Include="Projects\ProjectProperties.cs" />
     <Compile Include="Projects\PDDLExecuterDebuggerLaunchProvider.cs" />
@@ -238,6 +240,9 @@
     <Content Include="Commands\Resources\VisualisorIcon.png" />
     <Content Include="Commands\Resources\Welcome.png" />
     <Content Include="Commands\Resources\GitHub.png" />
+    <Resource Include="Images\PDDLProjectIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Windows\WelcomeWindow\Resources\Icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -253,6 +258,9 @@
     <EmbeddedResource Include="PDDLInfo\PDDLDefinition.json" />
     <None Include="Projects\DeployedBuildSystem\PDDL.props" />
     <None Include="Projects\DeployedBuildSystem\PDDL.targets" />
+    <Content Include="PDDLImages.imagemanifest">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -295,8 +303,8 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="Images\Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="languages.pkgdef">

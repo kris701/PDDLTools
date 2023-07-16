@@ -5,8 +5,8 @@
         <DisplayName>PDDL Tools</DisplayName>
         <Description xml:space="preserve">This is an extension to make developing with PDDL files and planning in general easier. This extension can be used with Fast Downward to execute and analyse plans from running PDDL files.</Description>
         <MoreInfo>https://github.com/kris701/PDDLTools</MoreInfo>
-        <Icon>Icon.png</Icon>
-        <PreviewImage>Icon.png</PreviewImage>
+        <Icon>Images\Icon.png</Icon>
+        <PreviewImage>Images\Icon.png</PreviewImage>
     </Metadata>
     <Installation AllUsers="true">
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
