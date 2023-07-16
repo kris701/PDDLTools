@@ -131,12 +131,10 @@ namespace PDDLTools.Helpers
                     return null;
                 foreach (UIHierarchyItem selItem in selectedItems)
                 {
-                    ProjectItem prjItem = selItem.Object as ProjectItem;
-                    if (prjItem == null)
-                        return null;
-
-                    string filePath = prjItem.Properties.Item("FullPath").Value.ToString();
-                    return filePath;
+                    if (selItem.Object is ProjectItem item)
+                        return item.Properties.Item("FullPath").Value.ToString();
+                    else if (selItem.Object is Project proj)
+                        return proj.Properties.Item("FullPath").Value.ToString();
                 }
             }
             return null;

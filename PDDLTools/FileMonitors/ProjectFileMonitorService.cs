@@ -15,6 +15,7 @@ namespace PDDLTools.FileMonitors
     {
         public static ProjectFileMonitorService Instance { get; internal set; }
 
+        private HashSet<string> _currentlyIndexing = new HashSet<string>();
         private Dictionary<string, FileSystemWatcher> _watchers = new Dictionary<string, FileSystemWatcher>();
         private Dictionary<string, HashSet<string>> _domainCache = new Dictionary<string, HashSet<string>>();
         private Dictionary<string, HashSet<string>> _problemCache = new Dictionary<string, HashSet<string>>();
@@ -49,6 +50,10 @@ namespace PDDLTools.FileMonitors
 
         public async Task InitialiseAsync(string projectPath)
         {
+            if (_currentlyIndexing.Contains(projectPath))
+                return;
+
+            _currentlyIndexing.Add(projectPath);
             Uninitialise(projectPath);
             _domainCache.Add(projectPath, new HashSet<string>());
             _problemCache.Add(projectPath, new HashSet<string>());
@@ -92,6 +97,7 @@ namespace PDDLTools.FileMonitors
                 _watchers[projectPath].EnableRaisingEvents = true;
             });
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            _currentlyIndexing.Remove(projectPath);
         }
 
         private void OnChanged(object source, FileSystemEventArgs e)

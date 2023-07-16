@@ -14,6 +14,9 @@
 			<Group guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" priority="0x0000">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
 			</Group>
+			<Group guid="PDDLCommandSetGuid" id="PDDLToolsProjectContextMenuGroup" priority="0x0000">
+				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_PROJNODE" />
+			</Group>
 			<Group guid="PDDLCommandSetGuid" id="PDDLToolsCodeContextMenuGroup" priority="0x0000">
 				<Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN" />
 			</Group>
@@ -43,6 +46,7 @@
 			<Bitmap guid="ProblemImageGuid" href="Commands\Resources\Problem.png" />
 			<Bitmap guid="VisualiserImageGuid" href="Commands\Resources\VisualisorIcon.png" />
 			<Bitmap guid="RenameImageGuid" href="Commands\Resources\Rename.png" />
+			<Bitmap guid="ReindexImageGuid" href="Commands\Resources\ReindexIcon.png" />
 		</Bitmaps>
 		
 		<Combos>
@@ -189,6 +193,17 @@
 					<ButtonText>Rename</ButtonText>
 				</Strings>
 			</Button>
+			
+			<!--Project Context Menu-->
+			<Button guid="PDDLCommandSetGuid" id="ReindexProjectCommandID" priority="0x0100" type="Button">
+				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
+				<CommandFlag>IconAndText</CommandFlag>
+				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
+				<Strings>
+					<ButtonText>Reindex Project</ButtonText>
+				</Strings>
+			</Button>
 		</Buttons>		
 	</Commands>
 
@@ -277,6 +292,11 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="RenameCodeCommandID" priority="0x001">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsCodeContextMenuGroup" />
 		</CommandPlacement>
+
+		<!--Project Context Menu-->
+		<CommandPlacement guid="PDDLCommandSetGuid" id="ReindexProjectCommandID" priority="0x001">
+			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsProjectContextMenuGroup" />
+		</CommandPlacement>
 	</CommandPlacements>
 	
 	<Symbols>
@@ -291,6 +311,8 @@
 			
 			<IDSymbol name="PDDLToolsMenu" value="0x1024" />
 			<IDSymbol name="PDDLToolsToolbar" value="0x1025" />
+
+			<IDSymbol name="PDDLToolsProjectContextMenuGroup" value="0x1026" />
 
 			<IDSymbol name="SelectDomainFileCommandID" value="257" />
 			<IDSymbol name="SelectDomainFileCtxCommandID" value="272" />
@@ -319,8 +341,10 @@
 			<IDSymbol name="SendDomainToValidatorCtxCommandId" value="274" />
 			<IDSymbol name="SendProblemToValidatorCtxCommandId" value="275" />
 			<IDSymbol name="SendPlanToValidatorCtxCommandId" value="276" />
-			
+
 			<IDSymbol name="RenameCodeCommandID" value="277" />
+			
+			<IDSymbol name="ReindexProjectCommandID" value="278" />
 		
 		</GuidSymbol>
 
@@ -343,6 +367,9 @@
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
 		<GuidSymbol value="{ED888B71-18C3-43A0-830E-7D7DCF30B681}" name="RenameImageGuid">
+			<IDSymbol name="bmpPic1" value="1" />
+		</GuidSymbol>
+		<GuidSymbol value="{BF8710F7-463A-4BBD-BC09-302FF1594698}" name="ReindexImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
   </Symbols>

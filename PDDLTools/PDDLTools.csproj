@@ -122,6 +122,7 @@
     <Compile Include="Commands\BaseCommand.cs" />
     <Compile Include="Commands\OpenPDDLVisualiserWindowCommand.cs" />
     <Compile Include="Commands\OpenPlanValidatorWindowCommand.cs" />
+    <Compile Include="Commands\ReindexProjectCommand.cs" />
     <Compile Include="Commands\RenameCodeCommand.cs" />
     <Compile Include="Commands\SASVisualiserCommand.cs" />
     <Compile Include="Commands\GitHubCommand.cs" />

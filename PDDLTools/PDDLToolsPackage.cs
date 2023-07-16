@@ -94,6 +94,8 @@ namespace PDDLTools
 
             await RenameCodeCommand.InitializeAsync(this);
 
+            await ReindexProjectCommand.InitializeAsync(this);
+
             new FastDownwardErrorManager(this);
 
             new ProjectFileMonitorService();
