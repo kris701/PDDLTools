@@ -28,7 +28,7 @@ namespace PDDLParser.Models
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode() + Arg1.GetHashCode() + Arg2.GetHashCode();
+            return base.GetHashCode() + Name.GetHashCode() + Arg1.GetHashCode() + Arg2.GetHashCode();
         }
 
         public override bool Equals(object obj)

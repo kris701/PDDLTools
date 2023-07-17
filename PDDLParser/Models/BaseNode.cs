@@ -31,11 +31,9 @@ namespace PDDLParser.Models
         public abstract HashSet<INamedNode> FindNames(string name);
         public abstract HashSet<T> FindTypes<T>();
 
-        public abstract bool Equals(object obj);
-
         public override int GetHashCode()
         {
-            return Start.GetHashCode() + Line.GetHashCode();
+            return Start.GetHashCode() + End.GetHashCode() + Line.GetHashCode();
         }
     }
 }

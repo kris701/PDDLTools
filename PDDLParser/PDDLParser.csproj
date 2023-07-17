@@ -105,6 +105,5 @@
     <Compile Include="Visitors\IVisitor.cs" />
     <Compile Include="Visitors\ProblemVisitor.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

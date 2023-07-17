@@ -11,7 +11,7 @@ namespace SASSimulator
     public interface ISASSimulator
     {
         PDDLDecl PDDL { get; }
-        List<PredicateExp> State { get; }
+        HashSet<Predicate> State { get; }
 
         List<ActionChoice> Plan { get; }
         int PlanStep { get; }

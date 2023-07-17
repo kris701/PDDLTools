@@ -22,13 +22,14 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Linq;
 using CMDRunners.FastDownward;
+using PDDLParser.Helpers;
 
 namespace PDDLTools.Commands
 {
     internal sealed class SelectEngineListCommand : BaseCommand<SelectEngineListCommand>
     {
         public override int CommandId { get; } = 264;
-        private List<string> _engines;
+        private HashSet<string> _engines;
 
         private SelectEngineListCommand(AsyncPackage package, OleMenuCommandService commandService) : base(package, commandService, false)
         {
@@ -37,7 +38,7 @@ namespace PDDLTools.Commands
         public static async Task InitializeAsync(AsyncPackage package)
         {
             Instance = new SelectEngineListCommand(package, await InitializeCommandServiceAsync(package));
-            Instance._engines = new List<string>();
+            Instance._engines = new HashSet<string>();
             Instance._engines.AddRange(GetEngines());
             Instance._engines.AddRange(await GetAliasesAsync());
         }
@@ -52,9 +53,9 @@ namespace PDDLTools.Commands
             }
         }
 
-        private static async Task<List<string>> GetAliasesAsync()
+        private static async Task<HashSet<string>> GetAliasesAsync()
         {
-            var aliases = new List<string>();
+            var aliases = new HashSet<string>();
             FDRunner runner = new FDRunner(OptionsManager.Instance.FDPath, OptionsManager.Instance.PythonPrefix, OptionsManager.Instance.FDFileExecutionTimeout);
             var shortAliases = await runner.GetAliasesAsync();
             foreach (var shortAlias in shortAliases)
@@ -63,10 +64,10 @@ namespace PDDLTools.Commands
             return aliases;
         }
 
-        private static List<string> GetEngines()
+        private static HashSet<string> GetEngines()
         {
             var optionsStr = OptionsManager.Instance.EngineOptions;
-            return optionsStr.Split(';').ToList();
+            return optionsStr.Split(';').ToHashSet();
         }
     }
 }

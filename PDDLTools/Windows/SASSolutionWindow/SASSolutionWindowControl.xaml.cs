@@ -6,6 +6,8 @@ using PDDLTools.Options;
 using PDDLTools.Windows.ResourceDictionary;
 using PDDLTools.Windows.SASSolutionWindow.UserControls;
 using SASSimulator;
+using SASSimulator.Models;
+using SASSimulator.Parsers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -156,14 +158,14 @@ namespace PDDLTools.Windows.SASSolutionWindow
             }
         }
 
-        private DynamicNode AddNewNode(int id, string text, List<PredicateExp> state, int totalGoal, Point start, Point target, int totalSteps)
+        private DynamicNode AddNewNode(int id, string text, HashSet<Predicate> state, int totalGoal, Point start, Point target, int totalSteps)
         {
-            var goalCount = GetGoalCountInState(_pddlData.Problem.Goal.GoalExp, state);
+            var goalCount = GetGoalCountInState(_pddlData.Problem.Goal.GoalExp as INode, state);
             bool isGoal = goalCount == totalGoal;
             bool isPartialGoal = goalCount > 0;
-            List<PredicateExp> cloneState = new List<PredicateExp>();
+            List<Predicate> cloneState = new List<Predicate>();
             foreach(var pred in state)
-                cloneState.Add(pred.Clone() as PredicateExp);
+                cloneState.Add(pred.Clone() as Predicate);
             List<int> targetIds = new List<int>();
             if (id != totalSteps)
                 targetIds.Add(id + 1);
@@ -183,30 +185,18 @@ namespace PDDLTools.Windows.SASSolutionWindow
             return newNode;
         }
 
-        private int GetGoalCountInState(IExp exp, List<PredicateExp> state)
+        private int GetGoalCountInState(INode exp, HashSet<Predicate> state)
         {
-            if (exp is AndExp and)
+            if (exp is PredicateExp pred)
+            {
+                if (state.Contains(new Predicate(pred)))
+                    return 1;
+            } else if (exp is IWalkable walk)
             {
                 int count = 0;
-                foreach (var child in and.Children)
-                    count += GetGoalCountInState(child, state);
+                foreach (var item in walk)
+                    count += GetGoalCountInState(item, state);
                 return count;
-            }
-            else if (exp is NotExp not)
-            {
-                return GetGoalCountInState(not.Child, state);
-            }
-            else if (exp is OrExp or)
-            {
-                return GetGoalCountInState(or.Option1, state) + GetGoalCountInState(or.Option2, state);
-            }
-            else
-            {
-                if (exp is PredicateExp pred)
-                {
-                    if (state.Contains(pred))
-                        return 1;
-                }
             }
             return 0;
         }

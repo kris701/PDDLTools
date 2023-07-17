@@ -28,6 +28,8 @@ namespace PDDLTools.FileMonitors
         {
             if (!_domainCache.ContainsKey(projectPath))
                 await InitialiseAsync(projectPath);
+            if (!_domainCache.ContainsKey(projectPath))
+                return new HashSet<string>();
             return _domainCache[projectPath];
         }
 
@@ -35,6 +37,8 @@ namespace PDDLTools.FileMonitors
         {
             if (!_problemCache.ContainsKey(projectPath))
                 await InitialiseAsync(projectPath);
+            if (!_problemCache.ContainsKey(projectPath))
+                return new HashSet<string>();
             return _problemCache[projectPath];
         }
 

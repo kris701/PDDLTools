@@ -41,10 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPlanParser.cs" />
+    <Compile Include="Models\Predicate.cs" />
+    <Compile Include="Parsers\IPlanParser.cs" />
     <Compile Include="ISASSimulator.cs" />
     <Compile Include="Models\ActionChoice.cs" />
-    <Compile Include="PlanParser.cs" />
+    <Compile Include="Parsers\PlanParser.cs" />
     <Compile Include="SASSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

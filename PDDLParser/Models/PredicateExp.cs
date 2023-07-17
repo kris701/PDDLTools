@@ -30,8 +30,8 @@ namespace PDDLParser.Models
         public override int GetHashCode()
         {
             int hash = Name.GetHashCode() + base.GetHashCode();
-            foreach(var  arg in Arguments)
-                hash *= arg.Name.GetHashCode();
+            foreach(var arg in Arguments)
+                hash *= arg.GetHashCode();
             return hash;
         }
 

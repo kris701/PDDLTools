@@ -48,7 +48,7 @@
 			<Bitmap guid="RenameImageGuid" href="Commands\Resources\Rename.png" />
 			<Bitmap guid="ReindexImageGuid" href="Commands\Resources\ReindexIcon.png" />
 		</Bitmaps>
-		
+
 		<Combos>
 			<Combo guid="PDDLCommandSetGuid" id="SelectDomainFileCommandID" idCommandList="SelectDomainFileListCommandID" defaultWidth="150" priority="0x0100" type="DropDownCombo">
 				<CommandFlag>StretchHorizontally</CommandFlag>
@@ -87,7 +87,7 @@
 				</Strings>
 			</Combo>
 		</Combos>
-		
+
 		<Buttons>
 			<Button guid="PDDLCommandSetGuid" id="GenerateReportCommandID" priority="0x0101" type="Button">
 				<Strings>
@@ -189,7 +189,7 @@
 					<ButtonText>Send to VAL</ButtonText>
 				</Strings>
 			</Button>
-			
+
 			<!--Code Context Menu-->
 			<Button guid="PDDLCommandSetGuid" id="RenameCodeCommandID" priority="0x0100" type="Button">
 				<Icon guid="RenameImageGuid" id="bmpPic1" />
@@ -200,7 +200,7 @@
 					<ButtonText>Rename</ButtonText>
 				</Strings>
 			</Button>
-			
+
 			<!--Project Context Menu-->
 			<Button guid="PDDLCommandSetGuid" id="ReindexProjectCommandID" priority="0x0100" type="Button">
 				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
@@ -211,7 +211,7 @@
 					<ButtonText>Reindex Project</ButtonText>
 				</Strings>
 			</Button>
-		</Buttons>		
+		</Buttons>
 	</Commands>
 
 	<KeyBindings>
@@ -254,7 +254,7 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="PDDLVisualiserWindowCommandID" priority="0x107">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
-		
+
 		<CommandPlacement guid="PDDLCommandSetGuid" id="GithubCommandID" priority="0x198">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsMenuGroup" />
 		</CommandPlacement>
@@ -280,7 +280,7 @@
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SelectProblemFileCtxCommandID" priority="0x104">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
 		</CommandPlacement>
-		
+
 		<CommandPlacement guid="PDDLCommandSetGuid" id="SendToVisualiserCtxCommandID" priority="0x105">
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsContextMenuGroup" />
 		</CommandPlacement>
@@ -305,7 +305,7 @@
 			<Parent guid="PDDLCommandSetGuid" id="PDDLToolsProjectContextMenuGroup" />
 		</CommandPlacement>
 	</CommandPlacements>
-	
+
 	<Symbols>
 		<GuidSymbol value="{956B19CF-953A-4E2A-9813-9EC5626CC12E}" name="PDDLPackageGuid" />
 		<GuidSymbol value="{BA53FE3E-0884-4928-8F2D-6D71973A7DD0}" name="PDDLProjectTypeID" />
@@ -315,7 +315,7 @@
 			<IDSymbol name="PDDLToolsToolbarGroup" value="0x1021" />
 			<IDSymbol name="PDDLToolsContextMenuGroup" value="0x1022" />
 			<IDSymbol name="PDDLToolsCodeContextMenuGroup" value="0x1023" />
-			
+
 			<IDSymbol name="PDDLToolsMenu" value="0x1024" />
 			<IDSymbol name="PDDLToolsToolbar" value="0x1025" />
 
@@ -324,7 +324,7 @@
 			<IDSymbol name="SelectDomainFileCommandID" value="257" />
 			<IDSymbol name="SelectDomainFileCtxCommandID" value="272" />
 			<IDSymbol name="SelectDomainFileListCommandID" value="259" />
-			
+
 			<IDSymbol name="GithubCommandID" value="258" />
 			<IDSymbol name="InstallFDWindowCommandID" value="261" />
 			<IDSymbol name="WelcomeWindowCommandID" value="262" />
@@ -335,7 +335,7 @@
 			<IDSymbol name="SelectProblemFileCommandID" value="265" />
 			<IDSymbol name="SelectProblemFileCtxCommandID" value="271" />
 			<IDSymbol name="SelectProblemFileListCommandID" value="266" />
-			
+
 			<IDSymbol name="GenerateReportCommandID" value="267" />
 			<IDSymbol name="SASVisualiserCommandID" value="268" />
 
@@ -350,9 +350,9 @@
 			<IDSymbol name="SendPlanToValidatorCtxCommandId" value="276" />
 
 			<IDSymbol name="RenameCodeCommandID" value="277" />
-			
+
 			<IDSymbol name="ReindexProjectCommandID" value="278" />
-		
+
 		</GuidSymbol>
 
 		<GuidSymbol value="{ff48a4e6-0aab-49a4-987a-0a3ed7ff4d23}" name="GithubImageGuid">
@@ -379,5 +379,5 @@
 		<GuidSymbol value="{BF8710F7-463A-4BBD-BC09-302FF1594698}" name="ReindexImageGuid">
 			<IDSymbol name="bmpPic1" value="1" />
 		</GuidSymbol>
-  </Symbols>
+	</Symbols>
 </CommandTable>
