@@ -137,6 +137,7 @@
 				<Icon guid="ProblemImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Select problem to execute</ButtonText>
 				</Strings>
@@ -145,6 +146,7 @@
 				<Icon guid="DomainImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Select domain to execute</ButtonText>
 				</Strings>
@@ -154,6 +156,7 @@
 				<Icon guid="VisualiserImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Visualise</ButtonText>
 				</Strings>
@@ -163,6 +166,7 @@
 				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Send to VAL</ButtonText>
 				</Strings>
@@ -171,6 +175,7 @@
 				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Send to VAL</ButtonText>
 				</Strings>
@@ -179,6 +184,7 @@
 				<Icon guid="VALWindowImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Send to VAL</ButtonText>
 				</Strings>
@@ -189,6 +195,7 @@
 				<Icon guid="RenameImageGuid" id="bmpPic1" />
 				<CommandFlag>IconAndText</CommandFlag>
 				<CommandFlag>DynamicVisibility</CommandFlag>
+				<CommandFlag>DefaultInvisible</CommandFlag>
 				<Strings>
 					<ButtonText>Rename</ButtonText>
 				</Strings>
