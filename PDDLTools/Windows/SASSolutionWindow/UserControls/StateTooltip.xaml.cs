@@ -1,4 +1,5 @@
 ﻿using PDDLParser.Models;
+using SASSimulator.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,8 +19,8 @@ namespace PDDLTools.Windows.SASSolutionWindow.UserControls
 {
     public partial class StateTooltip : UserControl
     {
-        public List<PredicateExp> State { get; }
-        public StateTooltip(string actionStep, bool isPartial, bool isGoal, List<PredicateExp> state)
+        public HashSet<Predicate> State { get; }
+        public StateTooltip(string actionStep, bool isPartial, bool isGoal, HashSet<Predicate> state)
         {
             InitializeComponent();
             SimulationStepLabel.Text = actionStep;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace PDDLParser.Models
 {
@@ -12,6 +13,11 @@ namespace PDDLParser.Models
     {
         protected BaseWalkableNode(ASTNode node, INode parent) : base(node, parent)
         {
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
         public abstract IEnumerator<INode> GetEnumerator();

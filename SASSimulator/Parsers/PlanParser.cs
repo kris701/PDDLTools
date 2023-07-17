@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SASSimulator
+namespace SASSimulator.Parsers
 {
     public class PlanParser : IPlanParser
     {
@@ -17,14 +17,14 @@ namespace SASSimulator
             var plan = new List<ActionChoice>();
             foreach (var line in text)
             {
-                if (!line.StartsWith(";"))
+                if (!line.StartsWith(";") && line.Trim() != "")
                 {
                     var innerLine = line.Replace("(", "").Replace(")", "");
                     var name = innerLine.Split(' ')[0];
                     var args = new List<string>();
                     foreach (var arg in innerLine.Split(' '))
-                        if (arg != name && arg != "")
-                            args.Add(arg);
+                        if (arg.Trim() != name && arg.Trim() != "")
+                            args.Add(arg.Trim());
                     plan.Add(new ActionChoice(name, args));
                 }
             }

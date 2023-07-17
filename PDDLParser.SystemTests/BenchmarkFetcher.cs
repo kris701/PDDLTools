@@ -13,6 +13,8 @@ namespace PDDLParser.SystemTests
         public static string OutputPath { get {
                 Assembly asm = Assembly.GetExecutingAssembly();
                 var asmPath = Path.GetDirectoryName(asm.Location);
+                if (asmPath == null)
+                    throw new Exception("Could not find the assembly path!");
                 string path = Path.Combine(asmPath, "benchmarks");
                 return path;
             } 

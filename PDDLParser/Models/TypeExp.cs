@@ -4,6 +4,7 @@ using PDDLParser.Models.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,9 +45,11 @@ namespace PDDLParser.Models
 
         public override int GetHashCode()
         {
+            int hash = Name.GetHashCode() + base.GetHashCode();
             if (SuperTypes != null)
-                return Name.GetHashCode() + SuperTypes.GetHashCode();
-            return Name.GetHashCode();
+                foreach (var type in SuperTypes)
+                    hash *= type.GetHashCode();
+            return hash;
         }
 
         public override bool Equals(object obj)
