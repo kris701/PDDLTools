@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Xml;
 
 namespace PDDLTools.TestAdapter
@@ -17,7 +16,18 @@ namespace PDDLTools.TestAdapter
     {
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger messageLogger, ITestCaseDiscoverySink discoverySink)
         {
-            MessageBox.Show("test");
+            TestLog.Initialize(messageLogger);
+            Initialize(discoveryContext);
+            if (RegistryFailure)
+            {
+                TestLog.SendErrorMessage(ErrorMsg);
+            }
+            Info("discovering tests", "started");
+
+            foreach(var source in sources)
+            {
+                TestLog.SendMessage(TestMessageLevel.Informational, source);
+            }
         }
     }
 }

@@ -411,6 +411,12 @@
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PDDLTools.TestAdapter\PDDLTools.TestAdapter.csproj">
+      <Project>{AA11C93D-3481-4C1C-9757-34BE198E8604}</Project>
+      <Name>PDDLTools.TestAdapter</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\ProjectTemplates\PDDLProjectTemplate\PDDLProjectTemplate.csproj">
       <Project>{651EBED8-058E-4104-A3B5-2E06330822F2}</Project>
       <Name>PDDLProjectTemplate</Name>
