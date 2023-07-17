@@ -236,6 +236,7 @@
   <ItemGroup>
     <Content Include="Commands\Resources\Domain.png" />
     <Content Include="Commands\Resources\Problem.png" />
+    <Content Include="Commands\Resources\ReindexIcon.png" />
     <Content Include="Commands\Resources\Rename.png" />
     <Content Include="Commands\Resources\ValidateIcon.png" />
     <Content Include="Commands\Resources\VisualisorIcon.png" />
