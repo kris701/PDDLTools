@@ -8,11 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PDDLTools.TestAdapter" Version="1.0.16" />
+    <ProjectReference Include="..\PDDLParser\PDDLParser.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PDDLParser\PDDLParser.csproj" />
+    <None Update="test.pddl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

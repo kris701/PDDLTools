@@ -11,13 +11,15 @@ using PDDLTools.TestAdapter.EventWatchers;
 using Microsoft.VisualStudio.Shell;
 using PDDLTools.TestAdapter.EventWatchers.EventArgs;
 using Microsoft.VisualStudio.Shell.Interop;
+using System.IO;
+using System.Windows.Forms;
 
 namespace PDDLTools.TestAdapter
 {
     [Export(typeof(ITestContainerDiscoverer))]
     public class PDDLTestContainerDiscoverer : ITestContainerDiscoverer
     {
-        public const string ExecutorUriString = PDDLToolsTestExecutor.ExecutorUri;
+        public const string ExecutorUriString = "executor://PDDLTestContainerDiscoverer/v1";
 
         public event EventHandler TestContainersUpdated;
         private readonly IServiceProvider serviceProvider;
@@ -28,7 +30,7 @@ namespace PDDLTools.TestAdapter
         private bool initialContainerSearch;
         private readonly List<ITestContainer> cachedContainers;
         protected string FileExtension { get { return ".pddl"; } }
-        public Uri ExecutorUri { get { return new System.Uri(ExecutorUriString); } }
+        public Uri ExecutorUri { get { return new Uri(ExecutorUriString); } }
         public IEnumerable<ITestContainer> TestContainers { get { return GetTestContainers(); } }
 
         [ImportingConstructor]
@@ -39,8 +41,6 @@ namespace PDDLTools.TestAdapter
             ITestFilesUpdateWatcher testFilesUpdateWatcher,
             ITestFileAddRemoveListener testFilesAddRemoveListener)
         {
-            Trace.WriteLine("Protractor container Discoverer created");
-
             initialContainerSearch = true;
             cachedContainers = new List<ITestContainer>();
             this.serviceProvider = serviceProvider;

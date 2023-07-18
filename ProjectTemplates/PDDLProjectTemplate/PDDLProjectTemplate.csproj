@@ -24,8 +24,8 @@
     <ProjectGuid>{651EBED8-058E-4104-A3B5-2E06330822F2}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WindowsScript</RootNamespace>
-    <AssemblyName>WindowsScript</AssemblyName>
+    <RootNamespace>PDDLProjectTemplate</RootNamespace>
+    <AssemblyName>PDDLProjectTemplate</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>

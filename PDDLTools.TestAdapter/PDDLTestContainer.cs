@@ -3,9 +3,11 @@ using Microsoft.VisualStudio.TestWindow.Extensibility;
 using Microsoft.VisualStudio.TestWindow.Extensibility.Model;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PDDLTools.TestAdapter
 {
@@ -18,12 +20,13 @@ namespace PDDLTools.TestAdapter
 
         public PDDLTestContainer(ITestContainerDiscoverer discoverer, string source, Uri executorUri, IEnumerable<Guid> debugEngines)
         {
+            MessageBox.Show("a");
             this.Source = source;
             this.ExecutorUri = executorUri;
             this.DebugEngines = debugEngines;
             this.discoverer = discoverer;
             this.TargetFramework = FrameworkVersion.None;
-            this.TargetPlatform = Architecture.AnyCPU;
+            this.TargetPlatform = Architecture.Default;
             this.timeStamp = GetTimeStamp();
         }
 

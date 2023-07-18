@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,6 @@ namespace PDDLTools.TestAdapter
 {
     [FileExtension(".dll")]
     [FileExtension(".pddl")]
-    [FileExtension(".exe")]
     [DefaultExecutorUri(PDDLToolsTestExecutor.ExecutorUri)]
     public sealed class PDDLToolsTestDiscoverer : PDDLTestAdapter, ITestDiscoverer
     {
@@ -21,9 +21,8 @@ namespace PDDLTools.TestAdapter
         {
             TestLog.Initialize(messageLogger);
             Initialize(discoveryContext);
-            Info("discovering tests", "started");
             TestLog.SendMessage(TestMessageLevel.Informational, "works!");
-            foreach(var file in sources)
+            foreach (var file in sources)
                 TestLog.SendMessage(TestMessageLevel.Informational, $"   File: {file}");
         }
     }
