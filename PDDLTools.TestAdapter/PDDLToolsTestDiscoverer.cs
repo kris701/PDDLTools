@@ -11,13 +11,20 @@ using System.Xml;
 
 namespace PDDLTools.TestAdapter
 {
+    [FileExtension(".dll")]
     [FileExtension(".pddl")]
+    [FileExtension(".exe")]
     [DefaultExecutorUri(PDDLToolsTestExecutor.ExecutorUri)]
     public sealed class PDDLToolsTestDiscoverer : PDDLTestAdapter, ITestDiscoverer
     {
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger messageLogger, ITestCaseDiscoverySink discoverySink)
         {
-            MessageBox.Show("test");
+            TestLog.Initialize(messageLogger);
+            Initialize(discoveryContext);
+            Info("discovering tests", "started");
+            TestLog.SendMessage(TestMessageLevel.Informational, "works!");
+            foreach(var file in sources)
+                TestLog.SendMessage(TestMessageLevel.Informational, $"   File: {file}");
         }
     }
 }

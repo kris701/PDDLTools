@@ -14,7 +14,7 @@ using Microsoft.VisualStudio.Shell.Interop;
 
 namespace PDDLTools.TestAdapter
 {
-    [Export(typeof(PDDLTestContainerDiscoverer))]
+    [Export(typeof(ITestContainerDiscoverer))]
     public class PDDLTestContainerDiscoverer : ITestContainerDiscoverer
     {
         public const string ExecutorUriString = PDDLToolsTestExecutor.ExecutorUri;
