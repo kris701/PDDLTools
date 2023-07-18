@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.Projects
+namespace PDDLTools.Projects.PDDLProject
 {
     internal static class PDDLProjectManager
     {

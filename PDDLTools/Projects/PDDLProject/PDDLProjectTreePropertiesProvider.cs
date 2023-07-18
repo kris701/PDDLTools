@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.Imaging;
 using Microsoft.VisualStudio.ProjectSystem;
-using PDDLTools.Projects.Images;
+using PDDLTools.Projects.BaseProject.Images;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.Projects
+namespace PDDLTools.Projects.PDDLProject
 {
     [Export(typeof(IProjectTreePropertiesProvider))]
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
@@ -21,7 +21,7 @@ namespace PDDLTools.Projects
         {
             if (propertyValues.Flags.Contains(ProjectTreeFlags.Common.ProjectRoot))
             {
-                propertyValues.Icon = PDDLProjectIconMoinkers.ProjectIconImageMoniker.ToProjectSystemType();
+                propertyValues.Icon = PDDLIconMoinkers.ProjectIconImageMoniker.ToProjectSystemType();
             }
         }
     }

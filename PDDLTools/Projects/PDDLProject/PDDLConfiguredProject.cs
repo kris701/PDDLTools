@@ -1,4 +1,4 @@
-﻿namespace PDDLTools.Projects
+﻿namespace PDDLTools.Projects.PDDLProject
 {
     using System;
     using System.Collections.Generic;
@@ -13,6 +13,7 @@
     using PDDLTools.Commands;
     using PDDLTools.FileMonitors;
     using PDDLTools.Helpers;
+    using PDDLTools.Projects.BaseProject;
 
     [Export]
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]

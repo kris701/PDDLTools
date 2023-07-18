@@ -22,6 +22,7 @@ using System.IO;
 using PDDLParser.Helpers;
 using System.Windows.Controls;
 using PDDLTools.Projects;
+using PDDLTools.Projects.PDDLProject;
 
 namespace PDDLTools.Commands
 {

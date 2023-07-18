@@ -12,7 +12,7 @@ namespace PDDLTools.TestAdapter
     [ExtensionUri(ExecutorUri)]
     public sealed class PDDLToolsTestExecutor : PDDLTestAdapter, ITestExecutor
     {
-        public const string ExecutorUri = "executor://PDDLToolsTestExecutor";
+        public const string ExecutorUri = "executor://PDDLToolsTestExecutor/v1";
 
         public void Cancel()
         {

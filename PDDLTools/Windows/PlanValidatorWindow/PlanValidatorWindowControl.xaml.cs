@@ -3,6 +3,7 @@ using PDDLParser.Helpers;
 using PDDLTools.Commands;
 using PDDLTools.Options;
 using PDDLTools.Projects;
+using PDDLTools.Projects.PDDLProject;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;

@@ -1,4 +1,4 @@
-namespace PDDLTools.Projects
+namespace PDDLTools.Projects.BaseProject
 {
     using System.Composition;
     using Microsoft.VisualStudio.ProjectSystem;

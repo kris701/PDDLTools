@@ -1,4 +1,4 @@
-﻿namespace PDDLTools.Projects
+﻿namespace PDDLTools.Projects.PDDLTestProject
 {
     using System;
     using System.ComponentModel.Composition;
@@ -8,15 +8,27 @@
     using Microsoft.VisualStudio.Shell.Interop;
 
     [Export]
-    [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
-    [ProjectTypeRegistration(PDDLTools.Constants.PDDLProjectTypeID, PDDLTools.Constants.PDDLLanguageName, "#2", PDDLTools.Constants.PDDLProjectExt, PDDLTools.Constants.PDDLLanguageName, resourcePackageGuid: PDDLTools.Constants.PackageGuidString, PossibleProjectExtensions = PDDLTools.Constants.PDDLProjectExt, ProjectTemplatesDir = @"..\..\Templates\Projects\MyCustomProject")]
-    [ProvideProjectItem(PDDLTools.Constants.PDDLProjectTypeID, "My Items", @"..\..\Templates\ProjectItems\MyCustomProject", 500)]
-    public class PDDLUnconfiguredProject
+    [AppliesTo(PDDLUnconfiguredTestProject.UniqueCapability)]
+    [ProjectTypeRegistration(
+        PDDLTools.Constants.PDDLTestProjectTypeID, 
+        PDDLTools.Constants.PDDLLanguageName,
+        PDDLTools.Constants.PDDLTestProjectExt, 
+        PDDLTools.Constants.PDDLTestProjectExt, 
+        PDDLTools.Constants.PDDLLanguageName, 
+        resourcePackageGuid: PDDLTools.Constants.PackageGuidString, 
+        PossibleProjectExtensions = PDDLTools.Constants.PDDLTestProjectExt, 
+        ProjectTemplatesDir = @"PDDLTestProject")]
+    [ProvideProjectItem(
+        PDDLTools.Constants.PDDLTestProjectTypeID, 
+        "My Items",
+        @"PDDLTestProject", 
+        500)]
+    public class PDDLUnconfiguredTestProject
     {
-        internal const string UniqueCapability = "PDDLSample";
+        internal const string UniqueCapability = "PDDLTestSample";
 
         [ImportingConstructor]
-        public PDDLUnconfiguredProject(UnconfiguredProject unconfiguredProject)
+        public PDDLUnconfiguredTestProject(UnconfiguredProject unconfiguredProject)
         {
             this.ProjectHierarchies = new OrderPrecedenceImportCollection<IVsHierarchy>(projectCapabilityCheckProvider: unconfiguredProject);
         }
@@ -34,7 +46,7 @@
         internal ActiveConfiguredProject<ConfiguredProject> ActiveConfiguredProject { get; private set; }
 
         [Import]
-        internal ActiveConfiguredProject<PDDLConfiguredProject> MyActiveConfiguredProject { get; private set; }
+        internal ActiveConfiguredProject<PDDLConfiguredTestProject> MyActiveConfiguredProject { get; private set; }
 
         [ImportMany(ExportContractNames.VsTypes.IVsProject, typeof(IVsProject))]
         internal OrderPrecedenceImportCollection<IVsHierarchy> ProjectHierarchies { get; private set; }

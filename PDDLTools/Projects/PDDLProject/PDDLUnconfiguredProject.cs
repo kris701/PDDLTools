@@ -1,4 +1,4 @@
-﻿namespace PDDLTools.Projects
+﻿namespace PDDLTools.Projects.PDDLProject
 {
     using System;
     using System.ComponentModel.Composition;
@@ -9,14 +9,26 @@
 
     [Export]
     [AppliesTo(PDDLUnconfiguredProject.UniqueCapability)]
-    [ProjectTypeRegistration(PDDLTools.Constants.PDDLProjectTypeID, PDDLTools.Constants.PDDLLanguageName, "#2", PDDLTools.Constants.PDDLTestProjectExt, PDDLTools.Constants.PDDLLanguageName, resourcePackageGuid: PDDLTools.Constants.PackageGuidString, PossibleProjectExtensions = PDDLTools.Constants.PDDLTestProjectExt, ProjectTemplatesDir = @"..\..\Templates\Projects\MyCustomProject")]
-    [ProvideProjectItem(PDDLTools.Constants.PDDLProjectTypeID, "My Items", @"..\..\Templates\ProjectItems\MyCustomProject", 500)]
-    public class PDDLUnconfiguredTestProject
+    [ProjectTypeRegistration(
+        PDDLTools.Constants.PDDLProjectTypeID, 
+        PDDLTools.Constants.PDDLLanguageName,
+        PDDLTools.Constants.PDDLProjectExt, 
+        PDDLTools.Constants.PDDLProjectExt, 
+        PDDLTools.Constants.PDDLLanguageName, 
+        resourcePackageGuid: PDDLTools.Constants.PackageGuidString, 
+        PossibleProjectExtensions = PDDLTools.Constants.PDDLProjectExt, 
+        ProjectTemplatesDir = @"PDDLProject")]
+    [ProvideProjectItem(
+        PDDLTools.Constants.PDDLProjectTypeID, 
+        "My Items", 
+        @"PDDLProject", 
+        500)]
+    public class PDDLUnconfiguredProject
     {
         internal const string UniqueCapability = "PDDLSample";
 
         [ImportingConstructor]
-        public PDDLUnconfiguredTestProject(UnconfiguredProject unconfiguredProject)
+        public PDDLUnconfiguredProject(UnconfiguredProject unconfiguredProject)
         {
             this.ProjectHierarchies = new OrderPrecedenceImportCollection<IVsHierarchy>(projectCapabilityCheckProvider: unconfiguredProject);
         }

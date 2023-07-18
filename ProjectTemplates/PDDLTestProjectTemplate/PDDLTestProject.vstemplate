@@ -9,8 +9,8 @@
 	<LanguageTag>PDDL</LanguageTag>
 	<PlatformTag>Windows</PlatformTag>
 	  
-    <SortOrder>1</SortOrder>
-    <TemplateID>{553e568b-a23f-4ff7-a1c6-b7b6debef284}</TemplateID>
+    <SortOrder>2</SortOrder>
+    <TemplateID>{9112E69E-283C-44E4-A7AC-9CE9A63C30CE}</TemplateID>
     <CreateNewFolder>true</CreateNewFolder>
     <DefaultName>New Test Project</DefaultName>
     <ProvideDefaultName>true</ProvideDefaultName>

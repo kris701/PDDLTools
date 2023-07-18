@@ -1,4 +1,4 @@
-﻿namespace PDDLTools.Projects
+﻿namespace PDDLTools.Projects.PDDLProject
 {
     using System;
     using System.Collections.Generic;

@@ -21,6 +21,7 @@ using System.Runtime.InteropServices;
 using System.IO;
 using PDDLParser.Helpers;
 using PDDLTools.Projects;
+using PDDLTools.Projects.PDDLProject;
 
 namespace PDDLTools.Commands
 {

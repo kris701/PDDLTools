@@ -24,8 +24,8 @@
     <ProjectGuid>{C06749B0-D022-4E84-B1B2-FEC6148B0CBD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PDDLProjectTemplate</RootNamespace>
-    <AssemblyName>PDDLProjectTemplate</AssemblyName>
+    <RootNamespace>PDDLTestProjectTemplate</RootNamespace>
+    <AssemblyName>PDDLTestProjectTemplate</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
@@ -66,8 +66,8 @@
     <None Include="PDDLTestProject.pddltestproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PDDLTestProject.ico" />
-    <Content Include="PDDLTestProject.vstemplate" />
+    <None Include="PDDLTestProject.ico" />
+    <VSTemplate Include="PDDLTestProject.vstemplate" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
