@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>PDDL Test Project</Name>
+    <Description>A template for creating a PDDL test project.</Description>
+    <Icon>PDDLTestProject.ico</Icon>
+	  
+    <ProjectType>PDDL</ProjectType>
+	<LanguageTag>PDDL</LanguageTag>
+	<PlatformTag>Windows</PlatformTag>
+	  
+    <SortOrder>1</SortOrder>
+    <TemplateID>{553e568b-a23f-4ff7-a1c6-b7b6debef284}</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>New Test Project</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+	<CreateInPlace>true</CreateInPlace>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="PDDLTestProject.pddltestproj" TargetFileName="$safeitemname$.pddltestproj" ReplaceParameters="true">
+		<Folder Name="Domain">
+			<ProjectItem OpenInEditor="true">domain.pddl</ProjectItem>
+			<ProjectItem>problem.pddl</ProjectItem>
+		</Folder>
+    </Project>
+  </TemplateContent>
+</VSTemplate>

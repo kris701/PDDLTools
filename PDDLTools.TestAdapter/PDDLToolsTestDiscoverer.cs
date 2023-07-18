@@ -12,7 +12,6 @@ using System.Xml;
 
 namespace PDDLTools.TestAdapter
 {
-    [FileExtension(".dll")]
     [FileExtension(".pddl")]
     [DefaultExecutorUri(PDDLToolsTestExecutor.ExecutorUri)]
     public sealed class PDDLToolsTestDiscoverer : PDDLTestAdapter, ITestDiscoverer

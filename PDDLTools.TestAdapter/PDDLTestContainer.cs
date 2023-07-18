@@ -20,7 +20,6 @@ namespace PDDLTools.TestAdapter
 
         public PDDLTestContainer(ITestContainerDiscoverer discoverer, string source, Uri executorUri, IEnumerable<Guid> debugEngines)
         {
-            MessageBox.Show("a");
             this.Source = source;
             this.ExecutorUri = executorUri;
             this.DebugEngines = debugEngines;

@@ -171,9 +171,11 @@
     <Compile Include="PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
     <Compile Include="PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
     <Compile Include="Projects\Images\PDDLProjectIconMoinkers.cs" />
+    <Compile Include="Projects\PDDLConfiguredTestProject.cs" />
     <Compile Include="Projects\PDDLConfiguredProject.cs" />
     <Compile Include="Projects\PDDLProjectManager.cs" />
     <Compile Include="Projects\PDDLProjectTreePropertiesProvider.cs" />
+    <Compile Include="Projects\PDDLUnconfiguredTestProject.cs" />
     <Compile Include="Projects\PDDLUnconfiguredProject.cs" />
     <Compile Include="Projects\ProjectProperties.cs" />
     <Compile Include="Projects\PDDLExecuterDebuggerLaunchProvider.cs" />
@@ -428,6 +430,13 @@
       <Project>{28449582-C3EB-4034-881B-E9349796789D}</Project>
       <Name>PDDLSimpleProblemFileTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjectTemplates\PDDLTestProjectTemplate\PDDLTestProjectTemplate.csproj">
+      <Project>{C06749B0-D022-4E84-B1B2-FEC6148B0CBD}</Project>
+      <Name>PDDLTestProjectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
