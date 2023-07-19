@@ -113,12 +113,9 @@
     <Compile Include="PDDLInfo\PDDLDefinitionElements\PDDLDefinition.cs" />
     <Compile Include="PDDLInfo\PDDLDefinitionElements\TextBlock.cs" />
     <Compile Include="Projects\BaseProject\Images\PDDLIconMoinkers.cs" />
-    <Compile Include="Projects\PDDLTestProject\PDDLConfiguredTestProject.cs" />
     <Compile Include="Projects\PDDLProject\PDDLConfiguredProject.cs" />
     <Compile Include="Projects\PDDLProject\PDDLProjectManager.cs" />
     <Compile Include="Projects\PDDLProject\PDDLProjectTreePropertiesProvider.cs" />
-    <Compile Include="Projects\PDDLTestProject\PDDLProjectTreePropertiesProvider.cs" />
-    <Compile Include="Projects\PDDLTestProject\PDDLUnconfiguredTestProject.cs" />
     <Compile Include="Projects\PDDLProject\PDDLUnconfiguredProject.cs" />
     <Compile Include="Projects\BaseProject\ProjectProperties.cs" />
     <Compile Include="Projects\PDDLProject\PDDLExecuterDebuggerLaunchProvider.cs" />
@@ -208,8 +205,6 @@
     <Content Include="PDDLImages.imagemanifest">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <None Include="Projects\PDDLTestProject\DeployedBuildSystem\PDDLTest.props" />
-    <None Include="Projects\PDDLTestProject\DeployedBuildSystem\PDDLTest.targets" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -246,9 +241,6 @@
     <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.6.2164">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="PDDLToolsTestAdapter">
-      <Version>1.0.1</Version>
     </PackageReference>
     <PackageReference Include="System.Composition">
       <Version>7.0.0</Version>
@@ -431,6 +423,13 @@
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PDDLTestprojectTemplate\PDDLTestprojectTemplate.csproj">
+      <Project>{473150FE-C057-4047-81BB-52ABF8FD73AD}</Project>
+      <Name>PDDLTestprojectTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PDDLTools.TestAdapter.Vs\PDDLTools.TestAdapter.Vs.csproj">
       <Project>{75d6b306-de46-4ab8-9ab9-0d8fe4bc8347}</Project>
       <Name>PDDLTools.TestAdapter.Vs</Name>
@@ -454,13 +453,6 @@
       <Project>{28449582-C3EB-4034-881B-E9349796789D}</Project>
       <Name>PDDLSimpleProblemFileTemplate</Name>
       <VSIXSubPath>ItemTemplates</VSIXSubPath>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-    </ProjectReference>
-    <ProjectReference Include="..\ProjectTemplates\PDDLTestProjectTemplate\PDDLTestProjectTemplate.csproj">
-      <Project>{C06749B0-D022-4E84-B1B2-FEC6148B0CBD}</Project>
-      <Name>PDDLTestProjectTemplate</Name>
-      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>

@@ -30,8 +30,8 @@ namespace PDDLTools.TestAdapter.Vs
         private ITestFileAddRemoveListener testFilesAddRemoveListener;
         private bool initialContainerSearch;
         private readonly List<ITestContainer> cachedContainers;
-        protected string FileExtension { get { return ".pddltestproj"; } }
-        public Uri ExecutorUri { get { return new Uri(ExecutorUriString); } }
+        protected string FileExtension { get { return ".pddltest"; } }
+        public Uri ExecutorUri { get { return new System.Uri(ExecutorUriString); } }
         public IEnumerable<ITestContainer> TestContainers { get { return GetTestContainers(); } }
 
         [ImportingConstructor]
@@ -57,6 +57,7 @@ namespace PDDLTools.TestAdapter.Vs
             this.testFilesAddRemoveListener.StartListeningForTestFileChanges();
 
             this.solutionListener.SolutionUnloaded += SolutionListenerOnSolutionUnloaded;
+            this.solutionListener.SolutionProjectChanged += OnSolutionProjectChanged;
             this.solutionListener.StartListeningForChanges();
 
             this.testFilesUpdateWatcher.FileChangedEvent += OnProjectItemChanged;
@@ -73,6 +74,26 @@ namespace PDDLTools.TestAdapter.Vs
         private void SolutionListenerOnSolutionUnloaded(object sender, EventArgs eventArgs)
         {
             initialContainerSearch = true;
+        }
+
+        private void OnSolutionProjectChanged(object sender, SolutionEventsListenerEventArgs e)
+        {
+            if (e != null)
+            {
+                var files = FindPDDLTestFiles(e.Project);
+                if (e.ChangedReason == SolutionChangedReason.Load)
+                {
+                    UpdateFileWatcher(files, true);
+                }
+                else if (e.ChangedReason == SolutionChangedReason.Unload)
+                {
+                    UpdateFileWatcher(files, false);
+                }
+            }
+
+            // Do not fire OnTestContainersChanged here.
+            // This will cause us to fire this event too early before the UTE is ready to process containers and will result in an exception.
+            // The UTE will query all the TestContainerDiscoverers once the solution is loaded.
         }
 
         private void UpdateFileWatcher(IEnumerable<string> files, bool isAdd)
@@ -98,7 +119,7 @@ namespace PDDLTools.TestAdapter.Vs
             if (e != null)
             {
                 // Don't do anything for files we are sure can't be test files
-                if (!IsPDDLTestProjectFile(e.File)) return;
+                if (!IsPDDLTestFile(e.File)) return;
 
                 switch (e.ChangedReason)
                 {
@@ -148,7 +169,7 @@ namespace PDDLTools.TestAdapter.Vs
             if (initialContainerSearch)
             {
                 cachedContainers.Clear();
-                var protractorFiles = FindPDDLProjectFiles();
+                var protractorFiles = FindPDDLTestFiles();
                 UpdateFileWatcher(protractorFiles, true);
                 initialContainerSearch = false;
             }
@@ -156,37 +177,35 @@ namespace PDDLTools.TestAdapter.Vs
             return cachedContainers;
         }
 
-        private IEnumerable<string> FindPDDLProjectFiles()
+        private IEnumerable<string> FindPDDLTestFiles()
         {
             var solution = (IVsSolution)serviceProvider.GetService(typeof(SVsSolution));
             var loadedProjects = solution.EnumerateLoadedProjects(__VSENUMPROJFLAGS.EPF_LOADEDINSOLUTION).OfType<IVsProject>();
-            List<string> validProjects = new List<string>();
-            foreach (var project in loadedProjects)
-            {
-                string name = "";
-                project.GetMkDocument(VSConstants.VSITEMID_ROOT, out name);
-                if (name != null)
-                    if (name.ToLower().EndsWith(".pddltestproj"))
-                        validProjects.Add(name);
-            }
 
-            return validProjects;
+            return loadedProjects.SelectMany(FindPDDLTestFiles).ToList();
         }
 
-        private static bool IsPDDLTestProjectFile(string path)
+        private IEnumerable<string> FindPDDLTestFiles(IVsProject project)
         {
-            return ".pddltestproj".Equals(Path.GetExtension(path), StringComparison.OrdinalIgnoreCase);
+            return from item in VsSolutionHelper.GetProjectItems(project)
+                    where IsTestFile(item)
+                    select item;
+        }
+
+        private static bool IsPDDLTestFile(string path)
+        {
+            return ".pddltest".Equals(Path.GetExtension(path), StringComparison.OrdinalIgnoreCase);
         }
 
         private bool IsTestFile(string path)
         {
             try
             {
-                return IsPDDLTestProjectFile(path);
+                return IsPDDLTestFile(path);
             }
             catch (IOException e)
             {
-                logger.Log(MessageLevel.Error, "IO error when detecting a test project during Test Container Discovery" + e.Message);
+                logger.Log(MessageLevel.Error, "IO error when detecting a test file during Test Container Discovery" + e.Message);
             }
 
             return false;
@@ -221,6 +240,7 @@ namespace PDDLTools.TestAdapter.Vs
 
                 if (solutionListener != null)
                 {
+                    solutionListener.SolutionProjectChanged -= OnSolutionProjectChanged;
                     solutionListener.StopListeningForChanges();
                     solutionListener = null;
                 }
