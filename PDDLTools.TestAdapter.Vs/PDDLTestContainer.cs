@@ -7,7 +7,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace PDDLTools.TestAdapter
 {
@@ -57,6 +56,7 @@ namespace PDDLTools.TestAdapter
         public Architecture TargetPlatform { get; set; }
         public override string ToString()
         {
+            //return new FileInfo(this.Source).Extension;
             return this.ExecutorUri.ToString() + "/" + this.Source;
             //return this.ExecutorUri.ToString();
         }

@@ -9,10 +9,10 @@ using System.Windows.Forms;
 
 namespace PDDLTools.TestAdapter
 {
-    [ExtensionUri(ExecutorUri)]
+    [ExtensionUri(ExecutorUriStr)]
     public sealed class PDDLToolsTestExecutor : PDDLTestAdapter, ITestExecutor
     {
-        public const string ExecutorUri = "executor://PDDLToolsTestExecutor/v1";
+        public const string ExecutorUriStr = "executor://PDDLToolsTestExecutor";
 
         public void Cancel()
         {

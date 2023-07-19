@@ -49,6 +49,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLTools.TestAdapter", "PD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLTestProjectTemplate", "ProjectTemplates\PDDLTestProjectTemplate\PDDLTestProjectTemplate.csproj", "{C06749B0-D022-4E84-B1B2-FEC6148B0CBD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PDDLTools.TestAdapter.Vs", "PDDLTools.TestAdapter.Vs\PDDLTools.TestAdapter.Vs.csproj", "{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -263,6 +265,18 @@ Global
 		{C06749B0-D022-4E84-B1B2-FEC6148B0CBD}.Release|arm64.Build.0 = Release|arm64
 		{C06749B0-D022-4E84-B1B2-FEC6148B0CBD}.Release|x86.ActiveCfg = Release|x86
 		{C06749B0-D022-4E84-B1B2-FEC6148B0CBD}.Release|x86.Build.0 = Release|x86
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Debug|arm64.Build.0 = Debug|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Debug|x86.Build.0 = Debug|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Release|arm64.ActiveCfg = Release|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Release|arm64.Build.0 = Release|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Release|x86.ActiveCfg = Release|Any CPU
+		{75D6B306-DE46-4AB8-9AB9-0D8FE4BC8347}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

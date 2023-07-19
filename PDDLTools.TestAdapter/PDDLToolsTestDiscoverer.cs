@@ -13,8 +13,7 @@ using System.Xml;
 namespace PDDLTools.TestAdapter
 {
     [FileExtension(".pddltestproj")]
-    [DirectoryBasedTestDiscoverer]
-    [DefaultExecutorUri(PDDLToolsTestExecutor.ExecutorUri)]
+    [DefaultExecutorUri(PDDLToolsTestExecutor.ExecutorUriStr)]
     public sealed class PDDLToolsTestDiscoverer : PDDLTestAdapter, ITestDiscoverer
     {
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger messageLogger, ITestCaseDiscoverySink discoverySink)
