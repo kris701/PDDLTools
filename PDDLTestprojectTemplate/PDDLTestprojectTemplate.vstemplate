@@ -19,7 +19,7 @@
   </TemplateData>
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
-      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+		<ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
 		<Folder Name="Domain">
 			<ProjectItem>domain.pddl</ProjectItem>
 			<ProjectItem>problem1.pddl</ProjectItem>
@@ -27,4 +27,13 @@
 		<ProjectItem>test.pddltest</ProjectItem>
     </Project>
   </TemplateContent>
+	<WizardExtension>
+		<Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+		<FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+	</WizardExtension>
+	<WizardData>
+		<packages>
+			<package id="PDDLTools.TestAdapter" version="1.0.3" />
+		</packages>
+	</WizardData>
 </VSTemplate>
