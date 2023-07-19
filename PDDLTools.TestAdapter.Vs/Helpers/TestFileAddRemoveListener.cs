@@ -1,13 +1,13 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using PDDLTools.TestAdapter.EventWatchers.EventArgs;
+using PDDLTools.TestAdapter.EventWatchers.EventArgs.Vs;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using PDDLTools.TestAdapter;
 
-namespace PDDLTools.TestAdapter.EventWatchers
+namespace PDDLTools.TestAdapter.EventWatchers.Vs
 {
     [Export(typeof(ITestFileAddRemoveListener))]
     public sealed class TestFileAddRemoveListener : IVsTrackProjectDocumentsEvents2, IDisposable, ITestFileAddRemoveListener

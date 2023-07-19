@@ -268,47 +268,47 @@
     </Page>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\folder.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\GeneralConfiguration.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\GeneralFile.browseobject.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\GeneralFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\NoneFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\PDDLFile.browseobject.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\PDDLFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\PDDLPlanFile.browseobject.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\PDDLPlanFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <None Include="Projects\BaseProject\Rules\ProjectItemsSchema.xaml">
@@ -316,28 +316,28 @@
     </None>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\SASFile.browseobject.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\SASFile.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
     <XamlPropertyRule Include="Projects\BaseProject\Rules\scc.xaml">
       <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		<Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
       <SubType>Design</SubType>
     </XamlPropertyRule>
-	  <XamlPropertyRule Include="Projects\PDDLProject\Rules\DebuggerGeneral.xaml">
-		  <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		  <Namespace>PDDLTools.Projects.BaseProject</Namespace>
-		  <SubType>Design</SubType>
-	  </XamlPropertyRule>
-	  <XamlPropertyRule Include="Projects\PDDLProject\Rules\PDDLExecuter.xaml">
-		  <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
-		  <Namespace>PDDLTools.Projects.BaseProject</Namespace>
-		  <SubType>Design</SubType>
+    <XamlPropertyRule Include="Projects\PDDLProject\Rules\DebuggerGeneral.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <SubType>Design</SubType>
+    </XamlPropertyRule>
+    <XamlPropertyRule Include="Projects\PDDLProject\Rules\PDDLExecuter.xaml">
+      <Generator>MSBuild:GenerateRuleSourceFromXaml</Generator>
+      <Namespace>PDDLTools.Projects.BaseProject</Namespace>
+      <SubType>Design</SubType>
     </XamlPropertyRule>
     <Page Include="Windows\FDResultsWindow\FDResultsWindowControl..xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -428,6 +428,10 @@
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PDDLTools.TestAdapter.Vs\PDDLTools.TestAdapter.Vs.csproj">
+      <Project>{75d6b306-de46-4ab8-9ab9-0d8fe4bc8347}</Project>
+      <Name>PDDLTools.TestAdapter.Vs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PDDLTools.TestAdapter\PDDLTools.TestAdapter.csproj">
       <Project>{8D0E8898-3C70-4E7E-A4DE-E38F59F729C1}</Project>
       <Name>PDDLTools.TestAdapter</Name>
@@ -475,33 +479,33 @@
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>CustomProjectSystems\PDDL</VSIXSubPath>
     </VSIXSourceItem>
-	  <VSIXSourceItem Include="Projects\PDDLTestProject\DeployedBuildSystem\**">
-		  <InProject>false</InProject>
-		  <InstallRoot>MSBuild</InstallRoot>
-		  <VSIXSubPath>CustomProjectSystems\PDDLTest</VSIXSubPath>
-	  </VSIXSourceItem>
+    <VSIXSourceItem Include="Projects\PDDLTestProject\DeployedBuildSystem\**">
+      <InProject>false</InProject>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>CustomProjectSystems\PDDLTest</VSIXSubPath>
+    </VSIXSourceItem>
     <VSIXSourceItem Include="Projects\BaseProject\Rules\*.xaml">
       <InProject>false</InProject>
       <InstallRoot>MSBuild</InstallRoot>
       <VSIXSubPath>CustomProjectSystems\PDDL\Rules</VSIXSubPath>
     </VSIXSourceItem>
-	  <VSIXSourceItem Include="Projects\PDDLProject\Rules\*.xaml">
-		  <InProject>false</InProject>
-		  <InstallRoot>MSBuild</InstallRoot>
-		  <VSIXSubPath>CustomProjectSystems\PDDL\Rules</VSIXSubPath>
-	  </VSIXSourceItem>
-	  <VSIXSourceItem Include="Projects\BaseProject\Rules\*.xaml">
-		  <InProject>false</InProject>
-		  <InstallRoot>MSBuild</InstallRoot>
-		  <VSIXSubPath>CustomProjectSystems\PDDLTest\Rules</VSIXSubPath>
-	  </VSIXSourceItem>
+    <VSIXSourceItem Include="Projects\PDDLProject\Rules\*.xaml">
+      <InProject>false</InProject>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>CustomProjectSystems\PDDL\Rules</VSIXSubPath>
+    </VSIXSourceItem>
+    <VSIXSourceItem Include="Projects\BaseProject\Rules\*.xaml">
+      <InProject>false</InProject>
+      <InstallRoot>MSBuild</InstallRoot>
+      <VSIXSubPath>CustomProjectSystems\PDDLTest\Rules</VSIXSubPath>
+    </VSIXSourceItem>
   </ItemGroup>
   <Target Name="AfterBuild">
     <ItemGroup>
-		<BuildSystemToCopy Include="Projects\PDDLProject\DeployedBuildSystem\**" />
-		<BuildSystemToCopy Include="Projects\PDDLTestProject\DeployedBuildSystem\**" />
-		<RulesToCopy Include="Projects\BaseProject\Rules\*.xaml" />
-		<RulesToCopy Include="Projects\PDDLProject\Rules\*.xaml" />
+      <BuildSystemToCopy Include="Projects\PDDLProject\DeployedBuildSystem\**" />
+      <BuildSystemToCopy Include="Projects\PDDLTestProject\DeployedBuildSystem\**" />
+      <RulesToCopy Include="Projects\BaseProject\Rules\*.xaml" />
+      <RulesToCopy Include="Projects\PDDLProject\Rules\*.xaml" />
     </ItemGroup>
     <Copy SourceFiles="@(BuildSystemToCopy)" DestinationFiles="@(BuildSystemToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(RulesToCopy)" DestinationFiles="@(RulesToCopy->'$(LocalAppData)\CustomProjectSystems\PDDL\Rules\%(RecursiveDir)%(FileName)%(Extension)')" SkipUnchangedFiles="true" />

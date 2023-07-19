@@ -1,4 +1,4 @@
-namespace PDDLTools.TestAdapter.EventWatchers.EventArgs
+namespace PDDLTools.TestAdapter.EventWatchers.EventArgs.Vs
 {
     public enum TestFileChangedReason
     {

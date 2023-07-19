@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using PDDLTools.TestAdapter.EventWatchers.EventArgs;
+using PDDLTools.TestAdapter.EventWatchers.EventArgs.Vs;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
-namespace PDDLTools.TestAdapter.EventWatchers
+namespace PDDLTools.TestAdapter.EventWatchers.Vs
 {
     [Export(typeof(ITestFilesUpdateWatcher))]
     public class TestFilesUpdateWatcher : IDisposable, ITestFilesUpdateWatcher

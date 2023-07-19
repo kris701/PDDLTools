@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PDDLTools.TestAdapter
+namespace PDDLTools.TestAdapter.Vs
 {
     public class PDDLTestContainer : ITestContainer
     {

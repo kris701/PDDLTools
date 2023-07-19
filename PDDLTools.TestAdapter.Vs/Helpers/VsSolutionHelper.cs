@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace PDDLTools.TestAdapter
+namespace PDDLTools.TestAdapter.Vs
 {
 	public static class VsSolutionHelper
 	{

@@ -1,7 +1,7 @@
 using System;
-using PDDLTools.TestAdapter.EventWatchers.EventArgs;
+using PDDLTools.TestAdapter.EventWatchers.EventArgs.Vs;
 
-namespace PDDLTools.TestAdapter.EventWatchers
+namespace PDDLTools.TestAdapter.EventWatchers.Vs
 {
     public interface ITestFilesUpdateWatcher
     {

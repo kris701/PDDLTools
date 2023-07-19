@@ -1,6 +1,6 @@
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace PDDLTools.TestAdapter.EventWatchers.EventArgs
+namespace PDDLTools.TestAdapter.EventWatchers.EventArgs.Vs
 {
     public enum SolutionChangedReason
     {

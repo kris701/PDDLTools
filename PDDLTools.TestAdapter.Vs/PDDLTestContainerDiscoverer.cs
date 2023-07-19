@@ -7,15 +7,15 @@ using Microsoft.VisualStudio.TestWindow.Extensibility;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System.Diagnostics;
 using System.ComponentModel.Composition;
-using PDDLTools.TestAdapter.EventWatchers;
+using PDDLTools.TestAdapter.EventWatchers.Vs;
 using Microsoft.VisualStudio.Shell;
-using PDDLTools.TestAdapter.EventWatchers.EventArgs;
+using PDDLTools.TestAdapter.EventWatchers.EventArgs.Vs;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.IO;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio;
 
-namespace PDDLTools.TestAdapter
+namespace PDDLTools.TestAdapter.Vs
 {
     [Export(typeof(ITestContainerDiscoverer))]
     public class PDDLTestContainerDiscoverer : ITestContainerDiscoverer

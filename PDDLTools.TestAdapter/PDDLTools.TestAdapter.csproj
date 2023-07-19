@@ -71,5 +71,8 @@
       <Version>5.11.3</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="PDDLTools.TestAdapter.nuspec" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
