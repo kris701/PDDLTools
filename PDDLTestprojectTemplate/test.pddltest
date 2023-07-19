@@ -1,10 +1,6 @@
 ﻿{
-	"tests" : [
-		{
-			"domain" : "Domain/domain.pddl"
-			"problems" : [
-				"Domain/problem1.pddl"
-			]
-		}
+	"domain" : "Domain/domain.pddl",
+	"problems" : [
+		"Domain/problem1.pddl"
 	]
 }

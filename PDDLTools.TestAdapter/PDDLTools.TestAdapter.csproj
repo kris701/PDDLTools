@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\PDDLTest.cs" />
     <Compile Include="PDDLTestAdapter.cs" />
     <Compile Include="PDDLToolsTestDiscoverer.cs" />
     <Compile Include="PDDLToolsTestExecutor.cs" />
