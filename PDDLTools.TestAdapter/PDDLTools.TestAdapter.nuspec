@@ -2,13 +2,13 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
     <metadata>
         <id>PDDLToolsTestAdapter</id>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <title>PDDL Tools Test Adapter</title>
         <authors>Kristian Skov Johansen</authors>
         <owners>Kristian Skov Johansen</owners>
         <iconUrl>https://raw.githubusercontent.com/kris701/PDDLTools/master/PDDLTools/Images/Icon.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description></description>
+        <description>PDDL tools test adapter for visual studio.</description>
         <copyright>Kristian Skov Johansen</copyright>
         <language>en-US</language>
         <tags></tags>

@@ -247,6 +247,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="PDDLToolsTestAdapter">
+      <Version>1.0.1</Version>
+    </PackageReference>
     <PackageReference Include="System.Composition">
       <Version>7.0.0</Version>
     </PackageReference>
@@ -431,6 +434,8 @@
     <ProjectReference Include="..\PDDLTools.TestAdapter.Vs\PDDLTools.TestAdapter.Vs.csproj">
       <Project>{75d6b306-de46-4ab8-9ab9-0d8fe4bc8347}</Project>
       <Name>PDDLTools.TestAdapter.Vs</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
     <ProjectReference Include="..\PDDLTools.TestAdapter\PDDLTools.TestAdapter.csproj">
       <Project>{8D0E8898-3C70-4E7E-A4DE-E38F59F729C1}</Project>

@@ -74,5 +74,12 @@
   <ItemGroup>
     <None Include="PDDLTools.TestAdapter.nuspec" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="nuget.exe" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>cd ..\..\
+nuget.exe pack -OutputDirectory ./bin/debug</PostBuildEvent>
+  </PropertyGroup>
 </Project>
