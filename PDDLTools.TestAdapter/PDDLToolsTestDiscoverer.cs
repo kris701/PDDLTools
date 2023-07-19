@@ -25,32 +25,44 @@ namespace PDDLTools.TestAdapter
             TestLog.Initialize(messageLogger);
             Initialize(discoveryContext);
             TestLog.SendInformationalMessage("Discovering PDDL test files...");
-            int counter = 1;
-            foreach (var file in sources)
+
+            try
             {
-                TestLog.SendInformationalMessage($"Generating test case {counter++} out of {sources.Count()}");
-                try
-                {
-                    GenerateTestCasesFromTestFile(file, discoverySink);
-                }
-                catch (Exception ex)
-                {
-                    TestLog.SendErrorMessage($"An error occured while discovering tests: {ex}");
-                }
+                GenerateTestCases(sources, discoverySink);
+            }
+            catch (Exception ex)
+            {
+                TestLog.SendErrorMessage($"An error occured while discovering tests: {ex}");
             }
         }
 
-        private void GenerateTestCasesFromTestFile(string file, ITestCaseDiscoverySink discoverySink)
+        public static List<TestCase> GenerateTestCases(IEnumerable<string> sources, ITestCaseDiscoverySink discoverySink)
         {
+            List<TestCase> cases = new List<TestCase>();
+            foreach (var file in sources)
+                cases.AddRange(GenerateTestCasesFromTestFile(file, discoverySink));
+            return cases;
+        }
+
+        private static List<TestCase> GenerateTestCasesFromTestFile(string file, ITestCaseDiscoverySink discoverySink)
+        {
+            List<TestCase> returnList = new List<TestCase>();
             PDDLTest test = JsonConvert.DeserializeObject<PDDLTest>(File.ReadAllText(file));
-            var basePath = new FileInfo(test.Domain).Name;
+            var testName = new FileInfo(file).Name.Replace(".pddltest", "");
+            var basePath = new FileInfo(file).Directory.FullName;
+            var domainPath = Path.Combine(basePath, test.Domain);
+            var domainName = new FileInfo(domainPath).Name.Replace(".pddl","");
             foreach(var problem in test.Problems)
             {
-                var caseName = Path.Combine(basePath, new FileInfo(problem).Name.Replace(".pddl", ""));
-                var newCase = new TestCase(caseName, new Uri(PDDLToolsTestExecutor.ExecutorUriStr), file.ToLowerInvariant());
+                var problemPath = Path.Combine(basePath, problem);
+                var problemName = new FileInfo(problemPath).Name.Replace(".pddl", "");
+                var newCase = new TestCase($"{testName}.{domainName}.{problemName}", new Uri(PDDLToolsTestExecutor.ExecutorUriStr), file.ToLowerInvariant());
+                returnList.Add(newCase);
                 newCase.CodeFilePath = problem;
+                newCase.LocalExtensionData = new KeyValuePair<string, string>(domainPath, problemPath);
                 discoverySink.SendTestCase(newCase);
             }
+            return returnList;
         }
     }
 }

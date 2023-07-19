@@ -14,30 +14,21 @@ namespace PDDLTools.TestAdapter
 {
     public abstract class PDDLTestAdapter
     {
-        // Our logger used to display messages
         protected TestLogger TestLog;
-        // The adapter version
-        private readonly string adapterVersion;
-
-        protected bool UseVsKeepEngineRunning { get; private set; }
-        public bool ShadowCopy { get; private set; }
-        public bool CollectSourceInformation { get; private set; }
 
         public int Verbosity { get; private set; }
 
+        public string FastDownwardPath { get; set; }
+        public string FastDownwardEngineArgs { get; set; }
+        public string PythonPrefix { get; set; }
+        public int FastDownwardTimeout { get; set; }
 
-        protected bool RegistryFailure { get; set; }
-        protected string ErrorMsg
-        {
-            get; set;
-        }
 
         #region Constructor
 
         protected PDDLTestAdapter()
         {
             Verbosity = 0;
-            RegistryFailure = false;
             TestLog = new TestLogger(Verbosity);
         }
 
@@ -53,7 +44,10 @@ namespace PDDLTools.TestAdapter
             var doc = new XmlDocument();
             doc.LoadXml(settingsXml);
             var runConfiguration = doc.SelectSingleNode("RunSettings/RunConfiguration");
-            CollectSourceInformation = GetInnerTextAsBool(runConfiguration, "CollectSourceInformation", true);
+            FastDownwardPath = GetInnerTextAsString(runConfiguration, "FDPath", "fast-downward.py");
+            FastDownwardEngineArgs = GetInnerTextAsString(runConfiguration, "FDEngineArgs", "\"astar(lmcut())\"");
+            PythonPrefix = GetInnerTextAsString(runConfiguration, "PythonPrefix", "python");
+            FastDownwardTimeout = GetInnerTextAsInt(runConfiguration, "FDTimeout", 10);
         }
 
         #region Helper Methods
@@ -94,20 +88,40 @@ namespace PDDLTools.TestAdapter
             return bool.Parse(temp);
         }
 
+        private int GetInnerTextAsInt(XmlNode startNode, string xpath, int defaultValue)
+        {
+            string temp = GetInnerText(startNode, xpath);
+
+            if (string.IsNullOrEmpty(temp))
+                return defaultValue;
+
+            return int.Parse(temp);
+        }
+
+        private string GetInnerTextAsString(XmlNode startNode, string xpath, string defaultValue)
+        {
+            string temp = GetInnerText(startNode, xpath);
+
+            if (string.IsNullOrEmpty(temp))
+                return defaultValue;
+
+            return temp;
+        }
+
         #endregion
 
         private const string Name = "PDDLTools VS Adapter";
 
         protected void Info(string method, string function)
         {
-            var msg = string.Format("{0} {1} {2} is {3}", Name, adapterVersion, method, function);
+            var msg = string.Format("{0} {1} is {3}", Name, method, function);
             TestLog.SendInformationalMessage(msg);
         }
 
         protected void Debug(string method, string function)
         {
 #if DEBUG
-            var msg = string.Format("{0} {1} {2} is {3}", Name, adapterVersion, method, function);
+            var msg = string.Format("{0} {1} is {3}", Name,method, function);
             TestLog.SendDebugMessage(msg);
 #endif
         }

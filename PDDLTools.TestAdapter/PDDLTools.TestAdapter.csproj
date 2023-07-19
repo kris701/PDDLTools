@@ -78,9 +78,15 @@
   <ItemGroup>
     <None Include="nuget.exe" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CMDRunners\CMDRunners.csproj">
+      <Project>{00a388be-b31e-4472-bffb-da51cb79a55b}</Project>
+      <Name>CMDRunners</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>cd ..\..\
-nuget.exe pack -OutputDirectory ./bin/debug</PostBuildEvent>
+nuget.exe pack -OutputDirectory ./bin/debug  -IncludeReferencedProjects</PostBuildEvent>
   </PropertyGroup>
 </Project>

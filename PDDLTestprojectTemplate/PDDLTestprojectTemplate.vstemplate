@@ -25,6 +25,7 @@
 			<ProjectItem>problem1.pddl</ProjectItem>
 		</Folder>
 		<ProjectItem>test.pddltest</ProjectItem>
+		<ProjectItem>test.runsettings</ProjectItem>
     </Project>
   </TemplateContent>
 	<WizardExtension>
