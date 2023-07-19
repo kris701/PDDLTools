@@ -58,7 +58,7 @@ namespace PDDLTools.TestAdapter
                 var problemName = new FileInfo(problemPath).Name.Replace(".pddl", "");
                 var newCase = new TestCase($"{testName}.{domainName}.{problemName}", new Uri(PDDLToolsTestExecutor.ExecutorUriStr), file.ToLowerInvariant());
                 returnList.Add(newCase);
-                newCase.CodeFilePath = problem;
+                newCase.CodeFilePath = $"{domainPath};{problemPath}";
                 newCase.LocalExtensionData = new KeyValuePair<string, string>(domainPath, problemPath);
                 discoverySink.SendTestCase(newCase);
             }

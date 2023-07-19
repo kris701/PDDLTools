@@ -44,13 +44,9 @@ namespace PDDLTools.TestAdapter
                 outcome.Outcome = TestOutcome.Failed;
                 try
                 {
-                    var domain = "";
-                    var problem = "";
-                    if (source.LocalExtensionData is KeyValuePair<string, string> kv)
-                    {
-                        domain = kv.Key;
-                        problem = kv.Value;
-                    }
+                    var split = source.CodeFilePath.Split(';');
+                    var domain = split[0];
+                    var problem = split[1];
                     TestLog.SendInformationalMessage($"   Full Domain:  {domain}");
                     TestLog.SendInformationalMessage($"   Full Problem: {problem}");
                     if (!File.Exists(domain) || !File.Exists(problem)) {
