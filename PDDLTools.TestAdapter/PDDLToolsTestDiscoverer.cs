@@ -48,11 +48,14 @@ namespace PDDLTools.TestAdapter
         {
             List<TestCase> returnList = new List<TestCase>();
             PDDLTest test = JsonConvert.DeserializeObject<PDDLTest>(File.ReadAllText(file));
-            var testName = new FileInfo(file).Name.Replace(".pddltest", "");
+
             var basePath = new FileInfo(file).Directory.FullName;
             var domainPath = Path.Combine(basePath, test.Domain);
             var domainName = new FileInfo(domainPath).Name.Replace(".pddl","");
-            foreach(var problem in test.Problems)
+
+            // So that the list is prioritized as listed in the .pddltest file
+            test.Tasks.Reverse();
+            foreach (var problem in test.Problems)
             {
                 var problemPath = Path.Combine(basePath, problem);
                 var problemName = new FileInfo(problemPath).Name.Replace(".pddl", "");

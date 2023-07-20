@@ -50,6 +50,7 @@
     <Compile Include="PDDLToolsTestDiscoverer.cs" />
     <Compile Include="PDDLToolsTestExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestCaseExecutionGenerator.cs" />
     <Compile Include="TestLogger.cs" />
   </ItemGroup>
   <ItemGroup>
