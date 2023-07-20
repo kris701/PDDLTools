@@ -9,7 +9,7 @@ Overall, this extensions adds:
 * Editor features
   * Syntax checking
   * Syntax Highlighting with options for custom colors
-  * Quick Info on all PDDL elements as well as contextual information
+  * Quick Info on all PDDL elements
   * Rename names and objects across multiple PDDL files
   * Small window in the bottom of the editor, showing general information on the document (such as predicate count or object count)
   * Auto completement of statements, both with basic PDDL elements and the predicates or objects you have written
@@ -32,17 +32,62 @@ Overall, this extensions adds:
   * Quick Access toolbar
   * Settings for most of the features
 
-## How to Use
-The first thing you will see when you have installed this extension, is a welcome page showing this information.
-Its recommended you read through the features, so you know how to use them correctly.
-To use this extension, make sure you have [Fast Downward](https://www.fast-downward.org/) installed and build somewhere. You must also have [Python](https://www.python.org/) installed.
-Then go to `Settings -> PDDL Tools` and set the `Fast Downward Folder` to be your install location. Its important that you set it to be the folder where the `fast-downward.py` is in.
+## Getting Started
+The only major requirement to running this is that you have a [Fast Downward](https://www.fast-downward.org/) installation build somewhere on your computer as well as having [Python](https://www.python.org/) installed.
+When you have done that and made sure that Fast Downward works (try and call it from the command line), you are now ready to setup the extension.
+After you have downloaded and installed this extension, a welcome window showing this will appear.
+You can then go into `Options -> PDDL Tools` and set the `Fast Downward Folder` to be your install location. Its important that you set it to be the folder where the `fast-downward.py` is in.
 Also set the `Python Prefix` to whatever your system environment is, its usually `python`, `python3` or `py`.
-When you have done this, you are ready to use the extension, simply by making a new project under `File -> New -> Project`!
+Now you are all set up and ready to use the extension. You can start by creating a new project in visual studio by `File -> New -> Project` and select the PDDL Project template.
 
-If you want to use the Plan Validator, you must have [VAL](https://www.fast-downward.org/SettingUpVal) installed too. 
+If you want to use the Plan Validator, you must have [VAL](https://www.fast-downward.org/SettingUpVal) installed too. Its the same process as with Fast Downward, make sure you have it installed, and then give the location of `validate.exe` in the settings.
 
 Note, you can also add the `PDDL Toolbar` if you want more direct access to the extension. You can enable it by right clicking the Visual Studio toolbar and add the `PDDL Toolbar`.
+
+## Features
+There are a lot of features in this extension, so each of them will be explained in their respective section below.
+
+### Editor Features
+One of the primary features of this extension is its syntax checker. Whenever you save a PDDL document, a background task will check through the PDDL document and give you errors, warnings and messages.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/33f0c0aa-c4d0-425f-beb6-19d6379b46fe)
+
+This feature helps a lot with developing PDDL domains to make sure they work as intended. 
+The next feature is the syntax highlighting.
+This makes it a lot easier to see what is what in a PDDL document.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/9486e528-2299-4950-91c0-63a769aecaf5)
+
+If you are not a fan of the default colors, you can change them all under `Options -> Environment -> Fonts and Colors` where all the relevant settings have the prefix `PDDL`.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/4b656014-204e-44eb-b231-e9202af2db49)
+
+This extension also provides quick info on general PDDL elements. With the info is a short description of what it is, as well as some example syntax of how it should be set up.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/9c74bc06-6e3d-4e8b-851b-2392797ca8bb)
+
+
+
+
+### PDDL Execution
+
+### PDDL Projects
+
+### VAL
+
+### PDDL Tests
+
+### Other
+
+
+
+
+
+
+
+
+
+
 
 ## PDDL Syntax Highlighting and Quick Info
 This extension contains a simple PDDL syntax highlighter for basic PDDL domain/problem constructs, such as `:objects` or `:action`.
