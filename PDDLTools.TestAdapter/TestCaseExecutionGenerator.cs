@@ -13,9 +13,41 @@ using System.IO;
 
 namespace PDDLTools.TestAdapter
 {
-    public static class TestCaseExecutionGenerator
+    public class TestCaseExecutionGenerator : PDDLTestAdapter
     {
-        public static Task GenerateParseTask(TestCase source, string domain, string problem, bool analyse, IFrameworkHandle frameworkHandle)
+        public readonly static HashSet<string> TaskOptions = new HashSet<string>() { "Parse", "ParseAnalyse", "FDExecute" };
+
+        public TestCaseExecutionGenerator(IDiscoveryContext context) {
+            Initialize(context);
+        }
+
+        public bool IsTaskValid(string task) => TaskOptions.Any(x => x.ToLower() == task.ToLower());
+
+        public Task GetTask(TestCase source, string domain, string problem, string task, IFrameworkHandle frameworkHandle)
+        {
+            switch (task.ToLower())
+            {
+                case "parse":
+                    return GenerateParseTask(source, domain, problem, false, frameworkHandle);
+                case "parseanalyse":
+                    return GenerateParseTask(source, domain, problem, true, frameworkHandle);
+                case "fdexecute":
+                    Random rnd = new Random();
+                    var tempPlanName = $"temp{rnd.Next()}.pddlplan";
+                    var tempOutName = $"temp{rnd.Next()}.out";
+                    return GenerateFDExecuteTask(
+                        source,
+                        domain,
+                        problem,
+                        tempPlanName,
+                        tempOutName,
+                        frameworkHandle);
+                default:
+                    return null;
+            }
+        }
+
+        private Task GenerateParseTask(TestCase source, string domain, string problem, bool analyse, IFrameworkHandle frameworkHandle)
         {
             return new Task(() => {
                 var outcome = new TestResult(source);
@@ -31,7 +63,7 @@ namespace PDDLTools.TestAdapter
                     {
                         outcome.Outcome = TestOutcome.Passed;
                         foreach (var message in parser.Listener.Errors)
-                            outcome.Messages.Add(new TestResultMessage("StdOutMsgs", $"{message.Message}{Environment.NewLine}"));
+                            outcome.Messages.Add(new TestResultMessage("StdOutMsgs", $"{message}{Environment.NewLine}"));
                     }
 
                 }
@@ -39,7 +71,7 @@ namespace PDDLTools.TestAdapter
                 {
                     outcome.ErrorMessage = ex.Message;
                     foreach (var error in ex.Errors)
-                        outcome.Messages.Add(new TestResultMessage("StdErrMsgs", $"{error.Message}{Environment.NewLine}"));
+                        outcome.Messages.Add(new TestResultMessage("StdErrMsgs", $"{error}{Environment.NewLine}"));
                 }
                 catch (Exception ex)
                 {
@@ -53,7 +85,7 @@ namespace PDDLTools.TestAdapter
             });
         }
 
-        public static Task GenerateFDExecuteTask(TestCase source, string domain, string problem, string tempPlanName, string tempOutName, string fastDownwardPath, string pythonPrefix, int fastDownwardTimeout, string fastDownwardEngineArgs, IFrameworkHandle frameworkHandle)
+        private Task GenerateFDExecuteTask(TestCase source, string domain, string problem, string tempPlanName, string tempOutName, IFrameworkHandle frameworkHandle)
         {
             return new Task(() => {
                 var outcome = new TestResult(source);
@@ -62,8 +94,8 @@ namespace PDDLTools.TestAdapter
                 frameworkHandle.RecordStart(source);
                 try
                 {
-                    FDRunner runner = new FDRunner(fastDownwardPath, pythonPrefix, fastDownwardTimeout);
-                    var res = runner.RunAsync(domain, problem, fastDownwardEngineArgs, tempPlanName, tempOutName).Result;
+                    FDRunner runner = new FDRunner(FastDownwardPath, PythonPrefix, FastDownwardTimeout);
+                    var res = runner.RunAsync(domain, problem, FastDownwardEngineArgs, tempPlanName, tempOutName).Result;
                     if (res.ResultReason == CMDRunners.Helpers.ProcessCompleteReson.RanToCompletion && res.ExitCode == FDExitCode.SUCCESS)
                         outcome.Outcome = TestOutcome.Passed;
                     if (res.ResultReason == CMDRunners.Helpers.ProcessCompleteReson.ForceKilled)

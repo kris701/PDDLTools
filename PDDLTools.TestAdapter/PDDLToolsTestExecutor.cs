@@ -49,7 +49,7 @@ namespace PDDLTools.TestAdapter
             }
             else
             {
-                var tasks = GenerateTasks(sources, frameworkHandle);
+                var tasks = GenerateTasks(sources, runContext, frameworkHandle);
 
                 if (RunParallel)
                 {
@@ -74,11 +74,12 @@ namespace PDDLTools.TestAdapter
             }
         }
 
-        private List<Task> GenerateTasks(IEnumerable<TestCase> sources, IFrameworkHandle frameworkHandle)
+        private List<Task> GenerateTasks(IEnumerable<TestCase> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             List<Task> tasks = new List<Task>();
 
-            Random rnd = new Random();
+            var generator = new TestCaseExecutionGenerator(runContext);
+
             foreach (var source in sources)
             {
                 if (_stop)
@@ -89,33 +90,16 @@ namespace PDDLTools.TestAdapter
                 var task = source.GetPropertyValue<string>(TestProperty.Find("PDDLTools_Task"), "");
                 if (File.Exists(domain) && File.Exists(problem))
                 {
-                    switch (task.ToLower())
+                    if (generator.IsTaskValid(task))
                     {
-                        case "parse":
-                            tasks.Add(TestCaseExecutionGenerator.GenerateParseTask(source, domain, problem, false, frameworkHandle));
-                            break;
-                        case "parseanalyse":
-                            tasks.Add(TestCaseExecutionGenerator.GenerateParseTask(source, domain, problem, true, frameworkHandle));
-                            break;
-                        case "fdexecute":
-                            var tempPlanName = $"temp{rnd.Next()}.pddlplan";
-                            var tempOutName = $"temp{rnd.Next()}.out";
-                            tasks.Add(TestCaseExecutionGenerator.GenerateFDExecuteTask(
-                                source, 
-                                domain, 
-                                problem, 
-                                tempPlanName, 
-                                tempOutName,
-                                FastDownwardPath,
-                                PythonPrefix,
-                                FastDownwardTimeout,
-                                FastDownwardEngineArgs,
-                                frameworkHandle));
-                            break;
-                        default:
-                            TestLog.SendErrorMessage($"Invalid task given for the domain '{domain}' and '{problem}' case! The task was: {task}");
-                            break;
+                        var newTask = generator.GetTask(source, domain, problem, task, frameworkHandle);
+                        if (newTask != null)
+                            tasks.Add(newTask);
+                        else
+                            TestLog.SendErrorMessage($"Unknown error occured while processing the domain '{domain}' and '{problem}' case! The task was: {task}");
                     }
+                    else
+                        TestLog.SendErrorMessage($"Invalid task given for the domain '{domain}' and '{problem}' case! The task was: {task}");
                 }
                 else
                     TestLog.SendErrorMessage($"Could not find domain and problem file! Domain: '{domain}', Problem: '{problem}'");
