@@ -52,6 +52,11 @@
 		<None Include="Domain/domain.pddl"/>
 		<None Include="Domain/problem1.pddl"/>
 	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="PDDLTools.TestAdapter">
+			<Version>1.0.50</Version>
+		</PackageReference>
+	</ItemGroup>
 	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
