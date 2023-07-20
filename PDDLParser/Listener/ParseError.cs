@@ -86,5 +86,21 @@ namespace PDDLParser.Listener
             Character = -1;
             Code = code;
         }
+
+        public override string ToString()
+        {
+            switch (Type)
+            {
+                case ParseErrorType.None:
+                    return $"       {Message}";
+                case ParseErrorType.Message:
+                    return $"[INFO] {Message}";
+                case ParseErrorType.Warning:
+                    return $"[WARN] {Message}";
+                case ParseErrorType.Error:
+                    return $"[ERRO] {Message}";
+            }
+            return Message;
+        }
     }
 }

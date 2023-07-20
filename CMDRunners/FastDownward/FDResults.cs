@@ -10,6 +10,7 @@ namespace CMDRunners.FastDownward
 {
     public enum FDExitCode
     {
+        NONE = -1,
         SUCCESS = 0,
         SEARCH_PLAN_FOUND_AND_OUT_OF_MEMORY = 1,
         SEARCH_PLAN_FOUND_AND_OUT_OF_TIME = 2,

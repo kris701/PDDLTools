@@ -20,6 +20,7 @@ using Task = System.Threading.Tasks.Task;
 using System.Runtime.InteropServices;
 using PDDLParser.Helpers;
 using PDDLTools.Projects;
+using PDDLTools.Projects.PDDLProject;
 
 namespace PDDLTools.Commands
 {

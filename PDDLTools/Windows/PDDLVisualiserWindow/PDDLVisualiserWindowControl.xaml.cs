@@ -5,6 +5,7 @@ using PDDLParser.Models;
 using PDDLParser.Models.Domain;
 using PDDLTools.Commands;
 using PDDLTools.Projects;
+using PDDLTools.Projects.PDDLProject;
 using PDDLTools.Windows.ResourceDictionary;
 using PDDLTools.Windows.SASSolutionWindow.UserControls;
 using System;

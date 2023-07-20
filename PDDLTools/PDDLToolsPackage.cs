@@ -26,6 +26,7 @@ using PDDLTools.Windows.RenameCodeWindow;
 using PDDLTools.FileMonitors;
 using Microsoft.VisualStudio.ProjectSystem;
 using System.IO;
+using PDDLTools.Projects.PDDLProject;
 
 namespace PDDLTools
 {

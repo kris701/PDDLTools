@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace CMDRunners
 {
-    public class BaseRunner : IRunner
+    public abstract class BaseRunner : IRunner
     {
         public string ExecutablePath { get; }
         public string ExecutableName { get; }
@@ -45,5 +45,7 @@ namespace CMDRunners
         {
             Log.Add(new LogItem(e.Data, LogItem.ItemType.Log));
         }
+
+        public abstract bool VerifyExecutable();
     }
 }

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>PDDL Test Project</Name>
+    <Description>A project for creating tests for PDDL files</Description>
+    <Icon>PDDLTestprojectTemplate.ico</Icon>
+
+	  <ProjectType>PDDL</ProjectType>
+	  <LanguageTag>PDDL</LanguageTag>
+	  <PlatformTag>Windows</PlatformTag>
+	  
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+	  <SortOrder>1</SortOrder>
+    <TemplateID>8d24f69d-2a11-4b2d-b260-2ccd49573ff2</TemplateID>
+	  <CreateNewFolder>true</CreateNewFolder>
+	  <DefaultName>New Test Project</DefaultName>
+	  <ProvideDefaultName>true</ProvideDefaultName>
+	  <CreateInPlace>true</CreateInPlace>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+		<ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+		<Folder Name="Domain">
+			<ProjectItem>domain.pddl</ProjectItem>
+			<ProjectItem>problem1.pddl</ProjectItem>
+		</Folder>
+		<ProjectItem>test.pddltest</ProjectItem>
+		<ProjectItem>test.runsettings</ProjectItem>
+    </Project>
+  </TemplateContent>
+	<WizardExtension>
+		<Assembly>NuGet.VisualStudio.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</Assembly>
+		<FullClassName>NuGet.VisualStudio.TemplateWizard</FullClassName>
+	</WizardExtension>
+	<WizardData>
+		<packages>
+			<package id="PDDLTools.TestAdapter" version="*" />
+		</packages>
+	</WizardData>
+</VSTemplate>

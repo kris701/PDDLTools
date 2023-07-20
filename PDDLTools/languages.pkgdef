@@ -10,3 +10,5 @@
 "DefaultIconMoniker"="KnownMonikers.DecisionNode"
 [$RootKey$\ShellFileAssociations\.pddlplan]
 "DefaultIconMoniker"="KnownMonikers.PathListBox"
+[$RootKey$\ShellFileAssociations\.pddltest]
+"DefaultIconMoniker"="KnownMonikers.AddTest"
