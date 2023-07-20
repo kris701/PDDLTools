@@ -25,7 +25,7 @@
 			<ProjectItem>problem1.pddl</ProjectItem>
 		</Folder>
 		<ProjectItem>test.pddltest</ProjectItem>
-		<ProjectItem>test.runsettings</ProjectItem>
+		<ProjectItem>.runsettings</ProjectItem>
     </Project>
   </TemplateContent>
 	<WizardExtension>
@@ -34,7 +34,7 @@
 	</WizardExtension>
 	<WizardData>
 		<packages>
-			<package id="PDDLTools.TestAdapter" version="*" />
+			<package id="PDDLTools.TestAdapter" version="1.0.50" />
 		</packages>
 	</WizardData>
 </VSTemplate>
