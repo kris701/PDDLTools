@@ -1,6 +1,4 @@
-# Visual Studio PDDL Tools Extension
-
-![combined](https://github.com/kris701/PDDLTools/assets/22596587/5ead8019-9c45-4d5d-94d4-e72d4f361914)
+![Banner](https://github.com/kris701/PDDLTools/assets/22596587/bed28862-d60b-47fb-a802-9039d5ad64a3)
 
 This is an extension to make developing with PDDL files and planning in general easier.
 This extension can be used with [Fast Downward](https://www.fast-downward.org/) to execute and analyse plans from running PDDL files. The extension is compatible with the PDDL 2.1 standard.
@@ -66,12 +64,70 @@ This extension also provides quick info on general PDDL elements. With the info 
 
 ![image](https://github.com/kris701/PDDLTools/assets/22596587/9c74bc06-6e3d-4e8b-851b-2392797ca8bb)
 
+You can also right click most PDDL named elements and rename them. When you click to rename a valid element, a popup will display where you can write what you want to replace the name with.
+If you select the option to rename across all matching problem files, the item will be renamed across all problems that uses the domain reference name given in the current PDDL document.
 
+![image](https://github.com/kris701/PDDLTools/assets/22596587/658cb593-db2e-421d-afa8-567537fda67a)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/09a7b9c3-8621-4a12-9917-58e546e54ae1)
 
+When you open a PDDL document, a small bar in the bottom of the editor shows some general information on the currently open domain or problem file.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/972815a7-9827-47b5-8f06-51e719d2725c)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/0cafda90-3354-4e2b-85ab-dc4c09da43b2)
+
+When you write anything in the editor, some autocompletements will show up. These are either basic PDDL elements or names or predicates used in the current document.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/2890bcb4-2c3e-4d6d-b33b-a4aef988816d)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/f41ad6c9-1dbe-4632-9f05-a31136d18269)
+
+Whenever you select a word in the current PDDL document, all other matching words is highlighted. Matching braces are also highlighted.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/3dc94247-e1a4-4d7c-8dad-3dc97756d32b)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/98d6429d-d7ab-4d28-b53e-9fdbc2deafbb)
+
+All these editor features can be turned on or off in Options page.
 
 ### PDDL Execution
 
+When creating PDDL projects, you get the option to execute PDDL files in it. To start, you can select domains/problems either from selecting it from the toolbar menu, the extension menu or context menus.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/064c69e0-77cc-40d1-bf87-8a7fc50f0642)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/2bcc3bdc-e29c-41ea-a51b-0ed15a36ce6f)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/c1afbba3-846e-4190-ad67-ad92ab2a6edc)
+
+Note, need to have the current project set as the startup project for this to work.
+(When a project is loaded, it may take a few seconds for the extension to index the PDDL files in it)
+
+You can now select what engine you want to execute with. By default there are a handful of `--search` options and all the `--alias` options that are available in the current install of Fast Downward. You can add more engine options in the Options menu.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/17232362-6d78-4c2c-b46f-35930fc4ae6d)
+
+You can now, assuming you have no syntax errors, execute the given domain and problem file by pressing F5 or clicking the `PDDL Executor` button in the toolbar.
+
+If the execution of the PDDL files where successful, two windows will open. One showing general information from the Fast Downward log.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/e4b2dace-5b5a-4793-bee6-dd401ccbd86c)
+
+As well as a visualiser showing details on the resulting plan file.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/b59f97bb-787f-4240-bbbd-2ca78ad5b88d)
+
+Each node represents a step in the plan, if the circle is dark then its just a normal state, if its orange its a partial goal state and green means a full goal state.
+You can move the nodes around by draging and dropping them, or you can reroll the layout by using the controls in the top of the window.
+You can also move the slider in the bottom, to show specific parts of the plan.
+
 ### PDDL Projects
+
+This extensions also brings custom project types. There are two primary types, `PDDL Projects` or `PDDL Test Projects`.
+The `PDDL Projects` is used for developing PDDL domains and problems and its also the projects used to execute files with Fast Downward. The `PDDL Test Project` will be explained later.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/4874dac7-5987-4959-8880-4b2d2fe138b7)
+
+When you create a new PDDL project, reload one, or startup a solution the files in each active PDDL projects will be indexed. 
+You will most likely only notice this if you have a lot of PDDL files (several thousands). The indexing gives the rest of the extension an easier time when it comes to knowing what files are what.
+You can right click a project file and reindex it manually if you need to.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/3fb83291-08ef-446d-92de-b94b830540b5)
 
 ### VAL
 
@@ -85,44 +141,3 @@ This extension also provides quick info on general PDDL elements. With the info 
 
 
 
-
-
-
-
-## PDDL Syntax Highlighting and Quick Info
-This extension contains a simple PDDL syntax highlighter for basic PDDL domain/problem constructs, such as `:objects` or `:action`.
-Also included is a simple Quick info provider, that shows some basic information on the highlighted constructs.
-
-![image](https://github.com/kris701/PDDLTools/assets/22596587/ec94d09a-548a-4129-8ee0-94770f63b8ed)
-
-![image](https://github.com/kris701/PDDLTools/assets/22596587/0269bfe7-319e-4aad-85b7-2e8b9f7e73ea)
-
-A basic parser is also in this extension, that gives you information on syntax errors in the given problem or domain file you are editing. This updated every time you save the document.
-
-![image](https://github.com/kris701/PDDLTools/assets/22596587/fed581a2-6373-4a4a-84dc-86bb115bd2d2)
-
-## Options
-There are two options pages for this extension, being `Settings -> PDDL Tools` and `Settings -> Text Editor -> PDDL`.
-The first one is fairly self explanatory, and the text editor one is simply default Visual Studio settings options.
-You can also add more Fast Downward search options under the tools options, just make sure its a `;` seperated list.
-There are also options under the `Fonts and Colors` category to change the syntax colors.
-
-## Execute a PDDL Problem and Domain
-To run a PDDL problem and domain, you must have an active PDDL project open. You can then select what problem or domain file you want, either by right clicking the fole in the Solution Explore, by selecting it in the Extensions menu or using the toolbar. You can then select what engine you want to use, that is either an "alias" or a "search".
-
-![image](https://github.com/kris701/PDDLTools/assets/22596587/539f0c73-51e3-443e-a19b-c3b926c57da7)
-
-You can now select what `Search` option you want to run Fast Downward with in the final textbox.
-Finally, you can click the `PDDL Executer` button, or press F5, and start Fast Downward. When the run is finished the results will be shown in the Output Window and two windows will open, regarding further details on the results and plan.
-
-## Result Windows
-There are two result windows that is displayedm the `Fast Downward Result` window and the `SAS Solution` window.
-The first window shows general results from Fast Downward regarding the Translator and Search parameters.
-The SAS Solution window shows if a solution was found.
-This window visually shows the plan, as well as giving you the option to scroll through the plan process, using the slider in the bottom, and its states:
-
-![image](https://github.com/kris701/PDDLTools/assets/22596587/019a2883-6d5c-4f47-8362-ad301f1de13e)
-
-You can hover over a given node in the plan, to show the state at that point, as well as what action it took:
-
-![image](https://github.com/kris701/PDDLTools/assets/22596587/b917ea0d-0cdd-4ed3-af0d-e921de345df0)
