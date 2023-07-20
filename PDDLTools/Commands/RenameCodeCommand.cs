@@ -51,7 +51,7 @@ namespace PDDLTools.Commands
                 var selectedWord = GetSelectedWord(document);
                 if (selectedWord == null)
                     return;
-                var selectedNode = await GetSelectedAsNodeAsync(selectedWord, document.Caret.Position.BufferPosition.Position);
+                var selectedNode = await GetSelectedAsNodeAsync(selectedWord.ToLower(), document.Caret.Position.BufferPosition.Position);
                 if (selectedNode == null)
                     return;
                 button.Visible = true;
@@ -66,7 +66,7 @@ namespace PDDLTools.Commands
             var selectedWord = GetSelectedWord(document);
             if (selectedWord == null)
                 return;
-            var selectedNode = await GetSelectedAsNodeAsync(selectedWord, document.Caret.Position.BufferPosition.Position);
+            var selectedNode = await GetSelectedAsNodeAsync(selectedWord.ToLower(), document.Caret.Position.BufferPosition.Position);
             if (selectedNode == null)
                 return;
 

@@ -117,7 +117,7 @@ namespace PDDLTools.Tagger
 
             //Find the new spans
             FindData findData = new FindData(currentWord.GetText(), currentWord.Snapshot);
-            findData.FindOptions = FindOptions.MatchCase;
+            findData.FindOptions = FindOptions.OrdinalComparison | FindOptions.WholeWord;
 
             wordSpans.AddRange(TextSearchService.FindAll(findData));
 

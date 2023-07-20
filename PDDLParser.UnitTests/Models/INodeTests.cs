@@ -18,8 +18,8 @@ namespace PDDLParser.UnitTests.Models
         [TestMethod]
         [DataRow("(define (domain a))", "a", 1)]
         [DataRow("(define (domain a) (:requirements a))", "a", 2)]
-        [DataRow("(define (:action a :parameters (?a) :precondition (a) :effect (a)))", "a", 4)]
-        [DataRow("(define (:action b :parameters (?a) :precondition (a) :effect (a)))", "a", 3)]
+        [DataRow("(define (:action a :parameters (?a) :precondition (a) :effect (a)))", "?a", 1)]
+        [DataRow("(define (:action b :parameters (?a) :precondition (a) :effect (a)))", "a", 2)]
         public void Can_FindNames_Domain(string toParse, string targetName, int expectedCount)
         {
             // ARRANGE

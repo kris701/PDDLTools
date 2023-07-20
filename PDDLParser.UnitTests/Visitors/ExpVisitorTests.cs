@@ -277,9 +277,9 @@ namespace PDDLParser.UnitTests.Visitors
         }
 
         [TestMethod]
-        [DataRow("(pred ?a)", "a")]
-        [DataRow("(pred ?a ?b)", "a", "b")]
-        [DataRow("(q ?a ?long)", "a", "long")]
+        [DataRow("(pred ?a)", "?a")]
+        [DataRow("(pred ?a ?b)", "?a", "?b")]
+        [DataRow("(q ?a ?long)", "?a", "?long")]
         public void Can_ParsePredicateNode_CorrectParameterNames(string toParse, params string[] expected)
         {
             // ARRANGE

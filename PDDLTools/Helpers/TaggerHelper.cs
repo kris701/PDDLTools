@@ -39,7 +39,7 @@ namespace PDDLTools.Helpers
             if (startIndex >= chars.Length)
                 return -1;
             char currentChar = chars[startIndex];
-            while (char.IsLetter(currentChar) || char.IsNumber(currentChar) || currentChar == '-' || currentChar == ':')
+            while (char.IsLetter(currentChar) || char.IsNumber(currentChar) || currentChar == '-' || currentChar == ':' || currentChar == '?')
             {
                 startIndex--;
                 if (startIndex < 0)
@@ -61,7 +61,7 @@ namespace PDDLTools.Helpers
                 return -1;
 
             char currentChar = chars[endIndex];
-            while (char.IsLetter(currentChar) || char.IsNumber(currentChar) || currentChar == '-' || currentChar == ':')
+            while (char.IsLetter(currentChar) || char.IsNumber(currentChar) || currentChar == '-' || currentChar == ':' || currentChar == '?')
             {
                 endIndex++;
                 if (endIndex >= chars.Length)

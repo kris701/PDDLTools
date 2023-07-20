@@ -17,11 +17,11 @@ namespace PDDLParser.UnitTests.Contextualisers
     public class PDDLDomainDeclContextualiserTests
     {
         [TestMethod]
-        [DataRow("(define (:action name :parameters (?a) :precondition (p a) :effect (p a)))", "a", "")]
-        [DataRow("(define (:action name :parameters (?a - type) :precondition (p a) :effect (p a)))", "a", "type")]
-        [DataRow("(define (:action name :parameters (?a - type) :precondition (not (p a)) :effect (p a)))", "a", "type")]
-        [DataRow("(define (:action name :parameters (?a - type) :precondition (not (p a)) :effect (and (p a))))", "a", "type")]
-        [DataRow("(define (:action name :parameters (?a - type) :precondition (not (p a)) :effect (or (p a) (not (p a)))))", "a", "type")]
+        [DataRow("(define (:action name :parameters (?a) :precondition (p a) :effect (p a)))", "?a", "")]
+        [DataRow("(define (:action name :parameters (?a - type) :precondition (p a) :effect (p a)))", "?a", "type")]
+        [DataRow("(define (:action name :parameters (?a - type) :precondition (not (p a)) :effect (p a)))", "?a", "type")]
+        [DataRow("(define (:action name :parameters (?a - type) :precondition (not (p a)) :effect (and (p a))))", "?a", "type")]
+        [DataRow("(define (:action name :parameters (?a - type) :precondition (not (p a)) :effect (or (p a) (not (p a)))))", "?a", "type")]
         public void Can_DecorateActionParameterReferencesWithType(string toParse, string argName, string expectedType)
         {
             // ARRANGE
@@ -44,11 +44,11 @@ namespace PDDLParser.UnitTests.Contextualisers
         }
 
         [TestMethod]
-        [DataRow("(define (:axiom :vars (?a) :context (p a) :implies (p a)))", "a", "")]
-        [DataRow("(define (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "type")]
-        [DataRow("(define (:axiom :vars (?a - type) :context (not (p a)) :implies (p a)))", "a", "type")]
-        [DataRow("(define (:axiom :vars (?a - type) :context (not (p a)) :implies (and (p a))))", "a", "type")]
-        [DataRow("(define (:axiom :vars (?a - type) :context (not (p a)) :implies (or (p a) (not (p a)))))", "a", "type")]
+        [DataRow("(define (:axiom :vars (?a) :context (p a) :implies (p a)))", "?a", "")]
+        [DataRow("(define (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "?a", "type")]
+        [DataRow("(define (:axiom :vars (?a - type) :context (not (p a)) :implies (p a)))", "?a", "type")]
+        [DataRow("(define (:axiom :vars (?a - type) :context (not (p a)) :implies (and (p a))))", "?a", "type")]
+        [DataRow("(define (:axiom :vars (?a - type) :context (not (p a)) :implies (or (p a) (not (p a)))))", "?a", "type")]
         public void Can_DecorateAxiomParameterReferencesWithType(string toParse, string argName, string expectedType)
         {
             // ARRANGE
@@ -71,10 +71,10 @@ namespace PDDLParser.UnitTests.Contextualisers
         }
 
         [TestMethod]
-        [DataRow("(define (:types type - supertype) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "supertype")]
-        [DataRow("(define (:types type - other \n supertype - highersupertype) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "other")]
-        [DataRow("(define (:types type - other \n supertype - type) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "other")]
-        [DataRow("(define (:types type) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "a", "")]
+        [DataRow("(define (:types type - supertype) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "?a", "supertype")]
+        [DataRow("(define (:types type - other \n supertype - highersupertype) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "?a", "other")]
+        [DataRow("(define (:types type - other \n supertype - type) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "?a", "other")]
+        [DataRow("(define (:types type) (:axiom :vars (?a - type) :context (p a) :implies (p a)))", "?a", "")]
         public void Can_CanDecorateSubtypes(string toParse, string argName, string expectedSuperType)
         {
             // ARRANGE

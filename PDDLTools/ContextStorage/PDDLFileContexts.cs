@@ -40,34 +40,31 @@ namespace PDDLTools.ContextStorage
             }
         }
 
-        public static Task<PDDLDecl> TryGetContextForFileAsync(string fileName)
+        public static async Task<PDDLDecl> TryGetContextForFileAsync(string fileName)
         {
             var returnDecl = new PDDLDecl(null, null);
-            return Task.Run(async () =>
+            try
             {
-                try
+                if (PDDLHelper.IsFileDomain(fileName))
+                    returnDecl.Domain = GetDomainContextForFile(fileName);
+                if (PDDLHelper.IsFileProblem(fileName))
+                    returnDecl.Problem = GetProblemContextForFile(fileName);
+
+                int tries = 0;
+                while (returnDecl.Domain == null && returnDecl.Problem == null)
                 {
+                    await Task.Delay(1000);
                     if (PDDLHelper.IsFileDomain(fileName))
                         returnDecl.Domain = GetDomainContextForFile(fileName);
                     if (PDDLHelper.IsFileProblem(fileName))
                         returnDecl.Problem = GetProblemContextForFile(fileName);
-
-                    int tries = 0;
-                    while (returnDecl.Domain == null || returnDecl.Problem == null)
-                    {
-                        await Task.Delay(1000);
-                        if (PDDLHelper.IsFileDomain(fileName))
-                            returnDecl.Domain = GetDomainContextForFile(fileName);
-                        if (PDDLHelper.IsFileProblem(fileName))
-                            returnDecl.Problem = GetProblemContextForFile(fileName);
-                        tries++;
-                        if (tries > RetryTimes)
-                            break;
-                    }
+                    tries++;
+                    if (tries > RetryTimes)
+                        break;
                 }
-                catch { }
-                return returnDecl;
-            });
+            }
+            catch { }
+            return returnDecl;
         }
 
         private static DomainDecl GetDomainContextForFile(string fileName)

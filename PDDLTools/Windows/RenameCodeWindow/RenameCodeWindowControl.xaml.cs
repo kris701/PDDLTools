@@ -129,42 +129,48 @@ namespace PDDLTools.Windows.RenameCodeWindow
                     }
 
                     foreach (var file in targetFiles)
-                    {
-                        var context = await PDDLFileContexts.TryGetContextForFileAsync(file);
-                        if (context != null)
-                            ReplaceNamesOfType(
-                                file,
-                                context.FindNames(ReplaceTextTextbox.Text).ToList(),
-                                ReplaceTextTextbox.Text,
-                                ReplaceWithTextbox.Text,
-                                _scopeType);
-                    }
+                        await ReplaceInFileAsync(file, ReplaceTextTextbox.Text.ToLower(), ReplaceWithTextbox.Text.ToLower());
                 }
             }
             else
             {
                 var file = await DTE2Helper.GetSourceFilePathAsync();
-                List<INamedNode> nodes = new List<INamedNode>();
-                switch (_scopeType)
-                {
-                    case ReplaceScopeTypes.ActionParameter:
-                        nodes = GetActionFromScope(_node).FindNames(ReplaceTextTextbox.Text).ToList(); break;
-                    case ReplaceScopeTypes.AxiomParameter:
-                        nodes = GetAxiomFromScope(_node).FindNames(ReplaceTextTextbox.Text).ToList(); break;
-                    case ReplaceScopeTypes.ActionName:
-                    case ReplaceScopeTypes.Predicate:
-                    case ReplaceScopeTypes.ProblemObjects:
-                    case ReplaceScopeTypes.TypeName:
-                        var context = await PDDLFileContexts.TryGetContextForFileAsync(file);
-                        if (context != null)
-                            nodes = context.FindNames(ReplaceTextTextbox.Text).ToList();
-                        break;
-                }
-                if (nodes.Count > 0)
-                    ReplaceNamesOfType(file, nodes, ReplaceTextTextbox.Text, ReplaceWithTextbox.Text, _scopeType);
+                await ReplaceInFileAsync(file, ReplaceTextTextbox.Text.ToLower(), ReplaceWithTextbox.Text.ToLower());
             }
 
             await HideThisWindowAsync();
+        }
+
+        private async Task ReplaceInFileAsync(string file, string targetName, string with)
+        {
+            List<INamedNode> nodes = new List<INamedNode>();
+            switch (_scopeType)
+            {
+                case ReplaceScopeTypes.ActionParameter:
+                    nodes = GetActionFromScope(_node).FindNames(targetName).ToList(); break;
+                case ReplaceScopeTypes.AxiomParameter:
+                    nodes = GetAxiomFromScope(_node).FindNames(targetName).ToList(); break;
+                case ReplaceScopeTypes.Predicate:
+                    var context = await PDDLFileContexts.TryGetContextForFileAsync(file);
+                    if (context != null)
+                        nodes = context.FindNames(targetName).ToList();
+                    nodes.RemoveAll(x => x.GetType() != typeof(PredicateExp));
+                    break;
+                case ReplaceScopeTypes.ActionName:
+                    var context2 = await PDDLFileContexts.TryGetContextForFileAsync(file);
+                    if (context2 != null)
+                        nodes = context2.FindNames(targetName).ToList();
+                    nodes.RemoveAll(x => x.GetType() != typeof(ActionDecl));
+                    break;
+                case ReplaceScopeTypes.ProblemObjects:
+                case ReplaceScopeTypes.TypeName:
+                    var context3 = await PDDLFileContexts.TryGetContextForFileAsync(file);
+                    if (context3 != null)
+                        nodes = context3.FindNames(targetName).ToList();
+                    break;
+            }
+            if (nodes.Count > 0)
+                ReplaceNamesOfType(file, nodes, targetName, with, _scopeType);
         }
 
         private bool IsGlobalRenameValid(ReplaceScopeTypes scopeType)
@@ -181,7 +187,7 @@ namespace PDDLTools.Windows.RenameCodeWindow
 
         private void ReplaceNamesOfType(string file, List<INamedNode> nodes, string from, string to, ReplaceScopeTypes scopeType)
         {
-            var text = File.ReadAllText(file);
+            var text = File.ReadAllText(file).ToLower();
 
             int offset = 0;
             foreach(var node in nodes)

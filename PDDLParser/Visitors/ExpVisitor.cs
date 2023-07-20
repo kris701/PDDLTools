@@ -188,8 +188,8 @@ namespace PDDLParser.Visitors
                             node.Start));
                     }
 
-                    //var newNameExp = new NameExp(node, parent, left);
-                    var newNameExp = new NameExp(node, parent, left.Replace("?", ""));
+                    var newNameExp = new NameExp(node, parent, left);
+                    //var newNameExp = new NameExp(node, parent, left.Replace("?", ""));
                     newNameExp.Type = new TypeExp(
                         new ASTNode(
                             node.Start + left.Length + 3,
@@ -206,8 +206,8 @@ namespace PDDLParser.Visitors
             {
                 if (DoesNodeHaveSpecificChildCount(node, "name", 0, listener))
                 {
-                    //var newNameExp = new NameExp(node, parent, node.InnerContent);
-                    var newNameExp = new NameExp(node, parent, node.InnerContent.Replace("?", ""));
+                    var newNameExp = new NameExp(node, parent, node.InnerContent);
+                    //var newNameExp = new NameExp(node, parent, node.InnerContent.Replace("?", ""));
                     exp = newNameExp;
                     return true;
                 }
