@@ -63,7 +63,7 @@
     <None Include="ProjectTemplate.csproj" />
     <None Include="PDDLTestprojectTemplate.ico" />
     <None Include="test.pddltest" />
-    <None Include="test.runsettings" />
+    <None Include=".runsettings" />
   </ItemGroup>
   <ItemGroup>
     <VSTemplate Include="PDDLTestprojectTemplate.vstemplate" />

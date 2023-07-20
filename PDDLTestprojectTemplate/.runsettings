@@ -3,6 +3,7 @@
     <FDPath>fast-downward</FDPath>
     <FDEngineArgs>"astar(lmcut())"</FDEngineArgs>
     <PythonPrefix>python</PythonPrefix>
-    <FDTimeout>10</FDTimeout>
+	  <FDTimeout>10</FDTimeout>
+	  <RunParallel>false</RunParallel>
   </RunConfiguration>
 </RunSettings>

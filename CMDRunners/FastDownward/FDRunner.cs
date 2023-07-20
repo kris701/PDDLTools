@@ -62,5 +62,14 @@ namespace CMDRunners.FastDownward
 
             return aliases;
         }
+
+        public override bool VerifyExecutable()
+        {
+            if (!Directory.Exists(ExecutablePath))
+                return false;
+            if (!File.Exists(Path.Combine(ExecutablePath, ExecutableName)))
+                return false;
+            return true;
+        }
     }
 }

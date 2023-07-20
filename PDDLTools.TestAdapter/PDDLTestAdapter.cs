@@ -22,6 +22,7 @@ namespace PDDLTools.TestAdapter
         public string FastDownwardEngineArgs { get; set; }
         public string PythonPrefix { get; set; }
         public int FastDownwardTimeout { get; set; }
+        public bool RunParallel { get; set; }
 
 
         #region Constructor
@@ -48,6 +49,7 @@ namespace PDDLTools.TestAdapter
             FastDownwardEngineArgs = GetInnerTextAsString(runConfiguration, "FDEngineArgs", "\"astar(lmcut())\"");
             PythonPrefix = GetInnerTextAsString(runConfiguration, "PythonPrefix", "python");
             FastDownwardTimeout = GetInnerTextAsInt(runConfiguration, "FDTimeout", 10);
+            RunParallel = GetInnerTextAsBool(runConfiguration, "RunParallel", false);
         }
 
         #region Helper Methods

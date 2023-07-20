@@ -16,5 +16,6 @@ namespace CMDRunners
         List<LogItem> Log { get; }
 
         PowershellProcess Process { get; }
+        bool VerifyExecutable();
     }
 }
