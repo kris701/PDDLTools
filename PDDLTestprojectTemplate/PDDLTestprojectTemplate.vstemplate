@@ -34,7 +34,7 @@
 	</WizardExtension>
 	<WizardData>
 		<packages>
-			<package id="PDDLTools.TestAdapter" version="1.0.3" />
+			<package id="PDDLTools.TestAdapter" version="*" />
 		</packages>
 	</WizardData>
 </VSTemplate>
