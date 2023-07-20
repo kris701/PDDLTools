@@ -32,6 +32,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <PackageIcon>Icon.png</PackageIcon>
+	  <PackageReadmeFile>readme.md</PackageReadmeFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="netstandard" />
     <Reference Include="System" />
@@ -75,6 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="PDDLTools.TestAdapter.nuspec" />
+    <None Include="readme.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="nuget.exe" />
@@ -88,6 +93,11 @@
       <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
       <Name>PDDLParser</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

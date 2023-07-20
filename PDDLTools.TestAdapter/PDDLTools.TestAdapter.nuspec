@@ -5,12 +5,15 @@
         <version>1.0.50</version>
         <title>PDDL Tools Test Adapter</title>
         <authors>Kristian Skov Johansen</authors>
-        <iconUrl>https://raw.githubusercontent.com/kris701/PDDLTools/master/PDDLTools/Images/Icon.png</iconUrl>
 		<projectUrl>https://github.com/kris701/PDDLTools</projectUrl>
 		<license type="expression">MIT</license>
         <description>PDDL tools test adapter for visual studio.</description>
         <copyright>Kristian Skov Johansen</copyright>
         <language>en-US</language>
+		<readme>readme.md</readme>
         <tags></tags>
     </metadata>
+	<files>
+		<file src="readme.md"/>
+	</files>
 </package>
