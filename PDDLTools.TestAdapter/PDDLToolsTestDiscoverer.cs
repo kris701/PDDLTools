@@ -56,11 +56,17 @@ namespace PDDLTools.TestAdapter
             {
                 var problemPath = Path.Combine(basePath, problem);
                 var problemName = new FileInfo(problemPath).Name.Replace(".pddl", "");
-                var newCase = new TestCase($"{testName}.{domainName}.{problemName}", new Uri(PDDLToolsTestExecutor.ExecutorUriStr), file.ToLowerInvariant());
-                returnList.Add(newCase);
-                newCase.CodeFilePath = $"{domainPath};{problemPath}";
-                newCase.LocalExtensionData = new KeyValuePair<string, string>(domainPath, problemPath);
-                discoverySink.SendTestCase(newCase);
+
+                foreach(var task in test.Tasks)
+                {
+                    var newCase = new TestCase($"{domainName}.{problemName}.{task}", new Uri(PDDLToolsTestExecutor.ExecutorUriStr), file.ToLowerInvariant());
+                    returnList.Add(newCase);
+                    newCase.CodeFilePath = problemPath;
+                    newCase.SetPropertyValue(TestProperty.Register("PDDLTools_DomainPath", "DomainPath", typeof(string), typeof(string)), domainPath);
+                    newCase.SetPropertyValue(TestProperty.Register("PDDLTools_ProblemPath", "ProblemPath", typeof(string), typeof(string)), problemPath);
+                    newCase.SetPropertyValue(TestProperty.Register("PDDLTools_Task", "Task", typeof(string), typeof(string)), task);
+                    discoverySink.SendTestCase(newCase);
+                }
             }
             return returnList;
         }

@@ -7,6 +7,8 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using Newtonsoft.Json;
+using PDDLParser;
+using PDDLParser.Exceptions;
 using PDDLTools.TestAdapter.Models;
 using System;
 using System.Collections.Generic;
@@ -82,25 +84,75 @@ namespace PDDLTools.TestAdapter
                 if (_stop)
                     break;
 
-                var split = source.CodeFilePath.Split(';');
-                if (split.Length == 2)
+                var domain = source.GetPropertyValue<string>(TestProperty.Find("PDDLTools_DomainPath"), "None");
+                var problem = source.GetPropertyValue<string>(TestProperty.Find("PDDLTools_ProblemPath"), "None");
+                var task = source.GetPropertyValue<string>(TestProperty.Find("PDDLTools_Task"), "");
+                if (File.Exists(domain) && File.Exists(problem))
                 {
-                    var domain = split[0];
-                    var problem = split[1];
-                    if (File.Exists(domain) && File.Exists(problem))
+                    switch (task.ToLower())
                     {
-                        var tempPlanName = $"temp{rnd.Next()}.pddlplan";
-                        var tempOutName = $"temp{rnd.Next()}.out";
-
-                        tasks.Add(GenerateTask(source, domain, problem, tempPlanName, tempOutName, frameworkHandle));
+                        case "parse":
+                            tasks.Add(GenerateParseTask(source, domain, problem, false, frameworkHandle));
+                            break;
+                        case "parseanalyse":
+                            tasks.Add(GenerateParseTask(source, domain, problem, true, frameworkHandle));
+                            break;
+                        case "fdexecute":
+                            var tempPlanName = $"temp{rnd.Next()}.pddlplan";
+                            var tempOutName = $"temp{rnd.Next()}.out";
+                            tasks.Add(GenerateFDExecuteTask(source, domain, problem, tempPlanName, tempOutName, frameworkHandle));
+                            break;
+                        default:
+                            TestLog.SendErrorMessage($"Invalid task given for the domain '{domain}' and '{problem}' case! The task was: {task}");
+                            break;
                     }
                 }
+                else
+                    TestLog.SendErrorMessage($"Could not find domain and problem file! Domain: '{domain}', Problem: '{problem}'");
             }
 
             return tasks;
         }
 
-        private Task GenerateTask(TestCase source, string domain, string problem, string tempPlanName, string tempOutName, IFrameworkHandle frameworkHandle)
+        private Task GenerateParseTask(TestCase source, string domain, string problem, bool analyse, IFrameworkHandle frameworkHandle)
+        {
+            return new Task(() => {
+                var outcome = new TestResult(source);
+                outcome.StartTime = DateTime.Now;
+                outcome.Outcome = TestOutcome.Failed;
+                frameworkHandle.RecordStart(source);
+
+                try
+                {
+                    IPDDLParser parser = new PDDLParser.PDDLParser(analyse, analyse);
+                    parser.Parse(domain, problem);
+                    if (parser.Listener.Errors.Count(x => x.Type == PDDLParser.Listener.ParseErrorType.Error) == 0)
+                    {
+                        outcome.Outcome = TestOutcome.Passed;
+                        foreach(var message in parser.Listener.Errors)
+                            outcome.Messages.Add(new TestResultMessage("StdOutMsgs", $"{message.Message}{Environment.NewLine}"));
+                    }
+
+                }
+                catch (ParseException ex)
+                {
+                    outcome.ErrorMessage = ex.Message;
+                    foreach(var error in ex.Errors)
+                        outcome.Messages.Add(new TestResultMessage("StdErrMsgs", $"{error.Message}{Environment.NewLine}"));
+                }
+                catch (Exception ex)
+                {
+                    outcome.ErrorMessage = ex.Message;
+                    outcome.Messages.Add(new TestResultMessage("StdErrMsgs", ex.Message));
+                }
+
+                outcome.EndTime = DateTime.Now;
+                outcome.Duration = outcome.EndTime - outcome.StartTime;
+                frameworkHandle.RecordResult(outcome);
+            });
+        }
+
+        private Task GenerateFDExecuteTask(TestCase source, string domain, string problem, string tempPlanName, string tempOutName, IFrameworkHandle frameworkHandle)
         {
             return new Task(() => {
                 var outcome = new TestResult(source);

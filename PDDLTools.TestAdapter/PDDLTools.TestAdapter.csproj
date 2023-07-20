@@ -83,6 +83,10 @@
       <Project>{00a388be-b31e-4472-bffb-da51cb79a55b}</Project>
       <Name>CMDRunners</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PDDLParser\PDDLParser.csproj">
+      <Project>{07627e9c-f6c2-468f-9855-9ff30adfd6db}</Project>
+      <Name>PDDLParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -10,5 +10,6 @@ namespace PDDLTools.TestAdapter.Models
     {
         public string Domain { get; set; }
         public List<string> Problems { get; set; }
+        public List<string> Tasks { get; set; }
     }
 }
