@@ -3,21 +3,34 @@
 ![combined](https://github.com/kris701/PDDLTools/assets/22596587/5ead8019-9c45-4d5d-94d4-e72d4f361914)
 
 This is an extension to make developing with PDDL files and planning in general easier.
-This extension can be used with [Fast Downward](https://www.fast-downward.org/) to execute and analyse plans from running PDDL files.
+This extension can be used with [Fast Downward](https://www.fast-downward.org/) to execute and analyse plans from running PDDL files. The extension is compatible with the PDDL 2.1 standard.
 This extension can also be found on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=KristianSkovJohansen.pddltools).
 Overall, this extensions adds:
-* PDDL Syntax Highlighting and custom coloring
-* PDDL Quick Info for general elements
-* Editor Options
-* Execute PDDL problem/domains with Fast Downward
-* Detailed Fast Downward results window
-* Visual view of Fast Downward SAS plans
-* Visual view of domain file strutures
-* Quick access toolbar
-* PDDL parser that outputs syntax errors in the PDDL files, if any
-* PDDL file templates
-* PDDL Project templates
-* Plan Validation using VAL
+* Editor features
+  * Syntax checking
+  * Syntax Highlighting with options for custom colors
+  * Quick Info on all PDDL elements as well as contextual information
+  * Rename names and objects across multiple PDDL files
+  * Small window in the bottom of the editor, showing general information on the document (such as predicate count or object count)
+  * Auto completement of statements, both with basic PDDL elements and the predicates or objects you have written
+  * Highlighting of same names across the entire document
+  * Highlighting of braces
+* PDDL Execution
+  * Use Fast Downward to execute your current domain/problem with the F5 key
+  * Get detailed results window from Fast Downward
+  * Visualiser for the resulting Plans from Fast Downward
+* PDDL Projects
+  * Custom project type for PDDL development
+  * Custom file templates to get you started with a PDDL file
+* VAL
+  * VAL integration to verify plans
+* PDDL Tests
+  * A small testing framework to execute and/or parse PDDL files
+  * Fully integrated into the Visual Studio Test Explorer
+* Other
+  * Visualise predicate and type structure of a PDDL file
+  * Quick Access toolbar
+  * Settings for most of the features
 
 ## How to Use
 The first thing you will see when you have installed this extension, is a welcome page showing this information.
