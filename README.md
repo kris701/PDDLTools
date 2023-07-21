@@ -131,12 +131,54 @@ You can right click a project file and reindex it manually if you need to.
 
 ### VAL
 
+The plan validator [VAL](https://www.fast-downward.org/SettingUpVal) is also integrated into this extension. You can right click any PDDL file and plan file to send it to the VAL window.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/a4a2d338-2c40-4b8e-a168-cbc843448fb9)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/b4dc794c-56e4-4d61-b47e-76b639e8ab4e)
+
+When you click on this, the VAL window will open, showing if a given combination of a domain, problem and plan file is valid.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/a8e4fd31-d47f-4ecf-bf23-5c3c3e87788a)
+
 ### PDDL Tests
+
+This extension also includes an entire testing framework, to run tests of PDDL files.
+This is the second PDDL project type thats included, that introduces a new file type being `.pddltest`.
+This file describes a test for a given domain and a set of problems, as well as what tests to actually run. 
+The file itself is structured as a JSON file.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/260fdd0d-9d9a-4d44-ac9b-d172b44d2e93)
+
+The tasks describe what kind of test to run, the options are
+* Parse
+  * Simply parses the given PDDL files
+* ParseAnalyse
+  * Parses the PDDL files and checks for errors. If there are any errors, the test will be regarded as a failure.
+* FDExecute
+  * Executes the PDDL files with Fast Downward.
+
+To configure the tests, the project template includes a `.runsettings` file that you should use. 
+It contains the basic information that is needed to run Fast Downward, the settings are much the same as those in the Options page.
+You can now open the Visual Studio Test Explorer and the tests should pop up.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/da98ea3c-6b4d-4474-bf6c-1e6e27b6901e)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/f5e10305-77d7-45fb-935b-cc41054fcbf6)
+
+And thats all you need to execute tests with the adapter!
 
 ### Other
 
+This extension makes it possible to visualise PDDL domain structures. This can again be done from the context menu by right clicking PDDL domains in the solution explorer.
+You can then see a general overview of the structure in the PDDL files, as well as see if some predicates are unused/unnessesary.
+You can also select to visualise types, as well as what objects use said type.
+Generally, this visualiser is good for small PDDL domains.
 
+![image](https://github.com/kris701/PDDLTools/assets/22596587/0c2cd918-5b79-487d-9855-df030bddfe60)
+![image](https://github.com/kris701/PDDLTools/assets/22596587/7506c853-966c-497b-9e2a-29d5a2eac3b5)
 
+More or less all the features have settings that are available under the `Options` page in Visual Studio.
+
+![image](https://github.com/kris701/PDDLTools/assets/22596587/42cf7027-3c1d-4cb4-9fe1-129e9e08709c)
 
 
 
