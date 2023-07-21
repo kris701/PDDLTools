@@ -49,5 +49,8 @@
     <Compile Include="RandomPathCorrectingSpreader.cs" />
     <Compile Include="RandomSpreader.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="readme.md" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
